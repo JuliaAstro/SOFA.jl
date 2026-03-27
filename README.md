@@ -2,7 +2,9 @@
 | :-----: | :------: | :-----------: |
 | [![Build Status](https://travis-ci.org/sisl/SOFA.jl.svg?branch=master)](https://travis-ci.org/sisl/SOFA.jl) | [![Coverage Status](https://coveralls.io/repos/github/sisl/SOFA.jl/badge.svg?branch=master)](https://coveralls.io/github/sisl/SOFA.jl?branch=master) | [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://sisl.github.io/SOFA.jl/latest) |
 
-
+> [!INFO]
+>
+> As of 2026-03-27 this repo will be transferred to [JuliaAstro](github.com/orgs/juliaastro/) for renewed maintenance and support.
 
 # SOFA.jl
 Unofficial wrapper of the IAU SOFA C libraries for fundamental astronomy. 
