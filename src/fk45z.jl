@@ -24,20 +24,20 @@ Returned:
 
 Notes:
 
-   1. The epoch bepoch is strictly speaking Besselian, but if a
+1. The epoch bepoch is strictly speaking Besselian, but if a
    Julian epoch is supplied the result will be affected only to a
    negligible extent.
 
-   2. The method is from Appendix 2 of Aoki et al. (1983), but using
+2. The method is from Appendix 2 of Aoki et al. (1983), but using
    the constants of Seidelmann (1992).  See the routine iauFk425
    for a general introduction to the FK4 to FK5 conversion.
 
-   3. Conversion from equinox B1950.0 FK4 to equinox J2000.0 FK5 only
+3. Conversion from equinox B1950.0 FK4 to equinox J2000.0 FK5 only
    is provided for.  Conversions for different starting and/or
    ending epochs would require additional treatment for precession,
    proper motion and E-terms.
 
-   4. In the FK4 catalog the proper motions of stars within 10 degrees
+4. In the FK4 catalog the proper motions of stars within 10 degrees
    of the poles do not embody differential E-terms effects and
    should, strictly speaking, be handled in a different manner from
    stars outside these regions.  However, given the general lack of

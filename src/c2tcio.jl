@@ -19,7 +19,7 @@ Returned:
 
 Notes:
 
-   1. This function constructs the rotation matrix that transforms
+1. This function constructs the rotation matrix that transforms
    vectors in the celestial system into vectors in the terrestrial
    system.  It does so starting from precomputed components, namely
    the matrix which rotates from celestial coordinates to the
@@ -30,7 +30,7 @@ Notes:
    recomputing the precession-nutation more often than necessary to
    achieve given accuracy objectives.
 
-   2. The relationship between the arguments is as follows:
+2. The relationship between the arguments is as follows:
 
       [TRS] = RPOM * R_3(ERA) * rc2i * [CRS]
 

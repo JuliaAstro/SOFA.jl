@@ -30,7 +30,7 @@ Returned (see Note 2):
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -49,7 +49,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. This function returns the set of equinox based angles for the
+2. This function returns the set of equinox based angles for the
    Capitaine et al. "P03" precession theory, adopted by the IAU in
    2006.  The angles are set out in Table 1 of Hilton et al. (2006):
 
@@ -72,7 +72,7 @@ Notes:
 
    The returned values are all radians.
 
-   3. Hilton et al. (2006) Table 1 also contains angles that depend on
+3. Hilton et al. (2006) Table 1 also contains angles that depend on
    models distinct from the P03 precession theory itself, namely the
    IAU 2000A frame bias and nutation.  The quoted polynomials are
    used in other SOFA functions:
@@ -85,18 +85,18 @@ Notes:
       angles that are with respect to the GCRS pole (i.e. the variants
       that include frame bias).
 
-   4. The IAU resolution stipulated that the choice of parameterization
+4. The IAU resolution stipulated that the choice of parameterization
    was left to the user, and so an IAU compliant precession
    implementation can be constructed using various combinations of
    the angles returned by the present function.
 
-   5. The parameterization used by SOFA is the version of the Fukushima-
+5. The parameterization used by SOFA is the version of the Fukushima-
    Williams angles that refers directly to the GCRS pole.  These
    angles may be calculated by calling the function iauPfw06.  SOFA
    also supports the direct computation of the CIP GCRS X,Y by
    series, available by calling iauXy06.
 
-   6. The agreement between the different parameterizations is at the
+6. The agreement between the different parameterizations is at the
    1 microarcsecond level in the present era.
 
    7> When constructing a precession formulation that refers to the GCRS
@@ -104,7 +104,7 @@ Notes:
    choice of angles) be necessary to introduce the frame bias
    explicitly.
 
-   8. It is permissible to re-use the same variable in the returned
+8. It is permissible to re-use the same variable in the returned
    arguments.  The quantities are stored in the stated order.
 
 Reference:

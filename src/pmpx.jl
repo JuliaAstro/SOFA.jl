@@ -21,9 +21,9 @@ Returned:
 
 Notes:
 
-   1. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
+1. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 
-   2. The proper motion time interval is for when the starlight
+2. The proper motion time interval is for when the starlight
    reaches the solar system barycenter.
 
    3). To avoid the need for iteration, the Roemer effect (i.e. the

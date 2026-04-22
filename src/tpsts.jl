@@ -16,10 +16,10 @@ Given:
 Returned:
    *a,*b     double  star's spherical coordinates
 
-   1. The tangent plane projection is also called the "gnomonic
+1. The tangent plane projection is also called the "gnomonic
    projection" and the "central projection".
 
-   2. The eta axis points due north in the adopted coordinate system.
+2. The eta axis points due north in the adopted coordinate system.
    If the spherical coordinates are observed (RA,Dec), the tangent
    plane coordinates (xi,eta) are conventionally called the
    "standard coordinates".  If the spherical coordinates are with
@@ -27,9 +27,9 @@ Returned:
    The units of (xi,eta) are, effectively, radians at the tangent
    point.
 
-   3. All angular arguments are in radians.
+3. All angular arguments are in radians.
 
-   4. This function is a member of the following set:
+4. This function is a member of the following set:
 
       spherical      vector         solve for
 

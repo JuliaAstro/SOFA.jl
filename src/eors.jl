@@ -17,14 +17,14 @@ Returned (function value):
 
 Notes:
 
-   1.  The equation of the origins is the distance between the true
+1.  The equation of the origins is the distance between the true
    equinox and the celestial intermediate origin and, equivalently,
    the difference between Earth rotation angle and Greenwich
    apparent sidereal time (ERA-GST).  It comprises the precession
    (since J2000.0) in right ascension plus the equation of the
    equinoxes (including the small correction terms).
 
-   2.  The algorithm is from Wallace & Capitaine (2006).
+2.  The algorithm is from Wallace & Capitaine (2006).
 
 References:
 

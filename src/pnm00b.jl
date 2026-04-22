@@ -16,7 +16,7 @@ Returned:
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,12 +35,12 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The matrix operates in the sense V(date) = rbpn * V(GCRS), where
+2. The matrix operates in the sense V(date) = rbpn * V(GCRS), where
    the p-vector V(date) is with respect to the true equatorial triad
    of date date1+date2 and the p-vector V(GCRS) is with respect to
    the Geocentric Celestial Reference System (IAU, 2000).
 
-   3. The present function is faster, but slightly less accurate (about
+3. The present function is faster, but slightly less accurate (about
    1 mas), than the iauPnm00a function.
 
 Called:

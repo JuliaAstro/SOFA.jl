@@ -16,11 +16,11 @@ Returned:
 
 Notes:
 
-   1. The vector p can have any magnitude; only its direction is used.
+1. The vector p can have any magnitude; only its direction is used.
 
-   2. If p is null, zero theta and phi are returned.
+2. If p is null, zero theta and phi are returned.
 
-   3. At either pole, zero theta is returned.
+3. At either pole, zero theta is returned.
 
 This revision:  2013 June 18
 

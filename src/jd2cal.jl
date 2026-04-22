@@ -23,10 +23,10 @@ Returned (function value):
 
 Notes:
 
-   1. The earliest valid date is -68569.5 (-4900 March 1).  The
+1. The earliest valid date is -68569.5 (-4900 March 1).  The
    largest value accepted is 1e9.
 
-   2. The Julian Date is apportioned in any convenient way between
+2. The Julian Date is apportioned in any convenient way between
    the arguments dj1 and dj2.  For example, JD=2450123.7 could
    be expressed in any of these ways, among others:
 
@@ -37,7 +37,7 @@ Notes:
       2400000.5       50123.2       (MJD method)
       2450123.5           0.2       (date & time method)
 
-   3. In early eras the conversion is from the "proleptic Gregorian
+3. In early eras the conversion is from the "proleptic Gregorian
    calendar";  no account is taken of the date(s) of adoption of
    the Gregorian calendar, nor is the AD/BC numbering convention
    observed.

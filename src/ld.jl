@@ -21,35 +21,35 @@ Returned:
 
 Notes:
 
-   1. The algorithm is based on Expr. (70) in Klioner (2003) and
+1. The algorithm is based on Expr. (70) in Klioner (2003) and
    Expr. (7.63) in the Explanatory Supplement (Urban & Seidelmann
    2013), with some rearrangement to minimize the effects of machine
    precision.
 
-   2. The mass parameter bm can, as required, be adjusted in order to
+2. The mass parameter bm can, as required, be adjusted in order to
    allow for such effects as quadrupole field.
 
-   3. The barycentric position of the deflecting body should ideally
+3. The barycentric position of the deflecting body should ideally
    correspond to the time of closest approach of the light ray to
    the body.
 
-   4. The deflection limiter parameter dlim is phi^2/2, where phi is
+4. The deflection limiter parameter dlim is phi^2/2, where phi is
    the angular separation (in radians) between source and body at
    which limiting is applied.  As phi shrinks below the chosen
    threshold, the deflection is artificially reduced, reaching zero
    for phi = 0.
 
-   5. The returned vector p1 is not normalized, but the consequential
+5. The returned vector p1 is not normalized, but the consequential
    departure from unit magnitude is always negligible.
 
-   6. The arguments p and p1 can be the same array.
+6. The arguments p and p1 can be the same array.
 
-   7. To accumulate total light deflection taking into account the
+7. To accumulate total light deflection taking into account the
    contributions from several bodies, call the present function for
    each body in succession, in decreasing order of distance from the
    observer.
 
-   8. For efficiency, validation is omitted.  The supplied vectors must
+8. For efficiency, validation is omitted.  The supplied vectors must
    be of unit magnitude, and the deflection limiter non-zero and
    positive.
 

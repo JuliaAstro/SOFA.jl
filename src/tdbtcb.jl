@@ -19,12 +19,12 @@ Returned (function value):
 
 Notes:
 
-   1. tdb1+tdb2 is Julian Date, apportioned in any convenient way
+1. tdb1+tdb2 is Julian Date, apportioned in any convenient way
    between the two arguments, for example where tdb1 is the Julian
    Day Number and tdb2 is the fraction of a day.  The returned
    tcb1,tcb2 follow suit.
 
-   2. The 2006 IAU General Assembly introduced a conventional linear
+2. The 2006 IAU General Assembly introduced a conventional linear
    transformation between TDB and TCB.  This transformation
    compensates for the drift between TCB and terrestrial time TT,
    and keeps TDB approximately centered on TT.  Because the
@@ -39,7 +39,7 @@ Notes:
    these difficulties whilst delivering a TDB that in practice was
    consistent with values before that date.
 
-   3. TDB is essentially the same as Teph, the time argument for the
+3. TDB is essentially the same as Teph, the time argument for the
    JPL solar system ephemerides.
 
 Reference:

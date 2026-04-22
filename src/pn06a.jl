@@ -23,7 +23,7 @@ Returned:
 
 Notes:
 
-    1.  The TT date date1+date2 is a Julian Date, apportioned in any
+1.  The TT date date1+date2 is a Julian Date, apportioned in any
     convenient way between the two arguments.  For example,
     JD(TT)=2450123.7 could be expressed in any of these ways,
     among others:
@@ -42,31 +42,31 @@ Notes:
     optimum resolution.  The MJD method and the date & time methods
     are both good compromises between resolution and convenience.
 
-    2.  The nutation components (luni-solar + planetary, IAU 2000A) in
+2.  The nutation components (luni-solar + planetary, IAU 2000A) in
     longitude and obliquity are in radians and with respect to the
     equinox and ecliptic of date.  Free core nutation is omitted;
     for the utmost accuracy, use the iauPn06 function, where the
     nutation components are caller-specified.
 
-    3.  The mean obliquity is consistent with the IAU 2006 precession.
+3.  The mean obliquity is consistent with the IAU 2006 precession.
 
-    4.  The matrix rb transforms vectors from GCRS to mean J2000.0 by
+4.  The matrix rb transforms vectors from GCRS to mean J2000.0 by
     applying frame bias.
 
-    5.  The matrix rp transforms vectors from mean J2000.0 to mean of
+5.  The matrix rp transforms vectors from mean J2000.0 to mean of
     date by applying precession.
 
-    6.  The matrix rbp transforms vectors from GCRS to mean of date by
+6.  The matrix rbp transforms vectors from GCRS to mean of date by
     applying frame bias then precession.  It is the product rp x rb.
 
-    7.  The matrix rn transforms vectors from mean of date to true of
+7.  The matrix rn transforms vectors from mean of date to true of
     date by applying the nutation (luni-solar + planetary).
 
-    8.  The matrix rbpn transforms vectors from GCRS to true of date
+8.  The matrix rbpn transforms vectors from GCRS to true of date
     (CIP/equinox).  It is the product rn x rbp, applying frame bias,
     precession and nutation in that order.
 
-    9.  The X,Y,Z coordinates of the IAU 2006/2000A Celestial
+9.  The X,Y,Z coordinates of the IAU 2006/2000A Celestial
     Intermediate Pole are elements (3,1-3) of the GCRS-to-true
     matrix, i.e. rbpn[2][0-2].
 

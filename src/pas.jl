@@ -18,12 +18,12 @@ Returned (function value):
 
 Notes:
 
-   1. The result is the bearing (position angle), in radians, of point
+1. The result is the bearing (position angle), in radians, of point
    B with respect to point A.  It is in the range -pi to +pi.  The
    sense is such that if B is a small distance "east" of point A,
    the bearing is approximately +pi/2.
 
-   2. Zero is returned if the two points are coincident.
+2. Zero is returned if the two points are coincident.
 
 This revision:  2013 June 18
 

@@ -20,7 +20,7 @@ Returned (function value):
 
 Notes:
 
-   1. The identifier n is a number that specifies the choice of
+1. The identifier n is a number that specifies the choice of
    reference ellipsoid.  The following are supported:
 
       n    ellipsoid
@@ -32,11 +32,11 @@ Notes:
    The n value has no significance outside the SOFA software.  For
    convenience, symbols WGS84 etc. are defined in sofam.h.
 
-   2. The ellipsoid parameters are returned in the form of equatorial
+2. The ellipsoid parameters are returned in the form of equatorial
    radius in meters (a) and flattening (f).  The latter is a number
    around 0.00335, i.e. around 1/298.
 
-   3. For the case where an unsupported n value is supplied, zero a and
+3. For the case where an unsupported n value is supplied, zero a and
    f are returned, as well as error status.
 
 References:

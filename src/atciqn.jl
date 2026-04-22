@@ -54,25 +54,25 @@ Returned:
 
 Notes:
 
-   1. Star data for an epoch other than J2000.0 (for example from the
+1. Star data for an epoch other than J2000.0 (for example from the
    Hipparcos catalog, which has an epoch of J1991.25) will require a
    preliminary call to iauPmsafe before use.
 
-   2. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
+2. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 
-   3. The struct b contains n entries, one for each body to be
+3. The struct b contains n entries, one for each body to be
    considered.  If n = 0, no gravitational light deflection will be
    applied, not even for the Sun.
 
-   4. The struct b should include an entry for the Sun as well as for
+4. The struct b should include an entry for the Sun as well as for
    any planet or other body to be taken into account.  The entries
    should be in the order in which the light passes the body.
 
-   5. In the entry in the b struct for body i, the mass parameter
+5. In the entry in the b struct for body i, the mass parameter
    b[i].bm can, as required, be adjusted in order to allow for such
    effects as quadrupole field.
 
-   6. The deflection limiter parameter b[i].dl is phi^2/2, where phi is
+6. The deflection limiter parameter b[i].dl is phi^2/2, where phi is
    the angular separation (in radians) between star and body at
    which limiting is applied.  As phi shrinks below the chosen
    threshold, the deflection is artificially reduced, reaching zero
@@ -85,7 +85,7 @@ Notes:
       Jupiter    0.00095435     3e-9
       Saturn     0.00028574     3e-10
 
-   7. For efficiency, validation of the contents of the b array is
+7. For efficiency, validation of the contents of the b array is
    omitted.  The supplied masses must be greater than zero, the
    position and velocity vectors must be right, and the deflection
    limiter greater than zero.

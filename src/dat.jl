@@ -60,7 +60,7 @@ Returned (function value):
 
 Notes:
 
-   1. UTC began at 1960 January 1.0 (JD 2436934.5) and it is improper
+1. UTC began at 1960 January 1.0 (JD 2436934.5) and it is improper
    to call the function with an earlier date.  If this is attempted,
    zero is returned together with a warning status.
 
@@ -75,18 +75,18 @@ Notes:
    This is distinct from the error status -1, which signifies a year
    so early that JD could not be computed.
 
-   2. If the specified date is for a day which ends with a leap second,
+2. If the specified date is for a day which ends with a leap second,
    the TAI-UTC value returned is for the period leading up to the
    leap second.  If the date is for a day which begins as a leap
    second ends, the TAI-UTC returned is for the period following the
    leap second.
 
-   3. The day number must be in the normal calendar range, for example
+3. The day number must be in the normal calendar range, for example
    1 through 30 for April.  The "almanac" convention of allowing
    such dates as January 0 and December 32 is not supported in this
    function, in order to avoid confusion near leap seconds.
 
-   4. The fraction of day is used only for dates before the
+4. The fraction of day is used only for dates before the
    introduction of leap seconds, the first of which occurred at the
    end of 1971.  It is tested for validity (0 to 1 is the valid
    range) even if not used;  if invalid, zero is used and status -4
@@ -94,21 +94,21 @@ Notes:
    acceptable;  the resulting error is always less than 3 ms (and
    occurs only pre-1972).
 
-   5. The status value returned in the case where there are multiple
+5. The status value returned in the case where there are multiple
    errors refers to the first error detected.  For example, if the
    month and day are 13 and 32 respectively, status -2 (bad month)
    will be returned.  The "internal error" status refers to a
    case that is impossible but causes some compilers to issue a
    warning.
 
-   6. In cases where a valid result is not available, zero is returned.
+6. In cases where a valid result is not available, zero is returned.
 
 References:
 
-   1. For dates from 1961 January 1 onwards, the expressions from the
+1. For dates from 1961 January 1 onwards, the expressions from the
    file ftp://maia.usno.navy.mil/ser7/tai-utc.dat are used.
 
-   2. The 5ms timestep at 1961 January 1 is taken from 2.58.1 (p87) of
+2. The 5ms timestep at 1961 January 1 is taken from 2.58.1 (p87) of
    the 1992 Explanatory Supplement.
 
 Called:

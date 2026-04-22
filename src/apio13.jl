@@ -50,104 +50,104 @@ Returned (function value):
 Notes:
 
 1.  utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
-convenient way between the two arguments, for example where utc1
-is the Julian Day Number and utc2 is the fraction of a day.
+    convenient way between the two arguments, for example where utc1
+    is the Julian Day Number and utc2 is the fraction of a day.
 
-However, JD cannot unambiguously represent UTC during a leap
-second unless special measures are taken.  The convention in the
-present function is that the JD day represents UTC days whether
-the length is 86399, 86400 or 86401 SI seconds.
+    However, JD cannot unambiguously represent UTC during a leap
+    second unless special measures are taken.  The convention in the
+    present function is that the JD day represents UTC days whether
+    the length is 86399, 86400 or 86401 SI seconds.
 
-Applications should use the function iauDtf2d to convert from
-calendar date and time of day into 2-part quasi Julian Date, as
-it implements the leap-second-ambiguity convention just
-described.
+    Applications should use the function iauDtf2d to convert from
+    calendar date and time of day into 2-part quasi Julian Date, as
+    it implements the leap-second-ambiguity convention just
+    described.
 
 2.  The warning status "dubious year" flags UTCs that predate the
-introduction of the time scale or that are too far in the future
-to be trusted.  See iauDat for further details.
+    introduction of the time scale or that are too far in the future
+    to be trusted.  See iauDat for further details.
 
-3)  UT1-UTC is tabulated in IERS bulletins.  It increases by exactly
-one second at the end of each positive UTC leap second,
-introduced in order to keep UT1-UTC within +/- 0.9s.  n.b. This
-practice is under review, and in the future UT1-UTC may grow
-essentially without limit.
+3.  UT1-UTC is tabulated in IERS bulletins.  It increases by exactly
+    one second at the end of each positive UTC leap second,
+    introduced in order to keep UT1-UTC within +/- 0.9s.  n.b. This
+    practice is under review, and in the future UT1-UTC may grow
+    essentially without limit.
 
 4.  The geographical coordinates are with respect to the WGS84
-reference ellipsoid.  TAKE CARE WITH THE LONGITUDE SIGN:  the
-longitude required by the present function is east-positive
-(i.e. right-handed), in accordance with geographical convention.
+    reference ellipsoid.  TAKE CARE WITH THE LONGITUDE SIGN:  the
+    longitude required by the present function is east-positive
+    (i.e. right-handed), in accordance with geographical convention.
 
 5.  The polar motion xp,yp can be obtained from IERS bulletins.  The
-values are the coordinates (in radians) of the Celestial
-Intermediate Pole with respect to the International Terrestrial
-Reference System (see IERS Conventions 2003), measured along the
-meridians 0 and 90 deg west respectively.  For many applications,
-xp and yp can be set to zero.
+    values are the coordinates (in radians) of the Celestial
+    Intermediate Pole with respect to the International Terrestrial
+    Reference System (see IERS Conventions 2003), measured along the
+    meridians 0 and 90 deg west respectively.  For many applications,
+    xp and yp can be set to zero.
 
-Internally, the polar motion is stored in a form rotated onto
-the local meridian.
+    Internally, the polar motion is stored in a form rotated onto
+    the local meridian.
 
 6.  If hm, the height above the ellipsoid of the observing station
-in meters, is not known but phpa, the pressure in hPa (=mB), is
-available, an adequate estimate of hm can be obtained from the
-expression
+    in meters, is not known but phpa, the pressure in hPa (=mB), is
+    available, an adequate estimate of hm can be obtained from the
+    expression
 
         hm = -29.3 * tsl * log ( phpa / 1013.25 );
 
-where tsl is the approximate sea-level air temperature in K
-(See Astrophysical Quantities, C.W.Allen, 3rd edition, section
-52).  Similarly, if the pressure phpa is not known, it can be
-estimated from the height of the observing station, hm, as
-follows:
+    where tsl is the approximate sea-level air temperature in K
+    (See Astrophysical Quantities, C.W.Allen, 3rd edition, section
+    52).  Similarly, if the pressure phpa is not known, it can be
+    estimated from the height of the observing station, hm, as
+    follows:
 
         phpa = 1013.25 * exp ( -hm / ( 29.3 * tsl ) );
 
-Note, however, that the refraction is nearly proportional to the
-pressure and that an accurate phpa value is important for
-precise work.
+    Note, however, that the refraction is nearly proportional to the
+    pressure and that an accurate phpa value is important for
+    precise work.
 
 7.  The argument wl specifies the observing wavelength in
-micrometers.  The transition from optical to radio is assumed to
-occur at 100 micrometers (about 3000 GHz).
+    micrometers.  The transition from optical to radio is assumed to
+    occur at 100 micrometers (about 3000 GHz).
 
 8.  It is advisable to take great care with units, as even unlikely
-values of the input parameters are accepted and processed in
-accordance with the models used.
+    values of the input parameters are accepted and processed in
+    accordance with the models used.
 
 9.  In cases where the caller wishes to supply his own Earth
-rotation information and refraction constants, the function
-iauApc can be used instead of the present function.
+    rotation information and refraction constants, the function
+    iauApc can be used instead of the present function.
 
 10. This is one of several functions that inserts into the astrom
-structure star-independent parameters needed for the chain of
-astrometric transformations ICRS <-> GCRS <-> CIRS <-> observed.
+    structure star-independent parameters needed for the chain of
+    astrometric transformations ICRS <-> GCRS <-> CIRS <-> observed.
 
-The various functions support different classes of observer and
-portions of the transformation chain:
+    The various functions support different classes of observer and
+    portions of the transformation chain:
 
-        functions         observer        transformation
+            functions         observer        transformation
 
-iauApcg iauApcg13    geocentric      ICRS <-> GCRS
-iauApci iauApci13    terrestrial     ICRS <-> CIRS
-iauApco iauApco13    terrestrial     ICRS <-> observed
-iauApcs iauApcs13    space           ICRS <-> GCRS
-iauAper iauAper13    terrestrial     update Earth rotation
-iauApio iauApio13    terrestrial     CIRS <-> observed
+    iauApcg iauApcg13    geocentric      ICRS <-> GCRS
+    iauApci iauApci13    terrestrial     ICRS <-> CIRS
+    iauApco iauApco13    terrestrial     ICRS <-> observed
+    iauApcs iauApcs13    space           ICRS <-> GCRS
+    iauAper iauAper13    terrestrial     update Earth rotation
+    iauApio iauApio13    terrestrial     CIRS <-> observed
 
-Those with names ending in "13" use contemporary SOFA models to
-compute the various ephemerides.  The others accept ephemerides
-supplied by the caller.
+    Those with names ending in "13" use contemporary SOFA models to
+    compute the various ephemerides.  The others accept ephemerides
+    supplied by the caller.
 
-The transformation from ICRS to GCRS covers space motion,
-parallax, light deflection, and aberration.  From GCRS to CIRS
-comprises frame bias and precession-nutation.  From CIRS to
-observed takes account of Earth rotation, polar motion, diurnal
-aberration and parallax (unless subsumed into the ICRS <-> GCRS
-transformation), and atmospheric refraction.
+    The transformation from ICRS to GCRS covers space motion,
+    parallax, light deflection, and aberration.  From GCRS to CIRS
+    comprises frame bias and precession-nutation.  From CIRS to
+    observed takes account of Earth rotation, polar motion, diurnal
+    aberration and parallax (unless subsumed into the ICRS <-> GCRS
+    transformation), and atmospheric refraction.
 
 11. The context structure astrom produced by this function is used
-by iauAtioq and iauAtoiq.
+    by iauAtioq and iauAtoiq.
 
 Called:
 iauUtctai    UTC to TAI
@@ -172,11 +172,11 @@ function iauApio13(utc1::Real, utc2::Real, dut1::Real,
     # Allocate return value
     ref_astrom = Ref{iauASTROM}(iauASTROM())
 
-    status = ccall((:iauApio13, libsofa_c), Cint, 
+    status = ccall((:iauApio13, libsofa_c), Cint,
             (Cdouble, Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
-            Ref{iauASTROM}), 
+            Ref{iauASTROM}),
             convert(Float64, utc1),
             convert(Float64, utc2),
             convert(Float64, dut1),

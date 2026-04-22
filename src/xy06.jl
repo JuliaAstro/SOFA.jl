@@ -16,7 +16,7 @@ Returned:
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,15 +35,15 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The X,Y coordinates are those of the unit vector towards the
+2. The X,Y coordinates are those of the unit vector towards the
    celestial intermediate pole.  They represent the combined effects
    of frame bias, precession and nutation.
 
-   3. The fundamental arguments used are as adopted in IERS Conventions
+3. The fundamental arguments used are as adopted in IERS Conventions
    (2003) and are from Simon et al. (1994) and Souchay et al.
    (1999).
 
-   4. This is an alternative to the angles-based method, via the SOFA
+4. This is an alternative to the angles-based method, via the SOFA
    function iauFw2xy and as used in iauXys06a for example.  The two
    methods agree at the 1 microarcsecond level (at present), a
    negligible amount compared with the intrinsic accuracy of the

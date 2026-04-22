@@ -20,12 +20,12 @@ Returned (function value):
 
 Notes:
 
-   1. tt1+tt2 is Julian Date, apportioned in any convenient way between
+1. tt1+tt2 is Julian Date, apportioned in any convenient way between
    the two arguments, for example where tt1 is the Julian Day Number
    and tt2 is the fraction of a day.  The returned ut11,ut12 follow
    suit.
 
-   2. The argument dt is classical Delta T.
+2. The argument dt is classical Delta T.
 
 Reference:
 

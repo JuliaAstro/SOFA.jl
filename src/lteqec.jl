@@ -16,16 +16,16 @@ Given:
 Returned:
    dl,db   double     ecliptic longitude and latitude (radians)
 
-   1. No assumptions are made about whether the coordinates represent
+1. No assumptions are made about whether the coordinates represent
    starlight and embody astrometric effects such as parallax or
    aberration.
 
-   2. The transformation is approximately that from mean J2000.0 right
+2. The transformation is approximately that from mean J2000.0 right
    ascension and declination to ecliptic longitude and latitude
    (mean equinox and ecliptic of date), with only frame bias (always
    less than 25 mas) to disturb this classical picture.
 
-   3. The Vondrak et al. (2011, 2012) 400 millennia precession model
+3. The Vondrak et al. (2011, 2012) 400 millennia precession model
    agrees with the IAU 2006 precession at J2000.0 and stays within
    100 microarcseconds during the 20th and 21st centuries.  It is
    accurate to a few arcseconds throughout the historical period,

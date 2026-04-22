@@ -43,17 +43,17 @@ Returned:
 
 Notes:
 
-    1. The TDB date date1+date2 is a Julian Date, apportioned in any
+1. The TDB date date1+date2 is a Julian Date, apportioned in any
     convenient way between the two arguments.  For example,
     JD(TDB)=2450123.7 could be expressed in any of these ways, among
     others:
 
-        date1          date2
-
-        2450123.7           0.0       (JD method)
-        2451545.0       -1421.3       (J2000 method)
-        2400000.5       50123.2       (MJD method)
-        2450123.5           0.2       (date & time method)
+      | date1        | date2     |                         |
+      | ------------ | --------- | ----------------------- |
+      | 2450123.7    |      0.0  |    (JD method)          |
+      | 2451545.0    |  -1421.3  |    (J2000 method)       |
+      | 2400000.5    |  50123.2  |    (MJD method)         |
+      | 2450123.5    |      0.2  |    (date & time method) |
 
     The JD method is the most natural and convenient to use in cases
     where the loss of several decimal digits of resolution is
@@ -67,14 +67,14 @@ Notes:
     TT can be used instead of TDB without any significant impact on
     accuracy.
 
-    2. All the vectors are with respect to BCRS axes.
+2. All the vectors are with respect to BCRS axes.
 
-    3. In cases where the caller does not wish to provide the Earth
+3. In cases where the caller does not wish to provide the Earth
     ephemeris and CIP/CIO, the function iauApci13 can be used instead
     of the present function.  This computes the required quantities
     using other SOFA functions.
 
-    4. This is one of several functions that inserts into the astrom
+4. This is one of several functions that inserts into the astrom
     structure star-independent parameters needed for the chain of
     astrometric transformations ICRS <-> GCRS <-> CIRS <-> observed.
 
@@ -101,7 +101,7 @@ Notes:
     aberration and parallax (unless subsumed into the ICRS <-> GCRS
     transformation), and atmospheric refraction.
 
-    5. The context structure astrom produced by this function is used by
+5.  The context structure astrom produced by this function is used by
     iauAtciq* and iauAticq*.
 
 Called:

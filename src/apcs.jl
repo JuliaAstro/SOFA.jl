@@ -42,7 +42,7 @@ Returned:
 
 Notes:
 
-   1. The TDB date date1+date2 is a Julian Date, apportioned in any
+1. The TDB date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TDB)=2450123.7 could be expressed in any of these ways, among
    others:
@@ -66,9 +66,9 @@ Notes:
    TT can be used instead of TDB without any significant impact on
    accuracy.
 
-   2. All the vectors are with respect to BCRS axes.
+2. All the vectors are with respect to BCRS axes.
 
-   3. Providing separate arguments for (i) the observer's geocentric
+3. Providing separate arguments for (i) the observer's geocentric
    position and velocity and (ii) the Earth ephemeris is done for
    convenience in the geocentric, terrestrial and Earth orbit cases.
    For deep space applications it maybe more convenient to specify
@@ -78,12 +78,12 @@ Notes:
    m and m/s for the geocentric vectors, au and au/day for the
    heliocentric and barycentric vectors.
 
-   4. In cases where the caller does not wish to provide the Earth
+4. In cases where the caller does not wish to provide the Earth
    ephemeris, the function iauApcs13 can be used instead of the
    present function.  This computes the Earth ephemeris using the
    SOFA function iauEpv00.
 
-   5. This is one of several functions that inserts into the astrom
+5. This is one of several functions that inserts into the astrom
    structure star-independent parameters needed for the chain of
    astrometric transformations ICRS <-> GCRS <-> CIRS <-> observed.
 
@@ -110,7 +110,7 @@ Notes:
    aberration and parallax (unless subsumed into the ICRS <-> GCRS
    transformation), and atmospheric refraction.
 
-   6. The context structure astrom produced by this function is used by
+6. The context structure astrom produced by this function is used by
    iauAtciq* and iauAticq*.
 
 Called:

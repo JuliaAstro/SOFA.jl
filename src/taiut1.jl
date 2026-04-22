@@ -20,12 +20,12 @@ Returned (function value):
 
 Notes:
 
-   1. tai1+tai2 is Julian Date, apportioned in any convenient way
+1. tai1+tai2 is Julian Date, apportioned in any convenient way
    between the two arguments, for example where tai1 is the Julian
    Day Number and tai2 is the fraction of a day.  The returned
    UT11,UT12 follow suit.
 
-   2. The argument dta, i.e. UT1-TAI, is an observed quantity, and is
+2. The argument dta, i.e. UT1-TAI, is an observed quantity, and is
    available from IERS tabulations.
 
 Reference:

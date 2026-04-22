@@ -16,7 +16,7 @@ Returned:
 
 Notes:
 
-   1. The TDB date date1+date2 is a Julian Date, apportioned in any
+1. The TDB date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TDB)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,7 +35,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The matrix operates in the sense V(date) = rmatpn * V(J2000),
+2. The matrix operates in the sense V(date) = rmatpn * V(J2000),
    where the p-vector V(date) is with respect to the true equatorial
    triad of date date1+date2 and the p-vector V(J2000) is with
    respect to the mean equatorial triad of epoch J2000.0.

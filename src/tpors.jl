@@ -25,10 +25,10 @@ Returned (function value):
 
 Notes:
 
-   1. The tangent plane projection is also called the "gnomonic
+1. The tangent plane projection is also called the "gnomonic
    projection" and the "central projection".
 
-   2. The eta axis points due north in the adopted coordinate system.
+2. The eta axis points due north in the adopted coordinate system.
    If the spherical coordinates are observed (RA,Dec), the tangent
    plane coordinates (xi,eta) are conventionally called the
    "standard coordinates".  If the spherical coordinates are with
@@ -36,24 +36,24 @@ Notes:
    The units of (xi,eta) are, effectively, radians at the tangent
    point.
 
-   3. All angular arguments are in radians.
+3. All angular arguments are in radians.
 
-   4. The angles a01 and a02 are returned in the range 0-2pi.  The
+4. The angles a01 and a02 are returned in the range 0-2pi.  The
    angles b01 and b02 are returned in the range +/-pi, but in the
    usual, non-pole-crossing, case, the range is +/-pi/2.
 
-   5. Cases where there is no solution can arise only near the poles.
+5. Cases where there is no solution can arise only near the poles.
    For example, it is clearly impossible for a star at the pole
    itself to have a non-zero xi value, and hence it is meaningless
    to ask where the tangent point would have to be to bring about
    this combination of xi and dec.
 
-   6. Also near the poles, cases can arise where there are two useful
+6. Also near the poles, cases can arise where there are two useful
    solutions.  The return value indicates whether the second of the
    two solutions returned is useful;  1 indicates only one useful
    solution, the usual case.
 
-   7. The basis of the algorithm is to solve the spherical triangle PSC,
+7. The basis of the algorithm is to solve the spherical triangle PSC,
    where P is the north celestial pole, S is the star and C is the
    tangent point.  The spherical coordinates of the tangent point are
    [a0,b0];  writing rho^2 = (xi^2+eta^2) and r^2 = (1+rho^2), side c
@@ -62,7 +62,7 @@ Notes:
    cos(C) = eta/rho.  Angle P (to be found) is the longitude
    difference between star and tangent point (a-a0).
 
-   8. This function is a member of the following set:
+8. This function is a member of the following set:
 
       spherical      vector         solve for
 

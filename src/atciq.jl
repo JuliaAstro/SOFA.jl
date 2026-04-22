@@ -45,13 +45,13 @@ Returned:
 
 Notes:
 
-   1. All the vectors are with respect to BCRS axes.
+1. All the vectors are with respect to BCRS axes.
 
-   2. Star data for an epoch other than J2000.0 (for example from the
+2. Star data for an epoch other than J2000.0 (for example from the
    Hipparcos catalog, which has an epoch of J1991.25) will require a
    preliminary call to iauPmsafe before use.
 
-   3. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
+3. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 
 Called:
    iauPmpx      proper motion and parallax
@@ -78,19 +78,19 @@ function iauAtciq(rc::Real, dc::Real,
    ref_ri     = Ref{Float64}(0.0)
    ref_di     = Ref{Float64}(0.0)
 
-   ccall((:iauAtciq, libsofa_c), Cvoid, 
+   ccall((:iauAtciq, libsofa_c), Cvoid,
             (Cdouble, Cdouble,
             Cdouble, Cdouble,
-            Cdouble, Cdouble, Ref{iauASTROM}, 
-            Ref{Cdouble}, Ref{Cdouble}), 
+            Cdouble, Cdouble, Ref{iauASTROM},
+            Ref{Cdouble}, Ref{Cdouble}),
             convert(Float64, rc),
-            convert(Float64, dc),            
+            convert(Float64, dc),
             convert(Float64, pr),
-            convert(Float64, pd),            
+            convert(Float64, pd),
             convert(Float64, px),
             convert(Float64, rv),
             ref_astrom, ref_ri, ref_di)
-            
+
 
    return ref_ri[], ref_di[]
 end

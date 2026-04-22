@@ -16,7 +16,7 @@ Returned (function value):
 
 Notes:
 
-   1. The UT1 date uta+utb is a Julian Date, apportioned in any
+1. The UT1 date uta+utb is a Julian Date, apportioned in any
    convenient way between the argument pair.  For example,
    JD=2450123.7 could be expressed in any of these ways, among
    others:
@@ -38,7 +38,7 @@ Notes:
    question and the utb argument lies in the range 0 to 1, or vice
    versa.
 
-   2. The result is compatible with the IAU 2000 resolutions, except
+2. The result is compatible with the IAU 2000 resolutions, except
    that accuracy has been compromised for the sake of speed and
    convenience in two respects:
 
@@ -49,13 +49,13 @@ Notes:
    . The IAU 2000B abridged nutation model (McCarthy & Luzum, 2001)
       is used, introducing errors of up to 1 mas.
 
-   3. This GAST is compatible with the IAU 2000 resolutions and must be
+3. This GAST is compatible with the IAU 2000 resolutions and must be
    used only in conjunction with other IAU 2000 compatible
    components such as precession-nutation.
 
-   4. The result is returned in the range 0 to 2pi.
+4. The result is returned in the range 0 to 2pi.
 
-   5. The algorithm is from Capitaine et al. (2003) and IERS
+5. The algorithm is from Capitaine et al. (2003) and IERS
    Conventions 2003.
 
 Called:

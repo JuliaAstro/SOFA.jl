@@ -20,7 +20,7 @@ Returned:
 
 Notes:
 
-    1. If the position part of pv is null, theta, phi, td and pd
+1. If the position part of pv is null, theta, phi, td and pd
     are indeterminate.  This is handled by extrapolating the
     position through unit time by using the velocity part of
     pv.  This moves the origin without changing the direction
@@ -28,7 +28,7 @@ Notes:
     components of pv are both null, zeroes are returned for all
     six results.
 
-    2. If the position is a pole, theta, td and pd are indeterminate.
+2. If the position is a pole, theta, td and pd are indeterminate.
     In such cases zeroes are returned for all three.
 
 This revision:  2013 June 18

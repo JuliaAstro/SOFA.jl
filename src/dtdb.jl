@@ -50,7 +50,7 @@ Returned (function value):
 
 Notes:
 
-   1. The date date1+date2 is a Julian Date, apportioned in any
+1. The date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -73,17 +73,17 @@ Notes:
    the terrestrial dynamical time (TT) can be used with no practical
    effect on the accuracy of the prediction.
 
-   2. TT can be regarded as a coordinate time that is realized as an
+2. TT can be regarded as a coordinate time that is realized as an
    offset of 32.184s from International Atomic Time, TAI.  TT is a
    specific linear transformation of geocentric coordinate time TCG,
    which is the time scale for the Geocentric Celestial Reference
    System, GCRS.
 
-   3. TDB is a coordinate time, and is a specific linear transformation
+3. TDB is a coordinate time, and is a specific linear transformation
    of barycentric coordinate time TCB, which is the time scale for
    the Barycentric Celestial Reference System, BCRS.
 
-   4. The difference TCG-TCB depends on the masses and positions of the
+4. The difference TCG-TCB depends on the masses and positions of the
    bodies of the solar system and the velocity of the Earth.  It is
    dominated by a rate difference, the residual being of a periodic
    character.  The latter, which is modeled by the present function,
@@ -95,7 +95,7 @@ Notes:
    surface) experiences variations in speed (with respect to the
    BCRS) and gravitational potential.
 
-   5. TDB can be regarded as the same as TCB but with a rate adjustment
+5. TDB can be regarded as the same as TCB but with a rate adjustment
    to keep it close to TT, which is convenient for many applications.
    The history of successive attempts to define TDB is set out in
    Resolution 3 adopted by the IAU General Assembly in 2006, which
@@ -105,7 +105,7 @@ Notes:
    could introduce a linear drift between TDB and TT;  however, any
    such drift is unlikely to exceed 1 nanosecond per century.
 
-   6. The geocentric TDB-TT model used in the present function is that of
+6. The geocentric TDB-TT model used in the present function is that of
    Fairhead & Bretagnon (1990), in its full form.  It was originally
    supplied by Fairhead (private communications with P.T.Wallace,
    1990) as a Fortran subroutine.  The present C function contains an
@@ -125,12 +125,12 @@ Notes:
    model can be nullified, and the function will return the Fairhead
    & Bretagnon result alone.
 
-   7. During the interval 1950-2050, the absolute accuracy is better
+7. During the interval 1950-2050, the absolute accuracy is better
    than +/- 3 nanoseconds relative to time ephemerides obtained by
    direct numerical integrations based on the JPL DE405 solar system
    ephemeris.
 
-   8. It must be stressed that the present function is merely a model,
+8. It must be stressed that the present function is merely a model,
    and that numerical integration of solar-system ephemerides is the
    definitive method for predicting the relationship between TCG and
    TCB and hence between TT and TDB.

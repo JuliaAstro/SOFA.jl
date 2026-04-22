@@ -16,7 +16,7 @@ Returned:
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,18 +35,18 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The precession adjustments are expressed as "nutation
+2. The precession adjustments are expressed as "nutation
    components", corrections in longitude and obliquity with respect
    to the J2000.0 equinox and ecliptic.
 
-   3. Although the precession adjustments are stated to be with respect
+3. Although the precession adjustments are stated to be with respect
    to Lieske et al. (1977), the MHB2000 model does not specify which
    set of Euler angles are to be used and how the adjustments are to
    be applied.  The most literal and straightforward procedure is to
    adopt the 4-rotation epsilon_0, psi_A, omega_A, xi_A option, and
    to add dpsipr to psi_A and depspr to both omega_A and eps_A.
 
-   4. This is an implementation of one aspect of the IAU 2000A nutation
+4. This is an implementation of one aspect of the IAU 2000A nutation
    model, formally adopted by the IAU General Assembly in 2000,
    namely MHB2000 (Mathews et al. 2002).
 

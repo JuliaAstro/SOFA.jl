@@ -18,10 +18,10 @@ Returned:
 
 Notes:
 
-   1. In contrast to the iauFk524  routine, here the FK5 proper
+1. In contrast to the iauFk524  routine, here the FK5 proper
    motions, the parallax and the radial velocity are presumed zero.
 
-   2. This function converts a star position from the IAU 1976 FK5
+2. This function converts a star position from the IAU 1976 FK5
    (Fricke) system to the former FK4 (Bessel-Newcomb) system, for
    cases such as distant radio sources where it is presumed there is
    zero parallax and no proper motion.  Because of the E-terms of
@@ -29,17 +29,17 @@ Notes:
    in FK4, and the present routine returns those fictitious proper
    motions.
 
-   3. Conversion from B1950.0 FK4 to J2000.0 FK5 only is provided for.
+3. Conversion from B1950.0 FK4 to J2000.0 FK5 only is provided for.
    Conversions involving other equinoxes would require additional
    treatment for precession.
 
-   4. The position returned by this routine is in the B1950.0 FK4
+4. The position returned by this routine is in the B1950.0 FK4
    reference system but at Besselian epoch BEPOCH.  For comparison
    with catalogs the BEPOCH argument will frequently be 1950.0. (In
    this context the distinction between Besselian and Julian epoch
    is insignificant.)
 
-   5. The RA component of the returned (fictitious) proper motion is
+5. The RA component of the returned (fictitious) proper motion is
    dRA/dt rather than cos(Dec)*dRA/dt.
 
 Called:

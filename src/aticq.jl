@@ -39,10 +39,9 @@ Returned:
 
 Notes:
 
-   1. Only the Sun is taken into account in the light deflection
-   correction.
+1. Only the Sun is taken into account in the light deflection correction.
 
-   2. Iterative techniques are used for the aberration and light
+2. Iterative techniques are used for the aberration and light
    deflection corrections so that the functions iauAtic13 (or
    iauAticq) and iauAtci13 (or iauAtciq) are accurate inverses;
    even at the edge of the Sun's disk the discrepancy is only about

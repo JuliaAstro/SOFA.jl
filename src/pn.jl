@@ -16,10 +16,10 @@ Returned:
 
 Notes:
 
-   1. If p is null, the result is null.  Otherwise the result is a unit
+1. If p is null, the result is null.  Otherwise the result is a unit
    vector.
 
-   2. It is permissible to re-use the same array for any of the
+2. It is permissible to re-use the same array for any of the
    arguments.
 
 Called:

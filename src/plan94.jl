@@ -26,7 +26,7 @@ Returned (function value):
 
 Notes:
 
-   1. The date date1+date2 is in the TDB time scale (in practice TT can
+1. The date date1+date2 is in the TDB time scale (in practice TT can
    be used) and is a Julian Date, apportioned in any convenient way
    between the two arguments.  For example, JD(TDB)=2450123.7 could
    be expressed in any of these ways, among others:
@@ -47,14 +47,14 @@ Notes:
    accuracy of the present algorithm is such that any of the methods
    is satisfactory.
 
-   2. If an np value outside the range 1-8 is supplied, an error status
+2. If an np value outside the range 1-8 is supplied, an error status
    (function value -1) is returned and the pv vector set to zeroes.
 
-   3. For np=3 the result is for the Earth-Moon Barycenter.  To obtain
+3. For np=3 the result is for the Earth-Moon Barycenter.  To obtain
    the heliocentric position and velocity of the Earth, use instead
    the SOFA function iauEpv00.
 
-   4. On successful return, the array pv contains the following:
+4. On successful return, the array pv contains the following:
 
       pv[0][0]   x      }
       pv[0][1]   y      } heliocentric position, au
@@ -67,7 +67,7 @@ Notes:
    The reference frame is equatorial and is with respect to the
    mean equator and equinox of epoch J2000.0.
 
-   5. The algorithm is due to J.L. Simon, P. Bretagnon, J. Chapront,
+5. The algorithm is due to J.L. Simon, P. Bretagnon, J. Chapront,
    M. Chapront-Touze, G. Francou and J. Laskar (Bureau des
    Longitudes, Paris, France).  From comparisons with JPL
    ephemeris DE102, they quote the following maximum errors
@@ -117,7 +117,7 @@ Notes:
       Uranus        86            7         661000      27.4
       Neptune       11            2         248000      21.4
 
-   6. The present SOFA re-implementation of the original Simon et al.
+6. The present SOFA re-implementation of the original Simon et al.
    Fortran code differs from the original in the following respects:
 
       *  C instead of Fortran.
@@ -144,7 +144,7 @@ Notes:
 
    None of the above changes affects the result significantly.
 
-   7. The returned status indicates the most serious condition
+7. The returned status indicates the most serious condition
    encountered during execution of the function.  Illegal np is
    considered the most serious, overriding failure to converge,
    which in turn takes precedence over the remote date warning.

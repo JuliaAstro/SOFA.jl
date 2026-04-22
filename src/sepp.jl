@@ -16,9 +16,9 @@ Returned (function value):
 
 Notes:
 
-   1. If either vector is null, a zero result is returned.
+1. If either vector is null, a zero result is returned.
 
-   2. The angular separation is most simply formulated in terms of
+2. The angular separation is most simply formulated in terms of
    scalar product.  However, this gives poor accuracy for angles
    near zero and pi.  The present algorithm uses both cross product
    and dot product, to deliver full accuracy whatever the size of

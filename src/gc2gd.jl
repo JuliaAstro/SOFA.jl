@@ -24,7 +24,7 @@ Returned (function value):
 
 Notes:
 
-   1. The identifier n is a number that specifies the choice of
+1. The identifier n is a number that specifies the choice of
    reference ellipsoid.  The following are supported:
 
       n    ellipsoid
@@ -36,14 +36,14 @@ Notes:
    The n value has no significance outside the SOFA software.  For
    convenience, symbols WGS84 etc. are defined in sofam.h.
 
-   2. The geocentric vector (xyz, given) and height (height, returned)
+2. The geocentric vector (xyz, given) and height (height, returned)
    are in meters.
 
-   3. An error status -1 means that the identifier n is illegal.  An
+3. An error status -1 means that the identifier n is illegal.  An
    error status -2 is theoretically impossible.  In all error cases,
    all three results are set to -1e9.
 
-   4. The inverse transformation is performed in the function iauGd2gc.
+4. The inverse transformation is performed in the function iauGd2gc.
 
 Called:
    iauEform     Earth reference ellipsoids

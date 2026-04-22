@@ -15,7 +15,7 @@ Returned:
 
 Notes:
 
-   1. The matrix is in the sense
+1. The matrix is in the sense
 
       P_date = rp x P_J2000,
 
@@ -23,7 +23,7 @@ Notes:
    equator and equinox and P_date is the same vector with respect to
    the equator and equinox of epoch epj.
 
-   2. The Vondrak et al. (2011, 2012) 400 millennia precession model
+2. The Vondrak et al. (2011, 2012) 400 millennia precession model
    agrees with the IAU 2006 precession at J2000.0 and stays within
    100 microarcseconds during the 20th and 21st centuries.  It is
    accurate to a few arcseconds throughout the historical period,

@@ -21,7 +21,7 @@ Returned (all FK5, equinox J2000.0, date date1+date2):
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -40,22 +40,22 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
+2. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 
-   3. The FK5 to Hipparcos transformation is modeled as a pure rotation
+3. The FK5 to Hipparcos transformation is modeled as a pure rotation
    and spin;  zonal errors in the FK5 catalogue are not taken into
    account.
 
-   4. It was the intention that Hipparcos should be a close
+4. It was the intention that Hipparcos should be a close
    approximation to an inertial frame, so that distant objects have
    zero proper motion;  such objects have (in general) non-zero
    proper motion in FK5, and this function returns those fictitious
    proper motions.
 
-   5. The position returned by this function is in the FK5 J2000.0
+5. The position returned by this function is in the FK5 J2000.0
    reference system but at date date1+date2.
 
-   6. See also iauFk52h, iauH2fk5, iauFk5zhz.
+6. See also iauFk52h, iauH2fk5, iauFk5zhz.
 
 Called:
    iauS2c       spherical coordinates to unit vector

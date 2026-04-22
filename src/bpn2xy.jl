@@ -16,11 +16,11 @@ Returned:
 
 Notes:
 
-    1. The matrix rbpn transforms vectors from GCRS to true equator (and
+1. The matrix rbpn transforms vectors from GCRS to true equator (and
     CIO or equinox) of date, and therefore the Celestial Intermediate
     Pole unit vector is the bottom row of the matrix.
 
-    2. The arguments x,y are components of the Celestial Intermediate
+2. The arguments x,y are components of the Celestial Intermediate
     Pole unit vector in the Geocentric Celestial Reference System.
 
 Reference:

@@ -20,12 +20,12 @@ Returned (function value):
 
 Notes:
 
-   1. tt1+tt2 is Julian Date, apportioned in any convenient way between
+1. tt1+tt2 is Julian Date, apportioned in any convenient way between
    the two arguments, for example where tt1 is the Julian Day Number
    and tt2 is the fraction of a day.  The returned tdb1,tdb2 follow
    suit.
 
-   2. The argument dtr represents the quasi-periodic component of the
+2. The argument dtr represents the quasi-periodic component of the
    GR transformation between TT and TCB.  It is dependent upon the
    adopted solar-system ephemeris, and can be obtained by numerical
    integration, by interrogating a precomputed time ephemeris or by
@@ -33,7 +33,7 @@ Notes:
    iauDtdb.   The quantity is dominated by an annual term of 1.7 ms
    amplitude.
 
-   3. TDB is essentially the same as Teph, the time argument for the JPL
+3. TDB is essentially the same as Teph, the time argument for the JPL
    solar system ephemerides.
 
 References:

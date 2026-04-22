@@ -15,7 +15,7 @@ Returned (function value):
 
 Notes:
 
-   1. The UT1 date dj1+dj2 is a Julian Date, apportioned in any
+1. The UT1 date dj1+dj2 is a Julian Date, apportioned in any
    convenient way between the arguments dj1 and dj2.  For example,
    JD(UT1)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -36,7 +36,7 @@ Notes:
    question and the dj2 argument lies in the range 0 to 1, or vice
    versa.
 
-   2. The algorithm is adapted from Expression 22 of Capitaine et al.
+2. The algorithm is adapted from Expression 22 of Capitaine et al.
    2000.  The time argument has been expressed in days directly,
    and, to retain precision, integer contributions have been
    eliminated.  The same formulation is given in IERS Conventions

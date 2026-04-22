@@ -16,7 +16,7 @@ Returned (function value):
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,7 +35,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The result, which is in radians, operates in the following sense:
+2. The result, which is in radians, operates in the following sense:
 
       Greenwich apparent ST = GMST + equation of the equinoxes
 

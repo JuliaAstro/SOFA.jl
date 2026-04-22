@@ -21,10 +21,10 @@ Returned: (all B2000.0, FK4)
 
 Notes:
 
-   1. The proper motions in RA are dRA/dt rather than cos(Dec)*dRA/dt,
+1. The proper motions in RA are dRA/dt rather than cos(Dec)*dRA/dt,
    and are per year rather than per century.
 
-   2. The conversion is somewhat complicated, for several reasons:
+2. The conversion is somewhat complicated, for several reasons:
 
    . Change of standard epoch from J2000.0 to B2000.0.
 
@@ -49,7 +49,7 @@ Notes:
    Andoyer's post-Newcomb precession.  The numerical constants from
    Seidelmann (1992) are used canonically.
 
-   4. In the FK4 catalog the proper motions of stars within 10 degrees
+4. In the FK4 catalog the proper motions of stars within 10 degrees
    of the poles do not embody differential E-terms effects and
    should, strictly speaking, be handled in a different manner from
    stars outside these regions.  However, given the general lack of

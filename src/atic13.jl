@@ -18,7 +18,7 @@ Returned:
 
 Notes:
 
-    1. The TDB date date1+date2 is a Julian Date, apportioned in any
+1.  The TDB date date1+date2 is a Julian Date, apportioned in any
     convenient way between the two arguments.  For example,
     JD(TDB)=2450123.7 could be expressed in any of these ways, among
     others:
@@ -42,13 +42,13 @@ Notes:
     TT can be used instead of TDB without any significant impact on
     accuracy.
 
-    2. Iterative techniques are used for the aberration and light
+2.  Iterative techniques are used for the aberration and light
     deflection corrections so that the functions iauAtic13 (or
     iauAticq) and iauAtci13 (or iauAtciq) are accurate inverses;
     even at the edge of the Sun's disk the discrepancy is only about
     1 nanoarcsecond.
 
-    3. The available accuracy is better than 1 milliarcsecond, limited
+3.  The available accuracy is better than 1 milliarcsecond, limited
     mainly by the precession-nutation model that is used, namely
     IAU 2000A/2006.  Very close to solar system bodies, additional
     errors of up to several milliarcseconds can occur because of
@@ -59,7 +59,7 @@ Notes:
     5 microarcseconds.  Light deflection at the Sun's limb is
     uncertain at the 0.4 mas level.
 
-    4. Should the transformation to (equinox based) J2000.0 mean place
+4.  Should the transformation to (equinox based) J2000.0 mean place
     be required rather than (CIO based) ICRS coordinates, subtract the
     equation of the origins from the returned right ascension:
     RA = RI - EO.  (The iauAnp function can then be applied, as

@@ -19,7 +19,7 @@ Returned:
 
 Notes:
 
-   1. The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
+1. The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
    apportioned in any convenient way between the arguments uta and
    utb.  For example, JD(UT1)=2450123.7 could be expressed in any of
    these ways, among others:
@@ -40,12 +40,12 @@ Notes:
    argument is for 0hrs UT1 on the day in question and the utb
    argument lies in the range 0 to 1, or vice versa.
 
-   2. The arguments xp and yp are the coordinates (in radians) of the
+2. The arguments xp and yp are the coordinates (in radians) of the
    Celestial Intermediate Pole with respect to the International
    Terrestrial Reference System (see IERS Conventions 2003),
    measured along the meridians to 0 and 90 deg west respectively.
 
-   3. The matrix rc2t transforms from celestial to terrestrial
+3. The matrix rc2t transforms from celestial to terrestrial
    coordinates:
 
       [TRS] = RPOM * R_3(ERA) * RC2I * [CRS]

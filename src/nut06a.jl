@@ -13,7 +13,7 @@ Status:  canonical model.
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -32,17 +32,17 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The nutation components in longitude and obliquity are in radians
+2. The nutation components in longitude and obliquity are in radians
    and with respect to the mean equinox and ecliptic of date,
    IAU 2006 precession model (Hilton et al. 2006, Capitaine et al.
    2005).
 
-   3. The function first computes the IAU 2000A nutation, then applies
+3. The function first computes the IAU 2000A nutation, then applies
    adjustments for (i) the consequences of the change in obliquity
    from the IAU 1980 ecliptic to the IAU 2006 ecliptic and (ii) the
    secular variation in the Earth's dynamical form factor J2.
 
-   4. The present function provides classical nutation, complementing
+4. The present function provides classical nutation, complementing
    the IAU 2000 frame bias and IAU 2006 precession.  It delivers a
    pole which is at current epochs accurate to a few tens of
    microarcseconds, apart from the free core nutation.

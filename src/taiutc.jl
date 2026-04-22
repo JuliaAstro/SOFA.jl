@@ -21,14 +21,14 @@ Returned (function value):
 
 Notes:
 
-   1. tai1+tai2 is Julian Date, apportioned in any convenient way
+1. tai1+tai2 is Julian Date, apportioned in any convenient way
    between the two arguments, for example where tai1 is the Julian
    Day Number and tai2 is the fraction of a day.  The returned utc1
    and utc2 form an analogous pair, except that a special convention
    is used, to deal with the problem of leap seconds - see the next
    note.
 
-   2. JD cannot unambiguously represent UTC during a leap second unless
+2. JD cannot unambiguously represent UTC during a leap second unless
    special measures are taken.  The convention in the present
    function is that the JD day represents UTC days whether the
    length is 86399, 86400 or 86401 SI seconds.  In the 1960-1972 era
@@ -36,11 +36,11 @@ Notes:
    linear UTC(TAI) expression was changed, and these "mini-leaps"
    are also included in the SOFA convention.
 
-   3. The function iauD2dtf can be used to transform the UTC quasi-JD
+3. The function iauD2dtf can be used to transform the UTC quasi-JD
    into calendar date and clock time, including UTC leap second
    handling.
 
-   4. The warning status "dubious year" flags UTCs that predate the
+4. The warning status "dubious year" flags UTCs that predate the
    introduction of the time scale or that are too far in the future
    to be trusted.  See iauDat for further details.
 

@@ -16,12 +16,12 @@ Returned:
 
 Notes:
 
-   1. "Update" means "refer the position component of the vector
+1. "Update" means "refer the position component of the vector
    to a new date dt time units from the existing date".
 
-   2. The time units of dt must match those of the velocity.
+2. The time units of dt must match those of the velocity.
 
-   3. It is permissible for pv and upv to be the same array.
+3. It is permissible for pv and upv to be the same array.
 
 Called:
    iauPpsp      p-vector plus scaled p-vector

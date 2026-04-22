@@ -48,17 +48,17 @@ Returned:
 
 Notes:
 
-   1. The TDB date date1+date2 is a Julian Date, apportioned in any
+1. The TDB date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TDB)=2450123.7 could be expressed in any of these ways, among
    others:
 
-         date1          date2
+    |    date1    |     date2
 
-      2450123.7           0.0       (JD method)
-      2451545.0       -1421.3       (J2000 method)
-      2400000.5       50123.2       (MJD method)
-      2450123.5           0.2       (date & time method)
+    | 2450123.7   |       0.0   |   (JD method)
+    | 2451545.0   |   -1421.3   |   (J2000 method)
+    | 2400000.5   |   50123.2   |   (MJD method)
+    | 2450123.5   |       0.2   |   (date & time method)
 
    The JD method is the most natural and convenient to use in cases
    where the loss of several decimal digits of resolution is
@@ -72,16 +72,16 @@ Notes:
    TT can be used instead of TDB without any significant impact on
    accuracy.
 
-   2. The vectors eb, eh, and all the astrom vectors, are with respect
+2. The vectors eb, eh, and all the astrom vectors, are with respect
    to BCRS axes.
 
-   3. The geographical coordinates are with respect to the WGS84
+3. The geographical coordinates are with respect to the WGS84
    reference ellipsoid.  TAKE CARE WITH THE LONGITUDE SIGN
    CONVENTION:  the longitude required by the present function is
    right-handed, i.e. east-positive, in accordance with geographical
    convention.
 
-   4. xp and yp are the coordinates (in radians) of the Celestial
+4. xp and yp are the coordinates (in radians) of the Celestial
    Intermediate Pole with respect to the International Terrestrial
    Reference System (see IERS Conventions), measured along the
    meridians 0 and 90 deg west respectively.  sp is the TIO locator
@@ -92,22 +92,22 @@ Notes:
    Internally, the polar motion is stored in a form rotated onto the
    local meridian.
 
-   5. The refraction constants refa and refb are for use in a
+5. The refraction constants refa and refb are for use in a
    dZ = A*tan(Z)+B*tan^3(Z) model, where Z is the observed
    (i.e. refracted) zenith distance and dZ is the amount of
    refraction.
 
-   6. It is advisable to take great care with units, as even unlikely
+6. It is advisable to take great care with units, as even unlikely
    values of the input parameters are accepted and processed in
    accordance with the models used.
 
-   7. In cases where the caller does not wish to provide the Earth
+7. In cases where the caller does not wish to provide the Earth
    Ephemeris, the Earth rotation information and refraction
    constants, the function iauApco13 can be used instead of the
    present function.  This starts from UTC and weather readings etc.
    and computes suitable values using other SOFA functions.
 
-   8. This is one of several functions that inserts into the astrom
+8. This is one of several functions that inserts into the astrom
    structure star-independent parameters needed for the chain of
    astrometric transformations ICRS <-> GCRS <-> CIRS <-> observed.
 
@@ -134,7 +134,7 @@ Notes:
    aberration and parallax (unless subsumed into the ICRS <-> GCRS
    transformation), and atmospheric refraction.
 
-   9. The context structure astrom produced by this function is used by
+9. The context structure astrom produced by this function is used by
    iauAtioq, iauAtoiq, iauAtciq* and iauAticq*.
 
 Called:

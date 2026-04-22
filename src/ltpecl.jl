@@ -15,10 +15,10 @@ Returned:
 
 Notes:
 
-   1. The returned vector is with respect to the J2000.0 mean equator
+1. The returned vector is with respect to the J2000.0 mean equator
    and equinox.
 
-   2. The Vondrak et al. (2011, 2012) 400 millennia precession model
+2. The Vondrak et al. (2011, 2012) 400 millennia precession model
    agrees with the IAU 2006 precession at J2000.0 and stays within
    100 microarcseconds during the 20th and 21st centuries.  It is
    accurate to a few arcseconds throughout the historical period,
