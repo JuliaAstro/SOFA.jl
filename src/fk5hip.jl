@@ -13,18 +13,18 @@ Returned:
 
 Notes:
 
-   1. This function models the FK5 to Hipparcos transformation as a
+1. This function models the FK5 to Hipparcos transformation as a
    pure rotation and spin;  zonal errors in the FK5 catalogue are
    not taken into account.
 
-   2. The r-matrix r5h operates in the sense:
+2. The r-matrix r5h operates in the sense:
 
          P_Hipparcos = r5h x P_FK5
 
    where P_FK5 is a p-vector in the FK5 frame, and P_Hipparcos is
    the equivalent Hipparcos p-vector.
 
-   3. The r-vector s5h represents the time derivative of the FK5 to
+3. The r-vector s5h represents the time derivative of the FK5 to
    Hipparcos rotation.  The units are radians per year (Julian,
    TDB).
 
@@ -47,9 +47,9 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauFk5hip()
    r5h = zeros(Float64, 3, 3)
    s5h = zeros(Float64, 3)
-   
-   ccall((:iauFk5hip, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}), 
+
+   ccall((:iauFk5hip, libsofa_c), Cvoid,
+         (Ptr{Cdouble}, Ptr{Cdouble}),
           r5h, s5h)
 
    return SMatrix{3,3}(r5h'), SVector{3}(s5h)

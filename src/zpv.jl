@@ -25,7 +25,7 @@ export iauZpv
 function iauZpv()
    pv = zeros(Float64, 3, 2)
 
-   ccall((:iauZpv, libsofa_c), Cvoid, 
+   ccall((:iauZpv, libsofa_c), Cvoid,
            (Ptr{Cdouble},),
            pv)
 

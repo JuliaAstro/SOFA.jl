@@ -15,11 +15,11 @@ Given and returned:
 
 Notes:
 
-   1. Calling this function with positive psi incorporates in the
+1. Calling this function with positive psi incorporates in the
    supplied r-matrix r an additional rotation, about the z-axis,
    anticlockwise as seen looking towards the origin from positive z.
 
-   2. The additional rotation can be represented by this matrix:
+2. The additional rotation can be represented by this matrix:
 
       (  + cos(psi)   + sin(psi)     0  )
       (                                 )

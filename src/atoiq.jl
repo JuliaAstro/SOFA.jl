@@ -38,7 +38,7 @@ Returned:
 
 Notes:
 
-   1. "Observed" Az,El means the position that would be seen by a
+1. "Observed" Az,El means the position that would be seen by a
    perfect geodetically aligned theodolite.  This is related to
    the observed HA,Dec via the standard rotation, using the geodetic
    latitude (corrected for polar motion), while the observed HA and
@@ -49,7 +49,7 @@ Notes:
    from the observed place the effects of atmospheric refraction and
    diurnal aberration, the CIRS RA,Dec is obtained.
 
-   2. Only the first character of the type argument is significant.
+2. Only the first character of the type argument is significant.
    "R" or "r" indicates that ob1 and ob2 are the observed right
    ascension and declination;  "H" or "h" indicates that they are
    hour angle (west +ve) and declination;  anything else ("A" or
@@ -58,7 +58,7 @@ Notes:
    rather than altitude in order to reflect the fact that no
    allowance is made for depression of the horizon.)
 
-   3. The accuracy of the result is limited by the corrections for
+3. The accuracy of the result is limited by the corrections for
    refraction, which use a simple A*tan(z) + B*tan^3(z) model.
    Providing the meteorological parameters are known accurately and
    there are no gross local effects, the predicted observed
@@ -73,7 +73,7 @@ Notes:
    falls off at high zenith distances, but is still better than
    0.05 arcsec at 85 degrees.
 
-   4. It is advisable to take great care with units, as even unlikely
+4. It is advisable to take great care with units, as even unlikely
    values of the input parameters are accepted and processed in
    accordance with the models used.
 
@@ -100,9 +100,9 @@ function iauAtoiq(type_::Char, ob1::Real, ob2::Real, astrom::iauASTROM)
    ref_ri     = Ref{Float64}(0.0)
    ref_di     = Ref{Float64}(0.0)
 
-   ccall((:iauAtoiq, libsofa_c), Cvoid, 
+   ccall((:iauAtoiq, libsofa_c), Cvoid,
        (Ref{UInt8}, Cdouble, Cdouble, Ref{iauASTROM},
-       Ref{Cdouble}, Ref{Cdouble}), 
+       Ref{Cdouble}, Ref{Cdouble}),
        ref_type_, convert(Float64, ob1), convert(Float64, ob2),
        ref_astrom, ref_ri, ref_di)
 

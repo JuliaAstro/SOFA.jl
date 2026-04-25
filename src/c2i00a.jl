@@ -16,7 +16,7 @@ Returned:
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,7 +35,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The matrix rc2i is the first stage in the transformation from
+2. The matrix rc2i is the first stage in the transformation from
    celestial to terrestrial coordinates:
 
       [TRS]  =  RPOM * R_3(ERA) * rc2i * [CRS]
@@ -47,7 +47,7 @@ Notes:
    Reference System (see IERS Conventions 2003), ERA is the Earth
    Rotation Angle and RPOM is the polar motion matrix.
 
-   3. A faster, but slightly less accurate result (about 1 mas), can be
+3. A faster, but slightly less accurate result (about 1 mas), can be
    obtained by using instead the iauC2i00b function.
 
 Called:
@@ -79,9 +79,9 @@ function iauC2i00a(date1::Real, date2::Real)
    # Allocate return value
    rc2i = zeros(Float64, 3, 3)
 
-   ccall((:iauC2i00a, libsofa_c), Cvoid, 
+   ccall((:iauC2i00a, libsofa_c), Cvoid,
          (Cdouble, Cdouble,
-         Ptr{Cdouble}), 
+         Ptr{Cdouble}),
          convert(Float64, date1), convert(Float64, date2),
          rc2i)
 

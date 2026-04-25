@@ -31,8 +31,8 @@ function iauPvppv(a::AbstractMatrix{<:Real}, b::AbstractMatrix{<:Real})
    # Preallocate return values
    amb = zeros(Float64, 3, 2)
 
-   ccall((:iauPvppv, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}, Ref{Cdouble}), 
+   ccall((:iauPvppv, libsofa_c), Cvoid,
+         (Ptr{Cdouble}, Ptr{Cdouble}, Ref{Cdouble}),
           convert(Array{Float64, 2}, a'),
           convert(Array{Float64, 2}, b'),
           amb)

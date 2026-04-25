@@ -18,12 +18,12 @@ Returned (function value):
 
 Notes:
 
-   1. The result is the bearing (position angle), in radians, of point
+1. The result is the bearing (position angle), in radians, of point
    B with respect to point A.  It is in the range -pi to +pi.  The
    sense is such that if B is a small distance "east" of point A,
    the bearing is approximately +pi/2.
 
-   2. Zero is returned if the two points are coincident.
+2. Zero is returned if the two points are coincident.
 
 This revision:  2013 June 18
 
@@ -35,8 +35,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # double iauPas(double al, double ap, double bl, double bp)
 
 function iauPas(al::Real, ap::Real, bl::Real, bp::Real)
-   return ccall((:iauPas, libsofa_c), Cdouble, 
-       (Cdouble, Cdouble, Cdouble, Cdouble), 
+   return ccall((:iauPas, libsofa_c), Cdouble,
+       (Cdouble, Cdouble, Cdouble, Cdouble),
        convert(Float64, al),
        convert(Float64, ap),
        convert(Float64, bl),

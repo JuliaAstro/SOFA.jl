@@ -17,7 +17,7 @@ Returned:
 
 Notes:
 
-  1. The IAU 1958 system of Galactic coordinates was defined with
+1. The IAU 1958 system of Galactic coordinates was defined with
     respect to the now obsolete reference system FK4 B1950.0.  When
     interpreting the system in a modern context, several factors have
     to be taken into account:
@@ -45,7 +45,7 @@ Notes:
     recomputed from the canonical three angles and are given to 30
     decimal places.
 
-  2. The inverse transformation is performed by the function iauG2icrs.
+2. The inverse transformation is performed by the function iauG2icrs.
 
 Called:
     iauAnp       normalize angle into range 0 to 2pi
@@ -73,9 +73,9 @@ function iauIcrs2g(dr::Real, dd::Real)
   ref_dl = Ref{Float64}(0.0)
   ref_db = Ref{Float64}(0.0)
 
-  ccall((:iauIcrs2g, libsofa_c), Cvoid, 
+  ccall((:iauIcrs2g, libsofa_c), Cvoid,
         (Cdouble, Cdouble,
-        Ref{Cdouble}, Ref{Cdouble}), 
+        Ref{Cdouble}, Ref{Cdouble}),
          convert(Float64, dr), convert(Float64, dd),
          ref_dl, ref_db)
 

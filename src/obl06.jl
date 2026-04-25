@@ -15,7 +15,7 @@ Returned (function value):
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -34,7 +34,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The result is the angle between the ecliptic and mean equator of
+2. The result is the angle between the ecliptic and mean equator of
    date date1+date2.
 
 Reference:
@@ -51,7 +51,7 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # double iauObl06(double date1, double date2)
 
 function iauObl06(date1::Real, date2::Real)
-   return ccall((:iauObl06, libsofa_c), Cdouble, 
-        (Cdouble, Cdouble), 
-        convert(Float64, date1), convert(Float64, date2)) 
+   return ccall((:iauObl06, libsofa_c), Cdouble,
+        (Cdouble, Cdouble),
+        convert(Float64, date1), convert(Float64, date2))
 end

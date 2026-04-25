@@ -15,7 +15,7 @@ Returned:
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -34,13 +34,13 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The matrix operates in the sense V(date) = RMATP * V(J2000),
+2. The matrix operates in the sense V(date) = RMATP * V(J2000),
    where the p-vector V(J2000) is with respect to the mean
    equatorial triad of epoch J2000.0 and the p-vector V(date)
    is with respect to the mean equatorial triad of the given
    date.
 
-   3. Though the matrix method itself is rigorous, the precession
+3. Though the matrix method itself is rigorous, the precession
    angles are expressed through canonical polynomials which are
    valid only for a limited time span.  In addition, the IAU 1976
    precession rate is known to be imperfect.  The absolute accuracy
@@ -76,7 +76,7 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauPmat76(date1::Real, date2::Real)
    rmatp = zeros(Float64, 3, 3)
 
-   ccall((:iauPmat76, libsofa_c), Cvoid, 
+   ccall((:iauPmat76, libsofa_c), Cvoid,
        (Cdouble, Cdouble, Ptr{Cdouble}),
        convert(Float64, date1),
        convert(Float64, date2),

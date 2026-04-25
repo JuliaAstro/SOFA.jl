@@ -15,11 +15,11 @@ Given and returned:
 
 Notes:
 
-   1. Calling this function with positive theta incorporates in the
+1. Calling this function with positive theta incorporates in the
    supplied r-matrix r an additional rotation, about the y-axis,
    anticlockwise as seen looking towards the origin from positive y.
 
-   2. The additional rotation can be represented by this matrix:
+2. The additional rotation can be represented by this matrix:
 
       (  + cos(theta)     0      - sin(theta)  )
       (                                        )

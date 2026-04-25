@@ -23,6 +23,6 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # double iauPm(double p[3])
 function iauPm(p::AbstractVector{<:Real})
 
-   return ccall((:iauPm, libsofa_c), Cdouble, 
+   return ccall((:iauPm, libsofa_c), Cdouble,
        (Ptr{Cdouble},), p)
 end

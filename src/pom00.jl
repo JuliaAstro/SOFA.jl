@@ -16,12 +16,12 @@ Returned:
 
 Notes:
 
-    1. The arguments xp and yp are the coordinates (in radians) of the
+1. The arguments xp and yp are the coordinates (in radians) of the
     Celestial Intermediate Pole with respect to the International
     Terrestrial Reference System (see IERS Conventions 2003),
     measured along the meridians to 0 and 90 deg west respectively.
 
-    2. The argument sp is the TIO locator s', in radians, which
+2. The argument sp is the TIO locator s', in radians, which
     positions the Terrestrial Intermediate Origin on the equator.  It
     is obtained from polar motion observations by numerical
     integration, and so is in essence unpredictable.  However, it is
@@ -30,7 +30,7 @@ Notes:
     where t is centuries since J2000.0.  The function iauSp00
     implements this approximation.
 
-    3. The matrix operates in the sense V(TRS) = rpom * V(CIP), meaning
+3. The matrix operates in the sense V(TRS) = rpom * V(CIP), meaning
     that it is the final rotation when computing the pointing
     direction to a celestial source.
 
@@ -57,7 +57,7 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauPom00(xp, yp, sp)
     rpom = zeros(Float64, 3, 3)
 
-    ccall((:iauPom00, libsofa_c), Cvoid, 
+    ccall((:iauPom00, libsofa_c), Cvoid,
             (Cdouble, Cdouble, Cdouble, Ptr{Cdouble}),
             xp, yp, sp, rpom)
 

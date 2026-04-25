@@ -15,8 +15,8 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 Status:  support function.
 
 Given:
-   date1  double     TDB as a 2-part...
-   date2  double     ...Julian Date (Note 1)
+-  date1  double     TDB as a 2-part...
+-  date2  double     ...Julian Date (Note 1)
 
 Returned:
    astrom iauASTROM* star-independent astrometry parameters:
@@ -39,7 +39,7 @@ Returned:
 
 Notes:
 
-   1. The TDB date date1+date2 is a Julian Date, apportioned in any
+1. The TDB date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TDB)=2450123.7 could be expressed in any of these ways, among
    others:
@@ -63,13 +63,13 @@ Notes:
    TT can be used instead of TDB without any significant impact on
    accuracy.
 
-   2. All the vectors are with respect to BCRS axes.
+2. All the vectors are with respect to BCRS axes.
 
-   3. In cases where the caller wishes to supply his own Earth
+3. In cases where the caller wishes to supply his own Earth
    ephemeris, the function iauApcg can be used instead of the present
    function.
 
-   4. This is one of several functions that inserts into the astrom
+4. This is one of several functions that inserts into the astrom
    structure star-independent parameters needed for the chain of
    astrometric transformations ICRS <-> GCRS <-> CIRS <-> observed.
 
@@ -78,12 +78,12 @@ Notes:
 
           functions         observer        transformation
 
-       iauApcg iauApcg13    geocentric      ICRS <-> GCRS
-       iauApci iauApci13    terrestrial     ICRS <-> CIRS
-       iauApco iauApco13    terrestrial     ICRS <-> observed
-       iauApcs iauApcs13    space           ICRS <-> GCRS
-       iauAper iauAper13    terrestrial     update Earth rotation
-       iauApio iauApio13    terrestrial     CIRS <-> observed
+       iauApcg iauApcg13  | geocentric   |  ICRS <-> GCRS
+       iauApci iauApci13  | terrestrial  |  ICRS <-> CIRS
+       iauApco iauApco13  | terrestrial  |  ICRS <-> observed
+       iauApcs iauApcs13  | space        |  ICRS <-> GCRS
+       iauAper iauAper13  | terrestrial  |  update Earth rotation
+       iauApio iauApio13  | terrestrial  |  CIRS <-> observed
 
    Those with names ending in "13" use contemporary SOFA models to
    compute the various ephemerides.  The others accept ephemerides
@@ -96,7 +96,7 @@ Notes:
    aberration and parallax (unless subsumed into the ICRS <-> GCRS
    transformation), and atmospheric refraction.
 
-   5. The context structure astrom produced by this function is used by
+5. The context structure astrom produced by this function is used by
    iauAtciq* and iauAticq*.
 
    Called:
@@ -113,8 +113,8 @@ function iauApcg13(date1::Real, date2::Real)
    # Allocate return value
    ref_astrom = Ref{iauASTROM}(iauASTROM())
 
-   ccall((:iauApcg13, libsofa_c), Cvoid, 
-           (Cdouble, Cdouble, Ref{iauASTROM}), 
+   ccall((:iauApcg13, libsofa_c), Cvoid,
+           (Cdouble, Cdouble, Ref{iauASTROM}),
            convert(Float64, date1),
            convert(Float64, date2),
            ref_astrom)

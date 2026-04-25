@@ -74,9 +74,9 @@ function iauAtciqz(rc::Real, dc::Real,  astrom::iauASTROM)
    ref_ri     = Ref{Float64}(0.0)
    ref_di     = Ref{Float64}(0.0)
 
-   ccall((:iauAtciqz, libsofa_c), Cvoid, 
-            (Cdouble, Cdouble, Ref{iauASTROM},  
-            Ref{Cdouble}, Ref{Cdouble}), 
+   ccall((:iauAtciqz, libsofa_c), Cvoid,
+            (Cdouble, Cdouble, Ref{iauASTROM},
+            Ref{Cdouble}, Ref{Cdouble}),
             convert(Float64, rc), convert(Float64, dc),
             ref_astrom, ref_ri, ref_di)
 

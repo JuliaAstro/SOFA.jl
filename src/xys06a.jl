@@ -18,7 +18,7 @@ Returned:
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -37,13 +37,13 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The Celestial Intermediate Pole coordinates are the x,y components
+2. The Celestial Intermediate Pole coordinates are the x,y components
    of the unit vector in the Geocentric Celestial Reference System.
 
-   3. The CIO locator s (in radians) positions the Celestial
+3. The CIO locator s (in radians) positions the Celestial
    Intermediate Origin on the equator of the CIP.
 
-   4. Series-based solutions for generating X and Y are also available:
+4. Series-based solutions for generating X and Y are also available:
    see Capitaine & Wallace (2006) and iauXy06.
 
 Called:

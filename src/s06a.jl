@@ -17,7 +17,7 @@ Returned (function value):
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -36,13 +36,13 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The CIO locator s is the difference between the right ascensions
+2. The CIO locator s is the difference between the right ascensions
    of the same point in two systems.  The two systems are the GCRS
    and the CIP,CIO, and the point is the ascending node of the
    CIP equator.  The CIO locator s remains a small fraction of
    1 arcsecond throughout 1900-2100.
 
-   3. The series used to compute s is in fact for s+XY/2, where X and Y
+3. The series used to compute s is in fact for s+XY/2, where X and Y
    are the x and y components of the CIP unit vector;  this series is
    more compact than a direct series for s would be.  The present
    function uses the full IAU 2000A nutation model when predicting

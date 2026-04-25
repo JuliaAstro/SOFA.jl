@@ -6,3 +6,4 @@ deps/usr/*
 deps/src/sofa/t_sofa_c
 deps/build.log
 docs/build
+Manifest.toml

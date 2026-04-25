@@ -45,8 +45,8 @@ export iauLtpequ
 # void iauLtpequ(double epj, double veq[3])
 function iauLtpequ(epj::Real)
    veq = zeros(Float64, 3)
-   ccall((:iauLtpequ, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}), 
+   ccall((:iauLtpequ, libsofa_c), Cvoid,
+         (Cdouble, Ref{Cdouble}),
           convert(Float64, epj),
           veq)
 

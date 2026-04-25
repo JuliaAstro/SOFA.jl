@@ -17,7 +17,7 @@ Returned:
 
 Notes:
 
-   1. The argument ndp is interpreted as follows:
+1. The argument ndp is interpreted as follows:
 
    ndp         resolution
    :      ...0000 00 00
@@ -34,7 +34,7 @@ Notes:
    3            0 00 00.001
    :            0 00 00.000...
 
-   2. The largest positive useful value for ndp is determined by the
+2. The largest positive useful value for ndp is determined by the
    size of days, the format of double on the target platform, and
    the risk of overflowing ihmsf[3].  On a typical platform, for
    days up to 1.0, the available floating-point precision might
@@ -42,7 +42,7 @@ Notes:
    ndp=9, set by the capacity of a 32-bit int, or ndp=4 if int is
    only 16 bits.
 
-   3. The absolute value of days may exceed 1.0.  In cases where it
+3. The absolute value of days may exceed 1.0.  In cases where it
    does not, it is up to the caller to test for and handle the
    case where days is very nearly 1.0 and rounds up to 24 hours,
    by testing for ihmsf[0]=24 and setting ihmsf[0-3] to zero.

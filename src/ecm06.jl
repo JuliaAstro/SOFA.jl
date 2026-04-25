@@ -15,7 +15,7 @@ Returned:
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -34,7 +34,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   1. The matrix is in the sense
+1. The matrix is in the sense
 
       E_ep = rm x P_ICRS,
 
@@ -42,7 +42,7 @@ Notes:
    and declination axes and E_ep is the same vector with respect to
    the (inertial) ecliptic and equinox of date.
 
-   2. P_ICRS is a free vector, merely a direction, typically of unit
+2. P_ICRS is a free vector, merely a direction, typically of unit
    magnitude, and not bound to any particular spatial origin, such
    as the Earth, Sun or SSB.  No assumptions are made about whether
    it represents starlight and embodies astrometric effects such as
@@ -71,9 +71,9 @@ function iauEcm06(date1::Real, date2::Real)
    # Allocate return value
    rm = zeros(Float64, 3, 3)
 
-   ccall((:iauEcm06, libsofa_c), Cvoid, 
+   ccall((:iauEcm06, libsofa_c), Cvoid,
          (Cdouble, Cdouble,
-         Ptr{Cdouble}), 
+         Ptr{Cdouble}),
          convert(Float64, date1), convert(Float64, date2),
          rm)
 

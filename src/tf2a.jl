@@ -24,12 +24,12 @@ Returned (function value):
 
 Notes:
 
-    1.  The result is computed even if any of the range checks fail.
+1.  The result is computed even if any of the range checks fail.
 
-    2.  Negative ihour, imin and/or sec produce a warning status, but
+2.  Negative ihour, imin and/or sec produce a warning status, but
     the absolute value is used in the conversion.
 
-    3.  If there are multiple errors, the status value reflects only the
+3.  If there are multiple errors, the status value reflects only the
     first, the smallest taking precedence.
 
 This revision:  2013 June 18
@@ -43,8 +43,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauTf2a(s::Char, ihour::Int, imin::Int, sec::Real)
     ref_rad  = Ref{Float64}(0.0)
 
-    status = ccall((:iauTf2a, libsofa_c), Cint, 
-        (Cchar, Cint, Cint, Cdouble, Ref{Cdouble}), 
+    status = ccall((:iauTf2a, libsofa_c), Cint,
+        (Cchar, Cint, Cint, Cdouble, Ref{Cdouble}),
         convert(UInt8, s),
         convert(Int32, ihour),
         convert(Int32, imin),

@@ -24,12 +24,12 @@ Returned:
 
 Notes:
 
-   1. The model balances speed and accuracy to give good results in
+1. The model balances speed and accuracy to give good results in
    applications where performance at low altitudes is not paramount.
    Performance is maintained across a range of conditions, and
    applies to both optical/IR and radio.
 
-   2. The model omits the effects of (i) height above sea level (apart
+2. The model omits the effects of (i) height above sea level (apart
    from the reduced pressure itself), (ii) latitude (i.e. the
    flattening of the Earth), (iii) variations in tropospheric lapse
    rate and (iv) dispersive effects in the radio.
@@ -88,15 +88,15 @@ Notes:
    The values for Saastamoinen's formula (which includes terms
    up to tan^5) are taken from Hohenkerk and Sinclair (1985).
 
-   3. A wl value in the range 0-100 selects the optical/IR case and is
+3. A wl value in the range 0-100 selects the optical/IR case and is
    wavelength in micrometers.  Any value outside this range selects
    the radio case.
 
-   4. Outlandish input parameters are silently limited to
+4. Outlandish input parameters are silently limited to
    mathematically safe values.  Zero pressure is permissible, and
    causes zeroes to be returned.
 
-   5. The algorithm draws on several sources, as follows:
+5. The algorithm draws on several sources, as follows:
 
       a. The formula for the saturation vapour pressure of water as
       a function of temperature and temperature is taken from
@@ -158,7 +158,7 @@ function iauRefco(phpa::Real, tc::Real, rh::Real, wl::Real)
    ref_refa = Ref{Float64}(0.0)
    ref_refb = Ref{Float64}(0.0)
 
-   ccall((:iauRefco, libsofa_c), Cvoid, 
+   ccall((:iauRefco, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble, Cdouble,
          Ref{Cdouble}, Ref{Cdouble}),
           convert(Float64, phpa),

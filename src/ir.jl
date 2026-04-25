@@ -22,8 +22,8 @@ function iauIr()
    # Allocate return values
    I  = zeros(Float64, 3, 3)
 
-   ccall((:iauIr, libsofa_c), Cvoid, 
-        (Ptr{Cdouble},), 
+   ccall((:iauIr, libsofa_c), Cvoid,
+        (Ptr{Cdouble},),
         I)
 
    return SMatrix{3,3}(I')

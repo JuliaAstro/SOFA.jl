@@ -16,10 +16,10 @@ Returned:
 
 Notes:
 
-   1. "Update" means "refer the position component of the vector to a
+1. "Update" means "refer the position component of the vector to a
    new date dt time units from the existing date".
 
-   2. The time units of dt must match those of the velocity.
+2. The time units of dt must match those of the velocity.
 
 This revision:  2013 June 18
 
@@ -33,8 +33,8 @@ function iauPvup(dt::Real, pv::AbstractMatrix{<:Real})
    # Preallocate return values
    p = zeros(Float64, 3)
 
-   ccall((:iauPvup, libsofa_c), Cvoid, 
-         (Cdouble, Ptr{Cdouble}, Ref{Cdouble}), 
+   ccall((:iauPvup, libsofa_c), Cvoid,
+         (Cdouble, Ptr{Cdouble}, Ref{Cdouble}),
           convert(Float64, dt),
           convert(Array{Float64, 2}, pv'),
           p)

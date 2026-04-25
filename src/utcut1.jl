@@ -22,29 +22,29 @@ Returned (function value):
 
 Notes:
 
-   1. utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
+1. utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
    convenient way between the two arguments, for example where utc1
    is the Julian Day Number and utc2 is the fraction of a day.
 
-   2. JD cannot unambiguously represent UTC during a leap second unless
+2. JD cannot unambiguously represent UTC during a leap second unless
    special measures are taken.  The convention in the present
    function is that the JD day represents UTC days whether the
    length is 86399, 86400 or 86401 SI seconds.
 
-   3. The warning status "dubious year" flags UTCs that predate the
+3. The warning status "dubious year" flags UTCs that predate the
    introduction of the time scale or that are too far in the future
    to be trusted.  See iauDat for further details.
 
-   4. The function iauDtf2d converts from calendar date and time of
+4. The function iauDtf2d converts from calendar date and time of
    day into 2-part Julian Date, and in the case of UTC implements
    the leap-second-ambiguity convention described above.
 
-   5. Delta UT1 can be obtained from tabulations provided by the
+5. Delta UT1 can be obtained from tabulations provided by the
    International Earth Rotation and Reference Systems Service.
    It is the caller's responsibility to supply a dut1 argument
    containing the UT1-UTC value that matches the given UTC.
 
-   6. The returned ut11,ut12 are such that their sum is the UT1 Julian
+6. The returned ut11,ut12 are such that their sum is the UT1 Julian
    Date.
 
 References:

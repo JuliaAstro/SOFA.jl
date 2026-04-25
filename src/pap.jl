@@ -16,18 +16,18 @@ Returned (function value):
 
 Notes:
 
-   1. The result is the position angle, in radians, of direction b with
+1. The result is the position angle, in radians, of direction b with
    respect to direction a.  It is in the range -pi to +pi.  The
    sense is such that if b is a small distance "north" of a the
    position angle is approximately zero, and if b is a small
    distance "east" of a the position angle is approximately +pi/2.
 
-   2. The vectors a and b need not be of unit length.
+2. The vectors a and b need not be of unit length.
 
-   3. Zero is returned if the two directions are the same or if either
+3. Zero is returned if the two directions are the same or if either
    vector is null.
 
-   4. If vector a is at a pole, the result is ill-defined.
+4. If vector a is at a pole, the result is ill-defined.
 
 Called:
    iauPn        decompose p-vector into modulus and direction
@@ -45,8 +45,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 
 # double iauPap(double a[3], double b[3])
 function iauPap(a::AbstractVector{<:Real}, b::AbstractVector{<:Real})
-   return ccall((:iauPap, libsofa_c), Cdouble, 
-       (Ptr{Cdouble}, Ptr{Cdouble}), 
+   return ccall((:iauPap, libsofa_c), Cdouble,
+       (Ptr{Cdouble}, Ptr{Cdouble}),
        convert(Array{Float64, 1}, a),
        convert(Array{Float64, 1}, b))
 end

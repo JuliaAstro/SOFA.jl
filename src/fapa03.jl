@@ -16,10 +16,10 @@ Returned (function value):
 
 Notes:
 
-   1. Though t is strictly TDB, it is usually more convenient to use
+1. Though t is strictly TDB, it is usually more convenient to use
    TT, which makes no significant difference.
 
-   2. The expression used is as adopted in IERS Conventions (2003).  It
+2. The expression used is as adopted in IERS Conventions (2003).  It
    is taken from Kinoshita & Souchay (1990) and comes originally
    from Lieske et al. (1977).
 

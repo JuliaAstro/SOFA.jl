@@ -16,7 +16,7 @@ Returned:
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,7 +35,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The nutation components are with respect to the ecliptic of
+2. The nutation components are with respect to the ecliptic of
    date.
 
 Called:
@@ -61,8 +61,8 @@ function iauNut80(date1::Real, date2::Real)
    ref_dpsi = Ref{Float64}(0.0)
    ref_deps = Ref{Float64}(0.0)
 
-   ccall((:iauNut80, libsofa_c), Cvoid, 
-        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}), 
+   ccall((:iauNut80, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
         convert(Float64, date1), convert(Float64, date2),
         ref_dpsi, ref_deps)
 

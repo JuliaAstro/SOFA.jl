@@ -44,13 +44,13 @@ Returned (function value):
 
 Notes:
 
-   1.  Star data for an epoch other than J2000.0 (for example from the
+1. Star data for an epoch other than J2000.0 (for example from the
    Hipparcos catalog, which has an epoch of J1991.25) will require
    a preliminary call to iauPmsafe before use.
 
-   2.  The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
+2. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 
-   3.  utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
+3. utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
    convenient way between the two arguments, for example where utc1
    is the Julian Day Number and utc2 is the fraction of a day.
 
@@ -64,29 +64,29 @@ Notes:
    it implements the leap-second-ambiguity convention just
    described.
 
-   4.  The warning status "dubious year" flags UTCs that predate the
+4. The warning status "dubious year" flags UTCs that predate the
    introduction of the time scale or that are too far in the
    future to be trusted.  See iauDat for further details.
 
-   5.  UT1-UTC is tabulated in IERS bulletins.  It increases by exactly
+5. UT1-UTC is tabulated in IERS bulletins.  It increases by exactly
    one second at the end of each positive UTC leap second,
    introduced in order to keep UT1-UTC within +/- 0.9s.  n.b. This
    practice is under review, and in the future UT1-UTC may grow
    essentially without limit.
 
-   6.  The geographical coordinates are with respect to the WGS84
+6. The geographical coordinates are with respect to the WGS84
    reference ellipsoid.  TAKE CARE WITH THE LONGITUDE SIGN:  the
    longitude required by the present function is east-positive
    (i.e. right-handed), in accordance with geographical convention.
 
-   7.  The polar motion xp,yp can be obtained from IERS bulletins.  The
+7. The polar motion xp,yp can be obtained from IERS bulletins.  The
    values are the coordinates (in radians) of the Celestial
    Intermediate Pole with respect to the International Terrestrial
    Reference System (see IERS Conventions 2003), measured along the
    meridians 0 and 90 deg west respectively.  For many
    applications, xp and yp can be set to zero.
 
-   8.  If hm, the height above the ellipsoid of the observing station
+8. If hm, the height above the ellipsoid of the observing station
    in meters, is not known but phpa, the pressure in hPa (=mB),
    is available, an adequate estimate of hm can be obtained from
    the expression
@@ -105,39 +105,39 @@ Notes:
    the pressure and that an accurate phpa value is important for
    precise work.
 
-   9.  The argument wl specifies the observing wavelength in
+9. The argument wl specifies the observing wavelength in
    micrometers.  The transition from optical to radio is assumed to
    occur at 100 micrometers (about 3000 GHz).
 
-   10. The accuracy of the result is limited by the corrections for
-   refraction, which use a simple A*tan(z) + B*tan^3(z) model.
-   Providing the meteorological parameters are known accurately and
-   there are no gross local effects, the predicted observed
-   coordinates should be within 0.05 arcsec (optical) or 1 arcsec
-   (radio) for a zenith distance of less than 70 degrees, better
-   than 30 arcsec (optical or radio) at 85 degrees and better
-   than 20 arcmin (optical) or 30 arcmin (radio) at the horizon.
+10. The accuracy of the result is limited by the corrections for
+    refraction, which use a simple A*tan(z) + B*tan^3(z) model.
+    Providing the meteorological parameters are known accurately and
+    there are no gross local effects, the predicted observed
+    coordinates should be within 0.05 arcsec (optical) or 1 arcsec
+    (radio) for a zenith distance of less than 70 degrees, better
+    than 30 arcsec (optical or radio) at 85 degrees and better
+    than 20 arcmin (optical) or 30 arcmin (radio) at the horizon.
 
-   Without refraction, the complementary functions iauAtco13 and
-   iauAtoc13 are self-consistent to better than 1 microarcsecond
-   all over the celestial sphere.  With refraction included,
-   consistency falls off at high zenith distances, but is still
-   better than 0.05 arcsec at 85 degrees.
+    Without refraction, the complementary functions iauAtco13 and
+    iauAtoc13 are self-consistent to better than 1 microarcsecond
+    all over the celestial sphere.  With refraction included,
+    consistency falls off at high zenith distances, but is still
+    better than 0.05 arcsec at 85 degrees.
 
-   11. "Observed" Az,ZD means the position that would be seen by a
-   perfect geodetically aligned theodolite.  (Zenith distance is
-   used rather than altitude in order to reflect the fact that no
-   allowance is made for depression of the horizon.)  This is
-   related to the observed HA,Dec via the standard rotation, using
-   the geodetic latitude (corrected for polar motion), while the
-   observed HA and RA are related simply through the Earth rotation
-   angle and the site longitude.  "Observed" RA,Dec or HA,Dec thus
-   means the position that would be seen by a perfect equatorial
-   with its polar axis aligned to the Earth's axis of rotation.
+11. "Observed" Az,ZD means the position that would be seen by a
+    perfect geodetically aligned theodolite.  (Zenith distance is
+    used rather than altitude in order to reflect the fact that no
+    allowance is made for depression of the horizon.)  This is
+    related to the observed HA,Dec via the standard rotation, using
+    the geodetic latitude (corrected for polar motion), while the
+    observed HA and RA are related simply through the Earth rotation
+    angle and the site longitude.  "Observed" RA,Dec or HA,Dec thus
+    means the position that would be seen by a perfect equatorial
+    with its polar axis aligned to the Earth's axis of rotation.
 
-   12. It is advisable to take great care with units, as even unlikely
-   values of the input parameters are accepted and processed in
-   accordance with the models used.
+12. It is advisable to take great care with units, as even unlikely
+    values of the input parameters are accepted and processed in
+    accordance with the models used.
 
 Called:
    iauApco13    astrometry parameters, ICRS-observed, 2013
@@ -158,10 +158,10 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 #               double *aob, double *zob, double *hob,
 #               double *dob, double *rob, double *eo)
 
-function iauAtco13(rc::Real, dc::Real, pr::Real, pd::Real, 
-                   px::Real, rv::Real, utc1::Real, utc2::Real, 
-                   dut1::Real, elong::Real, phi::Real, hm::Real, 
-                   xp::Real, yp::Real, phpa::Real, tc::Real, 
+function iauAtco13(rc::Real, dc::Real, pr::Real, pd::Real,
+                   px::Real, rv::Real, utc1::Real, utc2::Real,
+                   dut1::Real, elong::Real, phi::Real, hm::Real,
+                   xp::Real, yp::Real, phpa::Real, tc::Real,
                    rh::Real, wl::Real)
 
    # Allocate return values
@@ -172,22 +172,22 @@ function iauAtco13(rc::Real, dc::Real, pr::Real, pd::Real,
    ref_rob = Ref{Float64}(0.0)
    ref_eo  = Ref{Float64}(0.0)
 
-   status = ccall((:iauAtco13, libsofa_c), Cint, 
+   status = ccall((:iauAtco13, libsofa_c), Cint,
             (Cdouble, Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble, Cdouble,
-            Cdouble, Cdouble,  
+            Cdouble, Cdouble,
             Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
-            convert(Float64, rc), convert(Float64, dc), 
-            convert(Float64, pr), convert(Float64, pd), 
-            convert(Float64, px), convert(Float64, rv), 
-            convert(Float64, utc1), convert(Float64, utc2), 
-            convert(Float64, dut1), convert(Float64, elong), 
-            convert(Float64, phi), convert(Float64, hm), 
-            convert(Float64, xp), convert(Float64, yp), 
-            convert(Float64, phpa), convert(Float64, tc), 
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
+            convert(Float64, rc), convert(Float64, dc),
+            convert(Float64, pr), convert(Float64, pd),
+            convert(Float64, px), convert(Float64, rv),
+            convert(Float64, utc1), convert(Float64, utc2),
+            convert(Float64, dut1), convert(Float64, elong),
+            convert(Float64, phi), convert(Float64, hm),
+            convert(Float64, xp), convert(Float64, yp),
+            convert(Float64, phpa), convert(Float64, tc),
             convert(Float64, rh), convert(Float64, wl),
             ref_aob, ref_zob, ref_hob, ref_dob, ref_rob, ref_eo)
 

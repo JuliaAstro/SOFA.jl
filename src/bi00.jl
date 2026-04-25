@@ -14,18 +14,18 @@ Returned:
 
 Notes:
 
-    1. The frame bias corrections in longitude and obliquity (radians)
+1. The frame bias corrections in longitude and obliquity (radians)
     are required in order to correct for the offset between the GCRS
     pole and the mean J2000.0 pole.  They define, with respect to the
     GCRS frame, a J2000.0 mean pole that is consistent with the rest
     of the IAU 2000A precession-nutation model.
 
-    2. In addition to the displacement of the pole, the complete
+2. In addition to the displacement of the pole, the complete
     description of the frame bias requires also an offset in right
     ascension.  This is not part of the IAU 2000A model, and is from
     Chapront et al. (2002).  It is returned in radians.
 
-    3. This is a supplemented implementation of one aspect of the IAU
+3. This is a supplemented implementation of one aspect of the IAU
     2000A nutation model, formally adopted by the IAU General
     Assembly in 2000, namely MHB2000 (Mathews et al. 2002).
 
@@ -55,8 +55,8 @@ function iauBi00()
     ref_depsbi = Ref{Float64}(0.0)
     ref_dra    = Ref{Float64}(0.0)
 
-    ccall((:iauBi00, libsofa_c), Cvoid, 
-        (Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+    ccall((:iauBi00, libsofa_c), Cvoid,
+        (Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
         ref_dpsibi, ref_depsbi, ref_dra)
 
     return ref_dpsibi[], ref_depsbi[], ref_dra[]

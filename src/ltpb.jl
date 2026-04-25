@@ -15,7 +15,7 @@ Returned:
 
 Notes:
 
-   1. The matrix is in the sense
+1. The matrix is in the sense
 
       P_date = rpb x P_ICRS,
 
@@ -24,10 +24,10 @@ Notes:
    Intermediate Reference System at that date but with nutation
    neglected.
 
-   2. A first order frame bias formulation is used, of sub-
+2. A first order frame bias formulation is used, of sub-
    microarcsecond accuracy compared with a full 3D rotation.
 
-   3. The Vondrak et al. (2011, 2012) 400 millennia precession model
+3. The Vondrak et al. (2011, 2012) 400 millennia precession model
    agrees with the IAU 2006 precession at J2000.0 and stays within
    100 microarcseconds during the 20th and 21st centuries.  It is
    accurate to a few arcseconds throughout the historical period,
@@ -54,9 +54,9 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # void iauLtpb(double epj, double rpb[3][3])
 function iauLtpb(epj::Real)
    rpb = zeros(Float64, 3, 3)
-   
-   ccall((:iauLtpb, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}), 
+
+   ccall((:iauLtpb, libsofa_c), Cvoid,
+         (Cdouble, Ref{Cdouble}),
           convert(Float64, epj),
           rpb)
 

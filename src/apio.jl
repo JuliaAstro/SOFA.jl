@@ -41,16 +41,16 @@ Returned:
 
 Notes:
 
-   1. sp, the TIO locator s', is a tiny quantity needed only by the
+1. sp, the TIO locator s', is a tiny quantity needed only by the
    most precise applications.  It can either be set to zero or
    predicted using the SOFA function iauSp00.
 
-   2. The geographical coordinates are with respect to the WGS84
+2. The geographical coordinates are with respect to the WGS84
    reference ellipsoid.  TAKE CARE WITH THE LONGITUDE SIGN:  the
    longitude required by the present function is east-positive
    (i.e. right-handed), in accordance with geographical convention.
 
-   3. The polar motion xp,yp can be obtained from IERS bulletins.  The
+3. The polar motion xp,yp can be obtained from IERS bulletins.  The
    values are the coordinates (in radians) of the Celestial
    Intermediate Pole with respect to the International Terrestrial
    Reference System (see IERS Conventions 2003), measured along the
@@ -60,22 +60,22 @@ Notes:
    Internally, the polar motion is stored in a form rotated onto the
    local meridian.
 
-   4. The refraction constants refa and refb are for use in a
+4. The refraction constants refa and refb are for use in a
    dZ = A*tan(Z)+B*tan^3(Z) model, where Z is the observed
    (i.e. refracted) zenith distance and dZ is the amount of
    refraction.
 
-   5. It is advisable to take great care with units, as even unlikely
+5. It is advisable to take great care with units, as even unlikely
    values of the input parameters are accepted and processed in
    accordance with the models used.
 
-   6. In cases where the caller does not wish to provide the Earth
+6. In cases where the caller does not wish to provide the Earth
    rotation information and refraction constants, the function
    iauApio13 can be used instead of the present function.  This
    starts from UTC and weather readings etc. and computes suitable
    values using other SOFA functions.
 
-   7. This is one of several functions that inserts into the astrom
+7. This is one of several functions that inserts into the astrom
    structure star-independent parameters needed for the chain of
    astrometric transformations ICRS <-> GCRS <-> CIRS <-> observed.
 
@@ -102,7 +102,7 @@ Notes:
    aberration and parallax (unless subsumed into the ICRS <-> GCRS
    transformation), and atmospheric refraction.
 
-   8. The context structure astrom produced by this function is used by
+8. The context structure astrom produced by this function is used by
    iauAtioq and iauAtoiq.
 
 Called:
@@ -122,11 +122,11 @@ function iauApio(sp::Real, theta::Real,
    # Allocate return value
    ref_astrom = Ref{iauASTROM}(iauASTROM())
 
-   ccall((:iauApio, libsofa_c), Cvoid, 
+   ccall((:iauApio, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble,
          Cdouble, Cdouble, Cdouble,
          Cdouble, Cdouble, Cdouble,
-         Ref{iauASTROM}), 
+         Ref{iauASTROM}),
          convert(Float64, sp),
          convert(Float64, theta),
          convert(Float64, elong),

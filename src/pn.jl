@@ -16,10 +16,10 @@ Returned:
 
 Notes:
 
-   1. If p is null, the result is null.  Otherwise the result is a unit
+1. If p is null, the result is null.  Otherwise the result is a unit
    vector.
 
-   2. It is permissible to re-use the same array for any of the
+2. It is permissible to re-use the same array for any of the
    arguments.
 
 Called:
@@ -41,7 +41,7 @@ function iauPn(p::AbstractVector{<:Real})
    ref_r = Ref{Float64}(0.0)
    u = zeros(Float64, 3)
 
-   ccall((:iauPn, libsofa_c), Cvoid, 
+   ccall((:iauPn, libsofa_c), Cvoid,
         (Ptr{Cdouble}, Ref{Cdouble}, Ptr{Cdouble}),
          convert(Array{Float64, 1}, p), ref_r, u)
 

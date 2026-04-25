@@ -25,17 +25,17 @@ Returned (all FK5, equinox J2000.0, epoch J2000.0):
 
 Notes:
 
-   1. This function transforms Hipparcos star positions and proper
+1. This function transforms Hipparcos star positions and proper
    motions into FK5 J2000.0.
 
-   2. The proper motions in RA are dRA/dt rather than
+2. The proper motions in RA are dRA/dt rather than
    cos(Dec)*dRA/dt, and are per year rather than per century.
 
-   3. The FK5 to Hipparcos transformation is modeled as a pure
+3. The FK5 to Hipparcos transformation is modeled as a pure
    rotation and spin;  zonal errors in the FK5 catalog are not
    taken into account.
 
-   4. See also iauFk52h, iauFk5hz, iauHfk5z.
+4. See also iauFk52h, iauFk5hz, iauHfk5z.
 
 Called:
    iauStarpv    star catalog data to space motion pv-vector
@@ -70,10 +70,10 @@ function iauH2fk5(rh::Real, dh::Real, drh::Real, ddh::Real, pxh::Real, rvh::Real
    ref_dd5 = Ref{Float64}(0.0)
    ref_px5 = Ref{Float64}(0.0)
    ref_rv5 = Ref{Float64}(0.0)
-   
+
    ccall((:iauH2fk5, libsofa_c), Cdouble,
          (Cdouble, Cdouble, Cdouble, Cdouble,
-         Cdouble, Cdouble, 
+         Cdouble, Cdouble,
          Ref{Cdouble},  Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
          Ref{Cdouble}, Ref{Cdouble}, ),
          convert(Float64, rh), convert(Float64, dh),

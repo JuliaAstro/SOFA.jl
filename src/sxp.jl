@@ -29,8 +29,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauSxp(s::Real, p::AbstractVector{<:Real})
    sp = zeros(Float64, 3)
 
-   ccall((:iauSxp, libsofa_c), Cvoid, 
-       (Cdouble, Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauSxp, libsofa_c), Cvoid,
+       (Cdouble, Ptr{Cdouble}, Ptr{Cdouble}),
        convert(Float64, s),
        convert(Array{Float64, 1}, p),
        sp)

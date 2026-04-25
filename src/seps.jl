@@ -29,8 +29,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 
 # double iauSeps(double al, double ap, double bl, double bp)
 function iauSeps(al::Real, ap::Real, bl::Real, bp::Real)
-   return ccall((:iauSeps, libsofa_c), Cdouble, 
-       (Cdouble, Cdouble, Cdouble, Cdouble), 
+   return ccall((:iauSeps, libsofa_c), Cdouble,
+       (Cdouble, Cdouble, Cdouble, Cdouble),
        convert(Float64, al),
        convert(Float64, ap),
        convert(Float64, bl),

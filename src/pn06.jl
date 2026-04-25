@@ -23,7 +23,7 @@ Returned:
 
 Notes:
 
-   1.  The TT date date1+date2 is a Julian Date, apportioned in any
+1.  The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -42,35 +42,35 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2.  The caller is responsible for providing the nutation components;
+2.  The caller is responsible for providing the nutation components;
    they are in longitude and obliquity, in radians and are with
    respect to the equinox and ecliptic of date.  For high-accuracy
    applications, free core nutation should be included as well as
    any other relevant corrections to the position of the CIP.
 
-   3.  The returned mean obliquity is consistent with the IAU 2006
+3.  The returned mean obliquity is consistent with the IAU 2006
    precession.
 
-   4.  The matrix rb transforms vectors from GCRS to J2000.0 mean
+4.  The matrix rb transforms vectors from GCRS to J2000.0 mean
    equator and equinox by applying frame bias.
 
-   5.  The matrix rp transforms vectors from J2000.0 mean equator and
+5.  The matrix rp transforms vectors from J2000.0 mean equator and
    equinox to mean equator and equinox of date by applying
    precession.
 
-   6.  The matrix rbp transforms vectors from GCRS to mean equator and
+6.  The matrix rbp transforms vectors from GCRS to mean equator and
    equinox of date by applying frame bias then precession.  It is
    the product rp x rb.
 
-   7.  The matrix rn transforms vectors from mean equator and equinox
+7.  The matrix rn transforms vectors from mean equator and equinox
    of date to true equator and equinox of date by applying the
    nutation (luni-solar + planetary).
 
-   8.  The matrix rbpn transforms vectors from GCRS to true equator and
+8.  The matrix rbpn transforms vectors from GCRS to true equator and
    equinox of date.  It is the product rn x rbp, applying frame
    bias, precession and nutation in that order.
 
-   9.  The X,Y,Z coordinates of the Celestial Intermediate Pole are
+9.  The X,Y,Z coordinates of the Celestial Intermediate Pole are
    elements (3,1-3) of the GCRS-to-true matrix, i.e. rbpn[2][0-2].
 
    10. It is permissible to re-use the same array in the returned
@@ -110,7 +110,7 @@ function iauPn06(date1::Real, date2::Real, dpsi::Real, deps::Real)
    rn       = zeros(Float64, 3, 3)
    rbpn     = zeros(Float64, 3, 3)
 
-   ccall((:iauPn06, libsofa_c), Cvoid, 
+   ccall((:iauPn06, libsofa_c), Cvoid,
         (Cdouble, Cdouble, Cdouble, Cdouble,
          Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
          Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),

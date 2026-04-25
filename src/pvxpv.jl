@@ -16,12 +16,12 @@ Returned:
 
 Notes:
 
-   1. If the position and velocity components of the two pv-vectors are
+1. If the position and velocity components of the two pv-vectors are
    ( ap, av ) and ( bp, bv ), the result, a x b, is the pair of
    vectors ( ap x bp, ap x bv + av x bp ).  The two vectors are the
    cross-product of the two p-vectors and its derivative.
 
-   2. It is permissible to re-use the same array for any of the
+2. It is permissible to re-use the same array for any of the
    arguments.
 
 Called:
@@ -41,8 +41,8 @@ function iauPvxpv(a::AbstractMatrix{<:Real}, b::AbstractMatrix{<:Real})
    # Preallocate return values
    axb = zeros(Float64, 3, 2)
 
-   ccall((:iauPvxpv, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauPvxpv, libsofa_c), Cvoid,
+         (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
           convert(Array{Float64, 2}, a'),
           convert(Array{Float64, 2}, b'),
           axb)

@@ -17,7 +17,7 @@ Returned (function value):
 
 Notes:
 
-   1. The UT1 and TT dates uta+utb and tta+ttb respectively, are both
+1. The UT1 and TT dates uta+utb and tta+ttb respectively, are both
    Julian Dates, apportioned in any convenient way between the
    argument pairs.  For example, JD=2450123.7 could be expressed in
    any of these ways, among others:
@@ -40,18 +40,18 @@ Notes:
    question and the utb argument lies in the range 0 to 1, or vice
    versa.
 
-   2. Both UT1 and TT are required, UT1 to predict the Earth rotation
+2. Both UT1 and TT are required, UT1 to predict the Earth rotation
    and TT to predict the effects of precession-nutation.  If UT1 is
    used for both purposes, errors of order 100 microarcseconds
    result.
 
-   3. This GAST is compatible with the IAU 2000 resolutions and must be
+3. This GAST is compatible with the IAU 2000 resolutions and must be
    used only in conjunction with other IAU 2000 compatible
    components such as precession-nutation.
 
-   4. The result is returned in the range 0 to 2pi.
+4. The result is returned in the range 0 to 2pi.
 
-   5. The algorithm is from Capitaine et al. (2003) and IERS
+5. The algorithm is from Capitaine et al. (2003) and IERS
    Conventions 2003.
 
 Called:

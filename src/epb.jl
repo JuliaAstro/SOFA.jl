@@ -33,7 +33,7 @@ export iauEpb
 """
 
 function iauEpb(dj1::Real, dj2::Real)
-    return ccall((:iauEpb, libsofa_c), Cdouble, 
-                 (Cdouble, Cdouble), 
+    return ccall((:iauEpb, libsofa_c), Cdouble,
+                 (Cdouble, Cdouble),
                  convert(Float64, dj1), convert(Float64, dj2))
 end

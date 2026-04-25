@@ -15,7 +15,7 @@ Returned:
 
 Notes:
 
-   1. The matrix is in the sense
+1. The matrix is in the sense
 
       E_ep = rm x P_ICRS,
 
@@ -23,7 +23,7 @@ Notes:
    and declination axes and E_ep is the same vector with respect to
    the (inertial) ecliptic and equinox of epoch epj.
 
-   2. P_ICRS is a free vector, merely a direction, typically of unit
+2. P_ICRS is a free vector, merely a direction, typically of unit
    magnitude, and not bound to any particular spatial origin, such
    as the Earth, Sun or SSB.  No assumptions are made about whether
    it represents starlight and embodies astrometric effects such as
@@ -32,7 +32,7 @@ Notes:
    longitude and latitude, with only frame bias (always less than
    25 mas) to disturb this classical picture.
 
-   3. The Vondrak et al. (2011, 2012) 400 millennia precession model
+3. The Vondrak et al. (2011, 2012) 400 millennia precession model
    agrees with the IAU 2006 precession at J2000.0 and stays within
    100 microarcseconds during the 20th and 21st centuries.  It is
    accurate to a few arcseconds throughout the historical period,
@@ -65,8 +65,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # void iauLtecm(double epj, double rm[3][3])
 function iauLtecm(epj::Real)
    rm = zeros(Float64, 3, 3)
-   ccall((:iauLtecm, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}), 
+   ccall((:iauLtecm, libsofa_c), Cvoid,
+         (Cdouble, Ref{Cdouble}),
           convert(Float64, epj),
           rm)
 

@@ -15,11 +15,11 @@ Given and returned:
 
 Notes:
 
-   1. Calling this function with positive phi incorporates in the
+1. Calling this function with positive phi incorporates in the
    supplied r-matrix r an additional rotation, about the x-axis,
    anticlockwise as seen looking towards the origin from positive x.
 
-   2. The additional rotation can be represented by this matrix:
+2. The additional rotation can be represented by this matrix:
 
       (  1        0            0      )
       (                               )

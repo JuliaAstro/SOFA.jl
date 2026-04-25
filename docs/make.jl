@@ -7,6 +7,7 @@ makedocs(
     clean     = true,
     linkcheck = true,
     format    = Documenter.HTML(),
+    warnonly = [:docs_block, :missing_docs],
     sitename  = "SOFA.jl",
     authors   = "Duncan Eddy",
     pages     = Any[

@@ -16,11 +16,11 @@ Returned:
 
 Notes:
 
-    1. The matrix rbpn transforms vectors from GCRS to true equator (and
+1. The matrix rbpn transforms vectors from GCRS to true equator (and
     CIO or equinox) of date, and therefore the Celestial Intermediate
     Pole unit vector is the bottom row of the matrix.
 
-    2. The arguments x,y are components of the Celestial Intermediate
+2. The arguments x,y are components of the Celestial Intermediate
     Pole unit vector in the Geocentric Celestial Reference System.
 
 Reference:
@@ -46,8 +46,8 @@ function iauBpn2xy(rbpn::AbstractMatrix{<:Real})
     ref_x = Ref{Float64}(0.0)
     ref_y = Ref{Float64}(0.0)
 
-    ccall((:iauBpn2xy, libsofa_c), Cvoid, 
-        (Ptr{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+    ccall((:iauBpn2xy, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
         convert(Array{Float64, 2}, rbpn'), ref_x, ref_y)
 
     return ref_x[], ref_y[]

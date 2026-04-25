@@ -61,11 +61,11 @@ mutable struct iauASTROM
                eral::Real=0.0,
                refa::Real=0.0,
                refb::Real=0.0)
-    
-        new(convert(Float64, pmt), 
+
+        new(convert(Float64, pmt),
             (0.0, 0.0, 0.0),
             (0.0, 0.0, 0.0),
-            convert(Float64, em), 
+            convert(Float64, em),
             (0.0, 0.0, 0.0),
             convert(Float64, bm1),
             ((0.0, 0.0, 0.0),(0.0, 0.0, 0.0),(0.0, 0.0, 0.0)),
@@ -97,7 +97,7 @@ mutable struct iauLDBODY
 
         if size(pv) != (2, 3)
             error("Invalid size for rnpb. Must be a (2, 3).")
-        end 
+        end
 
         new(convert(Float64, bm), convert(Float64, dl), convert(Array{Float64, 2}, pv))
     end

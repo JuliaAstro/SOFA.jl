@@ -38,8 +38,8 @@ function iauP2s(p::AbstractVector{<:Real})
    ref_phi   = Ref{Float64}(0.0)
    ref_r     = Ref{Float64}(0.0)
 
-   ccall((:iauP2s, libsofa_c), Cvoid, 
-       (Ptr{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+   ccall((:iauP2s, libsofa_c), Cvoid,
+       (Ptr{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
        convert(Array{Float64, 1}, p),
        ref_theta, ref_phi, ref_r)
 

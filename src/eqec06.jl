@@ -16,7 +16,7 @@ Given:
 Returned:
    dl,db       double ecliptic longitude and latitude (radians)
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,11 +35,11 @@ Returned:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. No assumptions are made about whether the coordinates represent
+2. No assumptions are made about whether the coordinates represent
    starlight and embody astrometric effects such as parallax or
    aberration.
 
-   3. The transformation is approximately that from mean J2000.0 right
+3. The transformation is approximately that from mean J2000.0 right
    ascension and declination to ecliptic longitude and latitude
    (mean equinox and ecliptic of date), with only frame bias (always
    less than 25 mas) to disturb this classical picture.
@@ -68,9 +68,9 @@ function iauEqec06(date1::Real, date2::Real, dr::Real, dd::Real)
    ref_db = Ref{Float64}(0.0)
 
    ccall((:iauEqec06, libsofa_c), Cvoid,
-         (Cdouble, Cdouble, Cdouble, Cdouble, 
+         (Cdouble, Cdouble, Cdouble, Cdouble,
          Ref{Cdouble}, Ref{Cdouble}),
-         convert(Float64, date1), convert(Float64, date2), 
+         convert(Float64, date1), convert(Float64, date2),
          convert(Float64, dr), convert(Float64, dd),
          ref_dl, ref_db)
 

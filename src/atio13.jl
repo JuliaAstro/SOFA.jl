@@ -37,7 +37,7 @@ Returned (function value):
 
 Notes:
 
-   1.  utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
+1. utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
    convenient way between the two arguments, for example where utc1
    is the Julian Day Number and utc2 is the fraction of a day.
 
@@ -51,29 +51,29 @@ Notes:
    it implements the leap-second-ambiguity convention just
    described.
 
-   2.  The warning status "dubious year" flags UTCs that predate the
+2. The warning status "dubious year" flags UTCs that predate the
    introduction of the time scale or that are too far in the
    future to be trusted.  See iauDat for further details.
 
-   3.  UT1-UTC is tabulated in IERS bulletins.  It increases by exactly
+3. UT1-UTC is tabulated in IERS bulletins.  It increases by exactly
    one second at the end of each positive UTC leap second,
    introduced in order to keep UT1-UTC within +/- 0.9s.  n.b. This
    practice is under review, and in the future UT1-UTC may grow
    essentially without limit.
 
-   4.  The geographical coordinates are with respect to the WGS84
+4. The geographical coordinates are with respect to the WGS84
    reference ellipsoid.  TAKE CARE WITH THE LONGITUDE SIGN:  the
    longitude required by the present function is east-positive
    (i.e. right-handed), in accordance with geographical convention.
 
-   5.  The polar motion xp,yp can be obtained from IERS bulletins.  The
+5. The polar motion xp,yp can be obtained from IERS bulletins.  The
    values are the coordinates (in radians) of the Celestial
    Intermediate Pole with respect to the International Terrestrial
    Reference System (see IERS Conventions 2003), measured along the
    meridians 0 and 90 deg west respectively.  For many
    applications, xp and yp can be set to zero.
 
-   6.  If hm, the height above the ellipsoid of the observing station
+6. If hm, the height above the ellipsoid of the observing station
    in meters, is not known but phpa, the pressure in hPa (=mB), is
    available, an adequate estimate of hm can be obtained from the
    expression
@@ -92,11 +92,11 @@ Notes:
    the pressure and that an accurate phpa value is important for
    precise work.
 
-   7.  The argument wl specifies the observing wavelength in
+7. The argument wl specifies the observing wavelength in
    micrometers.  The transition from optical to radio is assumed to
    occur at 100 micrometers (about 3000 GHz).
 
-   8.  "Observed" Az,ZD means the position that would be seen by a
+8. "Observed" Az,ZD means the position that would be seen by a
    perfect geodetically aligned theodolite.  (Zenith distance is
    used rather than altitude in order to reflect the fact that no
    allowance is made for depression of the horizon.)  This is
@@ -107,7 +107,7 @@ Notes:
    means the position that would be seen by a perfect equatorial
    with its polar axis aligned to the Earth's axis of rotation.
 
-   9.  The accuracy of the result is limited by the corrections for
+9. The accuracy of the result is limited by the corrections for
    refraction, which use a simple A*tan(z) + B*tan^3(z) model.
    Providing the meteorological parameters are known accurately and
    there are no gross local effects, the predicted astrometric
@@ -116,19 +116,19 @@ Notes:
    than 30 arcsec (optical or radio) at 85 degrees and better
    than 20 arcmin (optical) or 30 arcmin (radio) at the horizon.
 
-   10. The complementary functions iauAtio13 and iauAtoi13 are self-
-   consistent to better than 1 microarcsecond all over the
-   celestial sphere.
+10. The complementary functions iauAtio13 and iauAtoi13 are self-
+    consistent to better than 1 microarcsecond all over the
+    celestial sphere.
 
-   11. It is advisable to take great care with units, as even unlikely
-   values of the input parameters are accepted and processed in
-   accordance with the models used.
+11. It is advisable to take great care with units, as even unlikely
+    values of the input parameters are accepted and processed in
+    accordance with the models used.
 
 Called:
    iauApio13    astrometry parameters, CIRS-observed, 2013
    iauAtioq     quick CIRS to observed
 
-This revision:   2016 February 2 
+This revision:   2016 February 2
 
 SOFA release 2018-01-30
 
@@ -152,19 +152,19 @@ function iauAtio13(ri::Real, di::Real, utc1::Real, utc2::Real, dut1::Real,
    ref_dob = Ref{Float64}(0.0)
    ref_rob = Ref{Float64}(0.0)
 
-   status = ccall((:iauAtio13, libsofa_c), Cint, 
+   status = ccall((:iauAtio13, libsofa_c), Cint,
             (Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
-            Cdouble, Cdouble, Cdouble, Cdouble, 
+            Cdouble, Cdouble, Cdouble, Cdouble,
             Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-            Ref{Cdouble}, Ref{Cdouble}), 
-            convert(Float64, ri), convert(Float64, di), 
-            convert(Float64, utc1), convert(Float64, utc2), 
-            convert(Float64, dut1), convert(Float64, elong), 
-            convert(Float64, phi), convert(Float64, hm), 
-            convert(Float64, xp), convert(Float64, yp), 
-            convert(Float64, phpa), convert(Float64, tc), 
-            convert(Float64, rh), convert(Float64, wl), 
+            Ref{Cdouble}, Ref{Cdouble}),
+            convert(Float64, ri), convert(Float64, di),
+            convert(Float64, utc1), convert(Float64, utc2),
+            convert(Float64, dut1), convert(Float64, elong),
+            convert(Float64, phi), convert(Float64, hm),
+            convert(Float64, xp), convert(Float64, yp),
+            convert(Float64, phpa), convert(Float64, tc),
+            convert(Float64, rh), convert(Float64, wl),
             ref_aob, ref_zob, ref_hob, ref_dob, ref_rob)
 
    return status, ref_aob[], ref_zob[], ref_hob[], ref_dob[], ref_rob[]

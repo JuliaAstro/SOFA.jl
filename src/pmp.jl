@@ -29,9 +29,9 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 
 function iauPmp(a::AbstractVector{<:Real}, b::AbstractVector{<:Real})
    amb = zeros(Float64, 3)
-   
-   ccall((:iauPmp, libsofa_c), Cdouble, 
-       (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
+
+   ccall((:iauPmp, libsofa_c), Cdouble,
+       (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
        convert(Array{Float64, 1}, a),
        convert(Array{Float64, 1}, b),
        amb)

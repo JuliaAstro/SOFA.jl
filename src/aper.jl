@@ -49,19 +49,19 @@ Returned:
 
 Notes:
 
-   1. This function exists to enable sidereal-tracking applications to
+1. This function exists to enable sidereal-tracking applications to
    avoid wasteful recomputation of the bulk of the astrometry
    parameters:  only the Earth rotation is updated.
 
-   2. For targets expressed as equinox based positions, such as
+2. For targets expressed as equinox based positions, such as
    classical geocentric apparent (RA,Dec), the supplied theta can be
    Greenwich apparent sidereal time rather than Earth rotation
    angle.
 
-   3. The function iauAper13 can be used instead of the present
+3. The function iauAper13 can be used instead of the present
    function, and starts from UT1 rather than ERA itself.
 
-   4. This is one of several functions that inserts into the astrom
+4. This is one of several functions that inserts into the astrom
    structure star-independent parameters needed for the chain of
    astrometric transformations ICRS <-> GCRS <-> CIRS <-> observed.
 
@@ -96,8 +96,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauAper(theta::Real, astrom::iauASTROM)
    ref_astrom = Ref{iauASTROM}(astrom)
-   ccall((:iauAper, libsofa_c), Cvoid, 
-            (Cdouble, Ref{iauASTROM}), 
+   ccall((:iauAper, libsofa_c), Cvoid,
+            (Cdouble, Ref{iauASTROM}),
             convert(Float64, theta), ref_astrom)
 
    return ref_astrom[]

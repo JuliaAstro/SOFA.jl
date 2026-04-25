@@ -55,7 +55,7 @@ Returned (function value):
 
 Notes:
 
-   1.  utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
+1. utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
    convenient way between the two arguments, for example where utc1
    is the Julian Day Number and utc2 is the fraction of a day.
 
@@ -69,22 +69,22 @@ Notes:
    it implements the leap-second-ambiguity convention just
    described.
 
-   2.  The warning status "dubious year" flags UTCs that predate the
+2. The warning status "dubious year" flags UTCs that predate the
    introduction of the time scale or that are too far in the
    future to be trusted.  See iauDat for further details.
 
-   3.  UT1-UTC is tabulated in IERS bulletins.  It increases by exactly
+3. UT1-UTC is tabulated in IERS bulletins.  It increases by exactly
    one second at the end of each positive UTC leap second,
    introduced in order to keep UT1-UTC within +/- 0.9s.  n.b. This
    practice is under review, and in the future UT1-UTC may grow
    essentially without limit.
 
-   4.  The geographical coordinates are with respect to the WGS84
+4. The geographical coordinates are with respect to the WGS84
    reference ellipsoid.  TAKE CARE WITH THE LONGITUDE SIGN:  the
    longitude required by the present function is east-positive
    (i.e. right-handed), in accordance with geographical convention.
 
-   5.  The polar motion xp,yp can be obtained from IERS bulletins.  The
+5. The polar motion xp,yp can be obtained from IERS bulletins.  The
    values are the coordinates (in radians) of the Celestial
    Intermediate Pole with respect to the International Terrestrial
    Reference System (see IERS Conventions 2003), measured along the
@@ -94,7 +94,7 @@ Notes:
    Internally, the polar motion is stored in a form rotated onto
    the local meridian.
 
-   6.  If hm, the height above the ellipsoid of the observing station
+6. If hm, the height above the ellipsoid of the observing station
    in meters, is not known but phpa, the pressure in hPa (=mB), is
    available, an adequate estimate of hm can be obtained from the
    expression
@@ -113,47 +113,47 @@ Notes:
    the pressure and that an accurate phpa value is important for
    precise work.
 
-   7.  The argument wl specifies the observing wavelength in
+7. The argument wl specifies the observing wavelength in
    micrometers.  The transition from optical to radio is assumed to
    occur at 100 micrometers (about 3000 GHz).
 
-   8.  It is advisable to take great care with units, as even unlikely
+8. It is advisable to take great care with units, as even unlikely
    values of the input parameters are accepted and processed in
    accordance with the models used.
 
-   9.  In cases where the caller wishes to supply his own Earth
+9. In cases where the caller wishes to supply his own Earth
    ephemeris, Earth rotation information and refraction constants,
    the function iauApco can be used instead of the present function.
 
-   10. This is one of several functions that inserts into the astrom
-   structure star-independent parameters needed for the chain of
-   astrometric transformations ICRS <-> GCRS <-> CIRS <-> observed.
+10. This is one of several functions that inserts into the astrom
+    structure star-independent parameters needed for the chain of
+    astrometric transformations ICRS <-> GCRS <-> CIRS <-> observed.
 
-   The various functions support different classes of observer and
-   portions of the transformation chain:
+    The various functions support different classes of observer and
+    portions of the transformation chain:
 
-         functions         observer        transformation
+     |    functions       | observer      | transformation        |
+     | ------------------ | ------------- | --------------------- |
+     | iauApcg iauApcg13  | geocentric    | ICRS <-> GCRS         |
+     | iauApci iauApci13  | terrestrial   | ICRS <-> CIRS         |
+     | iauApco iauApco13  | terrestrial   | ICRS <-> observed     |
+     | iauApcs iauApcs13  | space         | ICRS <-> GCRS         |
+     | iauAper iauAper13  | terrestrial   | update Earth rotation |
+     | iauApio iauApio13  | terrestrial   | CIRS <-> observed     |
 
-      iauApcg iauApcg13    geocentric      ICRS <-> GCRS
-      iauApci iauApci13    terrestrial     ICRS <-> CIRS
-      iauApco iauApco13    terrestrial     ICRS <-> observed
-      iauApcs iauApcs13    space           ICRS <-> GCRS
-      iauAper iauAper13    terrestrial     update Earth rotation
-      iauApio iauApio13    terrestrial     CIRS <-> observed
+    Those with names ending in "13" use contemporary SOFA models to
+    compute the various ephemerides.  The others accept ephemerides
+    supplied by the caller.
 
-   Those with names ending in "13" use contemporary SOFA models to
-   compute the various ephemerides.  The others accept ephemerides
-   supplied by the caller.
+    The transformation from ICRS to GCRS covers space motion,
+    parallax, light deflection, and aberration.  From GCRS to CIRS
+    comprises frame bias and precession-nutation.  From CIRS to
+    observed takes account of Earth rotation, polar motion, diurnal
+    aberration and parallax (unless subsumed into the ICRS <-> GCRS
+    transformation), and atmospheric refraction.
 
-   The transformation from ICRS to GCRS covers space motion,
-   parallax, light deflection, and aberration.  From GCRS to CIRS
-   comprises frame bias and precession-nutation.  From CIRS to
-   observed takes account of Earth rotation, polar motion, diurnal
-   aberration and parallax (unless subsumed into the ICRS <-> GCRS
-   transformation), and atmospheric refraction.
-
-   11. The context structure astrom produced by this function is used
-   by iauAtioq, iauAtoiq, iauAtciq* and iauAticq*.
+11. The context structure astrom produced by this function is used
+    by iauAtioq, iauAtoiq, iauAtciq* and iauAticq*.
 
 Called:
    iauUtctai    UTC to TAI
@@ -184,11 +184,11 @@ function iauApco13(utc1::Real, utc2::Real, dut1::Real,
    ref_eo     = Ref{Float64}(0.0)
 
 
-   status = ccall((:iauApco13, libsofa_c), Cint, 
+   status = ccall((:iauApco13, libsofa_c), Cint,
             (Cdouble, Cdouble, Cdouble, Cdouble,
-            Cdouble, Cdouble, Cdouble, Cdouble,
-            Cdouble, Cdouble, Cdouble, Cdouble,
-             Ref{iauASTROM}, Ref{Cdouble}), 
+             Cdouble, Cdouble, Cdouble, Cdouble,
+             Cdouble, Cdouble, Cdouble, Cdouble,
+             Ref{iauASTROM}, Ref{Cdouble}),
             convert(Float64, utc1), convert(Float64, utc2),
             convert(Float64, dut1), convert(Float64, elong),
             convert(Float64, phi), convert(Float64, hm),

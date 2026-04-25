@@ -18,7 +18,7 @@ Returned:
 
 Notes:
 
-   1. Naming the following points:
+1. Naming the following points:
 
          e = J2000.0 ecliptic pole,
          p = GCRS pole
@@ -32,7 +32,7 @@ Notes:
       psi = psi = pEP
       eps = epsilon = EP
 
-   2. The matrix representing the combined effects of frame bias,
+2. The matrix representing the combined effects of frame bias,
    precession and nutation is:
 
       NxPxB = R_1(-epsA).R_3(-psi).R_1(phib).R_3(gamb)
@@ -63,9 +63,9 @@ function iauFw2xy(gamb::Real, phib::Real, psi::Real, eps::Real)
    ref_x = Ref{Float64}(0.0)
    ref_y = Ref{Float64}(0.0)
 
-   ccall((:iauFw2xy, libsofa_c), Cvoid, 
+   ccall((:iauFw2xy, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble, Cdouble,
-         Ref{Cdouble}, Ref{Cdouble}), 
+         Ref{Cdouble}, Ref{Cdouble}),
           convert(Float64, gamb), convert(Float64, phib),
           convert(Float64, psi), convert(Float64, eps),
           ref_x, ref_y)

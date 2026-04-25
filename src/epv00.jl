@@ -22,7 +22,7 @@ Returned:
 
 Notes:
 
-      1. The TDB date date1+date2 is a Julian Date, apportioned in any
+1. The TDB date date1+date2 is a Julian Date, apportioned in any
       convenient way between the two arguments.  For example,
       JD(TDB)=2450123.7 could be expressed in any of these ways, among
       others:
@@ -45,7 +45,7 @@ Notes:
 
       n.b. TT can be used instead of TDB in most applications.
 
-      2. On return, the arrays pvh and pvb contain the following:
+2. On return, the arrays pvh and pvb contain the following:
 
             pvh[0][0]  x       }
             pvh[0][1]  y       } heliocentric position, au
@@ -66,12 +66,12 @@ Notes:
       The vectors are with respect to the Barycentric Celestial
       Reference System.  The time unit is one day in TDB.
 
-      3. The function is a SIMPLIFIED SOLUTION from the planetary theory
+3. The function is a SIMPLIFIED SOLUTION from the planetary theory
       VSOP2000 (X. Moisson, P. Bretagnon, 2001, Celes. Mechanics &
       Dyn. Astron., 80, 3/4, 205-213) and is an adaptation of original
       Fortran code supplied by P. Bretagnon (private comm., 2000).
 
-      4. Comparisons over the time span 1900-2100 with this simplified
+4. Comparisons over the time span 1900-2100 with this simplified
       solution and the JPL DE405 ephemeris give the following results:
 
                                     RMS    max
@@ -89,7 +89,7 @@ Notes:
       by 1000 and 3000 a factor of 60.  The velocity accuracy falls off
       at about half that rate.
 
-      5. It is permissible to use the same array for pvh and pvb, which
+5. It is permissible to use the same array for pvh and pvb, which
       will receive the barycentric values.
 
 This revision:  2017 March 16
@@ -106,12 +106,12 @@ function iauEpv00(date1::Real, date2::Real)
       # Initialize function return variables
       pvh = zeros(Float64, 3, 2)
       pvb = zeros(Float64, 3, 2)
-   
+
       status = ccall((:iauEpv00, libsofa_c), Cint,
             (Cdouble, Cdouble,
             Ref{Cdouble}, Ref{Cdouble}),
             convert(Float64, date1), convert(Float64, date2),
             pvh, pvb)
-   
+
       return status, SMatrix{2,3}(pvh'), SMatrix{2,3}(pvb')
    end

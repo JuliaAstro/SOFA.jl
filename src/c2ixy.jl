@@ -17,7 +17,7 @@ Returned:
 
 Notes:
 
-    1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
     convenient way between the two arguments.  For example,
     JD(TT)=2450123.7 could be expressed in any of these ways,
     among others:
@@ -36,10 +36,10 @@ Notes:
     optimum resolution.  The MJD method and the date & time methods
     are both good compromises between resolution and convenience.
 
-    2. The Celestial Intermediate Pole coordinates are the x,y components
+2. The Celestial Intermediate Pole coordinates are the x,y components
     of the unit vector in the Geocentric Celestial Reference System.
 
-    3. The matrix rc2i is the first stage in the transformation from
+3. The matrix rc2i is the first stage in the transformation from
     celestial to terrestrial coordinates:
 
     [TRS] = RPOM * R_3(ERA) * rc2i * [CRS]
@@ -51,7 +51,7 @@ Notes:
     Reference System (see IERS Conventions 2003), ERA is the Earth
     Rotation Angle and RPOM is the polar motion matrix.
 
-    4. Although its name does not include "00", This function is in fact
+4. Although its name does not include "00", This function is in fact
     specific to the IAU 2000 models.
 
 Called:
@@ -76,13 +76,13 @@ function iauC2ixy(date1::Real, date2::Real, x::Real, y::Real)
 
     # Allocate return value
     rc2i = zeros(Float64, 3, 3)
- 
-    ccall((:iauC2ixy, libsofa_c), Cvoid, 
+
+    ccall((:iauC2ixy, libsofa_c), Cvoid,
           (Cdouble, Cdouble, Cdouble, Cdouble,
-          Ptr{Cdouble}), 
+          Ptr{Cdouble}),
           convert(Float64, date1), convert(Float64, date2),
           convert(Float64, x), convert(Float64, y),
           rc2i)
- 
+
     return SMatrix{3,3}(rc2i')
  end

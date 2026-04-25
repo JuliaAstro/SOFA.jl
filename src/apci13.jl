@@ -40,17 +40,17 @@ Returned:
 
 Notes:
 
-   1. The TDB date date1+date2 is a Julian Date, apportioned in any
+1. The TDB date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TDB)=2450123.7 could be expressed in any of these ways, among
    others:
 
          date1          date2
 
-      2450123.7           0.0       (JD method)
-      2451545.0       -1421.3       (J2000 method)
-      2400000.5       50123.2       (MJD method)
-      2450123.5           0.2       (date & time method)
+   |  2450123.7  |        0.0   |   (JD method)
+   |  2451545.0  |    -1421.3   |   (J2000 method)
+   |  2400000.5  |    50123.2   |   (MJD method)
+   |  2450123.5  |        0.2   |   (date & time method)
 
    The JD method is the most natural and convenient to use in cases
    where the loss of several decimal digits of resolution is
@@ -64,27 +64,27 @@ Notes:
    TT can be used instead of TDB without any significant impact on
    accuracy.
 
-   2. All the vectors are with respect to BCRS axes.
+2. All the vectors are with respect to BCRS axes.
 
-   3. In cases where the caller wishes to supply his own Earth
+3. In cases where the caller wishes to supply his own Earth
    ephemeris and CIP/CIO, the function iauApci can be used instead
    of the present function.
 
-   4. This is one of several functions that inserts into the astrom
+4. This is one of several functions that inserts into the astrom
    structure star-independent parameters needed for the chain of
    astrometric transformations ICRS <-> GCRS <-> CIRS <-> observed.
 
    The various functions support different classes of observer and
    portions of the transformation chain:
 
-         functions         observer        transformation
-
-      iauApcg iauApcg13    geocentric      ICRS <-> GCRS
-      iauApci iauApci13    terrestrial     ICRS <-> CIRS
-      iauApco iauApco13    terrestrial     ICRS <-> observed
-      iauApcs iauApcs13    space           ICRS <-> GCRS
-      iauAper iauAper13    terrestrial     update Earth rotation
-      iauApio iauApio13    terrestrial     CIRS <-> observed
+    |    functions       | observer     |  transformation        |
+    | ------------------ | ------------ | ---------------------- |
+    | iauApcg iauApcg13  | geocentric   |  ICRS <-> GCRS         |
+    | iauApci iauApci13  | terrestrial  |  ICRS <-> CIRS         |
+    | iauApco iauApco13  | terrestrial  |  ICRS <-> observed     |
+    | iauApcs iauApcs13  | space        |  ICRS <-> GCRS         |
+    | iauAper iauAper13  | terrestrial  |  update Earth rotation |
+    | iauApio iauApio13  | terrestrial  |  CIRS <-> observed     |
 
    Those with names ending in "13" use contemporary SOFA models to
    compute the various ephemerides.  The others accept ephemerides
@@ -97,7 +97,7 @@ Notes:
    aberration and parallax (unless subsumed into the ICRS <-> GCRS
    transformation), and atmospheric refraction.
 
-   5. The context structure astrom produced by this function is used by
+5. The context structure astrom produced by this function is used by
    iauAtciq* and iauAticq*.
 
 Called:
@@ -119,8 +119,8 @@ function iauApci13(date1::Real, date2::Real)
    ref_astrom = Ref{iauASTROM}(iauASTROM())
    ref_eo     = Ref{Float64}(0.0)
 
-   ccall((:iauApci13, libsofa_c), Cvoid, 
-           (Cdouble, Cdouble, Ref{iauASTROM}, Ref{Cdouble}), 
+   ccall((:iauApci13, libsofa_c), Cvoid,
+           (Cdouble, Cdouble, Ref{iauASTROM}, Ref{Cdouble}),
            convert(Float64, date1),
            convert(Float64, date2),
            ref_astrom, ref_eo)

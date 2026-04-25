@@ -38,7 +38,7 @@ Returned (function value):
 
 Notes:
 
-   1. The starting and ending TDB dates ep1a+ep1b and ep2a+ep2b are
+1. The starting and ending TDB dates ep1a+ep1b and ep2a+ep2b are
    Julian Dates, apportioned in any convenient way between the two
    parts (A and B).  For example, JD(TDB)=2450123.7 could be
    expressed in any of these ways, among others:
@@ -57,7 +57,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. In accordance with normal star-catalog conventions, the object's
+2. In accordance with normal star-catalog conventions, the object's
    right ascension and declination are freed from the effects of
    secular aberration.  The frame, which is aligned to the catalog
    equator and equinox, is Lorentzian and centered on the SSB.
@@ -68,29 +68,29 @@ Notes:
 
    The parallax and radial velocity are in the same frame.
 
-   3. Care is needed with units.  The star coordinates are in radians
+3. Care is needed with units.  The star coordinates are in radians
    and the proper motions in radians per Julian year, but the
    parallax is in arcseconds.
 
-   4. The RA proper motion is in terms of coordinate angle, not true
+4. The RA proper motion is in terms of coordinate angle, not true
    angle.  If the catalog uses arcseconds for both RA and Dec proper
    motions, the RA proper motion will need to be divided by cos(Dec)
    before use.
 
-   5. Straight-line motion at constant speed, in the inertial frame,
+5. Straight-line motion at constant speed, in the inertial frame,
    is assumed.
 
-   6. An extremely small (or zero or negative) parallax is interpreted
+6. An extremely small (or zero or negative) parallax is interpreted
    to mean that the object is on the "celestial sphere", the radius
    of which is an arbitrary (large) value (see the iauStarpv
    function for the value used).  When the distance is overridden in
    this way, the status, initially zero, has 1 added to it.
 
-   7. If the space velocity is a significant fraction of c (see the
+7. If the space velocity is a significant fraction of c (see the
    constant VMAX in the function iauStarpv), it is arbitrarily set
    to zero.  When this action occurs, 2 is added to the status.
 
-   8. The relativistic adjustment carried out in the iauStarpv function
+8. The relativistic adjustment carried out in the iauStarpv function
    involves an iterative calculation.  If the process fails to
    converge within a set number of iterations, 4 is added to the
    status.
@@ -125,11 +125,11 @@ function iauStarpm(ra1::Real, dec1::Real, pmr1::Real, pmd1::Real,
    ref_px2  = Ref{Float64}(0.0)
    ref_rv2  = Ref{Float64}(0.0)
 
-   status = ccall((:iauStarpm, libsofa_c), Cint, 
+   status = ccall((:iauStarpm, libsofa_c), Cint,
        (Cdouble, Cdouble, Cdouble, Cdouble,
        Cdouble, Cdouble, Cdouble, Cdouble,
        Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble},
-       Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+       Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
        convert(Float64, ra1), convert(Float64, dec1),
        convert(Float64, pmr1), convert(Float64, pmd1),
        convert(Float64, px1), convert(Float64, rv1),

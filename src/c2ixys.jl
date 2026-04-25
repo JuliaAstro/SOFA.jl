@@ -17,14 +17,14 @@ Returned:
 
 Notes:
 
-   1. The Celestial Intermediate Pole coordinates are the x,y
+1. The Celestial Intermediate Pole coordinates are the x,y
    components of the unit vector in the Geocentric Celestial
    Reference System.
 
-   2. The CIO locator s (in radians) positions the Celestial
+2. The CIO locator s (in radians) positions the Celestial
    Intermediate Origin on the equator of the CIP.
 
-   3. The matrix rc2i is the first stage in the transformation from
+3. The matrix rc2i is the first stage in the transformation from
    celestial to terrestrial coordinates:
 
       [TRS] = RPOM * R_3(ERA) * rc2i * [CRS]
@@ -60,9 +60,9 @@ function iauC2ixys(x::Real, y::Real, s::Real)
    # Allocate return value
    rc2i = zeros(Float64, 3, 3)
 
-   ccall((:iauC2ixys, libsofa_c), Cvoid, 
+   ccall((:iauC2ixys, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble,
-         Ptr{Cdouble}), 
+         Ptr{Cdouble}),
          convert(Float64, x), convert(Float64, y), convert(Float64, s),
          rc2i)
 

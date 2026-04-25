@@ -16,10 +16,10 @@ Returned (function value):
 
 Notes:
 
-   1. Though t is strictly TDB, it is usually more convenient to use
+1. Though t is strictly TDB, it is usually more convenient to use
    TT, which makes no significant difference.
 
-   2. The expression used is as adopted in IERS Conventions (2003) and
+2. The expression used is as adopted in IERS Conventions (2003) and
    is from Simon et al. (1994).
 
 References:
@@ -41,6 +41,6 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 
 export iauFad03
 function iauFad03(t::Real)
-   return ccall((:iauFad03, libsofa_c), 
+   return ccall((:iauFad03, libsofa_c),
                 Cdouble, (Cdouble,), convert(Float64, t))
 end

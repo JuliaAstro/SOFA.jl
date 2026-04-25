@@ -29,8 +29,8 @@ function iauPv2p(pv::AbstractMatrix{<:Real})
    # Preallocate return values
    p = zeros(Float64, 3)
 
-   ccall((:iauPv2p, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauPv2p, libsofa_c), Cvoid,
+         (Ptr{Cdouble}, Ptr{Cdouble}),
           convert(Array{Float64, 2}, pv'), p)
 
    return SVector{3}(p)

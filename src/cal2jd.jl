@@ -23,15 +23,15 @@ Returned (function value):
 
 Notes:
 
-   1. The algorithm used is valid from -4800 March 1, but this
+1. The algorithm used is valid from -4800 March 1, but this
    implementation rejects dates before -4799 January 1.
 
-   2. The Julian Date is returned in two pieces, in the usual SOFA
+2. The Julian Date is returned in two pieces, in the usual SOFA
    manner, which is designed to preserve time resolution.  The
    Julian Date is available as a single number by adding djm0 and
    djm.
 
-   3. In early eras the conversion is from the "Proleptic Gregorian
+3. In early eras the conversion is from the "Proleptic Gregorian
    Calendar";  no account is taken of the date(s) of adoption of
    the Gregorian Calendar, nor is the AD/BC numbering convention
    observed.
@@ -57,9 +57,9 @@ function iauCal2jd(iy::Real, im::Real, id::Real)
    ref_djm0 = Ref{Float64}(0.0)
    ref_djm  = Ref{Float64}(0.0)
 
-   status = ccall((:iauCal2jd, libsofa_c), Cint, 
-         (Cint, Cint, Cint, 
-         Ref{Cdouble}, Ref{Cdouble}), 
+   status = ccall((:iauCal2jd, libsofa_c), Cint,
+         (Cint, Cint, Cint,
+         Ref{Cdouble}, Ref{Cdouble}),
          convert(Int32, iy), convert(Int32, im), convert(Int32, id),
          ref_djm0, ref_djm)
 

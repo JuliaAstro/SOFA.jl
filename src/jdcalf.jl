@@ -24,7 +24,7 @@ Returned (function value):
 
 Notes:
 
-   1. The Julian Date is apportioned in any convenient way between
+1. The Julian Date is apportioned in any convenient way between
    the arguments dj1 and dj2.  For example, JD=2450123.7 could
    be expressed in any of these ways, among others:
 
@@ -35,14 +35,14 @@ Notes:
       2400000.5       50123.2       (MJD method)
       2450123.5           0.2       (date & time method)
 
-   2. In early eras the conversion is from the "Proleptic Gregorian
+2. In early eras the conversion is from the "Proleptic Gregorian
    Calendar";  no account is taken of the date(s) of adoption of
    the Gregorian Calendar, nor is the AD/BC numbering convention
    observed.
 
-   3. Refer to the function iauJd2cal.
+3. Refer to the function iauJd2cal.
 
-   4. NDP should be 4 or less if internal overflows are to be
+4. NDP should be 4 or less if internal overflows are to be
    avoided on machines which use 16-bit integers.
 
 Called:
@@ -65,8 +65,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauJdcalf(ndp::Int, dj1::Real, dj2::Real)
    iymdf = zeros(Int32, 4)
 
-   status = ccall((:iauJdcalf, libsofa_c), Cint, 
-       (Cint, Cdouble, Cdouble, Ptr{Cint}), 
+   status = ccall((:iauJdcalf, libsofa_c), Cint,
+       (Cint, Cdouble, Cdouble, Ptr{Cint}),
        convert(Int32, ndp), convert(Float64, dj1), convert(Float64, dj2), iymdf)
 
    if status != 0

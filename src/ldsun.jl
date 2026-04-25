@@ -17,17 +17,17 @@ Returned:
 
 Notes:
 
-   1. The source is presumed to be sufficiently distant that its
+1. The source is presumed to be sufficiently distant that its
    directions seen from the Sun and the observer are essentially
    the same.
 
-   2. The deflection is restrained when the angle between the star and
+2. The deflection is restrained when the angle between the star and
    the center of the Sun is less than a threshold value, falling to
    zero deflection for zero separation.  The chosen threshold value
    is within the solar limb for all solar-system applications, and
    is about 5 arcminutes for the case of a terrestrial observer.
 
-   3. The arguments p and p1 can be the same array.
+3. The arguments p and p1 can be the same array.
 
 Called:
    iauLd        light deflection by a solar-system body
@@ -44,8 +44,8 @@ function iauLdsun(p::AbstractVector{<:Real}, e::AbstractVector{<:Real}, em::Real
    # Allocate return values
    p1 = zeros(Float64, 3)
 
-   ccall((:iauLdsun, libsofa_c), Cvoid, 
-        (Ptr{Cdouble}, Ptr{Cdouble}, Cdouble, Ptr{Cdouble}), 
+   ccall((:iauLdsun, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ptr{Cdouble}, Cdouble, Ptr{Cdouble}),
         convert(Array{Float64, 1}, p), convert(Array{Float64, 1}, e), convert(Float64, em), p1)
 
    return SVector{3}(p1)

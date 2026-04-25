@@ -16,11 +16,11 @@ Returned:
 
 Notes:
 
-   1. The vector p can have any magnitude; only its direction is used.
+1. The vector p can have any magnitude; only its direction is used.
 
-   2. If p is null, zero theta and phi are returned.
+2. If p is null, zero theta and phi are returned.
 
-   3. At either pole, zero theta is returned.
+3. At either pole, zero theta is returned.
 
 This revision:  2013 June 18
 
@@ -37,9 +37,9 @@ function iauC2s(p::AbstractVector{<:Real})
    ref_theta = Ref{Float64}(0.0)
    ref_phi   = Ref{Float64}(0.0)
 
-   ccall((:iauC2s, libsofa_c), Cvoid, 
+   ccall((:iauC2s, libsofa_c), Cvoid,
          (Ptr{Cdouble},
-         Ref{Cdouble}, Ref{Cdouble}), 
+         Ref{Cdouble}, Ref{Cdouble}),
          convert(Array{Float64, 1}, p),
          ref_theta, ref_phi)
 

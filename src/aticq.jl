@@ -39,10 +39,9 @@ Returned:
 
 Notes:
 
-   1. Only the Sun is taken into account in the light deflection
-   correction.
+1. Only the Sun is taken into account in the light deflection correction.
 
-   2. Iterative techniques are used for the aberration and light
+2. Iterative techniques are used for the aberration and light
    deflection corrections so that the functions iauAtic13 (or
    iauAticq) and iauAtci13 (or iauAtciq) are accurate inverses;
    even at the edge of the Sun's disk the discrepancy is only about
@@ -72,10 +71,10 @@ function iauAticq(ri::Real, di::Real, astrom::iauASTROM)
    ref_rc     = Ref{Float64}(0.0)
    ref_dc     = Ref{Float64}(0.0)
 
-   status = ccall((:iauAticq, libsofa_c), Cint, 
-            (Cdouble, Cdouble, Ref{iauASTROM}, 
-            Ref{Cdouble}, Ref{Cdouble}), 
-            convert(Float64, ri), convert(Float64, di), 
+   status = ccall((:iauAticq, libsofa_c), Cint,
+            (Cdouble, Cdouble, Ref{iauASTROM},
+            Ref{Cdouble}, Ref{Cdouble}),
+            convert(Float64, ri), convert(Float64, di),
             ref_astrom, ref_rc, ref_dc)
 
     return ref_rc[], ref_dc[]

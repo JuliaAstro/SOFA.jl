@@ -15,7 +15,7 @@ Returned (function value):
 
 Notes:
 
-   1. The UT1 date dj1+dj2 is a Julian Date, apportioned in any
+1. The UT1 date dj1+dj2 is a Julian Date, apportioned in any
    convenient way between the arguments dj1 and dj2.  For example,
    JD(UT1)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -36,14 +36,14 @@ Notes:
    0hrs UT1 on the day in question and the dj2 argument lies in the
    range 0 to 1, or vice versa.
 
-   2. The algorithm is based on the IAU 1982 expression.  This is
+2. The algorithm is based on the IAU 1982 expression.  This is
    always described as giving the GMST at 0 hours UT1.  In fact, it
    gives the difference between the GMST and the UT, the steady
    4-minutes-per-day drawing-ahead of ST with respect to UT.  When
    whole days are ignored, the expression happens to equal the GMST
    at 0 hours UT1 each day.
 
-   3. In this function, the entire UT1 (the sum of the two arguments
+3. In this function, the entire UT1 (the sum of the two arguments
    dj1 and dj2) is used directly as the argument for the standard
    formula, the constant term of which is adjusted by 12 hours to
    take account of the noon phasing of Julian Date.  The UT1 is then

@@ -22,7 +22,7 @@ Returned:
 
 Notes:
 
-   1. The dates date01+date02 and date11+date12 are Julian Dates,
+1. The dates date01+date02 and date11+date12 are Julian Dates,
    apportioned in any convenient way between the arguments daten1
    and daten2.  For example, JD(TDB)=2450123.7 could be expressed in
    any of these ways, among others:
@@ -43,7 +43,7 @@ Notes:
    The two dates may be expressed using different methods, but at
    the risk of losing some resolution.
 
-   2. The accumulated precession angles zeta, z, theta are expressed
+2. The accumulated precession angles zeta, z, theta are expressed
    through canonical polynomials which are valid only for a limited
    time span.  In addition, the IAU 1976 precession rate is known to
    be imperfect.  The absolute accuracy of the present formulation
@@ -54,7 +54,7 @@ Notes:
    outside 4200BC to 5600AD and exceed 1000 arcsec outside 6800BC to
    8200AD.
 
-   3. The three angles are returned in the conventional order, which
+3. The three angles are returned in the conventional order, which
    is not the same as the order of the corresponding Euler
    rotations.  The precession matrix is
    R_3(-z) x R_2(+theta) x R_3(-zeta).
@@ -80,9 +80,9 @@ function iauPrec76(date01::Real, date02::Real, date11::Real, date12::Real)
    ref_z     = Ref{Float64}(0.0)
    ref_theta = Ref{Float64}(0.0)
 
-   ccall((:iauPrec76, libsofa_c), Cvoid, 
+   ccall((:iauPrec76, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble, Cdouble,
-          Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
+          Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
           convert(Float64, date01), convert(Float64, date02),
           convert(Float64, date11), convert(Float64, date12),
           ref_zeta, ref_z, ref_theta)

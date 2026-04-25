@@ -24,19 +24,19 @@ Returned (function value):
 
 Notes:
 
-   1. The tangent plane projection is also called the "gnomonic
+1. The tangent plane projection is also called the "gnomonic
    projection" and the "central projection".
 
-   2. The eta axis points due north in the adopted coordinate system.
+2. The eta axis points due north in the adopted coordinate system.
    If the spherical coordinates are observed (RA,Dec), the tangent
    plane coordinates (xi,eta) are conventionally called the
    "standard coordinates".  For right-handed spherical coordinates,
    (xi,eta) are also right-handed.  The units of (xi,eta) are,
    effectively, radians at the tangent point.
 
-   3. All angular arguments are in radians.
+3. All angular arguments are in radians.
 
-   4. This function is a member of the following set:
+4. This function is a member of the following set:
 
       spherical      vector         solve for
 
@@ -67,9 +67,9 @@ function iauTpxes(a::Real, b::Real,
    ref_xi = Ref{Float64}(0.0)
    ref_eta = Ref{Float64}(0.0)
 
-   status = ccall((:iauTpxes, libsofa_c), Cint, 
+   status = ccall((:iauTpxes, libsofa_c), Cint,
        (Cdouble, Cdouble, Cdouble, Cdouble,
-       Ref{Cdouble}, Ref{Cdouble}), 
+       Ref{Cdouble}, Ref{Cdouble}),
        convert(Float64, a),
        convert(Float64, b),
        convert(Float64, a0),

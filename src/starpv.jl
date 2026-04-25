@@ -28,7 +28,7 @@ Returned (function value):
 
 Notes:
 
-   1. The star data accepted by this function are "observables" for an
+1. The star data accepted by this function are "observables" for an
    imaginary observer at the solar-system barycenter.  Proper motion
    and radial velocity are, strictly, in terms of barycentric
    coordinate time, TCB.  For most practical applications, it is
@@ -44,7 +44,7 @@ Notes:
    secular aberration.  The frame, which is aligned to the catalog
    equator and equinox, is Lorentzian and centered on the SSB.
 
-   2. The resulting position and velocity pv-vector is with respect to
+2. The resulting position and velocity pv-vector is with respect to
    the same frame and, like the catalog coordinates, is freed from
    the effects of secular aberration.  Should the "coordinate
    direction", where the object was located at the catalog epoch, be
@@ -66,34 +66,34 @@ Notes:
 
    (ii) The transformation complies with special relativity.
 
-   3. Care is needed with units.  The star coordinates are in radians
+3. Care is needed with units.  The star coordinates are in radians
    and the proper motions in radians per Julian year, but the
    parallax is in arcseconds; the radial velocity is in km/s, but
    the pv-vector result is in au and au/day.
 
-   4. The RA proper motion is in terms of coordinate angle, not true
+4. The RA proper motion is in terms of coordinate angle, not true
    angle.  If the catalog uses arcseconds for both RA and Dec proper
    motions, the RA proper motion will need to be divided by cos(Dec)
    before use.
 
-   5. Straight-line motion at constant speed, in the inertial frame,
+5. Straight-line motion at constant speed, in the inertial frame,
    is assumed.
 
-   6. An extremely small (or zero or negative) parallax is interpreted
+6. An extremely small (or zero or negative) parallax is interpreted
    to mean that the object is on the "celestial sphere", the radius
    of which is an arbitrary (large) value (see the constant PXMIN).
    When the distance is overridden in this way, the status,
    initially zero, has 1 added to it.
 
-   7. If the space velocity is a significant fraction of c (see the
+7. If the space velocity is a significant fraction of c (see the
    constant VMAX), it is arbitrarily set to zero.  When this action
    occurs, 2 is added to the status.
 
-   8. The relativistic adjustment involves an iterative calculation.
+8. The relativistic adjustment involves an iterative calculation.
    If the process fails to converge within a set number (IMAX) of
    iterations, 4 is added to the status.
 
-   9. The inverse transformation is performed by the function
+9. The inverse transformation is performed by the function
    iauPvstar.
 
 Called:
@@ -126,9 +126,9 @@ function iauStarpv(ra::Real, dec::Real, pmr::Real, pmd::Real,
 
    pv = zeros(Float64, 3, 2)
 
-   status = ccall((:iauStarpv, libsofa_c), Cint, 
+   status = ccall((:iauStarpv, libsofa_c), Cint,
        (Cdouble, Cdouble, Cdouble, Cdouble,
-       Cdouble, Cdouble, Ptr{Cdouble}), 
+       Cdouble, Cdouble, Ptr{Cdouble}),
        convert(Float64, ra), convert(Float64, dec),
        convert(Float64, pmr), convert(Float64, pmd),
        convert(Float64, px), convert(Float64, rv),

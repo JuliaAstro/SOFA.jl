@@ -18,7 +18,7 @@ Returned:
 
 Notes:
 
-    1. Naming the following points:
+1. Naming the following points:
 
         e = J2000.0 ecliptic pole,
         p = GCRS pole,
@@ -32,12 +32,12 @@ Notes:
     psi = psi = pEP
     eps = epsilon = EP
 
-    2. The matrix representing the combined effects of frame bias,
+2. The matrix representing the combined effects of frame bias,
     precession and nutation is:
 
     NxPxB = R_1(-eps).R_3(-psi).R_1(phib).R_3(gamb)
 
-    3. Three different matrices can be constructed, depending on the
+3. Three different matrices can be constructed, depending on the
     supplied angles:
 
     .  To obtain the nutation x precession x frame bias matrix,
@@ -75,13 +75,13 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 
 function iauFw2m(gamb::Real, phib::Real, psi::Real, eps::Real)
     r = zeros(Float64, 3, 3)
- 
-    ccall((:iauFw2m, libsofa_c), Cvoid, 
+
+    ccall((:iauFw2m, libsofa_c), Cvoid,
           (Cdouble, Cdouble, Cdouble, Cdouble,
-          Ptr{Cdouble}), 
+          Ptr{Cdouble}),
            convert(Float64, gamb), convert(Float64, phib),
            convert(Float64, psi), convert(Float64, eps),
            r)
- 
+
     return SMatrix{3,3}(r')
  end

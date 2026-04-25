@@ -15,7 +15,7 @@ Returned:
 
 Notes:
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -34,7 +34,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The matrix operates in the sense V(true) = rmatn * V(mean),
+2. The matrix operates in the sense V(true) = rmatn * V(mean),
    where the p-vector V(true) is with respect to the true
    equatorial triad of date and the p-vector V(mean) is with
    respect to the mean equatorial triad of date.
@@ -56,8 +56,8 @@ function iauNutm80(date1::Real, date2::Real)
    # Allocate return values
    rmatn = zeros(Float64, 3, 3)
 
-   ccall((:iauNutm80, libsofa_c), Cvoid, 
-        (Cdouble, Cdouble, Ptr{Cdouble},), 
+   ccall((:iauNutm80, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ptr{Cdouble},),
         convert(Float64, date1), convert(Float64, date2), rmatn)
 
    return SMatrix{3,3}(rmatn')

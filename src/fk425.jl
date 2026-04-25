@@ -24,10 +24,10 @@ Returned: (all J2000.0, FK5)
 
 Notes:
 
-   1. The proper motions in RA are dRA/dt rather than cos(Dec)*dRA/dt,
+1. The proper motions in RA are dRA/dt rather than cos(Dec)*dRA/dt,
    and are per year rather than per century.
 
-   2. The conversion is somewhat complicated, for several reasons:
+2. The conversion is somewhat complicated, for several reasons:
 
    . Change of standard epoch from B1950.0 to J2000.0.
 
@@ -52,11 +52,11 @@ Notes:
    Andoyer's post-Newcomb precession.  The numerical constants from
    Seidelmann (1992) are used canonically.
 
-   3. Conversion from B1950.0 FK4 to J2000.0 FK5 only is provided for.
+3. Conversion from B1950.0 FK4 to J2000.0 FK5 only is provided for.
    Conversions for different epochs and equinoxes would require
    additional treatment for precession, proper motion and E-terms.
 
-   4. In the FK4 catalog the proper motions of stars within 10 degrees
+4. In the FK4 catalog the proper motions of stars within 10 degrees
    of the poles do not embody differential E-terms effects and
    should, strictly speaking, be handled in a different manner from
    stars outside these regions.  However, given the general lack of
@@ -126,10 +126,10 @@ function iauFk425(r1950::Real, d1950::Real, dr1950::Real, dd1950::Real,
    ref_dd2000 = Ref{Float64}(0.0)
    ref_p2000 = Ref{Float64}(0.0)
    ref_v2000 = Ref{Float64}(0.0)
-   
+
    ccall((:iauFk425, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
-         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, 
+         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
          Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, ),
          convert(Float64, r1950), convert(Float64, d1950),
          convert(Float64, dr1950), convert(Float64, dd1950),

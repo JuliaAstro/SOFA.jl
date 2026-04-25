@@ -32,8 +32,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauSxpv(s::Real, pv::AbstractMatrix{<:Real})
    spv = zeros(Float64, 3, 2)
 
-   ccall((:iauSxpv, libsofa_c), Cvoid, 
-       (Cdouble, Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauSxpv, libsofa_c), Cvoid,
+       (Cdouble, Ptr{Cdouble}, Ptr{Cdouble}),
        convert(Float64, s),
        convert(Array{Float64, 2}, pv'),
        spv)

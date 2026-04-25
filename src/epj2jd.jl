@@ -38,8 +38,8 @@ function iauEpj2jd(epj::Real)
    ref_djm0 = Ref{Float64}(0.0)
    ref_djm  = Ref{Float64}(0.0)
 
-   ccall((:iauEpj2jd, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}, Ref{Cdouble}), 
+   ccall((:iauEpj2jd, libsofa_c), Cvoid,
+         (Cdouble, Ref{Cdouble}, Ref{Cdouble}),
          convert(Float64, epj), ref_djm0, ref_djm)
 
    return ref_djm0[], ref_djm[]

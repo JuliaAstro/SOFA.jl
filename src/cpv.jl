@@ -30,8 +30,8 @@ function iauCpv(pv::AbstractMatrix{<:Real})
    # Allocate return value
    c = zeros(Float64, 3, 2)
 
-   ccall((:iauCpv, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauCpv, libsofa_c), Cvoid,
+         (Ptr{Cdouble}, Ptr{Cdouble}),
          convert(Array{Float64, 2}, pv'), c)
 
    return SMatrix{2,3}(c')

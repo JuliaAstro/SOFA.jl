@@ -23,13 +23,13 @@ Returned:
 
 Notes:
 
-    1. Star data for an epoch other than J2000.0 (for example from the
+1.  Star data for an epoch other than J2000.0 (for example from the
     Hipparcos catalog, which has an epoch of J1991.25) will require a
     preliminary call to iauPmsafe before use.
 
-    2. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
+2.  The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 
-    3. The TDB date date1+date2 is a Julian Date, apportioned in any
+3.  The TDB date date1+date2 is a Julian Date, apportioned in any
     convenient way between the two arguments.  For example,
     JD(TDB)=2450123.7 could be expressed in any of these ways, among
     others:
@@ -53,7 +53,7 @@ Notes:
     TT can be used instead of TDB without any significant impact on
     accuracy.
 
-    4. The available accuracy is better than 1 milliarcsecond, limited
+4.  The available accuracy is better than 1 milliarcsecond, limited
     mainly by the precession-nutation model that is used, namely
     IAU 2000A/2006.  Very close to solar system bodies, additional
     errors of up to several milliarcseconds can occur because of
@@ -64,7 +64,7 @@ Notes:
     5 microarcseconds.  Light deflection at the Sun's limb is
     uncertain at the 0.4 mas level.
 
-    5. Should the transformation to (equinox based) apparent place be
+5.  Should the transformation to (equinox based) apparent place be
     required rather than (CIO based) intermediate place, subtract the
     equation of the origins from the returned right ascension:
     RA = RI - EO. (The iauAnp function can then be applied, as
@@ -88,11 +88,11 @@ function iauAtci13(rc::Real, dc::Real, pr::Real,
     ref_ri = Ref{Float64}(0.0)
     ref_di = Ref{Float64}(0.0)
     ref_eo = Ref{Float64}(0.0)
-    
-    status = ccall((:iauAtci13, libsofa_c), Cvoid, 
+
+    status = ccall((:iauAtci13, libsofa_c), Cvoid,
             (Cdouble, Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble, Cdouble,
-            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
             convert(Float64, rc), convert(Float64, dc),
             convert(Float64, pr), convert(Float64, pd),
             convert(Float64, px), convert(Float64, rv),
