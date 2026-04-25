@@ -32,8 +32,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # void iauPpsp(double a[3], double s, double b[3], double apsb[3])
 function iauPpsp(a::AbstractVector{<:Real}, s::Real, b::AbstractVector{<:Real})
    apsb = zeros(Float64, 3)
-   ccall((:iauPpsp, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauPpsp, libsofa_c), Cvoid,
+         (Ptr{Cdouble}, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}),
          convert(Array{Float64, 1}, a),
          convert(Float64, s),
          convert(Array{Float64, 1}, b),

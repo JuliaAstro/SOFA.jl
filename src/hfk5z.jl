@@ -88,9 +88,9 @@ function iauHfk5z(rh::Real, dh::Real, date1::Real, date2::Real)
    ref_dr5 = Ref{Float64}(0.0)
    ref_dd5 = Ref{Float64}(0.0)
 
-   ccall((:iauHfk5z, libsofa_c), Cvoid, 
+   ccall((:iauHfk5z, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble, Cdouble,
-         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
           convert(Float64, rh), convert(Float64, dh),
           convert(Float64, date1), convert(Float64, date2),
           ref_r5, ref_d5, ref_dr5, ref_dd5)

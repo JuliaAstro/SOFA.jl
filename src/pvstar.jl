@@ -110,10 +110,10 @@ function iauPvstar(pv::AbstractMatrix{<:Real})
    ref_px  = Ref{Float64}(0.0)
    ref_rv  = Ref{Float64}(0.0)
 
-   status = ccall((:iauPvstar, libsofa_c), Cint, 
+   status = ccall((:iauPvstar, libsofa_c), Cint,
          (Ptr{Cdouble},
          Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
          convert(Array{Float64, 2}, pv'),
          ref_ra, ref_dec, ref_pmr, ref_pmd, ref_px, ref_rv)
 

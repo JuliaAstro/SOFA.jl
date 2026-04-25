@@ -67,9 +67,9 @@ function iauTpxes(a::Real, b::Real,
    ref_xi = Ref{Float64}(0.0)
    ref_eta = Ref{Float64}(0.0)
 
-   status = ccall((:iauTpxes, libsofa_c), Cint, 
+   status = ccall((:iauTpxes, libsofa_c), Cint,
        (Cdouble, Cdouble, Cdouble, Cdouble,
-       Ref{Cdouble}, Ref{Cdouble}), 
+       Ref{Cdouble}, Ref{Cdouble}),
        convert(Float64, a),
        convert(Float64, b),
        convert(Float64, a0),

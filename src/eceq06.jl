@@ -68,9 +68,9 @@ function iauEceq06(date1::Real, date2::Real, dl::Real, db::Real)
 
 
    ccall((:iauEceq06, libsofa_c), Cvoid,
-         (Cdouble, Cdouble, Cdouble, Cdouble, 
+         (Cdouble, Cdouble, Cdouble, Cdouble,
          Ref{Cdouble}, Ref{Cdouble}),
-         convert(Float64, date1), convert(Float64, date2), 
+         convert(Float64, date1), convert(Float64, date2),
          convert(Float64, dl), convert(Float64, db),
          ref_dr, ref_dd)
 

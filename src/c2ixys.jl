@@ -60,9 +60,9 @@ function iauC2ixys(x::Real, y::Real, s::Real)
    # Allocate return value
    rc2i = zeros(Float64, 3, 3)
 
-   ccall((:iauC2ixys, libsofa_c), Cvoid, 
+   ccall((:iauC2ixys, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble,
-         Ptr{Cdouble}), 
+         Ptr{Cdouble}),
          convert(Float64, x), convert(Float64, y), convert(Float64, s),
          rc2i)
 

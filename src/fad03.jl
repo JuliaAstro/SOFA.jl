@@ -41,6 +41,6 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 
 export iauFad03
 function iauFad03(t::Real)
-   return ccall((:iauFad03, libsofa_c), 
+   return ccall((:iauFad03, libsofa_c),
                 Cdouble, (Cdouble,), convert(Float64, t))
 end

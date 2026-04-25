@@ -71,9 +71,9 @@ function iauC2i06a(date1::Real, date2::Real)
    # Allocate return value
    rc2i = zeros(Float64, 3, 3)
 
-   ccall((:iauC2i06a, libsofa_c), Cvoid, 
+   ccall((:iauC2i06a, libsofa_c), Cvoid,
          (Cdouble, Cdouble,
-         Ptr{Cdouble}), 
+         Ptr{Cdouble}),
          convert(Float64, date1), convert(Float64, date2),
          rc2i)
 

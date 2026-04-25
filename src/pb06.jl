@@ -76,8 +76,8 @@ function iauPb06(date1::Real, date2::Real)
    ref_bz     = Ref{Float64}(0.0)
    ref_btheta = Ref{Float64}(0.0)
 
-   ccall((:iauPb06, libsofa_c), Cvoid, 
-       (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+   ccall((:iauPb06, libsofa_c), Cvoid,
+       (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
        convert(Float64, date1),
        convert(Float64, date2),
        ref_bzeta, ref_bz, ref_btheta)

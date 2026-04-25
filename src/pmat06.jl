@@ -61,7 +61,7 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauPmat06(date1::Real, date2::Real)
    rbp = zeros(Float64, 3, 3)
 
-   ccall((:iauPmat06, libsofa_c), Cvoid, 
+   ccall((:iauPmat06, libsofa_c), Cvoid,
        (Cdouble, Cdouble, Ptr{Cdouble}),
        convert(Float64, date1),
        convert(Float64, date2),

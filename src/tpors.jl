@@ -96,9 +96,9 @@ function iauTpors(xi::Real, eta::Real, a::Real, b::Real)
    ref_a02 = Ref{Float64}(0.0)
    ref_b02 = Ref{Float64}(0.0)
 
-   status = ccall((:iauTpors, libsofa_c), Cint, 
-       (Cdouble, Cdouble, Cdouble, Cdouble, 
-       Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+   status = ccall((:iauTpors, libsofa_c), Cint,
+       (Cdouble, Cdouble, Cdouble, Cdouble,
+       Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
        convert(Float64, xi),
        convert(Float64, eta),
        convert(Float64, a),

@@ -146,19 +146,19 @@ function iauP06e(date1::Real, date2::Real)
    ref_phi    = Ref{Float64}(0.0)
    ref_psi    = Ref{Float64}(0.0)
 
-   ccall((:iauP06e, libsofa_c), Cvoid, 
+   ccall((:iauP06e, libsofa_c), Cvoid,
        (Cdouble, Cdouble,
        Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
        Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
        Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
        Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
        convert(Float64, date1), convert(Float64, date2),
-       ref_eps0, ref_psia, ref_oma, ref_bpa, ref_bqa, ref_pia, 
-       ref_bpia, ref_epsa, ref_chia, ref_za, ref_zetaa, ref_thetaa, 
+       ref_eps0, ref_psia, ref_oma, ref_bpa, ref_bqa, ref_pia,
+       ref_bpia, ref_epsa, ref_chia, ref_za, ref_zetaa, ref_thetaa,
        ref_pa, ref_gam, ref_phi, ref_psi)
 
    return ref_eps0[], ref_psia[], ref_oma[], ref_bpa[], ref_bqa[],
-          ref_pia[], ref_bpia[], ref_epsa[], ref_chia[], ref_za[], 
-          ref_zetaa[], ref_thetaa[], ref_pa[], ref_gam[], ref_phi[], 
+          ref_pia[], ref_bpia[], ref_epsa[], ref_chia[], ref_za[],
+          ref_zetaa[], ref_thetaa[], ref_pa[], ref_gam[], ref_phi[],
           ref_psi[]
 end

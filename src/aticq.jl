@@ -71,10 +71,10 @@ function iauAticq(ri::Real, di::Real, astrom::iauASTROM)
    ref_rc     = Ref{Float64}(0.0)
    ref_dc     = Ref{Float64}(0.0)
 
-   status = ccall((:iauAticq, libsofa_c), Cint, 
-            (Cdouble, Cdouble, Ref{iauASTROM}, 
-            Ref{Cdouble}, Ref{Cdouble}), 
-            convert(Float64, ri), convert(Float64, di), 
+   status = ccall((:iauAticq, libsofa_c), Cint,
+            (Cdouble, Cdouble, Ref{iauASTROM},
+            Ref{Cdouble}, Ref{Cdouble}),
+            convert(Float64, ri), convert(Float64, di),
             ref_astrom, ref_rc, ref_dc)
 
     return ref_rc[], ref_dc[]

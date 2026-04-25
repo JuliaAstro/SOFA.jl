@@ -63,9 +63,9 @@ function iauC2tcio(rc2i::AbstractMatrix{<:Real}, era::Real, rpom::AbstractMatrix
    # Allocate return value
    rc2t = zeros(Float64, 3, 3)
 
-   ccall((:iauC2tcio, libsofa_c), Cvoid, 
+   ccall((:iauC2tcio, libsofa_c), Cvoid,
          (Ptr{Cdouble}, Cdouble, Ptr{Cdouble},
-         Ptr{Cdouble}), 
+         Ptr{Cdouble}),
          convert(Array{Float64, 2}, rc2i'), convert(Float64, era),
          convert(Array{Float64, 2}, rpom'),
          rc2t)

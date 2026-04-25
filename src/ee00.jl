@@ -71,6 +71,6 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauEe00(date1::Real, date2::Real, epsa::Real, dpsi::Real)
    return ccall((:iauEe00, libsofa_c), Cdouble,
                (Cdouble, Cdouble, Cdouble, Cdouble),
-               convert(Float64, date1), convert(Float64, date2), 
+               convert(Float64, date1), convert(Float64, date2),
                convert(Float64, epsa), convert(Float64, dpsi))
 end

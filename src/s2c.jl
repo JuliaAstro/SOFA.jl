@@ -25,8 +25,8 @@ export iauS2c
 function iauS2c(theta::Real, phi::Real)
     c = zeros(Float64, 3)
 
-    ccall((:iauS2c, libsofa_c), Cvoid, 
-       (Cdouble, Cdouble, Ptr{Cdouble}), 
+    ccall((:iauS2c, libsofa_c), Cvoid,
+       (Cdouble, Cdouble, Ptr{Cdouble}),
        convert(Float64, theta),
        convert(Float64, phi),
        c)

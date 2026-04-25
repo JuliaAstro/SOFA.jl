@@ -36,10 +36,10 @@ function iauPvdpv(a::AbstractMatrix{<:Real}, b::AbstractMatrix{<:Real})
    # Preallocate return values
    adb = zeros(Float64, 2)
 
-   ccall((:iauPvdpv, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauPvdpv, libsofa_c), Cvoid,
+         (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
           convert(Array{Float64, 2}, a'),
-          convert(Array{Float64, 2}, b'), 
+          convert(Array{Float64, 2}, b'),
           adb)
 
    return SVector{2}(adb)

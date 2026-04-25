@@ -15,8 +15,8 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 Status:  support function.
 
 Given:
-   date1  double     TDB as a 2-part...
-   date2  double     ...Julian Date (Note 1)
+-  date1  double     TDB as a 2-part...
+-  date2  double     ...Julian Date (Note 1)
 
 Returned:
    astrom iauASTROM* star-independent astrometry parameters:
@@ -78,12 +78,12 @@ Notes:
 
           functions         observer        transformation
 
-       iauApcg iauApcg13    geocentric      ICRS <-> GCRS
-       iauApci iauApci13    terrestrial     ICRS <-> CIRS
-       iauApco iauApco13    terrestrial     ICRS <-> observed
-       iauApcs iauApcs13    space           ICRS <-> GCRS
-       iauAper iauAper13    terrestrial     update Earth rotation
-       iauApio iauApio13    terrestrial     CIRS <-> observed
+       iauApcg iauApcg13  | geocentric   |  ICRS <-> GCRS
+       iauApci iauApci13  | terrestrial  |  ICRS <-> CIRS
+       iauApco iauApco13  | terrestrial  |  ICRS <-> observed
+       iauApcs iauApcs13  | space        |  ICRS <-> GCRS
+       iauAper iauAper13  | terrestrial  |  update Earth rotation
+       iauApio iauApio13  | terrestrial  |  CIRS <-> observed
 
    Those with names ending in "13" use contemporary SOFA models to
    compute the various ephemerides.  The others accept ephemerides
@@ -113,8 +113,8 @@ function iauApcg13(date1::Real, date2::Real)
    # Allocate return value
    ref_astrom = Ref{iauASTROM}(iauASTROM())
 
-   ccall((:iauApcg13, libsofa_c), Cvoid, 
-           (Cdouble, Cdouble, Ref{iauASTROM}), 
+   ccall((:iauApcg13, libsofa_c), Cvoid,
+           (Cdouble, Cdouble, Ref{iauASTROM}),
            convert(Float64, date1),
            convert(Float64, date2),
            ref_astrom)

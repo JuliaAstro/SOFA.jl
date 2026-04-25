@@ -80,9 +80,9 @@ function iauPrec76(date01::Real, date02::Real, date11::Real, date12::Real)
    ref_z     = Ref{Float64}(0.0)
    ref_theta = Ref{Float64}(0.0)
 
-   ccall((:iauPrec76, libsofa_c), Cvoid, 
+   ccall((:iauPrec76, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble, Cdouble,
-          Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
+          Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
           convert(Float64, date01), convert(Float64, date02),
           convert(Float64, date11), convert(Float64, date12),
           ref_zeta, ref_z, ref_theta)

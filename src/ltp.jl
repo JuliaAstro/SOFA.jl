@@ -56,8 +56,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # void iauLtp(double epj, double rp[3][3])
 function iauLtp(epj::Real)
    rp = zeros(Float64, 3, 3)
-   ccall((:iauLtp, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}), 
+   ccall((:iauLtp, libsofa_c), Cvoid,
+         (Cdouble, Ref{Cdouble}),
           convert(Float64, epj),
           rp)
 

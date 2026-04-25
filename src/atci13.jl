@@ -88,11 +88,11 @@ function iauAtci13(rc::Real, dc::Real, pr::Real,
     ref_ri = Ref{Float64}(0.0)
     ref_di = Ref{Float64}(0.0)
     ref_eo = Ref{Float64}(0.0)
-    
-    status = ccall((:iauAtci13, libsofa_c), Cvoid, 
+
+    status = ccall((:iauAtci13, libsofa_c), Cvoid,
             (Cdouble, Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble, Cdouble,
-            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
             convert(Float64, rc), convert(Float64, dc),
             convert(Float64, pr), convert(Float64, pd),
             convert(Float64, px), convert(Float64, rv),

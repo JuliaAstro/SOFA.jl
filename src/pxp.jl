@@ -30,8 +30,8 @@ function iauPxp(a::AbstractVector{<:Real}, b::AbstractVector{<:Real})
    # Preallocate return values
    axb = zeros(Float64, 3)
 
-   ccall((:iauPxp, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauPxp, libsofa_c), Cvoid,
+         (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
           convert(Array{Float64, 1}, a),
           convert(Array{Float64, 1}, b),
           axb)

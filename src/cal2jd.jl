@@ -57,9 +57,9 @@ function iauCal2jd(iy::Real, im::Real, id::Real)
    ref_djm0 = Ref{Float64}(0.0)
    ref_djm  = Ref{Float64}(0.0)
 
-   status = ccall((:iauCal2jd, libsofa_c), Cint, 
-         (Cint, Cint, Cint, 
-         Ref{Cdouble}, Ref{Cdouble}), 
+   status = ccall((:iauCal2jd, libsofa_c), Cint,
+         (Cint, Cint, Cint,
+         Ref{Cdouble}, Ref{Cdouble}),
          convert(Int32, iy), convert(Int32, im), convert(Int32, id),
          ref_djm0, ref_djm)
 

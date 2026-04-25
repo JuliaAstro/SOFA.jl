@@ -80,9 +80,9 @@ function iauLd(rh::Real, p::AbstractVector{<:Real}, q::AbstractVector{<:Real},
                e::AbstractVector{<:Real}, em::Real, dlim::Real)
    p1 = zeros(Float64, 3)
 
-   ccall((:iauLd, libsofa_c), Cvoid, 
+   ccall((:iauLd, libsofa_c), Cvoid,
          (Cdouble, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
-         Cdouble, Cdouble, Ptr{Cdouble}), 
+         Cdouble, Cdouble, Ptr{Cdouble}),
           convert(Float64, rh), convert(Array{Float64, 1}, p),
           convert(Array{Float64, 1}, q), convert(Array{Float64, 1}, e),
           convert(Float64, em), convert(Float64, dlim), p1)

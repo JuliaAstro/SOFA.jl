@@ -46,8 +46,8 @@ function iauBpn2xy(rbpn::AbstractMatrix{<:Real})
     ref_x = Ref{Float64}(0.0)
     ref_y = Ref{Float64}(0.0)
 
-    ccall((:iauBpn2xy, libsofa_c), Cvoid, 
-        (Ptr{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+    ccall((:iauBpn2xy, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
         convert(Array{Float64, 2}, rbpn'), ref_x, ref_y)
 
     return ref_x[], ref_y[]

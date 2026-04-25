@@ -29,11 +29,11 @@ function iauPvm(pv::AbstractMatrix{<:Real})
     # Preallocate return values
     ref_r = Ref{Float64}(0.0)
     ref_s = Ref{Float64}(0.0)
- 
-    ccall((:iauPvm, libsofa_c), Cvoid, 
-          (Ptr{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+
+    ccall((:iauPvm, libsofa_c), Cvoid,
+          (Ptr{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
            convert(Array{Float64, 2}, pv'),
            ref_r, ref_s)
- 
+
     return ref_r[], ref_s[]
  end

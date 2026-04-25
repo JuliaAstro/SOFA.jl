@@ -86,14 +86,14 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # void iauLdn(int n, iauLDBODY b[], double ob[3], double sc[3],
 #             double sn[3])
 
-function iauLdn(n::Real, b::Array{iauLDBODY, 1}, 
+function iauLdn(n::Real, b::Array{iauLDBODY, 1},
                ob::AbstractVector{<:Real}, sc::AbstractVector{<:Real})
    ref_b = Ref{iauLDBODY}(b[1])
    sn    = zeros(Float64, 3)
 
-   ccall((:iauLdn, libsofa_c), Cvoid, 
+   ccall((:iauLdn, libsofa_c), Cvoid,
          (Cint, Ref{iauLDBODY}, Ptr{Cdouble}, Ptr{Cdouble},
-          Ptr{Cdouble}), 
+          Ptr{Cdouble}),
           convert(Int32, n),
           ref_b,
           convert(Array{Float64, 1}, ob),  convert(Array{Float64, 1}, sc),

@@ -65,8 +65,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauJdcalf(ndp::Int, dj1::Real, dj2::Real)
    iymdf = zeros(Int32, 4)
 
-   status = ccall((:iauJdcalf, libsofa_c), Cint, 
-       (Cint, Cdouble, Cdouble, Ptr{Cint}), 
+   status = ccall((:iauJdcalf, libsofa_c), Cint,
+       (Cint, Cdouble, Cdouble, Ptr{Cint}),
        convert(Int32, ndp), convert(Float64, dj1), convert(Float64, dj2), iymdf)
 
    if status != 0

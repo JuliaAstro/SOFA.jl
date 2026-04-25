@@ -61,8 +61,8 @@ function iauNut80(date1::Real, date2::Real)
    ref_dpsi = Ref{Float64}(0.0)
    ref_deps = Ref{Float64}(0.0)
 
-   ccall((:iauNut80, libsofa_c), Cvoid, 
-        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}), 
+   ccall((:iauNut80, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
         convert(Float64, date1), convert(Float64, date2),
         ref_dpsi, ref_deps)
 

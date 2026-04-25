@@ -44,8 +44,8 @@ function iauLdsun(p::AbstractVector{<:Real}, e::AbstractVector{<:Real}, em::Real
    # Allocate return values
    p1 = zeros(Float64, 3)
 
-   ccall((:iauLdsun, libsofa_c), Cvoid, 
-        (Ptr{Cdouble}, Ptr{Cdouble}, Cdouble, Ptr{Cdouble}), 
+   ccall((:iauLdsun, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ptr{Cdouble}, Cdouble, Ptr{Cdouble}),
         convert(Array{Float64, 1}, p), convert(Array{Float64, 1}, e), convert(Float64, em), p1)
 
    return SVector{3}(p1)

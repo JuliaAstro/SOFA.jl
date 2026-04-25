@@ -184,11 +184,11 @@ function iauApco13(utc1::Real, utc2::Real, dut1::Real,
    ref_eo     = Ref{Float64}(0.0)
 
 
-   status = ccall((:iauApco13, libsofa_c), Cint, 
+   status = ccall((:iauApco13, libsofa_c), Cint,
             (Cdouble, Cdouble, Cdouble, Cdouble,
              Cdouble, Cdouble, Cdouble, Cdouble,
              Cdouble, Cdouble, Cdouble, Cdouble,
-             Ref{iauASTROM}, Ref{Cdouble}), 
+             Ref{iauASTROM}, Ref{Cdouble}),
             convert(Float64, utc1), convert(Float64, utc2),
             convert(Float64, dut1), convert(Float64, elong),
             convert(Float64, phi), convert(Float64, hm),

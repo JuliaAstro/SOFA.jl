@@ -113,10 +113,10 @@ function iauAtioq(ri::Real, di::Real, astrom::iauASTROM)
     ref_dob    = Ref{Float64}(0.0)
     ref_rob    = Ref{Float64}(0.0)
 
-     ccall((:iauAtioq, libsofa_c), Cvoid, 
+     ccall((:iauAtioq, libsofa_c), Cvoid,
             (Cdouble, Cdouble, Ref{iauASTROM},
             Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-            Ref{Cdouble}, Ref{Cdouble}), 
+            Ref{Cdouble}, Ref{Cdouble}),
             convert(Float64, ri), convert(Float64, di), ref_astrom,
             ref_aob, ref_zob, ref_hob, ref_dob, ref_rob)
 

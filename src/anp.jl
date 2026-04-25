@@ -20,7 +20,5 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauAnp(a::Real)
-   return ccall((:iauAnp, libsofa_c), Cdouble, 
-       (Cdouble,), 
-       convert(Float64, a))
+   return ccall((:iauAnp, libsofa_c), Cdouble, (Cdouble,), convert(Float64, a))
 end

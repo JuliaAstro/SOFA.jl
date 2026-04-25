@@ -68,13 +68,13 @@ function iauGc2gde(a::Real, f::Real, xyz::AbstractVector{<:Real})
    ref_elong  = Ref{Float64}(0.0)
    ref_phi    = Ref{Float64}(0.0)
    ref_height = Ref{Float64}(0.0)
-   
- 
-   status = ccall((:iauGc2gde, libsofa_c), Cint, 
+
+
+   status = ccall((:iauGc2gde, libsofa_c), Cint,
          (Cdouble, Cdouble, Ptr{Cdouble},
-         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
          convert(Float64, a), convert(Float64, f), xyz,
          ref_elong, ref_phi, ref_height)
- 
+
    return status, ref_elong[], ref_phi[], ref_height[]
  end

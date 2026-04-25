@@ -73,7 +73,7 @@ function iauXys00b(date1::Real, date2::Real)
 
    ccall((:iauXys00b, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
-         convert(Float64, date1), convert(Float64, date2), 
+         convert(Float64, date1), convert(Float64, date2),
          ref_x, ref_y, ref_s)
 
    return ref_x[], ref_y[], ref_s[]

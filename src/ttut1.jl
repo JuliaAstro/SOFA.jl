@@ -48,7 +48,7 @@ function iauTtut1(tt1::Real, tt2::Real, dt::Real)
 
    status = ccall((:iauTtut1, libsofa_c), Cint,
                    (Cdouble, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
-                   convert(Float64, tt1), convert(Float64, tt2), convert(Float64, dt), 
+                   convert(Float64, tt1), convert(Float64, tt2), convert(Float64, dt),
                    ref_tdb1, ref_tdb2)
 
    return status, ref_tdb1[], ref_tdb2[]

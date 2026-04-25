@@ -22,7 +22,7 @@ export iauZr
 function iauZr()
    r = zeros(Float64, 3, 3)
 
-   ccall((:iauZr, libsofa_c), Cvoid, 
+   ccall((:iauZr, libsofa_c), Cvoid,
            (Ptr{Cdouble},),
            r)
 

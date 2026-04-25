@@ -11,8 +11,8 @@ Given:
 - `angle::Real`  angle in radians
 
 Returned:
-- `sign::Char`    '+' or '-'
-- `idmsf::Array{Int32, 1}`  degrees, arcminutes, arcseconds, fraction
+- `sign::Char`    `'+'` or `'-'`
+- `idmsf::Vector{Int32}`  degrees, arcminutes, arcseconds, fraction
 
 Called:
    iauD2tf      decompose days to hms
@@ -35,7 +35,7 @@ Notes:
    |  2  | 0.01         |
    |  3  | 0.001        |
    |  :  | 0.000...     |
- 
+
 2. The largest positive useful value for ndp is determined by the size of angle,
    the format of doubles on the target platform, and the risk of overflowing
    idmsf[3].  On a typical platform, for angle up to 2pi, the available
@@ -56,8 +56,8 @@ function iauA2af(ndp::Int, angle::Real)
     sign  = Array{UInt8}(undef, 1)
     idmsf = Array{Int32}(undef, 4)
 
-    ccall((:iauA2af, libsofa_c), Cvoid, 
-        (Cint, Cdouble, Ptr{UInt8}, Ptr{Cint}), 
+    ccall((:iauA2af, libsofa_c), Cvoid,
+        (Cint, Cdouble, Ptr{UInt8}, Ptr{Cint}),
         convert(Int32, ndp), convert(Float64, angle), sign, idmsf)
 
 

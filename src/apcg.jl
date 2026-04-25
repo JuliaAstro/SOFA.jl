@@ -14,29 +14,29 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 Status:  support function.
 
 Given:
-    date1  double       TDB as a 2-part...
-    date2  double       ...Julian Date (Note 1)
-    ebpv   double[2][3] Earth barycentric pos/vel (au, au/day)
-    ehp    double[3]    Earth heliocentric position (au)
+-   date1  double       TDB as a 2-part...
+-   date2  double       ...Julian Date (Note 1)
+-   ebpv   double[2][3] Earth barycentric pos/vel (au, au/day)
+-   ehp    double[3]    Earth heliocentric position (au)
 
 Returned:
     astrom iauASTROM*   star-independent astrometry parameters:
-     pmt    double       PM time interval (SSB, Julian years)
-     eb     double[3]    SSB to observer (vector, au)
-     eh     double[3]    Sun to observer (unit vector)
-     em     double       distance from Sun to observer (au)
-     v      double[3]    barycentric observer velocity (vector, c)
-     bm1    double       sqrt(1-|v|^2): reciprocal of Lorenz factor
-     bpn    double[3][3] bias-precession-nutation matrix
-     along  double       unchanged
-     xpl    double       unchanged
-     ypl    double       unchanged
-     sphi   double       unchanged
-     cphi   double       unchanged
-     diurab double       unchanged
-     eral   double       unchanged
-     refa   double       unchanged
-     refb   double       unchanged
+-    pmt    double       PM time interval (SSB, Julian years)
+-    eb     double[3]    SSB to observer (vector, au)
+-    eh     double[3]    Sun to observer (unit vector)
+-    em     double       distance from Sun to observer (au)
+-    v      double[3]    barycentric observer velocity (vector, c)
+-    bm1    double       sqrt(1-|v|^2): reciprocal of Lorenz factor
+-    bpn    double[3][3] bias-precession-nutation matrix
+-    along  double       unchanged
+-    xpl    double       unchanged
+-    ypl    double       unchanged
+-    sphi   double       unchanged
+-    cphi   double       unchanged
+-    diurab double       unchanged
+-    eral   double       unchanged
+-    refa   double       unchanged
+-    refb   double       unchanged
 
 Notes:
 1. The TDB date date1+date2 is a Julian Date, apportioned in any
@@ -72,14 +72,14 @@ Notes:
     The various functions support different classes of observer and
     portions of the transformation chain:
 
-          functions         observer        transformation
-
-       iauApcg iauApcg13    geocentric      ICRS <-> GCRS
-       iauApci iauApci13    terrestrial     ICRS <-> CIRS
-       iauApco iauApco13    terrestrial     ICRS <-> observed
-       iauApcs iauApcs13    space           ICRS <-> GCRS
-       iauAper iauAper13    terrestrial     update Earth rotation
-       iauApio iauApio13    terrestrial     CIRS <-> observed
+     |    functions       | observer     | transformation          |
+     | ------------------ | ------------ | ----------------------- |
+     | iauApcg iauApcg13  | geocentric   | ICRS <-> GCRS           |
+     | iauApci iauApci13  | terrestrial  | ICRS <-> CIRS           |
+     | iauApco iauApco13  | terrestrial  | ICRS <-> observed       |
+     | iauApcs iauApcs13  | space        | ICRS <-> GCRS           |
+     | iauAper iauAper13  | terrestrial  | update Earth rotation   |
+     | iauApio iauApio13  | terrestrial  | CIRS <-> observed       |
 
     Those with names ending in "13" use contemporary SOFA models to
     compute the various ephemerides.  The others accept ephemerides
@@ -111,8 +111,8 @@ function iauApcg(date1::Real, date2::Real, ebpv::AbstractMatrix{<:Real}, ehp::Ab
     # Transpose to map Julia (FORTRAN) -> C style memory allocation
     ebpv = Array{Float64, 2}(ebpv') # Transpose input up front
 
-    ccall((:iauApcg, libsofa_c), Cvoid, 
-            (Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}, Ref{iauASTROM}), 
+    ccall((:iauApcg, libsofa_c), Cvoid,
+            (Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}, Ref{iauASTROM}),
             convert(Float64, date1),
             convert(Float64, date2),
             pointer(ebpv),

@@ -68,10 +68,10 @@ function iauFk52h(r5::Real, d5::Real, dr5::Real, dd5::Real, px5::Real, rv5::Real
    ref_ddh = Ref{Float64}(0.0)
    ref_pxh = Ref{Float64}(0.0)
    ref_rvh = Ref{Float64}(0.0)
-   
+
    ccall((:iauFk52h, libsofa_c), Cdouble,
          (Cdouble, Cdouble, Cdouble, Cdouble,
-         Cdouble, Cdouble, 
+         Cdouble, Cdouble,
          Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
          Ref{Cdouble}, Ref{Cdouble}, ),
          convert(Float64, r5), convert(Float64, d5),

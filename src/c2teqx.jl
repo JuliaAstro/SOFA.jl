@@ -65,9 +65,9 @@ function iauC2teqx(rbpn::AbstractMatrix{<:Real}, gst::Real, rpom::AbstractMatrix
    # Allocate return value
    rc2t = zeros(Float64, 3, 3)
 
-   ccall((:iauC2teqx, libsofa_c), Cvoid, 
+   ccall((:iauC2teqx, libsofa_c), Cvoid,
          (Ptr{Cdouble}, Cdouble, Ptr{Cdouble},
-         Ptr{Cdouble}), 
+         Ptr{Cdouble}),
          convert(Array{Float64, 2}, rbpn'), convert(Float64, gst),
          convert(Array{Float64, 2}, rpom'),
          rc2t)

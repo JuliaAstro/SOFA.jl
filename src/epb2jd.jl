@@ -38,8 +38,8 @@ function iauEpb2jd(epb::Real)
    ref_djm0 = Ref{Float64}(0.0)
    ref_djm  = Ref{Float64}(0.0)
 
-   ccall((:iauEpb2jd, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}, Ref{Cdouble}), 
+   ccall((:iauEpb2jd, libsofa_c), Cvoid,
+         (Cdouble, Ref{Cdouble}, Ref{Cdouble}),
          convert(Float64, epb),
          ref_djm0, ref_djm)
 

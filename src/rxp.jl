@@ -30,11 +30,11 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # void iauRxp(double r[3][3], double p[3], double rp[3])
 function iauRxp(r::AbstractMatrix{<:Real}, p::AbstractVector{<:Real})
     rp = zeros(Float64, 3)
-    ccall((:iauRxp, libsofa_c), Cvoid, 
-          (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
+    ccall((:iauRxp, libsofa_c), Cvoid,
+          (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
           convert(Array{Float64, 2}, r'),
           convert(Array{Float64, 1}, p),
           rp)
- 
+
     return SVector{3}(rp)
  end

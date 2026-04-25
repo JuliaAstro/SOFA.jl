@@ -64,7 +64,7 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauPnm00b(date1::Real, date2::Real)
    rbpn = zeros(Float64, 3, 3)
 
-   ccall((:iauPnm00b, libsofa_c), Cvoid, 
+   ccall((:iauPnm00b, libsofa_c), Cvoid,
        (Cdouble, Cdouble, Ptr{Cdouble}),
        convert(Float64, date1),
        convert(Float64, date2),

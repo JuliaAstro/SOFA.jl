@@ -70,10 +70,10 @@ function iauH2fk5(rh::Real, dh::Real, drh::Real, ddh::Real, pxh::Real, rvh::Real
    ref_dd5 = Ref{Float64}(0.0)
    ref_px5 = Ref{Float64}(0.0)
    ref_rv5 = Ref{Float64}(0.0)
-   
+
    ccall((:iauH2fk5, libsofa_c), Cdouble,
          (Cdouble, Cdouble, Cdouble, Cdouble,
-         Cdouble, Cdouble, 
+         Cdouble, Cdouble,
          Ref{Cdouble},  Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
          Ref{Cdouble}, Ref{Cdouble}, ),
          convert(Float64, rh), convert(Float64, dh),

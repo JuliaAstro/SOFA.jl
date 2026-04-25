@@ -64,8 +64,8 @@ function iauJd2cal(dj1::Real, dj2::Real)
    ref_id = Ref{Int32}(0.0)
    ref_fd = Ref{Float64}(0.0)
 
-   status = ccall((:iauJd2cal, libsofa_c), Cint, 
-       (Cdouble, Cdouble, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cdouble}), 
+   status = ccall((:iauJd2cal, libsofa_c), Cint,
+       (Cdouble, Cdouble, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ref{Cdouble}),
        convert(Float64, dj1), convert(Float64, dj2), ref_iy, ref_im, ref_id, ref_fd)
 
    if status != 0

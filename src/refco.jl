@@ -158,7 +158,7 @@ function iauRefco(phpa::Real, tc::Real, rh::Real, wl::Real)
    ref_refa = Ref{Float64}(0.0)
    ref_refb = Ref{Float64}(0.0)
 
-   ccall((:iauRefco, libsofa_c), Cvoid, 
+   ccall((:iauRefco, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble, Cdouble,
          Ref{Cdouble}, Ref{Cdouble}),
           convert(Float64, phpa),

@@ -117,7 +117,7 @@ function iauAticqn(ri::Real, di::Real, astrom::iauASTROM,
 
    # Copy b, and transpose pv field
    # for ld in b
-   #    ld.pv = [ld.pv[1, 1] ld.pv[1, 3] ld.pv[2, 2]; 
+   #    ld.pv = [ld.pv[1, 1] ld.pv[1, 3] ld.pv[2, 2];
    #             ld.pv[1, 2] ld.pv[2, 1] ld.pv[2, 3]]
    # end
    for ld in b
@@ -126,9 +126,9 @@ function iauAticqn(ri::Real, di::Real, astrom::iauASTROM,
 
    # println(b)
 
-   ccall((:iauAticqn, libsofa_c), Cvoid, 
-            (Cdouble, Cdouble, Ref{iauASTROM}, Cint, Ref{iauLDBODY}, 
-            Ref{Cdouble}, Ref{Cdouble}), 
+   ccall((:iauAticqn, libsofa_c), Cvoid,
+            (Cdouble, Cdouble, Ref{iauASTROM}, Cint, Ref{iauLDBODY},
+            Ref{Cdouble}, Ref{Cdouble}),
             convert(Float64, ri), convert(Float64, di),
             ref_astrom, convert(Int32, n), ref_b, ref_rc, ref_dc)
 

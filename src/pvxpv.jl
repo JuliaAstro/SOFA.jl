@@ -41,8 +41,8 @@ function iauPvxpv(a::AbstractMatrix{<:Real}, b::AbstractMatrix{<:Real})
    # Preallocate return values
    axb = zeros(Float64, 3, 2)
 
-   ccall((:iauPvxpv, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauPvxpv, libsofa_c), Cvoid,
+         (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
           convert(Array{Float64, 2}, a'),
           convert(Array{Float64, 2}, b'),
           axb)

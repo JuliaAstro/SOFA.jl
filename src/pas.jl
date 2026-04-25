@@ -35,8 +35,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # double iauPas(double al, double ap, double bl, double bp)
 
 function iauPas(al::Real, ap::Real, bl::Real, bp::Real)
-   return ccall((:iauPas, libsofa_c), Cdouble, 
-       (Cdouble, Cdouble, Cdouble, Cdouble), 
+   return ccall((:iauPas, libsofa_c), Cdouble,
+       (Cdouble, Cdouble, Cdouble, Cdouble),
        convert(Float64, al),
        convert(Float64, ap),
        convert(Float64, bl),

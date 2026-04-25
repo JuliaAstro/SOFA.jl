@@ -36,7 +36,7 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauRv2m(w::AbstractVector{<:Real})
    r = zeros(Float64, 3, 3)
 
-   ccall((:iauRv2m, libsofa_c), Cvoid, 
+   ccall((:iauRv2m, libsofa_c), Cvoid,
          (Ptr{Cdouble}, Ptr{Cdouble}),
           w, r)
 

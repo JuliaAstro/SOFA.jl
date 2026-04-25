@@ -77,9 +77,9 @@ function iauTpxev(v::AbstractVector{<:Real}, v0::AbstractVector{<:Real})
    ref_xi = Ref{Float64}(0.0)
    ref_eta = Ref{Float64}(0.0)
 
-   status = ccall((:iauTpxev, libsofa_c), Cint, 
+   status = ccall((:iauTpxev, libsofa_c), Cint,
        (Ptr{Cdouble}, Ptr{Cdouble},
-       Ref{Cdouble}, Ref{Cdouble}), 
+       Ref{Cdouble}, Ref{Cdouble}),
        convert(Array{Float64, 1}, v),
        convert(Array{Float64, 1}, v0),
        ref_xi, ref_eta)

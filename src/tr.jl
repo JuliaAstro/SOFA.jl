@@ -31,8 +31,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauTr(r::AbstractMatrix{<:Real})
    rt = zeros(Float64, 3, 3)
 
-   ccall((:iauTr, libsofa_c), Cvoid, 
-       (Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauTr, libsofa_c), Cvoid,
+       (Ptr{Cdouble}, Ptr{Cdouble}),
        convert(Array{Float64, 2}, r'),
        rt)
 

@@ -28,8 +28,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauP2pv(p::AbstractVector{<:Real})
    pv = zeros(Float64, 3, 2)
 
-   ccall((:iauP2pv, libsofa_c), Cvoid, 
-       (Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauP2pv, libsofa_c), Cvoid,
+       (Ptr{Cdouble}, Ptr{Cdouble}),
        convert(Array{Float64, 1}, p),
        pv)
 

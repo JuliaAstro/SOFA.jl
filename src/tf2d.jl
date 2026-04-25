@@ -43,8 +43,8 @@ export iauTf2d
 function iauTf2d(s::Char, ihour::Int, imin::Int, sec::Real)
     ref_days  = Ref{Float64}(0.0)
 
-    status = ccall((:iauTf2d, libsofa_c), Cint, 
-        (Cchar, Cint, Cint, Cdouble, Ref{Cdouble}), 
+    status = ccall((:iauTf2d, libsofa_c), Cint,
+        (Cchar, Cint, Cint, Cdouble, Ref{Cdouble}),
         convert(UInt8, s),
         convert(Int32, ihour),
         convert(Int32, imin),

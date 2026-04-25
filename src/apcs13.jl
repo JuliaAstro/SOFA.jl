@@ -122,9 +122,9 @@ function iauApcs13(date1::Real, date2::Real, pv::AbstractMatrix{<:Real})
    # Transpose to map Julia (FORTRAN) -> C style memory allocation
    pv   = Array{Float64, 2}(pv')
 
-   status = ccall((:iauApcs13, libsofa_c), Cvoid, 
+   status = ccall((:iauApcs13, libsofa_c), Cvoid,
             (Cdouble, Cdouble, Ptr{Cdouble},
-            Ref{iauASTROM}), 
+            Ref{iauASTROM}),
             convert(Float64, date1),
             convert(Float64, date2),
             pointer(pv),

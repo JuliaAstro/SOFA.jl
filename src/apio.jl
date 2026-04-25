@@ -122,11 +122,11 @@ function iauApio(sp::Real, theta::Real,
    # Allocate return value
    ref_astrom = Ref{iauASTROM}(iauASTROM())
 
-   ccall((:iauApio, libsofa_c), Cvoid, 
+   ccall((:iauApio, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble,
          Cdouble, Cdouble, Cdouble,
          Cdouble, Cdouble, Cdouble,
-         Ref{iauASTROM}), 
+         Ref{iauASTROM}),
          convert(Float64, sp),
          convert(Float64, theta),
          convert(Float64, elong),

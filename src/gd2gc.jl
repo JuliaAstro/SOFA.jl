@@ -64,15 +64,15 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 
 function iauGd2gc(n::Int, elong::Real, phi::Real, height::Real)
    xyz = zeros(Float64, 3)
- 
-   status = ccall((:iauGd2gc, libsofa_c), Cint, 
+
+   status = ccall((:iauGd2gc, libsofa_c), Cint,
          (Cint, Cdouble, Cdouble, Cdouble,
-         Ptr{Cdouble}), 
+         Ptr{Cdouble}),
          convert(Int32, n),
-         convert(Float64, elong), 
-         convert(Float64, phi), 
+         convert(Float64, elong),
+         convert(Float64, phi),
          convert(Float64, height),
          xyz)
- 
+
    return status, SVector{3}(xyz)
  end

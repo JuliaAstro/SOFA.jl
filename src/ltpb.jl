@@ -54,9 +54,9 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # void iauLtpb(double epj, double rpb[3][3])
 function iauLtpb(epj::Real)
    rpb = zeros(Float64, 3, 3)
-   
-   ccall((:iauLtpb, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}), 
+
+   ccall((:iauLtpb, libsofa_c), Cvoid,
+         (Cdouble, Ref{Cdouble}),
           convert(Float64, epj),
           rpb)
 

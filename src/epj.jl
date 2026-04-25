@@ -34,7 +34,7 @@ export iauEpj
 
 # double iauEpj(double dj1, double dj2)
 function iauEpj(dj1::Real, dj2::Real)
-   return ccall((:iauEpj, libsofa_c), Cdouble, 
-               (Cdouble, Cdouble), 
+   return ccall((:iauEpj, libsofa_c), Cdouble,
+               (Cdouble, Cdouble),
                convert(Float64, dj1), convert(Float64, dj2))
 end

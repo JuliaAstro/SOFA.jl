@@ -65,8 +65,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # void iauLtecm(double epj, double rm[3][3])
 function iauLtecm(epj::Real)
    rm = zeros(Float64, 3, 3)
-   ccall((:iauLtecm, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}), 
+   ccall((:iauLtecm, libsofa_c), Cvoid,
+         (Cdouble, Ref{Cdouble}),
           convert(Float64, epj),
           rm)
 

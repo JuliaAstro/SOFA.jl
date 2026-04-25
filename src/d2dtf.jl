@@ -88,7 +88,7 @@ function iauD2dtf(scale::String, ndp::Int, d1::Real, d2::Real)
 
    status = ccall((:iauD2dtf, libsofa_c), Cint,
                   (Cstring, Cint, Cdouble, Cdouble, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ptr{Cint}),
-                  scale, convert(Int32, ndp), 
+                  scale, convert(Int32, ndp),
                   convert(Float64, d1), convert(Float64, d2),
                    ref_iy, ref_im, ref_id, ihmsf)
 

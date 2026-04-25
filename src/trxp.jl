@@ -33,8 +33,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauTrxp(r::AbstractMatrix{<:Real}, p::AbstractVector{<:Real})
    trp = zeros(Float64, 3)
 
-   ccall((:iauTrxp, libsofa_c), Cvoid, 
-       (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauTrxp, libsofa_c), Cvoid,
+       (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
        convert(Array{Float64, 2}, r'),
        convert(Array{Float64, 1}, p),
        trp)

@@ -47,10 +47,10 @@ Notes:
 
          date1          date2
 
-      2450123.7           0.0       (JD method)
-      2451545.0       -1421.3       (J2000 method)
-      2400000.5       50123.2       (MJD method)
-      2450123.5           0.2       (date & time method)
+   |  2450123.7  |        0.0   |   (JD method)
+   |  2451545.0  |    -1421.3   |   (J2000 method)
+   |  2400000.5  |    50123.2   |   (MJD method)
+   |  2450123.5  |        0.2   |   (date & time method)
 
    The JD method is the most natural and convenient to use in cases
    where the loss of several decimal digits of resolution is
@@ -119,8 +119,8 @@ function iauApci13(date1::Real, date2::Real)
    ref_astrom = Ref{iauASTROM}(iauASTROM())
    ref_eo     = Ref{Float64}(0.0)
 
-   ccall((:iauApci13, libsofa_c), Cvoid, 
-           (Cdouble, Cdouble, Ref{iauASTROM}, Ref{Cdouble}), 
+   ccall((:iauApci13, libsofa_c), Cvoid,
+           (Cdouble, Cdouble, Ref{iauASTROM}, Ref{Cdouble}),
            convert(Float64, date1),
            convert(Float64, date2),
            ref_astrom, ref_eo)

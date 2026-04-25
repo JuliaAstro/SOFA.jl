@@ -63,9 +63,9 @@ function iauFw2xy(gamb::Real, phib::Real, psi::Real, eps::Real)
    ref_x = Ref{Float64}(0.0)
    ref_y = Ref{Float64}(0.0)
 
-   ccall((:iauFw2xy, libsofa_c), Cvoid, 
+   ccall((:iauFw2xy, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble, Cdouble,
-         Ref{Cdouble}, Ref{Cdouble}), 
+         Ref{Cdouble}, Ref{Cdouble}),
           convert(Float64, gamb), convert(Float64, phib),
           convert(Float64, psi), convert(Float64, eps),
           ref_x, ref_y)

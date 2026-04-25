@@ -83,14 +83,14 @@ function iauBp00(date1::Real, date2::Real)
     rp  = zeros(Float64, 3, 3)
     rbp = zeros(Float64, 3, 3)
 
-    ccall((:iauBp00, libsofa_c), Cvoid, 
+    ccall((:iauBp00, libsofa_c), Cvoid,
         (Cdouble, Cdouble,
-        Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
+        Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
         convert(Float64, date1), convert(Float64, date2),
         rb, rp, rbp)
 
 
-    
+
 
     return SMatrix{3,3}(rb'), SMatrix{3,3}(rp'), SMatrix{3,3}(rbp')
 end

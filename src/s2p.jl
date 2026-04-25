@@ -29,8 +29,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauS2p(theta::Real, phi::Real, r::Real)
    p = zeros(Float64, 3)
 
-   ccall((:iauS2p, libsofa_c), Cvoid, 
-       (Cdouble, Cdouble, Cdouble, Ptr{Cdouble}), 
+   ccall((:iauS2p, libsofa_c), Cvoid,
+       (Cdouble, Cdouble, Cdouble, Ptr{Cdouble}),
        convert(Float64, theta),
        convert(Float64, phi),
        convert(Float64, r),

@@ -39,8 +39,8 @@ function iauPvu(dt::Real, pv::AbstractMatrix{<:Real})
    # Preallocate return values
    upv = zeros(Float64, 3, 2)
 
-   ccall((:iauPvu, libsofa_c), Cvoid, 
-         (Cdouble, Ptr{Cdouble}, Ref{Cdouble}), 
+   ccall((:iauPvu, libsofa_c), Cvoid,
+         (Cdouble, Ptr{Cdouble}, Ref{Cdouble}),
           convert(Float64, dt),
           convert(Array{Float64, 2}, pv'),
           upv)

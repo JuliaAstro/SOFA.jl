@@ -76,7 +76,7 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauPmat76(date1::Real, date2::Real)
    rmatp = zeros(Float64, 3, 3)
 
-   ccall((:iauPmat76, libsofa_c), Cvoid, 
+   ccall((:iauPmat76, libsofa_c), Cvoid,
        (Cdouble, Cdouble, Ptr{Cdouble}),
        convert(Float64, date1),
        convert(Float64, date2),

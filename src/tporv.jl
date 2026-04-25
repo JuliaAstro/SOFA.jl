@@ -90,9 +90,9 @@ function iauTporv(xi::Real, eta::Real, v::AbstractVector{<:Real})
    v01 = zeros(Float64, 3)
    v02 = zeros(Float64, 3)
 
-   status = ccall((:iauTporv, libsofa_c), Cint, 
+   status = ccall((:iauTporv, libsofa_c), Cint,
        (Cdouble, Cdouble, Ref{Cdouble},
-       Ptr{Cdouble}, Ptr{Cdouble}), 
+       Ptr{Cdouble}, Ptr{Cdouble}),
        convert(Float64, xi),
        convert(Float64, eta),
        convert(Array{Float64, 1}, v),

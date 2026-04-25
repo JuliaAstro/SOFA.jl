@@ -114,7 +114,7 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauApci(date1::Real, date2::Real, 
+function iauApci(date1::Real, date2::Real,
                  ebpv::AbstractMatrix{<:Real}, ehp::AbstractVector{<:Real},
                  x::Real, y::Real, s::Real)
     # Allocate return value
@@ -123,10 +123,10 @@ function iauApci(date1::Real, date2::Real,
     # Transpose to map Julia (FORTRAN) -> C style memory allocation
     ebpv = Array{Float64, 2}(ebpv') # Transpose input up front
 
-    ccall((:iauApci, libsofa_c), Cvoid, 
-            (Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}, 
+    ccall((:iauApci, libsofa_c), Cvoid,
+            (Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble},
             Cdouble, Cdouble, Cdouble,
-            Ref{iauASTROM}), 
+            Ref{iauASTROM}),
             convert(Float64, date1),
             convert(Float64, date2),
             pointer(ebpv),

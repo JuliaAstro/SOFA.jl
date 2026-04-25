@@ -61,8 +61,8 @@ function iauA2tf(ndp::Int, angle::Real)
     sign  = Array{UInt8}(undef, 1)
     ihmsf = Array{Int32}(undef, 4)
 
-    ccall((:iauA2tf, libsofa_c), Cvoid, 
-        (Cint, Cdouble, Ptr{UInt8}, Ptr{Cint}), 
+    ccall((:iauA2tf, libsofa_c), Cvoid,
+        (Cint, Cdouble, Ptr{UInt8}, Ptr{Cint}),
         convert(Int32, ndp), convert(Float64, angle), sign, ihmsf)
 
 

@@ -75,9 +75,9 @@ function iauPvtob(elong::Real, phi::Real, hm::Real,
 
     pv = zeros(Float64, 3, 2)
 
-    status = ccall((:iauPvtob, libsofa_c), Cvoid, 
+    status = ccall((:iauPvtob, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
-          Ptr{Float64}), 
+          Ptr{Float64}),
          convert(Float64, elong),
          convert(Float64, phi),
          convert(Float64, hm),

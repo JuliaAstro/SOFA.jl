@@ -126,9 +126,9 @@ function iauStarpv(ra::Real, dec::Real, pmr::Real, pmd::Real,
 
    pv = zeros(Float64, 3, 2)
 
-   status = ccall((:iauStarpv, libsofa_c), Cint, 
+   status = ccall((:iauStarpv, libsofa_c), Cint,
        (Cdouble, Cdouble, Cdouble, Cdouble,
-       Cdouble, Cdouble, Ptr{Cdouble}), 
+       Cdouble, Cdouble, Ptr{Cdouble}),
        convert(Float64, ra), convert(Float64, dec),
        convert(Float64, pmr), convert(Float64, pmd),
        convert(Float64, px), convert(Float64, rv),

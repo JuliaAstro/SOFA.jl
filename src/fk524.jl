@@ -120,10 +120,10 @@ function iauFk524(r2000::Real, d2000::Real, dr2000::Real, dd2000::Real,
    ref_dd1950 = Ref{Float64}(0.0)
    ref_p1950 = Ref{Float64}(0.0)
    ref_v1950 = Ref{Float64}(0.0)
-   
+
    ccall((:iauFk524, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
-         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, 
+         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
          Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, ),
          convert(Float64, r2000), convert(Float64, d2000),
          convert(Float64, dr2000), convert(Float64, dd2000),

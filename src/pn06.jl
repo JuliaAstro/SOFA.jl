@@ -110,7 +110,7 @@ function iauPn06(date1::Real, date2::Real, dpsi::Real, deps::Real)
    rn       = zeros(Float64, 3, 3)
    rbpn     = zeros(Float64, 3, 3)
 
-   ccall((:iauPn06, libsofa_c), Cvoid, 
+   ccall((:iauPn06, libsofa_c), Cvoid,
         (Cdouble, Cdouble, Cdouble, Cdouble,
          Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
          Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),

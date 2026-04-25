@@ -4,9 +4,9 @@ Horizon to equatorial coordinates:  transform azimuth and altitude
 to hour angle and declination.
 
 Given:
-   az       double       azimuth
-   el       double       altitude (informally, elevation)
-   phi      double       site latitude
+|  az   |   double  |    azimuth
+|  el   |   double  |    altitude (informally, elevation)
+|  phi  |   double  |    site latitude
 
 Returned:
    ha       double       hour angle (local)
@@ -59,8 +59,8 @@ function iauAe2hd(az::Real, el::Real, phi::Real)
    ha  = zeros(Float64, 1)
    dec = zeros(Float64, 1)
 
-   ccall((:iauAe2hd, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauAe2hd, libsofa_c), Cvoid,
+         (Cdouble, Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}),
          convert(Float64, az),
          convert(Float64, el),
          convert(Float64, phi),

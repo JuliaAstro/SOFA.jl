@@ -45,8 +45,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 # void iauLtpecl(double epj, double vec[3])
 function iauLtpecl(epj::Real)
    vec = zeros(Float64, 3)
-   ccall((:iauLtpecl, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}), 
+   ccall((:iauLtpecl, libsofa_c), Cvoid,
+         (Cdouble, Ref{Cdouble}),
           convert(Float64, epj),
           vec)
 

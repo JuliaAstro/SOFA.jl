@@ -33,10 +33,10 @@ function iauS2pv(theta::Real, phi::Real, r::Real,
                 td::Real, pd::Real, rd::Real)
    pv = zeros(Float64, 3, 2)
 
-   ccall((:iauS2pv, libsofa_c), Cvoid, 
+   ccall((:iauS2pv, libsofa_c), Cvoid,
        (Cdouble, Cdouble, Cdouble,
        Cdouble, Cdouble, Cdouble,
-       Ptr{Cdouble}), 
+       Ptr{Cdouble}),
        convert(Float64, theta),
        convert(Float64, phi),
        convert(Float64, r),

@@ -73,9 +73,9 @@ function iauG2icrs(dl::Real, db::Real)
   ref_dr = Ref{Float64}(0.0)
   ref_dd = Ref{Float64}(0.0)
 
-  ccall((:iauG2icrs, libsofa_c), Cvoid, 
+  ccall((:iauG2icrs, libsofa_c), Cvoid,
         (Cdouble, Cdouble,
-        Ref{Cdouble}, Ref{Cdouble}), 
+        Ref{Cdouble}, Ref{Cdouble}),
          convert(Float64, dl), convert(Float64, db),
          ref_dr, ref_dd)
 

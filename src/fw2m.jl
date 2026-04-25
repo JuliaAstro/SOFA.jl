@@ -75,13 +75,13 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 
 function iauFw2m(gamb::Real, phib::Real, psi::Real, eps::Real)
     r = zeros(Float64, 3, 3)
- 
-    ccall((:iauFw2m, libsofa_c), Cvoid, 
+
+    ccall((:iauFw2m, libsofa_c), Cvoid,
           (Cdouble, Cdouble, Cdouble, Cdouble,
-          Ptr{Cdouble}), 
+          Ptr{Cdouble}),
            convert(Float64, gamb), convert(Float64, phib),
            convert(Float64, psi), convert(Float64, eps),
            r)
- 
+
     return SMatrix{3,3}(r')
  end

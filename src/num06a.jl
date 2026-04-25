@@ -62,11 +62,11 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauNum06a(date1::Real, date2::Real)
     # Allocate return values
     rmatn = zeros(Float64, 3, 3)
- 
-    ccall((:iauNum06a, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Ptr{Cdouble},), 
+
+    ccall((:iauNum06a, libsofa_c), Cvoid,
+         (Cdouble, Cdouble, Ptr{Cdouble},),
          convert(Float64, date1), convert(Float64, date2),
          rmatn)
- 
+
     return SMatrix{3,3}(rmatn')
  end

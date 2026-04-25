@@ -33,8 +33,8 @@ function iauPvup(dt::Real, pv::AbstractMatrix{<:Real})
    # Preallocate return values
    p = zeros(Float64, 3)
 
-   ccall((:iauPvup, libsofa_c), Cvoid, 
-         (Cdouble, Ptr{Cdouble}, Ref{Cdouble}), 
+   ccall((:iauPvup, libsofa_c), Cvoid,
+         (Cdouble, Ptr{Cdouble}, Ref{Cdouble}),
           convert(Float64, dt),
           convert(Array{Float64, 2}, pv'),
           p)

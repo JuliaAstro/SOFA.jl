@@ -125,11 +125,11 @@ function iauStarpm(ra1::Real, dec1::Real, pmr1::Real, pmd1::Real,
    ref_px2  = Ref{Float64}(0.0)
    ref_rv2  = Ref{Float64}(0.0)
 
-   status = ccall((:iauStarpm, libsofa_c), Cint, 
+   status = ccall((:iauStarpm, libsofa_c), Cint,
        (Cdouble, Cdouble, Cdouble, Cdouble,
        Cdouble, Cdouble, Cdouble, Cdouble,
        Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble},
-       Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+       Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
        convert(Float64, ra1), convert(Float64, dec1),
        convert(Float64, pmr1), convert(Float64, pmd1),
        convert(Float64, px1), convert(Float64, rv1),

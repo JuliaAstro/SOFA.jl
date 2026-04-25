@@ -96,8 +96,8 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauAper(theta::Real, astrom::iauASTROM)
    ref_astrom = Ref{iauASTROM}(astrom)
-   ccall((:iauAper, libsofa_c), Cvoid, 
-            (Cdouble, Ref{iauASTROM}), 
+   ccall((:iauAper, libsofa_c), Cvoid,
+            (Cdouble, Ref{iauASTROM}),
             convert(Float64, theta), ref_astrom)
 
    return ref_astrom[]

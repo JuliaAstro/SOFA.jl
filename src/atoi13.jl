@@ -157,10 +157,10 @@ function iauAtoi13(type_::Char, ob1::Real, ob2::Real,
    ref_ri     = Ref{Float64}(0.0)
    ref_di     = Ref{Float64}(0.0)
 
-   status = ccall((:iauAtoi13, libsofa_c), Cint, 
+   status = ccall((:iauAtoi13, libsofa_c), Cint,
        (Ref{UInt8}, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
        Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
-       Cdouble, Cdouble, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}), 
+       Cdouble, Cdouble, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
        ref_type_, convert(Float64, ob1), convert(Float64, ob2),
        convert(Float64, utc1), convert(Float64, utc2),
        convert(Float64, dut1), convert(Float64, elong),

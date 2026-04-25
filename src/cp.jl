@@ -27,8 +27,8 @@ function iauCp(p::AbstractVector{<:Real})
    # Allocate return value
    c = zeros(Float64, 3)
 
-   ccall((:iauCp, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}), 
+   ccall((:iauCp, libsofa_c), Cvoid,
+         (Ptr{Cdouble}, Ptr{Cdouble}),
          convert(Array{Float64, 1}, p), c)
 
    return SVector{3}(c)

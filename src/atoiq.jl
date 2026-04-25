@@ -100,9 +100,9 @@ function iauAtoiq(type_::Char, ob1::Real, ob2::Real, astrom::iauASTROM)
    ref_ri     = Ref{Float64}(0.0)
    ref_di     = Ref{Float64}(0.0)
 
-   ccall((:iauAtoiq, libsofa_c), Cvoid, 
+   ccall((:iauAtoiq, libsofa_c), Cvoid,
        (Ref{UInt8}, Cdouble, Cdouble, Ref{iauASTROM},
-       Ref{Cdouble}, Ref{Cdouble}), 
+       Ref{Cdouble}, Ref{Cdouble}),
        ref_type_, convert(Float64, ob1), convert(Float64, ob2),
        ref_astrom, ref_ri, ref_di)
 

@@ -32,13 +32,12 @@ Notes:
    supplied velocity.  For example, if the SOFA iauEpv00 function is
    used, errors of up to 5 microarcseconds could occur.
 
-  References:
-   - Urban, S. & Seidelmann, P. K. (eds), Explanatory Supplement to
-   the Astronomical Almanac, 3rd ed., University Science Books
-   (2013).
+References:
+- Urban, S. & Seidelmann, P. K. (eds), Explanatory Supplement to
+  the Astronomical Almanac, 3rd ed., University Science Books (2013).
 
-   - Klioner, Sergei A., "A practical relativistic model for micro-
-   arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
+- Klioner, Sergei A., "A practical relativistic model for micro-
+  arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 
 Called:
    iauPdp       scalar product of two p-vectors
@@ -52,11 +51,11 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauAb(pnat::AbstractVector{<:Real}, v::AbstractVector{<:Real}, s::Real, bm1::Float64)
    ppr = zeros(Float64, 3)
 
-   ccall((:iauAb, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}, Cdouble, Cdouble, Ptr{Cdouble}), 
+   ccall((:iauAb, libsofa_c), Cvoid,
+         (Ptr{Cdouble}, Ptr{Cdouble}, Cdouble, Cdouble, Ptr{Cdouble}),
          convert(Array{Float64, 1}, pnat),
-         convert(Array{Float64, 1}, v), 
-         convert(Float64, s), 
+         convert(Array{Float64, 1}, v),
+         convert(Float64, s),
          convert(Float64, bm1), ppr)
 
    return SVector{3}(ppr)

@@ -63,9 +63,9 @@ function iauTpsts(xi::Real, eta::Real,
    ref_a = Ref{Float64}(0.0)
    ref_b = Ref{Float64}(0.0)
 
-   ccall((:iauTpsts, libsofa_c), Cvoid, 
+   ccall((:iauTpsts, libsofa_c), Cvoid,
        (Cdouble, Cdouble, Cdouble, Cdouble,
-       Ref{Cdouble}, Ref{Cdouble}), 
+       Ref{Cdouble}, Ref{Cdouble}),
        convert(Float64, xi),
        convert(Float64, eta),
        convert(Float64, a0),

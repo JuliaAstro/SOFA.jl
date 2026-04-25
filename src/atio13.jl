@@ -128,7 +128,7 @@ Called:
    iauApio13    astrometry parameters, CIRS-observed, 2013
    iauAtioq     quick CIRS to observed
 
-This revision:   2016 February 2 
+This revision:   2016 February 2
 
 SOFA release 2018-01-30
 
@@ -152,19 +152,19 @@ function iauAtio13(ri::Real, di::Real, utc1::Real, utc2::Real, dut1::Real,
    ref_dob = Ref{Float64}(0.0)
    ref_rob = Ref{Float64}(0.0)
 
-   status = ccall((:iauAtio13, libsofa_c), Cint, 
+   status = ccall((:iauAtio13, libsofa_c), Cint,
             (Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
-            Cdouble, Cdouble, Cdouble, Cdouble, 
+            Cdouble, Cdouble, Cdouble, Cdouble,
             Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-            Ref{Cdouble}, Ref{Cdouble}), 
-            convert(Float64, ri), convert(Float64, di), 
-            convert(Float64, utc1), convert(Float64, utc2), 
-            convert(Float64, dut1), convert(Float64, elong), 
-            convert(Float64, phi), convert(Float64, hm), 
-            convert(Float64, xp), convert(Float64, yp), 
-            convert(Float64, phpa), convert(Float64, tc), 
-            convert(Float64, rh), convert(Float64, wl), 
+            Ref{Cdouble}, Ref{Cdouble}),
+            convert(Float64, ri), convert(Float64, di),
+            convert(Float64, utc1), convert(Float64, utc2),
+            convert(Float64, dut1), convert(Float64, elong),
+            convert(Float64, phi), convert(Float64, hm),
+            convert(Float64, xp), convert(Float64, yp),
+            convert(Float64, phpa), convert(Float64, tc),
+            convert(Float64, rh), convert(Float64, wl),
             ref_aob, ref_zob, ref_hob, ref_dob, ref_rob)
 
    return status, ref_aob[], ref_zob[], ref_hob[], ref_dob[], ref_rob[]

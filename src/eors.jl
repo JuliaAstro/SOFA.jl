@@ -45,7 +45,7 @@ function iauEors(rnbp::AbstractMatrix{<:Real}, s::Real)
    # Allocate return value
    rm = zeros(Float64, 3, 3)
 
-   return ccall((:iauEors, libsofa_c), Cdouble, 
-               (Ptr{Cdouble}, Cdouble), 
+   return ccall((:iauEors, libsofa_c), Cdouble,
+               (Ptr{Cdouble}, Cdouble),
                convert(Array{Float64, 2}, rnbp'), convert(Float64, s))
 end

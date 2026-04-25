@@ -50,13 +50,13 @@ function iauPv2s(pv::AbstractMatrix{<:Real})
     ref_td = Ref{Float64}(0.0)
     ref_pd = Ref{Float64}(0.0)
     ref_rd = Ref{Float64}(0.0)
- 
-    ccall((:iauPv2s, libsofa_c), Cvoid, 
-          (Ptr{Cdouble}, 
+
+    ccall((:iauPv2s, libsofa_c), Cvoid,
+          (Ptr{Cdouble},
           Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-          Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+          Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
            convert(Array{Float64, 2}, pv'),
            ref_theta, ref_phi, ref_r, ref_td, ref_pd, ref_rd)
- 
+
     return ref_theta[], ref_phi[], ref_r[], ref_td[], ref_pd[], ref_rd[]
  end

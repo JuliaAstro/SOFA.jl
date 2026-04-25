@@ -106,12 +106,12 @@ function iauEpv00(date1::Real, date2::Real)
       # Initialize function return variables
       pvh = zeros(Float64, 3, 2)
       pvb = zeros(Float64, 3, 2)
-   
+
       status = ccall((:iauEpv00, libsofa_c), Cint,
             (Cdouble, Cdouble,
             Ref{Cdouble}, Ref{Cdouble}),
             convert(Float64, date1), convert(Float64, date2),
             pvh, pvb)
-   
+
       return status, SMatrix{2,3}(pvh'), SMatrix{2,3}(pvb')
    end

@@ -71,9 +71,9 @@ function iauEcm06(date1::Real, date2::Real)
    # Allocate return value
    rm = zeros(Float64, 3, 3)
 
-   ccall((:iauEcm06, libsofa_c), Cvoid, 
+   ccall((:iauEcm06, libsofa_c), Cvoid,
          (Cdouble, Cdouble,
-         Ptr{Cdouble}), 
+         Ptr{Cdouble}),
          convert(Float64, date1), convert(Float64, date2),
          rm)
 

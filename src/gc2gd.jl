@@ -63,13 +63,13 @@ function iauGc2gd(n::Int, xyz::AbstractVector{<:Real})
    ref_elong  = Ref{Float64}(0.0)
    ref_phi    = Ref{Float64}(0.0)
    ref_height = Ref{Float64}(0.0)
-   
- 
-   status = ccall((:iauGc2gd, libsofa_c), Cint, 
+
+
+   status = ccall((:iauGc2gd, libsofa_c), Cint,
          (Cint, Ptr{Cdouble},
-         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
+         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
          convert(Int32, n), xyz,
          ref_elong, ref_phi, ref_height)
- 
+
    return status, ref_elong[], ref_phi[], ref_height[]
  end

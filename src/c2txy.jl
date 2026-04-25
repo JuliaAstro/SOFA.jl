@@ -93,10 +93,10 @@ function iauC2txy(tta::Real, ttb::Real, uta::Real, utb::Real,
    # Allocate return value
    rc2t = zeros(Float64, 3, 3)
 
-   ccall((:iauC2txy, libsofa_c), Cvoid, 
+   ccall((:iauC2txy, libsofa_c), Cvoid,
          (Cdouble, Cdouble, Cdouble, Cdouble,
          Cdouble, Cdouble, Cdouble, Cdouble,
-         Ptr{Cdouble}), 
+         Ptr{Cdouble}),
          tta, ttb, uta, utb, x, y, xp, yp,
          rc2t)
 

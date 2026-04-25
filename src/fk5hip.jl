@@ -47,9 +47,9 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauFk5hip()
    r5h = zeros(Float64, 3, 3)
    s5h = zeros(Float64, 3)
-   
-   ccall((:iauFk5hip, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}), 
+
+   ccall((:iauFk5hip, libsofa_c), Cvoid,
+         (Ptr{Cdouble}, Ptr{Cdouble}),
           r5h, s5h)
 
    return SMatrix{3,3}(r5h'), SVector{3}(s5h)
