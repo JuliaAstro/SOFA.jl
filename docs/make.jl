@@ -17,7 +17,7 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/sisl/SOFA.jl",
+    repo = "github.com/JuliaAstro/SOFA.jl",
     devbranch = "master",
     devurl = "latest",
 )
