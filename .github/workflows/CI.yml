@@ -60,5 +60,5 @@ jobs:
       - name: Run Aqua tests
         shell: julia --color=yes --project=@. {0}
         run: |
-          using Aqua, DustExtinction
-          Aqua.test_all(DustExtinction, ambiguities=false)
+          using Aqua, SOFA
+          Aqua.test_all(SOFA, ambiguities=false)
