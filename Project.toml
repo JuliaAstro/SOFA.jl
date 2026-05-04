@@ -15,5 +15,7 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 SOFA_jll = {url = "https://github.com/icweaver/SOFA_jll-preview"}
 
 [compat]
+Libdl = "1"
 StaticArrays = "^1.0.1"
+SOFA_jll = "2019.7.22+0"
 julia = "1.10.0"
