@@ -23,14 +23,13 @@ jobs:
         version:
           - 'min'
           - '1'
-          - 'lts'
+          - 'pre'
         os:
           - ubuntu-latest
           - macOS-latest
           - windows-latest
-        exclude:
-          - os: macOS-latest
-            version: 'min'
+        arch:
+          - default
     steps:
       - uses: actions/checkout@v6
       - uses: julia-actions/setup-julia@v3
