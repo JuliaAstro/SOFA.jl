@@ -1,11 +1,7 @@
 __precompile__(true)
 module SOFA
 
-if isfile(joinpath(dirname(@__FILE__),"..","deps","deps.jl"))
-    include("../deps/deps.jl")
-else
-    error("libsofa_c not properly installed. Please run Pkg.build(\"SOFA\")")
-end
+using SOFA_jll
 
 # Use static arrays
 using StaticArrays

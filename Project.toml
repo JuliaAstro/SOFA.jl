@@ -7,11 +7,13 @@ version = "1.0.2"
 projects = ["test", "docs"]
 
 [deps]
-BinDeps = "9e28174c-4ba2-5203-b857-d8d62c4213ee"
 Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
+SOFA_jll = "d1004450-2f34-5761-9671-ec24e6a6fe03"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
+[sources]
+SOFA_jll = {url = "https://github.com/icweaver/SOFA_jll-preview"}
+
 [compat]
-BinDeps = "^1.0.2"
 StaticArrays = "^1.0.1"
 julia = "1.10.0"
