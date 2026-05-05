@@ -8,25 +8,25 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    rnpb  double[3][3]  classical nutation x precession x bias matrix
    s     double        the quantity s (the CIO locator)
 
 Returned (function value):
          double        the equation of the origins in radians.
 
-Notes:
+### Notes
 
-   1.  The equation of the origins is the distance between the true
+1.  The equation of the origins is the distance between the true
    equinox and the celestial intermediate origin and, equivalently,
    the difference between Earth rotation angle and Greenwich
    apparent sidereal time (ERA-GST).  It comprises the precession
    (since J2000.0) in right ascension plus the equation of the
    equinoxes (including the small correction terms).
 
-   2.  The algorithm is from Wallace & Capitaine (2006).
+2.  The algorithm is from Wallace & Capitaine (2006).
 
-References:
+### References
 
    Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
@@ -38,9 +38,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauEors(double rnpb[3][3], double s)
-
 function iauEors(rnbp::AbstractMatrix{<:Real}, s::Real)
    # Allocate return value
    rm = zeros(Float64, 3, 3)

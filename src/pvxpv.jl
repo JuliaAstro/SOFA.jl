@@ -7,22 +7,21 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    a        double[2][3]      first pv-vector
    b        double[2][3]      second pv-vector
 
-Returned:
+### Returned
    axb      double[2][3]      a x b
 
-Notes:
+### Notes
 
-   1. If the position and velocity components of the two pv-vectors are
+1. If the position and velocity components of the two pv-vectors are
    ( ap, av ) and ( bp, bv ), the result, a x b, is the pair of
    vectors ( ap x bp, ap x bv + av x bp ).  The two vectors are the
    cross-product of the two p-vectors and its derivative.
 
-   2. It is permissible to re-use the same array for any of the
-   arguments.
+2. It is permissible to re-use the same array for any of the arguments.
 
 Called:
    iauCpv       copy pv-vector
@@ -35,8 +34,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauPvxpv(double a[2][3], double b[2][3], double axb[2][3])
 function iauPvxpv(a::AbstractMatrix{<:Real}, b::AbstractMatrix{<:Real})
    # Preallocate return values
    axb = zeros(Float64, 3, 2)

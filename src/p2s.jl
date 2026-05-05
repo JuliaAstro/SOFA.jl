@@ -7,15 +7,15 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    p        double[3]    p-vector
 
-Returned:
+### Returned
    theta    double       longitude angle (radians)
    phi      double       latitude angle (radians)
    r        double       radial distance
 
-Notes:
+### Notes
 
 1) If P is null, zero theta, phi and r are returned.
 
@@ -31,8 +31,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauP2s(double p[3], double *theta, double *phi, double *r)
 function iauP2s(p::AbstractVector{<:Real})
    ref_theta = Ref{Float64}(0.0)
    ref_phi   = Ref{Float64}(0.0)

@@ -7,10 +7,10 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    pv     double[2][3]    position/velocity vector to be copied
 
-Returned:
+### Returned
    c      double[2][3]    copy
 
 Called:
@@ -22,9 +22,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauCpv(double pv[2][3], double c[2][3])
-
 function iauCpv(pv::AbstractMatrix{<:Real})
 
    # Allocate return value

@@ -7,15 +7,15 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
     dl     double      galactic longitude (radians)
     db     double      galactic latitude (radians)
 
-Returned:
+### Returned
     dr     double      ICRS right ascension (radians)
     dd     double      ICRS declination (radians)
 
-Notes:
+### Notes
 
   1. The IAU 1958 system of Galactic coordinates was defined with
     respect to the now obsolete reference system FK4 B1950.0.  When
@@ -54,7 +54,7 @@ Called:
     iauTrxp      product of transpose of r-matrix and p-vector
     iauC2s       p-vector to spherical
 
-Reference:
+### References
     Perryman M.A.C. & ESA, 1997, ESA SP-1200, The Hipparcos and Tycho
     catalogues.  Astrometric and photometric star catalogues
     derived from the ESA Hipparcos Space Astrometry Mission.  ESA
@@ -66,9 +66,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauG2icrs ( double dl, double db, double *dr, double *dd )
-
 function iauG2icrs(dl::Real, db::Real)
   ref_dr = Ref{Float64}(0.0)
   ref_dd = Ref{Float64}(0.0)

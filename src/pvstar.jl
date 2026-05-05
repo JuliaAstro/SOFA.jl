@@ -24,13 +24,13 @@ Returned (function value):
                            -1 = superluminal speed (Note 5)
                            -2 = null position vector
 
-Notes:
+### Notes
 
-   1. The specified pv-vector is the coordinate direction (and its rate
+1. The specified pv-vector is the coordinate direction (and its rate
    of change) for the date at which the light leaving the star
    reached the solar-system barycenter.
 
-   2. The star data returned by this function are "observables" for an
+2. The star data returned by this function are "observables" for an
    imaginary observer at the solar-system barycenter.  Proper motion
    and radial velocity are, strictly, in terms of barycentric
    coordinate time, TCB.  For most practical applications, it is
@@ -60,22 +60,22 @@ Notes:
 
    (ii) The transformation complies with special relativity.
 
-   3. Care is needed with units.  The star coordinates are in radians
+3. Care is needed with units.  The star coordinates are in radians
    and the proper motions in radians per Julian year, but the
    parallax is in arcseconds; the radial velocity is in km/s, but
    the pv-vector result is in au and au/day.
 
-   4. The proper motions are the rate of change of the right ascension
+4. The proper motions are the rate of change of the right ascension
    and declination at the catalog epoch and are in radians per Julian
    year.  The RA proper motion is in terms of coordinate angle, not
    true angle, and will thus be numerically larger at high
    declinations.
 
-   5. Straight-line motion at constant speed in the inertial frame is
+5. Straight-line motion at constant speed in the inertial frame is
    assumed.  If the speed is greater than or equal to the speed of
    light, the function aborts with an error status.
 
-   6. The inverse transformation is performed by the function iauStarpv.
+6. The inverse transformation is performed by the function iauStarpv.
 
 Called:
    iauPn        decompose p-vector into modulus and direction
@@ -87,7 +87,7 @@ Called:
    iauPv2s      pv-vector to spherical
    iauAnp       normalize angle into range 0 to 2pi
 
-Reference:
+### References
 
    Stumpff, P., 1985, Astron.Astrophys. 144, 232-240.
 
@@ -97,10 +97,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# int iauPvstar(double pv[2][3], double *ra, double *dec,
-#               double *pmr, double *pmd, double *px, double *rv)
-
 function iauPvstar(pv::AbstractMatrix{<:Real})
    # Preallocate return values
    ref_ra  = Ref{Float64}(0.0)

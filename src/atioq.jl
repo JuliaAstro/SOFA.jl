@@ -12,7 +12,7 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
     ri     double     CIRS right ascension
     di     double     CIRS declination
     astrom iauASTROM* star-independent astrometry parameters:
@@ -33,20 +33,20 @@ Given:
         refa   double       refraction constant A (radians)
         refb   double       refraction constant B (radians)
 
-Returned:
+### Returned
     aob    double*    observed azimuth (radians: N=0,E=90)
     zob    double*    observed zenith distance (radians)
     hob    double*    observed hour angle (radians)
     dob    double*    observed declination (radians)
     rob    double*    observed right ascension (CIO-based, radians)
 
-Notes:
+### Notes
 
-    1. This function returns zenith distance rather than altitude in
+ 1. This function returns zenith distance rather than altitude in
     order to reflect the fact that no allowance is made for
     depression of the horizon.
 
-    2. The accuracy of the result is limited by the corrections for
+ 2. The accuracy of the result is limited by the corrections for
     refraction, which use a simple A*tan(z) + B*tan^3(z) model.
     Providing the meteorological parameters are known accurately and
     there are no gross local effects, the predicted observed
@@ -61,18 +61,18 @@ Notes:
     falls off at high zenith distances, but is still better than
     0.05 arcsec at 85 degrees.
 
-    3. It is advisable to take great care with units, as even unlikely
+ 3. It is advisable to take great care with units, as even unlikely
     values of the input parameters are accepted and processed in
     accordance with the models used.
 
-    4. The CIRS RA,Dec is obtained from a star catalog mean place by
+ 4. The CIRS RA,Dec is obtained from a star catalog mean place by
     allowing for space motion, parallax, the Sun's gravitational lens
     effect, annual aberration and precession-nutation.  For star
     positions in the ICRS, these effects can be applied by means of
     the iauAtci13 (etc.) functions.  Starting from classical "mean
     place" systems, additional transformations will be needed first.
 
-    5. "Observed" Az,El means the position that would be seen by a
+ 5. "Observed" Az,El means the position that would be seen by a
     perfect geodetically aligned theodolite.  This is obtained from
     the CIRS RA,Dec by allowing for Earth orientation and diurnal
     aberration, rotating from equator to horizon coordinates, and
@@ -82,7 +82,7 @@ Notes:
     aligned to the Earth's axis of rotation.  Finally, the RA is
     obtained by subtracting the HA from the local ERA.
 
-    6. The star-independent CIRS-to-observed-place parameters in ASTROM
+ 6. The star-independent CIRS-to-observed-place parameters in ASTROM
     may be computed with iauApio[13] or iauApco[13].  If nothing has
     changed significantly except the time, iauAper[13] may be used to
     perform the requisite adjustment to the astrom structure.
@@ -98,11 +98,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauAtioq(double ri, double di, iauASTROM *astrom,
-#               double *aob, double *zob,
-#               double *hob, double *dob, double *rob)
-
 function iauAtioq(ri::Real, di::Real, astrom::iauASTROM)
 
     # Allocate return values

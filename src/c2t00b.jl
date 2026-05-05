@@ -8,17 +8,17 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    tta,ttb  double         TT as a 2-part Julian Date (Note 1)
    uta,utb  double         UT1 as a 2-part Julian Date (Note 1)
    xp,yp    double         coordinates of the pole (radians, Note 2)
 
-Returned:
+### Returned
    rc2t     double[3][3]   celestial-to-terrestrial matrix (Note 3)
 
-Notes:
+### Notes
 
-   1. The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
+1. The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
    apportioned in any convenient way between the arguments uta and
    utb.  For example, JD(UT1)=2450123.7 could be expressed in any of
    these ways, among others:
@@ -39,12 +39,12 @@ Notes:
    argument is for 0hrs UT1 on the day in question and the utb
    argument lies in the range 0 to 1, or vice versa.
 
-   2. The arguments xp and yp are the coordinates (in radians) of the
+2. The arguments xp and yp are the coordinates (in radians) of the
    Celestial Intermediate Pole with respect to the International
    Terrestrial Reference System (see IERS Conventions 2003),
    measured along the meridians to 0 and 90 deg west respectively.
 
-   3. The matrix rc2t transforms from celestial to terrestrial
+3. The matrix rc2t transforms from celestial to terrestrial
    coordinates:
 
       [TRS] = RPOM * R_3(ERA) * RC2I * [CRS]
@@ -57,7 +57,7 @@ Notes:
    celestial-to-intermediate matrix, ERA is the Earth rotation
    angle and RPOM is the polar motion matrix.
 
-   4. The present function is faster, but slightly less accurate (about
+4. The present function is faster, but slightly less accurate (about
    1 mas), than the iauC2t00a function.
 
 Called:
@@ -66,7 +66,7 @@ Called:
    iauPom00     polar motion matrix
    iauC2tcio    form CIO-based celestial-to-terrestrial matrix
 
-Reference:
+### References
 
    McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
    IERS Technical Note No. 32, BKG (2004)
@@ -77,10 +77,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauC2t00b(double tta, double ttb, double uta, double utb,
-#                double xp, double yp, double rc2t[3][3])
-
 function iauC2t00b(tta::Real, ttb::Real, uta::Real, utb::Real, xp::Real, yp::Real)
 
    # Allocate return value

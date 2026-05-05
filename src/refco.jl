@@ -12,24 +12,24 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    phpa   double    pressure at the observer (hPa = millibar)
    tc     double    ambient temperature at the observer (deg C)
    rh     double    relative humidity at the observer (range 0-1)
    wl     double    wavelength (micrometers)
 
-Returned:
+### Returned
    refa   double*   tan Z coefficient (radians)
    refb   double*   tan^3 Z coefficient (radians)
 
-Notes:
+### Notes
 
-   1. The model balances speed and accuracy to give good results in
+1. The model balances speed and accuracy to give good results in
    applications where performance at low altitudes is not paramount.
    Performance is maintained across a range of conditions, and
    applies to both optical/IR and radio.
 
-   2. The model omits the effects of (i) height above sea level (apart
+2. The model omits the effects of (i) height above sea level (apart
    from the reduced pressure itself), (ii) latitude (i.e. the
    flattening of the Earth), (iii) variations in tropospheric lapse
    rate and (iv) dispersive effects in the radio.
@@ -88,40 +88,40 @@ Notes:
    The values for Saastamoinen's formula (which includes terms
    up to tan^5) are taken from Hohenkerk and Sinclair (1985).
 
-   3. A wl value in the range 0-100 selects the optical/IR case and is
+3. A wl value in the range 0-100 selects the optical/IR case and is
    wavelength in micrometers.  Any value outside this range selects
    the radio case.
 
-   4. Outlandish input parameters are silently limited to
+4. Outlandish input parameters are silently limited to
    mathematically safe values.  Zero pressure is permissible, and
    causes zeroes to be returned.
 
-   5. The algorithm draws on several sources, as follows:
+5. The algorithm draws on several sources, as follows:
 
-      a. The formula for the saturation vapour pressure of water as
+   a. The formula for the saturation vapour pressure of water as
       a function of temperature and temperature is taken from
       Equations (A4.5-A4.7) of Gill (1982).
 
-      b. The formula for the water vapour pressure, given the
+   b. The formula for the water vapour pressure, given the
       saturation pressure and the relative humidity, is from
       Crane (1976), Equation (2.5.5).
 
-      c. The refractivity of air is a function of temperature,
+   c. The refractivity of air is a function of temperature,
       total pressure, water-vapour pressure and, in the case
       of optical/IR, wavelength.  The formulae for the two cases are
       developed from Hohenkerk & Sinclair (1985) and Rueger (2002).
 
-      d. The formula for beta, the ratio of the scale height of the
+   d. The formula for beta, the ratio of the scale height of the
       atmosphere to the geocentric distance of the observer, is
       an adaption of Equation (9) from Stone (1996).  The
       adaptations, arrived at empirically, consist of (i) a small
       adjustment to the coefficient and (ii) a humidity term for the
       radio case only.
 
-      e. The formulae for the refraction constants as a function of
+   e. The formulae for the refraction constants as a function of
       n-1 and beta are from Green (1987), Equation (4.31).
 
-References:
+### References
 
    Crane, R.K., Meeks, M.L. (ed), "Refraction Effects in the Neutral
    Atmosphere", Methods of Experimental Physics: Astrophysics 12B,
@@ -149,10 +149,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauRefco(double phpa, double tc, double rh, double wl,
-#               double *refa, double *refb)
-
 function iauRefco(phpa::Real, tc::Real, rh::Real, wl::Real)
    # Preallocate return values
    ref_refa = Ref{Float64}(0.0)

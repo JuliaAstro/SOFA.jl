@@ -7,10 +7,10 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    r        double[3][3]    r-matrix
 
-Returned:
+### Returned
    rt       double[3][3]    transpose
 
 Note:
@@ -25,9 +25,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauTr(double r[3][3], double rt[3][3])
-
 function iauTr(r::AbstractMatrix{<:Real})
    rt = zeros(Float64, 3, 3)
 

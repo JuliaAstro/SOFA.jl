@@ -6,7 +6,10 @@ makedocs(
     doctest   = false,
     clean     = true,
     linkcheck = true,
-    format    = Documenter.HTML(),
+    format    = Documenter.HTML(
+        size_threshold_warn = 400 * 1024,   # 200 KiB
+        size_threshold = 800 * 1024,        # 400 KiB
+    ),
     warnonly = [:docs_block, :missing_docs],
     sitename  = "SOFA.jl",
     authors   = "Duncan Eddy",

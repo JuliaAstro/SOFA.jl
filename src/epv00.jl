@@ -8,10 +8,10 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
       date1,date2  double        TDB date (Note 1)
 
-Returned:
+### Returned
       pvh          double[2][3]  heliocentric Earth position/velocity
       pvb          double[2][3]  barycentric Earth position/velocity
 
@@ -20,7 +20,7 @@ Returned:
                                        +1 = warning: date outside
                                                 the range 1900-2100 AD
 
-Notes:
+### Notes
 
       1. The TDB date date1+date2 is a Julian Date, apportioned in any
       convenient way between the two arguments.  For example,
@@ -98,10 +98,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# int iauEpv00(double date1, double date2,
-#              double pvh[2][3], double pvb[2][3])
-
 function iauEpv00(date1::Real, date2::Real)
       # Initialize function return variables
       pvh = zeros(Float64, 3, 2)

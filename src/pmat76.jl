@@ -7,15 +7,15 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    date1,date2 double       ending date, TT (Note 1)
 
-Returned:
+### Returned
    rmatp       double[3][3] precession matrix, J2000.0 -> date1+date2
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -34,13 +34,12 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The matrix operates in the sense V(date) = RMATP * V(J2000),
+2. The matrix operates in the sense V(date) = RMATP * V(J2000),
    where the p-vector V(J2000) is with respect to the mean
    equatorial triad of epoch J2000.0 and the p-vector V(date)
-   is with respect to the mean equatorial triad of the given
-   date.
+   is with respect to the mean equatorial triad of the given date.
 
-   3. Though the matrix method itself is rigorous, the precession
+3. Though the matrix method itself is rigorous, the precession
    angles are expressed through canonical polynomials which are
    valid only for a limited time span.  In addition, the IAU 1976
    precession rate is known to be imperfect.  The absolute accuracy
@@ -58,7 +57,7 @@ Called:
    iauRy        rotate around Y-axis
    iauCr        copy r-matrix
 
-References:
+### References
 
    Lieske, J.H., 1979, Astron.Astrophys. 73, 282.
    equations (6) & (7), p283.
@@ -71,8 +70,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauPmat76(double date1, double date2, double rmatp[3][3])
 function iauPmat76(date1::Real, date2::Real)
    rmatp = zeros(Float64, 3, 3)
 

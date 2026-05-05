@@ -8,10 +8,10 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  canonical.
 
-Given:
+### Given
    tt1,tt2    double    TT as a 2-part Julian Date
 
-Returned:
+### Returned
    tai1,tai2  double    TAI as a 2-part Julian Date
 
 Returned (function value):
@@ -24,7 +24,7 @@ Note:
    and tt2 is the fraction of a day.  The returned tai1,tai2 follow
    suit.
 
-References:
+### References
 
    McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
    IERS Technical Note No. 32, BKG (2004)
@@ -38,9 +38,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# int iauTttai(double tt1, double tt2, double *tai1, double *tai2)
-
 function iauTttai(tt1::Real, tt2::Real)
    ref_tai1 = Ref{Float64}(0.0)
    ref_tai2 = Ref{Float64}(0.0)

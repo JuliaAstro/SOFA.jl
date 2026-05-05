@@ -7,18 +7,18 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
     ri,di  double  CIRS geocentric RA,Dec (radians)
     date1  double  TDB as a 2-part...
     date2  double  ...Julian Date (Note 1)
 
-Returned:
+### Returned
     rc,dc  double  ICRS astrometric RA,Dec (radians)
     eo     double  equation of the origins (ERA-GST, Note 4)
 
-Notes:
+### Notes
 
-    1. The TDB date date1+date2 is a Julian Date, apportioned in any
+ 1. The TDB date date1+date2 is a Julian Date, apportioned in any
     convenient way between the two arguments.  For example,
     JD(TDB)=2450123.7 could be expressed in any of these ways, among
     others:
@@ -42,7 +42,7 @@ Notes:
     TT can be used instead of TDB without any significant impact on
     accuracy.
 
-    2. Iterative techniques are used for the aberration and light
+ 2. Iterative techniques are used for the aberration and light
     deflection corrections so that the functions iauAtic13 (or
     iauAticq) and iauAtci13 (or iauAtciq) are accurate inverses;
     even at the edge of the Sun's disk the discrepancy is only about
@@ -75,9 +75,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-# void iauAtic13(double ri, double di, double date1, double date2,
-#                double *rc, double *dc, double *eo)
-
 function iauAtic13(ri::Real, di::Real, date1::Real, date2::Real)
    # Allocate return values
    ref_rc = Ref{Float64}(0.0)

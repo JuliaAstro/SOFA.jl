@@ -8,24 +8,24 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    r5           double   FK5 RA (radians), equinox J2000.0, at date
    d5           double   FK5 Dec (radians), equinox J2000.0, at date
    date1,date2  double   TDB date (Notes 1,2)
 
-Returned:
+### Returned
    rh           double   Hipparcos RA (radians)
    dh           double   Hipparcos Dec (radians)
 
-Notes:
+### Notes
 
-   1. This function converts a star position from the FK5 system to
+1. This function converts a star position from the FK5 system to
    the Hipparcos system, in such a way that the Hipparcos proper
    motion is zero.  Because such a star has, in general, a non-zero
    proper motion in the FK5 system, the function requires the date
    at which the position in the FK5 system was determined.
 
-   2. The TT date date1+date2 is a Julian Date, apportioned in any
+2. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -44,14 +44,14 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   3. The FK5 to Hipparcos transformation is modeled as a pure
+3. The FK5 to Hipparcos transformation is modeled as a pure
    rotation and spin;  zonal errors in the FK5 catalogue are not
    taken into account.
 
-   4. The position returned by this function is in the Hipparcos
+4. The position returned by this function is in the Hipparcos
    reference system but at date date1+date2.
 
-   5. See also iauFk52h, iauH2fk5, iauHfk5z.
+5. See also iauFk52h, iauH2fk5, iauHfk5z.
 
 Called:
    iauS2c       spherical coordinates to unit vector
@@ -63,7 +63,7 @@ Called:
    iauC2s       p-vector to spherical
    iauAnp       normalize angle into range 0 to 2pi
 
-Reference:
+### References
 
    F.Mignard & M.Froeschle, 2000, Astron.Astrophys. 354, 732-739.
 
@@ -73,10 +73,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauFk5hz(double r5, double d5, double date1, double date2,
-#               double *rh, double *dh)
-
 function iauFk5hz(r5::Real, d5::Real, date1::Real, date2::Real)
    ref_rh = Ref{Float64}(0.0)
    ref_dh = Ref{Float64}(0.0)

@@ -7,16 +7,16 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  canonical model.
 
-Given:
+### Given
    date1,date2   double    TT as a 2-part Julian Date (Note 1)
 
-Returned:
+### Returned
    dpsi          double    nutation in longitude (radians)
    deps          double    nutation in obliquity (radians)
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,13 +35,12 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The nutation components are with respect to the ecliptic of
-   date.
+2. The nutation components are with respect to the ecliptic of date.
 
 Called:
    iauAnpm      normalize angle into range +/- pi
 
-Reference:
+### References
 
    Explanatory Supplement to the Astronomical Almanac,
    P. Kenneth Seidelmann (ed), University Science Books (1992),
@@ -53,9 +52,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauNut80(double date1, double date2, double *dpsi, double *deps)
-
 function iauNut80(date1::Real, date2::Real)
    # Allocate return values
    ref_dpsi = Ref{Float64}(0.0)

@@ -8,7 +8,7 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  canonical model.
 
-Given:
+### Given
    date1,date2  double    TT as a 2-part Julian Date (Note 1)
    epsa         double    mean obliquity (Note 2)
    dpsi         double    nutation in longitude (Note 3)
@@ -16,9 +16,9 @@ Given:
 Returned (function value):
                double    equation of the equinoxes (Note 4)
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -37,20 +37,19 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The obliquity, in radians, is mean of date.
+2. The obliquity, in radians, is mean of date.
 
-   3. The result, which is in radians, operates in the following sense:
+3. The result, which is in radians, operates in the following sense:
 
       Greenwich apparent ST = GMST + equation of the equinoxes
 
-   4. The result is compatible with the IAU 2000 resolutions.  For
-   further details, see IERS Conventions 2003 and Capitaine et al.
-   (2002).
+4. The result is compatible with the IAU 2000 resolutions.  For
+   further details, see IERS Conventions 2003 and Capitaine et al. (2002).
 
 Called:
    iauEect00    equation of the equinoxes complementary terms
 
-References:
+### References
 
    Capitaine, N., Wallace, P.T. and McCarthy, D.D., "Expressions to
    implement the IAU 2000 definition of UT1", Astronomy &
@@ -65,9 +64,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauEe00(double date1, double date2, double epsa, double dpsi)
-
 function iauEe00(date1::Real, date2::Real, epsa::Real, dpsi::Real)
    return ccall((:iauEe00, libsofa_c), Cdouble,
                (Cdouble, Cdouble, Cdouble, Cdouble),

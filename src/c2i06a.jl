@@ -8,15 +8,15 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    date1,date2 double       TT as a 2-part Julian Date (Note 1)
 
-Returned:
+### Returned
    rc2i        double[3][3] celestial-to-intermediate matrix (Note 2)
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,7 +35,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The matrix rc2i is the first stage in the transformation from
+2. The matrix rc2i is the first stage in the transformation from
    celestial to terrestrial coordinates:
 
       [TRS]  =  RPOM * R_3(ERA) * rc2i * [CRS]
@@ -53,7 +53,7 @@ Called:
    iauS06       the CIO locator s, given X,Y, IAU 2006
    iauC2ixys    celestial-to-intermediate matrix, given X,Y and s
 
-References:
+### References
 
    McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003),
    IERS Technical Note No. 32, BKG
@@ -64,9 +64,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauC2i06a(double date1, double date2, double rc2i[3][3])
-
 function iauC2i06a(date1::Real, date2::Real)
    # Allocate return value
    rc2i = zeros(Float64, 3, 3)

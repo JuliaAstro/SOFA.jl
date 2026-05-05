@@ -7,19 +7,19 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    psi    double          angle (radians)
 
 Given and returned:
    r      double[3][3]    r-matrix, rotated
 
-Notes:
+### Notes
 
-   1. Calling this function with positive psi incorporates in the
+1. Calling this function with positive psi incorporates in the
    supplied r-matrix r an additional rotation, about the z-axis,
    anticlockwise as seen looking towards the origin from positive z.
 
-   2. The additional rotation can be represented by this matrix:
+2. The additional rotation can be represented by this matrix:
 
       (  + cos(psi)   + sin(psi)     0  )
       (                                 )
@@ -33,8 +33,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauRz(double psi, double r[3][3])
 function iauRz(psi::Real, r::AbstractMatrix{<:Real})
 
    # Transpose matrix upfront
