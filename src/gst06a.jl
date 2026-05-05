@@ -8,16 +8,16 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  canonical model.
 
-Given:
+### Given
    uta,utb    double    UT1 as a 2-part Julian Date (Notes 1,2)
    tta,ttb    double    TT as a 2-part Julian Date (Notes 1,2)
 
 Returned (function value):
                double    Greenwich apparent sidereal time (radians)
 
-Notes:
+### Notes
 
-   1. The UT1 and TT dates uta+utb and tta+ttb respectively, are both
+1. The UT1 and TT dates uta+utb and tta+ttb respectively, are both
    Julian Dates, apportioned in any convenient way between the
    argument pairs.  For example, JD=2450123.7 could be expressed in
    any of these ways, among others:
@@ -40,22 +40,21 @@ Notes:
    question and the utb argument lies in the range 0 to 1, or vice
    versa.
 
-   2. Both UT1 and TT are required, UT1 to predict the Earth rotation
+2. Both UT1 and TT are required, UT1 to predict the Earth rotation
    and TT to predict the effects of precession-nutation.  If UT1 is
-   used for both purposes, errors of order 100 microarcseconds
-   result.
+   used for both purposes, errors of order 100 microarcseconds result.
 
-   3. This GAST is compatible with the IAU 2000/2006 resolutions and
+3. This GAST is compatible with the IAU 2000/2006 resolutions and
    must be used only in conjunction with IAU 2006 precession and
    IAU 2000A nutation.
 
-   4. The result is returned in the range 0 to 2pi.
+4. The result is returned in the range 0 to 2pi.
 
 Called:
    iauPnm06a    classical NPB matrix, IAU 2006/2000A
    iauGst06     Greenwich apparent ST, IAU 2006, given NPB matrix
 
-Reference:
+### References
 
    Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 
@@ -65,9 +64,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauGst06a(double uta, double utb, double tta, double ttb)
-
 function iauGst06a(uta::Real, utb::Real, tta::Real, ttb::Real)
 
    return ccall((:iauGst06a, libsofa_c), Cdouble,

@@ -7,15 +7,15 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  canonical model.
 
-Given:
+### Given
    dj1,dj2   double    UT1 as a 2-part Julian Date (see note)
 
 Returned (function value):
             double    Earth rotation angle (radians), range 0-2pi
 
-Notes:
+### Notes
 
-   1. The UT1 date dj1+dj2 is a Julian Date, apportioned in any
+1. The UT1 date dj1+dj2 is a Julian Date, apportioned in any
    convenient way between the arguments dj1 and dj2.  For example,
    JD(UT1)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -36,7 +36,7 @@ Notes:
    question and the dj2 argument lies in the range 0 to 1, or vice
    versa.
 
-   2. The algorithm is adapted from Expression 22 of Capitaine et al.
+2. The algorithm is adapted from Expression 22 of Capitaine et al.
    2000.  The time argument has been expressed in days directly,
    and, to retain precision, integer contributions have been
    eliminated.  The same formulation is given in IERS Conventions
@@ -45,7 +45,7 @@ Notes:
 Called:
    iauAnp       normalize angle into range 0 to 2pi
 
-References:
+### References
 
    Capitaine N., Guinot B. and McCarthy D.D, 2000, Astron.
    Astrophys., 355, 398-405.
@@ -59,8 +59,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauEra00(double dj1, double dj2)
 function iauEra00(dj1::Real, dj2::Real)
    return ccall((:iauEra00, libsofa_c), Cdouble,
                    (Cdouble, Cdouble),

@@ -7,10 +7,10 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    epj      double    Julian Epoch (e.g. 1996.8)
 
-Returned:
+### Returned
    djm0     double    MJD zero-point: always 2400000.5
    djm      double    Modified Julian Date
 
@@ -21,7 +21,7 @@ Note:
    Julian Date is available as a single number by adding djm0 and
    djm.
 
-Reference:
+### References
 
    Lieske, J.H., 1979, Astron.Astrophys. 73, 282.
 
@@ -31,9 +31,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauEpj2jd(double epj, double *djm0, double *djm)
-
 function iauEpj2jd(epj::Real)
    ref_djm0 = Ref{Float64}(0.0)
    ref_djm  = Ref{Float64}(0.0)

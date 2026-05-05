@@ -8,16 +8,16 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    date1,date2 double       TT as a 2-part Julian Date (Note 1)
    rbpn        double[3][3] celestial-to-true matrix (Note 2)
 
-Returned:
+### Returned
    rc2i        double[3][3] celestial-to-intermediate matrix (Note 3)
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -36,10 +36,10 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The matrix rbpn transforms vectors from GCRS to true equator (and
+2. The matrix rbpn transforms vectors from GCRS to true equator (and
    CIO or equinox) of date.  Only the CIP (bottom row) is used.
 
-   3. The matrix rc2i is the first stage in the transformation from
+3. The matrix rc2i is the first stage in the transformation from
    celestial to terrestrial coordinates:
 
       [TRS] = RPOM * R_3(ERA) * rc2i * [CRS]
@@ -51,14 +51,14 @@ Notes:
    Reference System (see IERS Conventions 2003), ERA is the Earth
    Rotation Angle and RPOM is the polar motion matrix.
 
-   4. Although its name does not include "00", This function is in fact
+4. Although its name does not include "00", This function is in fact
    specific to the IAU 2000 models.
 
 Called:
    iauBpn2xy    extract CIP X,Y coordinates from NPB matrix
    iauC2ixy     celestial-to-intermediate matrix, given X,Y
 
-References:
+### References
    "Expressions for the Celestial Intermediate Pole and Celestial
    Ephemeris Origin consistent with the IAU 2000A precession-
    nutation model", Astron.Astrophys. 400, 1145-1154 (2003)
@@ -75,10 +75,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauC2ibpn(double date1, double date2, double rbpn[3][3],
-#                double rc2i[3][3])
-
 function iauC2ibpn(date1::Real, date2::Real, rbpn::AbstractMatrix{<:Real})
 
    # Allocate return value

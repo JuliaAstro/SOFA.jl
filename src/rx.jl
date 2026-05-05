@@ -7,19 +7,19 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    phi    double          angle (radians)
 
 Given and returned:
    r      double[3][3]    r-matrix, rotated
 
-Notes:
+### Notes
 
-   1. Calling this function with positive phi incorporates in the
+1. Calling this function with positive phi incorporates in the
    supplied r-matrix r an additional rotation, about the x-axis,
    anticlockwise as seen looking towards the origin from positive x.
 
-   2. The additional rotation can be represented by this matrix:
+2. The additional rotation can be represented by this matrix:
 
       (  1        0            0      )
       (                               )
@@ -33,8 +33,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauRx(double phi, double r[3][3])
 function iauRx(phi::Real, r::AbstractMatrix{<:Real})
 
    # Transpose matrix upfront

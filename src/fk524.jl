@@ -7,7 +7,7 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given: (all J2000.0, FK5)
+### Given (all J2000.0, FK5)
    - r2000,d2000    double   J2000.0 RA,Dec (rad)
    - dr2000,dd2000  double   J2000.0 proper motions (rad/Jul.yr)
    - p2000          double   parallax (arcsec)
@@ -19,29 +19,28 @@ Returned: (all B2000.0, FK4)
    - p2000          double   parallax (arcsec)
    - v2000          double   radial velocity (km/s, +ve = moving away)
 
-Notes:
+### Notes
 
-   1. The proper motions in RA are dRA/dt rather than cos(Dec)*dRA/dt,
+1. The proper motions in RA are dRA/dt rather than cos(Dec)*dRA/dt,
    and are per year rather than per century.
 
-   2. The conversion is somewhat complicated, for several reasons:
+2. The conversion is somewhat complicated, for several reasons:
 
-   . Change of standard epoch from J2000.0 to B2000.0.
+   - Change of standard epoch from J2000.0 to B2000.0.
 
-   . An intermediate transition date of 1984 January 1.0 TT.
+   - An intermediate transition date of 1984 January 1.0 TT.
 
-   . A change of precession model.
+   - A change of precession model.
 
-   . Change of time unit for proper motion (Julian to tropical).
+   - Change of time unit for proper motion (Julian to tropical).
 
-   . FK4 positions include the E-terms of aberration, to simplify
-      the hand computation of annual aberration.  FK5 positions
-      assume a rigorous aberration computation based on the Earth's
-      barycentric velocity.
+   - FK4 positions include the E-terms of aberration, to simplify
+     the hand computation of annual aberration.  FK5 positions
+     assume a rigorous aberration computation based on the Earth's
+     barycentric velocity.
 
-   . The E-terms also affect proper motions, and in particular cause
-      objects at large distances to exhibit fictitious proper
-      motions.
+   - The E-terms also affect proper motions, and in particular cause
+     objects at large distances to exhibit fictitious proper motions.
 
    The algorithm is based on Smith et al. (1989) and Yallop et al.
    (1989), which presented a matrix method due to Standish (1982) as
@@ -49,7 +48,7 @@ Notes:
    Andoyer's post-Newcomb precession.  The numerical constants from
    Seidelmann (1992) are used canonically.
 
-   4. In the FK4 catalog the proper motions of stars within 10 degrees
+4. In the FK4 catalog the proper motions of stars within 10 degrees
    of the poles do not embody differential E-terms effects and
    should, strictly speaking, be handled in a different manner from
    stars outside these regions.  However, given the general lack of
@@ -77,7 +76,7 @@ Called:
    - iauS2pv      spherical coordinates to pv-vector
    - iauSxp       multiply p-vector by scalar
 
-References:
+### References
 
    - Aoki, S. et al., 1983, "Conversion matrix of epoch B2000.0
    FK4-based positions of stars to epoch J2000.0 positions in
@@ -104,14 +103,6 @@ SOFA release 2019-07-22
 
 Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 """
-
-# void iauFk524(double r2000, double d2000,
-#               double dr2000, double dd2000,
-#               double p2000, double v2000,
-#               double *r2000, double *d2000,
-#               double *dr2000, double *dd2000,
-#               double *p2000, double *v2000)
-
 function iauFk524(r2000::Real, d2000::Real, dr2000::Real, dd2000::Real,
                   p2000::Real, v2000::Real)
    ref_r1950 = Ref{Float64}(0.0)

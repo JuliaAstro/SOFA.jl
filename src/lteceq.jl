@@ -8,23 +8,23 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    epj     double     Julian epoch (TT)
    dl,db   double     ecliptic longitude and latitude (radians)
 
-Returned:
+### Returned
    dr,dd   double     ICRS right ascension and declination (radians)
 
-   1. No assumptions are made about whether the coordinates represent
+1. No assumptions are made about whether the coordinates represent
    starlight and embody astrometric effects such as parallax or
    aberration.
 
-   2. The transformation is approximately that from ecliptic longitude
+2. The transformation is approximately that from ecliptic longitude
    and latitude (mean equinox and ecliptic of date) to mean J2000.0
    right ascension and declination, with only frame bias (always
    less than 25 mas) to disturb this classical picture.
 
-   3. The Vondrak et al. (2011, 2012) 400 millennia precession model
+3. The Vondrak et al. (2011, 2012) 400 millennia precession model
    agrees with the IAU 2006 precession at J2000.0 and stays within
    100 microarcseconds during the 20th and 21st centuries.  It is
    accurate to a few arcseconds throughout the historical period,
@@ -39,7 +39,7 @@ Called:
    iauAnp       normalize angle into range 0 to 2pi
    iauAnpm      normalize angle into range +/- pi
 
-References:
+### References
 
    Vondrak, J., Capitaine, N. and Wallace, P., 2011, New precession
    expressions, valid for long time intervals, Astron.Astrophys. 534,
@@ -55,8 +55,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauLteceq(double epj, double dl, double db, double *dr, double *dd)
 function iauLteceq(epj::Real, dl::Real, db::Real)
    ref_dr = Ref{Float64}(0.0)
    ref_dd = Ref{Float64}(0.0)

@@ -13,13 +13,13 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
     date1  double       TDB as a 2-part...
     date2  double       ...Julian Date (Note 1)
     ebpv   double[2][3] Earth barycentric pos/vel (au, au/day)
     ehp    double[3]    Earth heliocentric position (au)
 
-Returned:
+### Returned
     astrom iauASTROM*   star-independent astrometry parameters:
      pmt    double       PM time interval (SSB, Julian years)
      eb     double[3]    SSB to observer (vector, au)
@@ -38,8 +38,8 @@ Returned:
      refa   double       unchanged
      refb   double       unchanged
 
-Notes:
-    1. The TDB date date1+date2 is a Julian Date, apportioned in any
+### Notes
+ 1. The TDB date date1+date2 is a Julian Date, apportioned in any
     convenient way between the two arguments.  For example,
     JD(TDB)=2450123.7 could be expressed in any of these ways, among
     others:
@@ -63,9 +63,9 @@ Notes:
     TT can be used instead of TDB without any significant impact on
     accuracy.
 
-    2. All the vectors are with respect to BCRS axes.
+ 2. All the vectors are with respect to BCRS axes.
 
-    3. This is one of several functions that inserts into the astrom
+ 3. This is one of several functions that inserts into the astrom
     structure star-independent parameters needed for the chain of
     astrometric transformations ICRS <-> GCRS <-> CIRS <-> observed.
 
@@ -92,7 +92,7 @@ Notes:
     aberration and parallax (unless subsumed into the ICRS <-> GCRS
     transformation), and atmospheric refraction.
 
-    4. The context structure astrom produced by this function is used by
+ 4. The context structure astrom produced by this function is used by
     iauAtciq* and iauAticq*.
 
 Called:

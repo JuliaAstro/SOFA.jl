@@ -8,23 +8,23 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    x,y      double         Celestial Intermediate Pole (Note 1)
    s        double         the CIO locator s (Note 2)
 
-Returned:
+### Returned
    rc2i     double[3][3]   celestial-to-intermediate matrix (Note 3)
 
-Notes:
+### Notes
 
-   1. The Celestial Intermediate Pole coordinates are the x,y
+1. The Celestial Intermediate Pole coordinates are the x,y
    components of the unit vector in the Geocentric Celestial
    Reference System.
 
-   2. The CIO locator s (in radians) positions the Celestial
+2. The CIO locator s (in radians) positions the Celestial
    Intermediate Origin on the equator of the CIP.
 
-   3. The matrix rc2i is the first stage in the transformation from
+3. The matrix rc2i is the first stage in the transformation from
    celestial to terrestrial coordinates:
 
       [TRS] = RPOM * R_3(ERA) * rc2i * [CRS]
@@ -41,7 +41,7 @@ Called:
    iauRz        rotate around Z-axis
    iauRy        rotate around Y-axis
 
-Reference:
+### References
 
    McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
    IERS Technical Note No. 32, BKG (2004)
@@ -52,9 +52,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauC2ixys(double x, double y, double s, double rc2i[3][3])
-
 function iauC2ixys(x::Real, y::Real, s::Real)
 
    # Allocate return value

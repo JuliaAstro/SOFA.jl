@@ -8,15 +8,15 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    date1,date2 double       TT as a 2-part Julian Date (Note 1)
 
-Returned:
+### Returned
    rc2i        double[3][3] celestial-to-intermediate matrix (Note 2)
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,7 +35,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The matrix rc2i is the first stage in the transformation from
+2. The matrix rc2i is the first stage in the transformation from
    celestial to terrestrial coordinates:
 
       [TRS]  =  RPOM * R_3(ERA) * rc2i * [CRS]
@@ -47,14 +47,14 @@ Notes:
    Reference System (see IERS Conventions 2003), ERA is the Earth
    Rotation Angle and RPOM is the polar motion matrix.
 
-   3. A faster, but slightly less accurate result (about 1 mas), can be
+3. A faster, but slightly less accurate result (about 1 mas), can be
    obtained by using instead the iauC2i00b function.
 
 Called:
    iauPnm00a    classical NPB matrix, IAU 2000A
    iauC2ibpn    celestial-to-intermediate matrix, given NPB matrix
 
-References:
+### References
 
    "Expressions for the Celestial Intermediate Pole and Celestial
    Ephemeris Origin consistent with the IAU 2000A precession-
@@ -73,8 +73,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-# void iauC2i00a(double date1, double date2, double rc2i[3][3])
-
 function iauC2i00a(date1::Real, date2::Real)
    # Allocate return value
    rc2i = zeros(Float64, 3, 3)

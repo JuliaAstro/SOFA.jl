@@ -7,7 +7,7 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    a        double     angle (radians)
 
 Returned (function value):

@@ -8,15 +8,15 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    uta,utb    double    UT1 as a 2-part Julian Date (Notes 1,2)
 
 Returned (function value):
                double    Greenwich apparent sidereal time (radians)
 
-Notes:
+### Notes
 
-   1. The UT1 date uta+utb is a Julian Date, apportioned in any
+1. The UT1 date uta+utb is a Julian Date, apportioned in any
    convenient way between the argument pair.  For example,
    JD=2450123.7 could be expressed in any of these ways, among
    others:
@@ -38,23 +38,23 @@ Notes:
    question and the utb argument lies in the range 0 to 1, or vice
    versa.
 
-   2. The result is compatible with the IAU 1982 and 1994 resolutions,
+2. The result is compatible with the IAU 1982 and 1994 resolutions,
    except that accuracy has been compromised for the sake of
    convenience in that UT is used instead of TDB (or TT) to compute
    the equation of the equinoxes.
 
-   3. This GAST must be used only in conjunction with contemporaneous
+3. This GAST must be used only in conjunction with contemporaneous
    IAU standards such as 1976 precession, 1980 obliquity and 1982
    nutation.  It is not compatible with the IAU 2000 resolutions.
 
-   4. The result is returned in the range 0 to 2pi.
+4. The result is returned in the range 0 to 2pi.
 
 Called:
    iauGmst82    Greenwich mean sidereal time, IAU 1982
    iauEqeq94    equation of the equinoxes, IAU 1994
    iauAnp       normalize angle into range 0 to 2pi
 
-References:
+### References
 
    Explanatory Supplement to the Astronomical Almanac,
    P. Kenneth Seidelmann (ed), University Science Books (1992)
@@ -67,9 +67,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauGst94(double uta, double utb)
-
 function iauGst94(uta::Real, utb::Real)
    return ccall((:iauGst94, libsofa_c), Cdouble,
                (Cdouble, Cdouble),

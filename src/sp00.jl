@@ -8,15 +8,15 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  canonical model.
 
-Given:
+### Given
    date1,date2  double    TT as a 2-part Julian Date (Note 1)
 
 Returned (function value):
                double    the TIO locator s' in radians (Note 2)
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,13 +35,13 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The TIO locator s' is obtained from polar motion observations by
+2. The TIO locator s' is obtained from polar motion observations by
    numerical integration, and so is in essence unpredictable.
    However, it is dominated by a secular drift of about
    47 microarcseconds per century, which is the approximation
    evaluated by the present function.
 
-Reference:
+### References
 
    McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
    IERS Technical Note No. 32, BKG (2004)
@@ -52,9 +52,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauSp00(double date1, double date2)
-
 function iauSp00(date1::Real, date2::Real)
    return ccall((:iauSp00, libsofa_c), Cdouble,
                (Cdouble, Cdouble),

@@ -7,17 +7,17 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    date1,date2  double         TT as a 2-part Julian Date (Note 1)
 
-Returned:
+### Returned
    rb           double[3][3]   frame bias matrix (Note 2)
    rp           double[3][3]   precession matrix (Note 3)
    rbp          double[3][3]   bias-precession matrix (Note 4)
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -36,16 +36,16 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The matrix rb transforms vectors from GCRS to mean J2000.0 by
+2. The matrix rb transforms vectors from GCRS to mean J2000.0 by
    applying frame bias.
 
-   3. The matrix rp transforms vectors from mean J2000.0 to mean of
+3. The matrix rp transforms vectors from mean J2000.0 to mean of
    date by applying precession.
 
-   4. The matrix rbp transforms vectors from GCRS to mean of date by
+4. The matrix rbp transforms vectors from GCRS to mean of date by
    applying frame bias then precession.  It is the product rp x rb.
 
-   5. It is permissible to re-use the same array in the returned
+5. It is permissible to re-use the same array in the returned
    arguments.  The arrays are filled in the order given.
 
 Called:
@@ -56,7 +56,7 @@ Called:
    iauRxr       product of two r-matrices
    iauCr        copy r-matrix
 
-References:
+### References
 
    Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
@@ -68,10 +68,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauBp06(double date1, double date2,
-#              double rb[3][3], double rp[3][3], double rbp[3][3])
-
 function iauBp06(date1::Real, date2::Real)
    # Allocate return value
    rb  = zeros(Float64, 3, 3)

@@ -7,12 +7,12 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    theta   double       longitude angle (radians)
    phi     double       latitude angle (radians)
    r       double       radial distance
 
-Returned:
+### Returned
    p       double[3]    Cartesian coordinates
 
 Called:
@@ -25,7 +25,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-# void iauS2p(double theta, double phi, double r, double p[3])
 function iauS2p(theta::Real, phi::Real, r::Real)
    p = zeros(Float64, 3)
 

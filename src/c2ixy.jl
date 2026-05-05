@@ -8,16 +8,16 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
     date1,date2 double       TT as a 2-part Julian Date (Note 1)
     x,y         double       Celestial Intermediate Pole (Note 2)
 
-Returned:
+### Returned
     rc2i        double[3][3] celestial-to-intermediate matrix (Note 3)
 
-Notes:
+### Notes
 
-    1. The TT date date1+date2 is a Julian Date, apportioned in any
+ 1. The TT date date1+date2 is a Julian Date, apportioned in any
     convenient way between the two arguments.  For example,
     JD(TT)=2450123.7 could be expressed in any of these ways,
     among others:
@@ -36,10 +36,10 @@ Notes:
     optimum resolution.  The MJD method and the date & time methods
     are both good compromises between resolution and convenience.
 
-    2. The Celestial Intermediate Pole coordinates are the x,y components
+ 2. The Celestial Intermediate Pole coordinates are the x,y components
     of the unit vector in the Geocentric Celestial Reference System.
 
-    3. The matrix rc2i is the first stage in the transformation from
+ 3. The matrix rc2i is the first stage in the transformation from
     celestial to terrestrial coordinates:
 
     [TRS] = RPOM * R_3(ERA) * rc2i * [CRS]
@@ -51,14 +51,14 @@ Notes:
     Reference System (see IERS Conventions 2003), ERA is the Earth
     Rotation Angle and RPOM is the polar motion matrix.
 
-    4. Although its name does not include "00", This function is in fact
+ 4. Although its name does not include "00", This function is in fact
     specific to the IAU 2000 models.
 
 Called:
     iauC2ixys    celestial-to-intermediate matrix, given X,Y and s
     iauS00       the CIO locator s, given X,Y, IAU 2000A
 
-Reference:
+### References
 
     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
     IERS Technical Note No. 32, BKG (2004)
@@ -69,9 +69,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-# void iauC2ixy(double date1, double date2, double x, double y,
-#               double rc2i[3][3])
-
 function iauC2ixy(date1::Real, date2::Real, x::Real, y::Real)
 
     # Allocate return value

@@ -8,15 +8,15 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    date1,date2  double    TT as a 2-part Julian Date (Note 1)
 
 Returned (function value):
                double    equation of the equinoxes (Note 2)
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -35,7 +35,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The result, which is in radians, operates in the following sense:
+2. The result, which is in radians, operates in the following sense:
 
       Greenwich apparent ST = GMST + equation of the equinoxes
 
@@ -44,7 +44,7 @@ Called:
    iauGst06a    Greenwich apparent sidereal time, IAU 2006/2000A
    iauGmst06    Greenwich mean sidereal time, IAU 2006
 
-Reference:
+### References
 
    McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003),
    IERS Technical Note No. 32, BKG
@@ -55,9 +55,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauEe06a(double date1, double date2)
-
 function iauEe06a(date1::Real, date2::Real)
    return ccall((:iauEe06a, libsofa_c), Cdouble,
                (Cdouble, Cdouble),

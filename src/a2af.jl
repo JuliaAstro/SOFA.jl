@@ -6,18 +6,18 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
 - `ndp::Integer` resolution (Note 1)
 - `angle::Real`  angle in radians
 
-Returned:
+### Returned
 - `sign::Char`    '+' or '-'
 - `idmsf::Array{Int32, 1}`  degrees, arcminutes, arcseconds, fraction
 
 Called:
    iauD2tf      decompose days to hms
 
-Notes:
+### Notes
 1. The argument ndp is interpreted as follows:
 | ndp | resolution |
 | :-: | :--------: |

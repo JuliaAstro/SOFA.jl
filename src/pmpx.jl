@@ -7,7 +7,7 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    rc,dc  double     ICRS RA,Dec at catalog epoch (radians)
    pr     double     RA proper motion (radians/year; Note 1)
    pd     double     Dec proper motion (radians/year)
@@ -16,22 +16,22 @@ Given:
    pmt    double     proper motion time interval (SSB, Julian years)
    pob    double[3]  SSB to observer vector (au)
 
-Returned:
+### Returned
    pco    double[3]  coordinate direction (BCRS unit vector)
 
-Notes:
+### Notes
 
-   1. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
+1. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 
-   2. The proper motion time interval is for when the starlight
+2. The proper motion time interval is for when the starlight
    reaches the solar system barycenter.
 
-   3). To avoid the need for iteration, the Roemer effect (i.e. the
+3. To avoid the need for iteration, the Roemer effect (i.e. the
    small annual modulation of the proper motion coming from the
    changing light time) is applied approximately, using the
    direction of the star at the catalog epoch.
 
-References:
+### References
 
    1984 Astronomical Almanac, pp B39-B41.
 
@@ -49,11 +49,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauPmpx(double rc, double dc, double pr, double pd,
-#              double px, double rv, double pmt, double pob[3],
-#              double pco[3])
-
 function iauPmpx(rc::Real, dc::Real, pr::Real, pd::Real,
                  px::Real, rv::Real, pmt::Real, pob::AbstractVector{<:Real})
    pco = zeros(Float64, 3)

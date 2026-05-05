@@ -7,10 +7,10 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
     pv     double[2][3]   pv-vector
 
-Returned:
+### Returned
     r      double         modulus of position component
     s      double         modulus of velocity component
 
@@ -23,8 +23,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauPvm(double pv[2][3], double *r, double *s)
 function iauPvm(pv::AbstractMatrix{<:Real})
     # Preallocate return values
     ref_r = Ref{Float64}(0.0)

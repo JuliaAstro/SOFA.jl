@@ -8,23 +8,23 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  canonical.
 
-Given:
+### Given
    tdb1,tdb2  double    TDB as a 2-part Julian Date
 
-Returned:
+### Returned
    tcb1,tcb2  double    TCB as a 2-part Julian Date
 
 Returned (function value):
                int       status:  0 = OK
 
-Notes:
+### Notes
 
-   1. tdb1+tdb2 is Julian Date, apportioned in any convenient way
+1. tdb1+tdb2 is Julian Date, apportioned in any convenient way
    between the two arguments, for example where tdb1 is the Julian
    Day Number and tdb2 is the fraction of a day.  The returned
    tcb1,tcb2 follow suit.
 
-   2. The 2006 IAU General Assembly introduced a conventional linear
+2. The 2006 IAU General Assembly introduced a conventional linear
    transformation between TDB and TCB.  This transformation
    compensates for the drift between TCB and terrestrial time TT,
    and keeps TDB approximately centered on TT.  Because the
@@ -39,10 +39,10 @@ Notes:
    these difficulties whilst delivering a TDB that in practice was
    consistent with values before that date.
 
-   3. TDB is essentially the same as Teph, the time argument for the
+3. TDB is essentially the same as Teph, the time argument for the
    JPL solar system ephemerides.
 
-Reference:
+### References
 
    IAU 2006 Resolution B3
 
@@ -52,8 +52,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# int iauTdbtcb(double tdb1, double tdb2, double *tcb1, double *tcb2)
 function iauTdbtcb(tdb1::Real, tdb2::Real)
    ref_tcb1 = Ref{Float64}(0.0)
    ref_tcb2 = Ref{Float64}(0.0)

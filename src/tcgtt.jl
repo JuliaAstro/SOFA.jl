@@ -8,10 +8,10 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  canonical.
 
-Given:
+### Given
    tcg1,tcg2  double    TCG as a 2-part Julian Date
 
-Returned:
+### Returned
    tt1,tt2    double    TT as a 2-part Julian Date
 
 Returned (function value):
@@ -24,7 +24,7 @@ Note:
    Day Number and tcg22 is the fraction of a day.  The returned
    tt1,tt2 follow suit.
 
-References:
+### References
 
    McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),.
    IERS Technical Note No. 32, BKG (2004)
@@ -37,9 +37,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# int iauTcgtt(double tcg1, double tcg2, double *tt1, double *tt2)
-
 function iauTcgtt(tcg1::Real, tcg2::Real)
    ref_tt1 = Ref{Float64}(0.0)
    ref_tt2 = Ref{Float64}(0.0)

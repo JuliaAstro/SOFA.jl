@@ -7,7 +7,7 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  canonical models.
 
-Given:
+### Given
    date1,date2   double   TT as a 2-part Julian Date (Note 1)
 
 Returned (see Note 2):
@@ -28,9 +28,9 @@ Returned (see Note 2):
    phi           double   F-W angle phi_J2000
    psi           double   F-W angle psi_J2000
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -49,7 +49,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. This function returns the set of equinox based angles for the
+2. This function returns the set of equinox based angles for the
    Capitaine et al. "P03" precession theory, adopted by the IAU in
    2006.  The angles are set out in Table 1 of Hilton et al. (2006):
 
@@ -72,31 +72,31 @@ Notes:
 
    The returned values are all radians.
 
-   3. Hilton et al. (2006) Table 1 also contains angles that depend on
+3. Hilton et al. (2006) Table 1 also contains angles that depend on
    models distinct from the P03 precession theory itself, namely the
    IAU 2000A frame bias and nutation.  The quoted polynomials are
    used in other SOFA functions:
 
-   . iauXy06  contains the polynomial parts of the X and Y series.
+   - iauXy06  contains the polynomial parts of the X and Y series.
 
-   . iauS06  contains the polynomial part of the s+XY/2 series.
+   - iauS06  contains the polynomial part of the s+XY/2 series.
 
-   . iauPfw06  implements the series for the Fukushima-Williams
+   - iauPfw06  implements the series for the Fukushima-Williams
       angles that are with respect to the GCRS pole (i.e. the variants
       that include frame bias).
 
-   4. The IAU resolution stipulated that the choice of parameterization
+4. The IAU resolution stipulated that the choice of parameterization
    was left to the user, and so an IAU compliant precession
    implementation can be constructed using various combinations of
    the angles returned by the present function.
 
-   5. The parameterization used by SOFA is the version of the Fukushima-
+5. The parameterization used by SOFA is the version of the Fukushima-
    Williams angles that refers directly to the GCRS pole.  These
    angles may be calculated by calling the function iauPfw06.  SOFA
    also supports the direct computation of the CIP GCRS X,Y by
    series, available by calling iauXy06.
 
-   6. The agreement between the different parameterizations is at the
+6. The agreement between the different parameterizations is at the
    1 microarcsecond level in the present era.
 
    7> When constructing a precession formulation that refers to the GCRS
@@ -104,10 +104,10 @@ Notes:
    choice of angles) be necessary to introduce the frame bias
    explicitly.
 
-   8. It is permissible to re-use the same variable in the returned
+8. It is permissible to re-use the same variable in the returned
    arguments.  The quantities are stored in the stated order.
 
-Reference:
+### References
 
    Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 
@@ -120,14 +120,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauP06e(double date1, double date2,
-#              double *eps0, double *psia, double *oma, double *bpa,
-#              double *bqa, double *pia, double *bpia,
-#              double *epsa, double *chia, double *za, double *zetaa,
-#              double *thetaa, double *pa,
-#              double *gam, double *phi, double *psi)
-
 function iauP06e(date1::Real, date2::Real)
    ref_eps0   = Ref{Float64}(0.0)
    ref_psia   = Ref{Float64}(0.0)

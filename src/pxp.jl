@@ -7,11 +7,11 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    a        double[3]      first p-vector
    b        double[3]      second p-vector
 
-Returned:
+### Returned
    axb      double[3]      a x b
 
 Note:
@@ -24,8 +24,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauPxp(double a[3], double b[3], double axb[3])
 function iauPxp(a::AbstractVector{<:Real}, b::AbstractVector{<:Real})
    # Preallocate return values
    axb = zeros(Float64, 3)

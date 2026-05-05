@@ -7,15 +7,15 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  canonical model.
 
-Given:
+### Given
    dj1,dj2    double    UT1 Julian Date (see note)
 
 Returned (function value):
                double    Greenwich mean sidereal time (radians)
 
-Notes:
+### Notes
 
-   1. The UT1 date dj1+dj2 is a Julian Date, apportioned in any
+1. The UT1 date dj1+dj2 is a Julian Date, apportioned in any
    convenient way between the arguments dj1 and dj2.  For example,
    JD(UT1)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -36,14 +36,14 @@ Notes:
    0hrs UT1 on the day in question and the dj2 argument lies in the
    range 0 to 1, or vice versa.
 
-   2. The algorithm is based on the IAU 1982 expression.  This is
+2. The algorithm is based on the IAU 1982 expression.  This is
    always described as giving the GMST at 0 hours UT1.  In fact, it
    gives the difference between the GMST and the UT, the steady
    4-minutes-per-day drawing-ahead of ST with respect to UT.  When
    whole days are ignored, the expression happens to equal the GMST
    at 0 hours UT1 each day.
 
-   3. In this function, the entire UT1 (the sum of the two arguments
+3. In this function, the entire UT1 (the sum of the two arguments
    dj1 and dj2) is used directly as the argument for the standard
    formula, the constant term of which is adjusted by 12 hours to
    take account of the noon phasing of Julian Date.  The UT1 is then
@@ -52,7 +52,7 @@ Notes:
 Called:
    iauAnp       normalize angle into range 0 to 2pi
 
-References:
+### References
 
    Transactions of the International Astronomical Union,
    XVIII B, 67 (1983).
@@ -65,9 +65,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauGmst82(double dj1, double dj2)
-
 function iauGmst82(dj1::Real, dj2::Real)
    return ccall((:iauGmst82, libsofa_c), Cdouble,
                (Cdouble, Cdouble),

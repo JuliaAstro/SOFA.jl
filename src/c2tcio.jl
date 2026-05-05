@@ -9,17 +9,17 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    rc2i     double[3][3]    celestial-to-intermediate matrix
    era      double          Earth rotation angle (radians)
    rpom     double[3][3]    polar-motion matrix
 
-Returned:
+### Returned
    rc2t     double[3][3]    celestial-to-terrestrial matrix
 
-Notes:
+### Notes
 
-   1. This function constructs the rotation matrix that transforms
+1. This function constructs the rotation matrix that transforms
    vectors in the celestial system into vectors in the terrestrial
    system.  It does so starting from precomputed components, namely
    the matrix which rotates from celestial coordinates to the
@@ -30,7 +30,7 @@ Notes:
    recomputing the precession-nutation more often than necessary to
    achieve given accuracy objectives.
 
-   2. The relationship between the arguments is as follows:
+2. The relationship between the arguments is as follows:
 
       [TRS] = RPOM * R_3(ERA) * rc2i * [CRS]
 
@@ -45,7 +45,7 @@ Called:
    iauRz        rotate around Z-axis
    iauRxr       product of two r-matrices
 
-Reference:
+### References
 
    McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003),
    IERS Technical Note No. 32, BKG
@@ -56,8 +56,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-# void iauC2tcio(double rc2i[3][3], double era, double rpom[3][3],
-#                double rc2t[3][3])
 function iauC2tcio(rc2i::AbstractMatrix{<:Real}, era::Real, rpom::AbstractMatrix{<:Real})
 
    # Allocate return value

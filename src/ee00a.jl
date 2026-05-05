@@ -7,15 +7,15 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    date1,date2  double    TT as a 2-part Julian Date (Note 1)
 
 Returned (function value):
                double    equation of the equinoxes (Note 2)
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -34,13 +34,12 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The result, which is in radians, operates in the following sense:
+2. The result, which is in radians, operates in the following sense:
 
       Greenwich apparent ST = GMST + equation of the equinoxes
 
-   3. The result is compatible with the IAU 2000 resolutions.  For
-   further details, see IERS Conventions 2003 and Capitaine et al.
-   (2002).
+3. The result is compatible with the IAU 2000 resolutions.  For
+   further details, see IERS Conventions 2003 and Capitaine et al. (2002).
 
 Called:
    iauPr00      IAU 2000 precession adjustments
@@ -48,7 +47,7 @@ Called:
    iauNut00a    nutation, IAU 2000A
    iauEe00      equation of the equinoxes, IAU 2000
 
-References:
+### References
 
    Capitaine, N., Wallace, P.T. and McCarthy, D.D., "Expressions to
    implement the IAU 2000 definition of UT1", Astronomy &
@@ -63,9 +62,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauEe00a(double date1, double date2)
-
 function iauEe00a(date1::Real, date2::Real)
    return ccall((:iauEe00a, libsofa_c), Cdouble,
                (Cdouble, Cdouble),

@@ -8,14 +8,14 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    date1,date2 double TT as a 2-part Julian date (Note 1)
    dl,db       double ecliptic longitude and latitude (radians)
 
-Returned:
+### Returned
    dr,dd       double ICRS right ascension and declination (radians)
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -34,11 +34,11 @@ Returned:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. No assumptions are made about whether the coordinates represent
+2. No assumptions are made about whether the coordinates represent
    starlight and embody astrometric effects such as parallax or
    aberration.
 
-   3. The transformation is approximately that from ecliptic longitude
+3. The transformation is approximately that from ecliptic longitude
    and latitude (mean equinox and ecliptic of date) to mean J2000.0
    right ascension and declination, with only frame bias (always
    less than 25 mas) to disturb this classical picture.
@@ -57,10 +57,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauEceq06(double date1, double date2, double dl, double db,
-#                double *dr, double *dd)
-
 function iauEceq06(date1::Real, date2::Real, dl::Real, db::Real)
    # Initialize function return variables
    ref_dr = Ref{Float64}(0.0)

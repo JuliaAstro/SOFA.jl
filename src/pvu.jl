@@ -7,21 +7,21 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    dt       double           time interval
    pv       double[2][3]     pv-vector
 
-Returned:
+### Returned
    upv      double[2][3]     p updated, v unchanged
 
-Notes:
+### Notes
 
-   1. "Update" means "refer the position component of the vector
+1. "Update" means "refer the position component of the vector
    to a new date dt time units from the existing date".
 
-   2. The time units of dt must match those of the velocity.
+2. The time units of dt must match those of the velocity.
 
-   3. It is permissible for pv and upv to be the same array.
+3. It is permissible for pv and upv to be the same array.
 
 Called:
    iauPpsp      p-vector plus scaled p-vector
@@ -33,8 +33,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauPvu(double dt, double pv[2][3], double upv[2][3])
 function iauPvu(dt::Real, pv::AbstractMatrix{<:Real})
    # Preallocate return values
    upv = zeros(Float64, 3, 2)

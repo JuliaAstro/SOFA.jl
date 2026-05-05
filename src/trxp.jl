@@ -7,11 +7,11 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    r        double[3][3]   r-matrix
    p        double[3]      p-vector
 
-Returned:
+### Returned
    trp      double[3]      r * p
 
 Note:
@@ -27,9 +27,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauTrxp(double r[3][3], double p[3], double trp[3])
-
 function iauTrxp(r::AbstractMatrix{<:Real}, p::AbstractVector{<:Real})
    trp = zeros(Float64, 3)
 

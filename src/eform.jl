@@ -7,10 +7,10 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  canonical.
 
-Given:
+### Given
    n    int         ellipsoid identifier (Note 1)
 
-Returned:
+### Returned
    a    double      equatorial radius (meters, Note 2)
    f    double      flattening (Note 2)
 
@@ -18,9 +18,9 @@ Returned (function value):
          int         status:  0 = OK
                            -1 = illegal identifier (Note 3)
 
-Notes:
+### Notes
 
-   1. The identifier n is a number that specifies the choice of
+1. The identifier n is a number that specifies the choice of
    reference ellipsoid.  The following are supported:
 
       n    ellipsoid
@@ -32,14 +32,14 @@ Notes:
    The n value has no significance outside the SOFA software.  For
    convenience, symbols WGS84 etc. are defined in sofam.h.
 
-   2. The ellipsoid parameters are returned in the form of equatorial
+2. The ellipsoid parameters are returned in the form of equatorial
    radius in meters (a) and flattening (f).  The latter is a number
    around 0.00335, i.e. around 1/298.
 
-   3. For the case where an unsupported n value is supplied, zero a and
+3. For the case where an unsupported n value is supplied, zero a and
    f are returned, as well as error status.
 
-References:
+### References
 
    Department of Defense World Geodetic System 1984, National
    Imagery and Mapping Agency Technical Report 8350.2, Third
@@ -60,9 +60,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# int iauEform ( int n, double *a, double *f )
-
 function iauEform(n::Int)
    # Initialize return variables
    ref_a = Ref{Float64}(0.0)

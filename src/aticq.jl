@@ -14,7 +14,7 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    ri,di  double     CIRS RA,Dec (radians)
    astrom iauASTROM* star-independent astrometry parameters:
       pmt    double       PM time interval (SSB, Julian years)
@@ -34,15 +34,14 @@ Given:
       refa   double       refraction constant A (radians)
       refb   double       refraction constant B (radians)
 
-Returned:
+### Returned
    rc,dc  double     ICRS astrometric RA,Dec (radians)
 
-Notes:
+### Notes
 
-   1. Only the Sun is taken into account in the light deflection
-   correction.
+1. Only the Sun is taken into account in the light deflection correction.
 
-   2. Iterative techniques are used for the aberration and light
+2. Iterative techniques are used for the aberration and light
    deflection corrections so that the functions iauAtic13 (or
    iauAticq) and iauAtci13 (or iauAtciq) are accurate inverses;
    even at the edge of the Sun's disk the discrepancy is only about
@@ -63,9 +62,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-# void iauAticq(double ri, double di, iauASTROM *astrom,
-#               double *rc, double *dc)
-
 function iauAticq(ri::Real, di::Real, astrom::iauASTROM)
    # Allocate return values
    ref_astrom = Ref{iauASTROM}(astrom)

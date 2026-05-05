@@ -8,7 +8,7 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    ri     double   CIRS right ascension (CIO-based, radians)
    di     double   CIRS declination (radians)
    utc1   double   UTC as a 2-part...
@@ -23,7 +23,7 @@ Given:
    rh     double   relative humidity at the observer (range 0-1)
    wl     double   wavelength (micrometers, Note 7)
 
-Returned:
+### Returned
    aob    double*  observed azimuth (radians: N=0,E=90)
    zob    double*  observed zenith distance (radians)
    hob    double*  observed hour angle (radians)
@@ -35,9 +35,9 @@ Returned (function value):
                            0 = OK
                            -1 = unacceptable date
 
-Notes:
+### Notes
 
-   1.  utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
+1. utc1+utc2 is quasi Julian Date (see Note 2), apportioned in any
    convenient way between the two arguments, for example where utc1
    is the Julian Day Number and utc2 is the fraction of a day.
 
@@ -51,29 +51,29 @@ Notes:
    it implements the leap-second-ambiguity convention just
    described.
 
-   2.  The warning status "dubious year" flags UTCs that predate the
+2. The warning status "dubious year" flags UTCs that predate the
    introduction of the time scale or that are too far in the
    future to be trusted.  See iauDat for further details.
 
-   3.  UT1-UTC is tabulated in IERS bulletins.  It increases by exactly
+3. UT1-UTC is tabulated in IERS bulletins.  It increases by exactly
    one second at the end of each positive UTC leap second,
    introduced in order to keep UT1-UTC within +/- 0.9s.  n.b. This
    practice is under review, and in the future UT1-UTC may grow
    essentially without limit.
 
-   4.  The geographical coordinates are with respect to the WGS84
+4. The geographical coordinates are with respect to the WGS84
    reference ellipsoid.  TAKE CARE WITH THE LONGITUDE SIGN:  the
    longitude required by the present function is east-positive
    (i.e. right-handed), in accordance with geographical convention.
 
-   5.  The polar motion xp,yp can be obtained from IERS bulletins.  The
+5. The polar motion xp,yp can be obtained from IERS bulletins.  The
    values are the coordinates (in radians) of the Celestial
    Intermediate Pole with respect to the International Terrestrial
    Reference System (see IERS Conventions 2003), measured along the
    meridians 0 and 90 deg west respectively.  For many
    applications, xp and yp can be set to zero.
 
-   6.  If hm, the height above the ellipsoid of the observing station
+6. If hm, the height above the ellipsoid of the observing station
    in meters, is not known but phpa, the pressure in hPa (=mB), is
    available, an adequate estimate of hm can be obtained from the
    expression
@@ -92,11 +92,11 @@ Notes:
    the pressure and that an accurate phpa value is important for
    precise work.
 
-   7.  The argument wl specifies the observing wavelength in
+7. The argument wl specifies the observing wavelength in
    micrometers.  The transition from optical to radio is assumed to
    occur at 100 micrometers (about 3000 GHz).
 
-   8.  "Observed" Az,ZD means the position that would be seen by a
+8. "Observed" Az,ZD means the position that would be seen by a
    perfect geodetically aligned theodolite.  (Zenith distance is
    used rather than altitude in order to reflect the fact that no
    allowance is made for depression of the horizon.)  This is
@@ -107,7 +107,7 @@ Notes:
    means the position that would be seen by a perfect equatorial
    with its polar axis aligned to the Earth's axis of rotation.
 
-   9.  The accuracy of the result is limited by the corrections for
+9. The accuracy of the result is limited by the corrections for
    refraction, which use a simple A*tan(z) + B*tan^3(z) model.
    Providing the meteorological parameters are known accurately and
    there are no gross local effects, the predicted astrometric
@@ -116,13 +116,13 @@ Notes:
    than 30 arcsec (optical or radio) at 85 degrees and better
    than 20 arcmin (optical) or 30 arcmin (radio) at the horizon.
 
-   10. The complementary functions iauAtio13 and iauAtoi13 are self-
-   consistent to better than 1 microarcsecond all over the
-   celestial sphere.
+10. The complementary functions iauAtio13 and iauAtoi13 are self-
+    consistent to better than 1 microarcsecond all over the
+    celestial sphere.
 
-   11. It is advisable to take great care with units, as even unlikely
-   values of the input parameters are accepted and processed in
-   accordance with the models used.
+11. It is advisable to take great care with units, as even unlikely
+    values of the input parameters are accepted and processed in
+    accordance with the models used.
 
 Called:
    iauApio13    astrometry parameters, CIRS-observed, 2013
@@ -134,13 +134,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-# int iauAtio13(double ri, double di,
-#               double utc1, double utc2, double dut1,
-#               double elong, double phi, double hm, double xp, double yp,
-#               double phpa, double tc, double rh, double wl,
-#               double *aob, double *zob, double *hob,
-#               double *dob, double *rob)
-
 function iauAtio13(ri::Real, di::Real, utc1::Real, utc2::Real, dut1::Real,
                   elong::Real, phi::Real, hm::Real, xp::Real, yp::Real,
                   phpa::Real, tc::Real, rh::Real, wl::Real)

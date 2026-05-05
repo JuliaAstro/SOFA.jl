@@ -9,17 +9,17 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    date1,date2  double   TT as a 2-part Julian Date (Note 1)
 
-Returned:
+### Returned
    bzeta        double   1st rotation: radians cw around z
    bz           double   3rd rotation: radians cw around z
    btheta       double   2nd rotation: radians ccw around y
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -38,7 +38,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The traditional accumulated precession angles zeta_A, z_A,
+2. The traditional accumulated precession angles zeta_A, z_A,
    theta_A cannot be obtained in the usual way, namely through
    polynomial expressions, because of the frame bias.  The latter
    means that two of the angles undergo rapid changes near this
@@ -48,12 +48,12 @@ Notes:
    decomposition returns values which can be used in the
    conventional formulation and which include frame bias.
 
-   3. The three angles are returned in the conventional order, which
+3. The three angles are returned in the conventional order, which
    is not the same as the order of the corresponding Euler
    rotations.  The precession-bias matrix is
    R_3(-z) x R_2(+theta) x R_3(-zeta).
 
-   4. Should zeta_A, z_A, theta_A angles be required that do not
+4. Should zeta_A, z_A, theta_A angles be required that do not
    contain frame bias, they are available by calling the SOFA
    function iauP06e.
 
@@ -67,10 +67,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauPb06(double date1, double date2,
-#              double *bzeta, double *bz, double *btheta)
-
 function iauPb06(date1::Real, date2::Real)
    ref_bzeta  = Ref{Float64}(0.0)
    ref_bz     = Ref{Float64}(0.0)
