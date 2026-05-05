@@ -7,11 +7,11 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    s      double        scalar
    p      double[3]     p-vector
 
-Returned:
+### Returned
    sp     double[3]     s * p
 
 Note:
@@ -23,9 +23,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauSxp(double s, double p[3], double sp[3])
-
 function iauSxp(s::Real, p::AbstractVector{<:Real})
    sp = zeros(Float64, 3)
 

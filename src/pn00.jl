@@ -9,11 +9,11 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    date1,date2  double          TT as a 2-part Julian Date (Note 1)
    dpsi,deps    double          nutation (Note 2)
 
-Returned:
+### Returned
    epsa         double          mean obliquity (Note 3)
    rb           double[3][3]    frame bias matrix (Note 4)
    rp           double[3][3]    precession matrix (Note 5)
@@ -21,9 +21,9 @@ Returned:
    rn           double[3][3]    nutation matrix (Note 7)
    rbpn         double[3][3]    GCRS-to-true matrix (Note 8)
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -42,35 +42,35 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The caller is responsible for providing the nutation components;
+2. The caller is responsible for providing the nutation components;
    they are in longitude and obliquity, in radians and are with
    respect to the equinox and ecliptic of date.  For high-accuracy
    applications, free core nutation should be included as well as
    any other relevant corrections to the position of the CIP.
 
-   3. The returned mean obliquity is consistent with the IAU 2000
+3. The returned mean obliquity is consistent with the IAU 2000
    precession-nutation models.
 
-   4. The matrix rb transforms vectors from GCRS to J2000.0 mean
+4. The matrix rb transforms vectors from GCRS to J2000.0 mean
    equator and equinox by applying frame bias.
 
-   5. The matrix rp transforms vectors from J2000.0 mean equator and
+5. The matrix rp transforms vectors from J2000.0 mean equator and
    equinox to mean equator and equinox of date by applying
    precession.
 
-   6. The matrix rbp transforms vectors from GCRS to mean equator and
+6. The matrix rbp transforms vectors from GCRS to mean equator and
    equinox of date by applying frame bias then precession.  It is
    the product rp x rb.
 
-   7. The matrix rn transforms vectors from mean equator and equinox of
+7. The matrix rn transforms vectors from mean equator and equinox of
    date to true equator and equinox of date by applying the nutation
    (luni-solar + planetary).
 
-   8. The matrix rbpn transforms vectors from GCRS to true equator and
+8. The matrix rbpn transforms vectors from GCRS to true equator and
    equinox of date.  It is the product rn x rbp, applying frame
    bias, precession and nutation in that order.
 
-   9. It is permissible to re-use the same array in the returned
+9. It is permissible to re-use the same array in the returned
    arguments.  The arrays are filled in the order given.
 
 Called:
@@ -81,7 +81,7 @@ Called:
    iauNumat     form nutation matrix
    iauRxr       product of two r-matrices
 
-Reference:
+### References
 
    Capitaine, N., Chapront, J., Lambert, S. and Wallace, P.,
    "Expressions for the Celestial Intermediate Pole and Celestial
@@ -97,12 +97,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauPn00(double date1, double date2, double dpsi, double deps,
-#              double *epsa,
-#              double rb[3][3], double rp[3][3], double rbp[3][3],
-#              double rn[3][3], double rbpn[3][3])
-
 function iauPn00(date1::Real, date2::Real, dpsi::Real, deps::Real)
    # Allocate return values
    ref_epsa = Ref{Float64}(0.0)

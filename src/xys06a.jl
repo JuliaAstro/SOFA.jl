@@ -9,16 +9,16 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    date1,date2  double  TT as a 2-part Julian Date (Note 1)
 
-Returned:
+### Returned
    x,y          double  Celestial Intermediate Pole (Note 2)
    s            double  the CIO locator s (Note 2)
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -37,13 +37,13 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The Celestial Intermediate Pole coordinates are the x,y components
+2. The Celestial Intermediate Pole coordinates are the x,y components
    of the unit vector in the Geocentric Celestial Reference System.
 
-   3. The CIO locator s (in radians) positions the Celestial
+3. The CIO locator s (in radians) positions the Celestial
    Intermediate Origin on the equator of the CIP.
 
-   4. Series-based solutions for generating X and Y are also available:
+4. Series-based solutions for generating X and Y are also available:
    see Capitaine & Wallace (2006) and iauXy06.
 
 Called:
@@ -51,7 +51,7 @@ Called:
    iauBpn2xy    extract CIP X,Y coordinates from NPB matrix
    iauS06       the CIO locator s, given X,Y, IAU 2006
 
-References:
+### References
 
    Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
@@ -63,10 +63,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauXys06a(double date1, double date2,
-#                double *x, double *y, double *s)
-
 function iauXys06a(date1::Real, date2::Real)
    ref_x = Ref{Float64}(0.0)
    ref_y = Ref{Float64}(0.0)

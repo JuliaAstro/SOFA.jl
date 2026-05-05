@@ -8,18 +8,18 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    tta,ttb  double         TT as a 2-part Julian Date (Note 1)
    uta,utb  double         UT1 as a 2-part Julian Date (Note 1)
    x,y      double         Celestial Intermediate Pole (Note 2)
    xp,yp    double         coordinates of the pole (radians, Note 3)
 
-Returned:
+### Returned
    rc2t     double[3][3]   celestial-to-terrestrial matrix (Note 4)
 
-Notes:
+### Notes
 
-   1. The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
+1. The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
    apportioned in any convenient way between the arguments uta and
    utb.  For example, JD(UT1)=2450123.7 could be expressed in any o
    these ways, among others:
@@ -40,16 +40,16 @@ Notes:
    argument is for 0hrs UT1 on the day in question and the utb
    argument lies in the range 0 to 1, or vice versa.
 
-   2. The Celestial Intermediate Pole coordinates are the x,y
+2. The Celestial Intermediate Pole coordinates are the x,y
    components of the unit vector in the Geocentric Celestial
    Reference System.
 
-   3. The arguments xp and yp are the coordinates (in radians) of the
+3. The arguments xp and yp are the coordinates (in radians) of the
    Celestial Intermediate Pole with respect to the International
    Terrestrial Reference System (see IERS Conventions 2003),
    measured along the meridians to 0 and 90 deg west respectively.
 
-   4. The matrix rc2t transforms from celestial to terrestrial
+4. The matrix rc2t transforms from celestial to terrestrial
    coordinates:
 
       [TRS] = RPOM * R_3(ERA) * RC2I * [CRS]
@@ -61,7 +61,7 @@ Notes:
    Reference System (see IERS Conventions 2003), ERA is the Earth
    Rotation Angle and RPOM is the polar motion matrix.
 
-   5. Although its name does not include "00", This function is in fact
+5. Although its name does not include "00", This function is in fact
    specific to the IAU 2000 models.
 
 Called:
@@ -71,7 +71,7 @@ Called:
    iauPom00     polar motion matrix
    iauC2tcio    form CIO-based celestial-to-terrestrial matrix
 
-Reference:
+### References
 
    McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
    IERS Technical Note No. 32, BKG (2004)
@@ -82,11 +82,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauC2txy(double tta, double ttb, double uta, double utb,
-#               double x, double y, double xp, double yp,
-#               double rc2t[3][3])
-
 function iauC2txy(tta::Real, ttb::Real, uta::Real, utb::Real,
                    x::Real, y::Real, xp::Real, yp::Real)
 

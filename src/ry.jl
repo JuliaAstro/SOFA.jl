@@ -7,19 +7,19 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    theta  double          angle (radians)
 
 Given and returned:
    r      double[3][3]    r-matrix, rotated
 
-Notes:
+### Notes
 
-   1. Calling this function with positive theta incorporates in the
+1. Calling this function with positive theta incorporates in the
    supplied r-matrix r an additional rotation, about the y-axis,
    anticlockwise as seen looking towards the origin from positive y.
 
-   2. The additional rotation can be represented by this matrix:
+2. The additional rotation can be represented by this matrix:
 
       (  + cos(theta)     0      - sin(theta)  )
       (                                        )
@@ -33,8 +33,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauRy(double theta, double r[3][3])
 function iauRy(theta::Real, r::AbstractMatrix{<:Real})
 
    # Transpose matrix upfront

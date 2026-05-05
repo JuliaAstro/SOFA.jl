@@ -7,7 +7,7 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    al     double       first longitude (radians)
    ap     double       first latitude (radians)
    bl     double       second longitude (radians)
@@ -26,8 +26,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauSeps(double al, double ap, double bl, double bp)
 function iauSeps(al::Real, ap::Real, bl::Real, bp::Real)
    return ccall((:iauSeps, libsofa_c), Cdouble, 
        (Cdouble, Cdouble, Cdouble, Cdouble), 

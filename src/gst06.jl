@@ -7,7 +7,7 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    uta,utb  double        UT1 as a 2-part Julian Date (Notes 1,2)
    tta,ttb  double        TT as a 2-part Julian Date (Notes 1,2)
    rnpb     double[3][3]  nutation x precession x bias matrix
@@ -15,9 +15,9 @@ Given:
 Returned (function value):
             double        Greenwich apparent sidereal time (radians)
 
-Notes:
+### Notes
 
-   1. The UT1 and TT dates uta+utb and tta+ttb respectively, are both
+1. The UT1 and TT dates uta+utb and tta+ttb respectively, are both
    Julian Dates, apportioned in any convenient way between the
    argument pairs.  For example, JD=2450123.7 could be expressed in
    any of these ways, among others:
@@ -40,16 +40,16 @@ Notes:
    question and the utb argument lies in the range 0 to 1, or vice
    versa.
 
-   2. Both UT1 and TT are required, UT1 to predict the Earth rotation
+2. Both UT1 and TT are required, UT1 to predict the Earth rotation
    and TT to predict the effects of precession-nutation.  If UT1 is
    used for both purposes, errors of order 100 microarcseconds
    result.
 
-   3. Although the function uses the IAU 2006 series for s+XY/2, it is
+3. Although the function uses the IAU 2006 series for s+XY/2, it is
    otherwise independent of the precession-nutation model and can in
    practice be used with any equinox-based NPB matrix.
 
-   4. The result is returned in the range 0 to 2pi.
+4. The result is returned in the range 0 to 2pi.
 
 Called:
    iauBpn2xy    extract CIP X,Y coordinates from NPB matrix
@@ -58,7 +58,7 @@ Called:
    iauEra00     Earth rotation angle, IAU 2000
    iauEors      equation of the origins, given NPB matrix and s
 
-Reference:
+### References
 
    Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 
@@ -68,10 +68,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauGst06(double uta, double utb, double tta, double ttb,
-#                 double rnpb[3][3])
-
 function iauGst06(uta::Real, utb::Real, tta::Real, ttb::Real,
                    rnpb::AbstractMatrix{<:Real})
 

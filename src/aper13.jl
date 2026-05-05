@@ -8,7 +8,7 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    ut11    double      UT1 as a 2-part...
    ut12    double      ...Julian Date (Note 1)
    astrom  iauASTROM*  star-independent astrometry parameters:
@@ -29,7 +29,7 @@ Given:
    refa   double       not used
    refb   double       not used
 
-Returned:
+### Returned
    astrom  iauASTROM*  star-independent astrometry parameters:
    pmt    double       unchanged
    eb     double[3]    unchanged
@@ -48,7 +48,7 @@ Returned:
    refa   double       unchanged
    refb   double       unchanged
 
-Notes:
+### Notes
 
 1) The UT1 date (n.b. not UTC) ut11+ut12 is a Julian Date,
    apportioned in any convenient way between the arguments ut11 and

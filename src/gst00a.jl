@@ -8,16 +8,16 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  canonical model.
 
-Given:
+### Given
    uta,utb    double    UT1 as a 2-part Julian Date (Notes 1,2)
    tta,ttb    double    TT as a 2-part Julian Date (Notes 1,2)
 
 Returned (function value):
                double    Greenwich apparent sidereal time (radians)
 
-Notes:
+### Notes
 
-   1. The UT1 and TT dates uta+utb and tta+ttb respectively, are both
+1. The UT1 and TT dates uta+utb and tta+ttb respectively, are both
    Julian Dates, apportioned in any convenient way between the
    argument pairs.  For example, JD=2450123.7 could be expressed in
    any of these ways, among others:
@@ -40,18 +40,18 @@ Notes:
    question and the utb argument lies in the range 0 to 1, or vice
    versa.
 
-   2. Both UT1 and TT are required, UT1 to predict the Earth rotation
+2. Both UT1 and TT are required, UT1 to predict the Earth rotation
    and TT to predict the effects of precession-nutation.  If UT1 is
    used for both purposes, errors of order 100 microarcseconds
    result.
 
-   3. This GAST is compatible with the IAU 2000 resolutions and must be
+3. This GAST is compatible with the IAU 2000 resolutions and must be
    used only in conjunction with other IAU 2000 compatible
    components such as precession-nutation.
 
-   4. The result is returned in the range 0 to 2pi.
+4. The result is returned in the range 0 to 2pi.
 
-   5. The algorithm is from Capitaine et al. (2003) and IERS
+5. The algorithm is from Capitaine et al. (2003) and IERS
    Conventions 2003.
 
 Called:
@@ -59,7 +59,7 @@ Called:
    iauEe00a     equation of the equinoxes, IAU 2000A
    iauAnp       normalize angle into range 0 to 2pi
 
-References:
+### References
 
    Capitaine, N., Wallace, P.T. and McCarthy, D.D., "Expressions to
    implement the IAU 2000 definition of UT1", Astronomy &
@@ -74,9 +74,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauGst00a(double uta, double utb, double tta, double ttb)
-
 function iauGst00a(uta::Real, utb::Real, tta::Real, ttb::Real)
    return ccall((:iauGst00a, libsofa_c), Cdouble,
                (Cdouble, Cdouble, Cdouble, Cdouble),

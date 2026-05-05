@@ -7,10 +7,10 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    pv      double[2][3]     pv-vector
 
-Returned:
+### Returned
    p       double[3]        p-vector
 
 Called:
@@ -22,9 +22,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauPv2p(double pv[2][3], double p[3])
-
 function iauPv2p(pv::AbstractMatrix{<:Real})
    # Preallocate return values
    p = zeros(Float64, 3)

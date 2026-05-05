@@ -7,11 +7,11 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    a        double[3]      first p-vector
    b        double[3]      second p-vector
 
-Returned:
+### Returned
    amb      double[3]      a - b
 
 Note:
@@ -24,9 +24,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauPmp(double a[3], double b[3], double amb[3])
-
 function iauPmp(a::AbstractVector{<:Real}, b::AbstractVector{<:Real})
    amb = zeros(Float64, 3)
    

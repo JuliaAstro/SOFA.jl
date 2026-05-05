@@ -17,7 +17,7 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    rc,dc  double     ICRS astrometric RA,Dec (radians)
    astrom iauASTROM* star-independent astrometry parameters:
       pmt    double       PM time interval (SSB, Julian years)
@@ -37,14 +37,14 @@ Given:
       refa   double       refraction constant A (radians)
       refb   double       refraction constant B (radians)
 
-Returned:
+### Returned
    ri,di  double     CIRS RA,Dec (radians)
 
 Note:
 
    All the vectors are with respect to BCRS axes.
 
-References:
+### References
 
    Urban, S. & Seidelmann, P. K. (eds), Explanatory Supplement to
    the Astronomical Almanac, 3rd ed., University Science Books

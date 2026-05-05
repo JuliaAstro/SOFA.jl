@@ -7,10 +7,10 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    r        double[3][3]    r-matrix to be copied
 
-Returned:
+### Returned
    c        double[3][3]    copy
 
 Called:
@@ -22,8 +22,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-# void iauCr(double r[3][3], double c[3][3])
-
 function iauCr(r::AbstractMatrix{<:Real})
 
    # Allocate return value

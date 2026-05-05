@@ -23,19 +23,19 @@ Returned (all Hipparcos, epoch J2000.0):
    pxh     double    parallax (arcsec)
    rvh     double    radial velocity (km/s, positive = receding)
 
-Notes:
+### Notes
 
-   1> This function transforms FK5 star positions and proper motions
+1. This function transforms FK5 star positions and proper motions
    into the system of the Hipparcos catalog.
 
-   2. The proper motions in RA are dRA/dt rather than
+2. The proper motions in RA are dRA/dt rather than
    cos(Dec)*dRA/dt, and are per year rather than per century.
 
-   3. The FK5 to Hipparcos transformation is modeled as a pure
+3. The FK5 to Hipparcos transformation is modeled as a pure
    rotation and spin;  zonal errors in the FK5 catalog are not
    taken into account.
 
-   4. See also iauH2fk5, iauFk5hz, iauHfk5z.
+4. See also iauH2fk5, iauFk5hz, iauHfk5z.
 
 Called:
    iauStarpv    star catalog data to space motion pv-vector
@@ -45,7 +45,7 @@ Called:
    iauPpp       p-vector plus p-vector
    iauPvstar    space motion pv-vector to star catalog data
 
-Reference:
+### References
 
    F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 
@@ -55,12 +55,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauFk52h(double r5, double d5,
-#               double dr5, double dd5, double px5, double rv5,
-#               double *rh, double *dh,
-#               double *drh, double *ddh, double *pxh, double *rvh)
-
 function iauFk52h(r5::Real, d5::Real, dr5::Real, dd5::Real, px5::Real, rv5::Real)
    ref_rh  = Ref{Float64}(0.0)
    ref_dh  = Ref{Float64}(0.0)

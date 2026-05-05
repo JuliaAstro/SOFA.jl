@@ -7,15 +7,15 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    date1,date2  double    TT as a 2-part Julian Date (Note 1)
 
 Returned (function value):
                double    equation of the origins in radians
 
-Notes:
+### Notes
 
-   1. The TT date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
    JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
@@ -34,7 +34,7 @@ Notes:
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-   2. The equation of the origins is the distance between the true
+2. The equation of the origins is the distance between the true
    equinox and the celestial intermediate origin and, equivalently,
    the difference between Earth rotation angle and Greenwich
    apparent sidereal time (ERA-GST).  It comprises the precession
@@ -47,7 +47,7 @@ Called:
    iauS06       the CIO locator s, given X,Y, IAU 2006
    iauEors      equation of the origins, given NPB matrix and s
 
-References:
+### References
 
    Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
@@ -59,8 +59,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauEo06a(double date1, double date2)
 function iauEo06a(date1::Real, date2::Real)
    return ccall((:iauEo06a, libsofa_c), Cdouble,
                (Cdouble, Cdouble),

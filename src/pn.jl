@@ -7,20 +7,18 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
-Given:
+### Given
    p        double[3]      p-vector
 
-Returned:
+### Returned
    r        double         modulus
    u        double[3]      unit vector
 
-Notes:
+### Notes
 
-   1. If p is null, the result is null.  Otherwise the result is a unit
-   vector.
+1. If p is null, the result is null.  Otherwise the result is a unit vector.
 
-   2. It is permissible to re-use the same array for any of the
-   arguments.
+2. It is permissible to re-use the same array for any of the arguments.
 
 Called:
    iauPm        modulus of p-vector
@@ -33,9 +31,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# void iauPn(double p[3], double *r, double u[3])
-
 function iauPn(p::AbstractVector{<:Real})
    # Allocate return values
    ref_r = Ref{Float64}(0.0)

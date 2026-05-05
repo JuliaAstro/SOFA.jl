@@ -8,11 +8,11 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    ndp       int      number of decimal places of days in fraction
    dj1,dj2   double   dj1+dj2 = Julian Date (Note 1)
 
-Returned:
+### Returned
    iymdf     int[4]   year, month, day, fraction in Gregorian
                      calendar
 
@@ -22,9 +22,9 @@ Returned (function value):
                         0 = OK
                         +1 = NDP not 0-9 (interpreted as 0)
 
-Notes:
+### Notes
 
-   1. The Julian Date is apportioned in any convenient way between
+1. The Julian Date is apportioned in any convenient way between
    the arguments dj1 and dj2.  For example, JD=2450123.7 could
    be expressed in any of these ways, among others:
 
@@ -35,20 +35,20 @@ Notes:
       2400000.5       50123.2       (MJD method)
       2450123.5           0.2       (date & time method)
 
-   2. In early eras the conversion is from the "Proleptic Gregorian
+2. In early eras the conversion is from the "Proleptic Gregorian
    Calendar";  no account is taken of the date(s) of adoption of
    the Gregorian Calendar, nor is the AD/BC numbering convention
    observed.
 
-   3. Refer to the function iauJd2cal.
+3. Refer to the function iauJd2cal.
 
-   4. NDP should be 4 or less if internal overflows are to be
+4. NDP should be 4 or less if internal overflows are to be
    avoided on machines which use 16-bit integers.
 
 Called:
    iauJd2cal    JD to Gregorian calendar
 
-Reference:
+### References
 
    Explanatory Supplement to the Astronomical Almanac,
    P. Kenneth Seidelmann (ed), University Science Books (1992),
@@ -60,8 +60,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# int iauJdcalf(int ndp, double dj1, double dj2, int iymdf[4])
 function iauJdcalf(ndp::Int, dj1::Real, dj2::Real)
    iymdf = zeros(Int32, 4)
 

@@ -8,21 +8,21 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  canonical model.
 
-Given:
+### Given
    t     double    TDB, Julian centuries since J2000.0 (Note 1)
 
 Returned (function value):
          double    D, radians (Note 2)
 
-Notes:
+### Notes
 
-   1. Though t is strictly TDB, it is usually more convenient to use
+1. Though t is strictly TDB, it is usually more convenient to use
    TT, which makes no significant difference.
 
-   2. The expression used is as adopted in IERS Conventions (2003) and
+2. The expression used is as adopted in IERS Conventions (2003) and
    is from Simon et al. (1994).
 
-References:
+### References
 
    McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
    IERS Technical Note No. 32, BKG (2004)
@@ -36,10 +36,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
-# double iauFad03(double t)
-
-export iauFad03
 function iauFad03(t::Real)
    return ccall((:iauFad03, libsofa_c), 
                 Cdouble, (Cdouble,), convert(Float64, t))

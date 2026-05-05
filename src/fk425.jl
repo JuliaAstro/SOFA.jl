@@ -10,7 +10,7 @@ Status:  support function.
 This function converts a star's catalog data from the old FK4
 (Bessel-Newcomb) system to the later IAU 1976 FK5 (Fricke) system.
 
-Given: (all B1950.0, FK4)
+### Given (all B1950.0, FK4)
    - r1950,d1950    double   B1950.0 RA,Dec (rad)
    - dr1950,dd1950  double   B1950.0 proper motions (rad/trop.yr)
    - p1950          double   parallax (arcsec)
@@ -22,12 +22,12 @@ Returned: (all J2000.0, FK5)
    - p2000          double   parallax (arcsec)
    - v2000          double   radial velocity (km/s, +ve = moving away)
 
-Notes:
+### Notes
 
-   1. The proper motions in RA are dRA/dt rather than cos(Dec)*dRA/dt,
+1. The proper motions in RA are dRA/dt rather than cos(Dec)*dRA/dt,
    and are per year rather than per century.
 
-   2. The conversion is somewhat complicated, for several reasons:
+2. The conversion is somewhat complicated, for several reasons:
 
    . Change of standard epoch from B1950.0 to J2000.0.
 
@@ -52,11 +52,11 @@ Notes:
    Andoyer's post-Newcomb precession.  The numerical constants from
    Seidelmann (1992) are used canonically.
 
-   3. Conversion from B1950.0 FK4 to J2000.0 FK5 only is provided for.
+3. Conversion from B1950.0 FK4 to J2000.0 FK5 only is provided for.
    Conversions for different epochs and equinoxes would require
    additional treatment for precession, proper motion and E-terms.
 
-   4. In the FK4 catalog the proper motions of stars within 10 degrees
+4. In the FK4 catalog the proper motions of stars within 10 degrees
    of the poles do not embody differential E-terms effects and
    should, strictly speaking, be handled in a different manner from
    stars outside these regions.  However, given the general lack of
@@ -83,7 +83,7 @@ Called:
    - iauS2pv      spherical coordinates to pv-vector
    - iauSxp       multiply p-vector by scalar
 
-References:
+### References
 
    - Aoki, S. et al., 1983, "Conversion matrix of epoch B1950.0
    FK4-based positions of stars to epoch J2000.0 positions in
@@ -110,14 +110,6 @@ SOFA release 2019-07-22
 
 Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 """
-
-# void iauFk425(double r1950, double d1950,
-#               double dr1950, double dd1950,
-#               double p1950, double v1950,
-#               double *r2000, double *d2000,
-#               double *dr2000, double *dd2000,
-#               double *p2000, double *v2000)
-
 function iauFk425(r1950::Real, d1950::Real, dr1950::Real, dd1950::Real,
                   p1950::Real, v1950::Real)
    ref_r2000 = Ref{Float64}(0.0)

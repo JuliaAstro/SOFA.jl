@@ -15,29 +15,29 @@ star has, in general, a non-zero proper motion in the FK4 system,
 the routine requires the epoch at which the position in the FK4
 system was determined.
 
-Given:
+### Given
    - r1950,d1950    double   B1950.0 FK4 RA,Dec at epoch (rad)
    - bepoch         double   Besselian epoch (e.g. 1979.3D0)
 
-Returned:
+### Returned
    - r2000,d2000    double   J2000.0 FK5 RA,Dec (rad)
 
-Notes:
+### Notes
 
-   1. The epoch bepoch is strictly speaking Besselian, but if a
+1. The epoch bepoch is strictly speaking Besselian, but if a
    Julian epoch is supplied the result will be affected only to a
    negligible extent.
 
-   2. The method is from Appendix 2 of Aoki et al. (1983), but using
+2. The method is from Appendix 2 of Aoki et al. (1983), but using
    the constants of Seidelmann (1992).  See the routine iauFk425
    for a general introduction to the FK4 to FK5 conversion.
 
-   3. Conversion from equinox B1950.0 FK4 to equinox J2000.0 FK5 only
+3. Conversion from equinox B1950.0 FK4 to equinox J2000.0 FK5 only
    is provided for.  Conversions for different starting and/or
    ending epochs would require additional treatment for precession,
    proper motion and E-terms.
 
-   4. In the FK4 catalog the proper motions of stars within 10 degrees
+4. In the FK4 catalog the proper motions of stars within 10 degrees
    of the poles do not embody differential E-terms effects and
    should, strictly speaking, be handled in a different manner from
    stars outside these regions.  However, given the general lack of
@@ -55,7 +55,7 @@ Notes:
    1 milliarcsecond in position and 1 milliarcsecond per century in
    proper motion.
 
-References:
+### References
 
    Aoki, S. et al., 1983, "Conversion matrix of epoch B1950.0
    FK4-based positions of stars to epoch J2000.0 positions in
@@ -82,10 +82,6 @@ SOFA release 2019-07-22
 
 Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 """
-
-# void iauFk45z(double r1950, double d1950, double bepoch,
-#               double *r2000, double *d2000)
-
 function iauFk45z(r1950::Real, d1950::Real, bepoch::Real)
    ref_r2000 = Ref{Float64}(0.0)
    ref_d2000 = Ref{Float64}(0.0)

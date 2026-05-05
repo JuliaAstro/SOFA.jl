@@ -8,22 +8,22 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
     rbpn      double[3][3]  celestial-to-true matrix (Note 1)
 
-Returned:
+### Returned
     x,y       double        Celestial Intermediate Pole (Note 2)
 
-Notes:
+### Notes
 
-    1. The matrix rbpn transforms vectors from GCRS to true equator (and
+ 1. The matrix rbpn transforms vectors from GCRS to true equator (and
     CIO or equinox) of date, and therefore the Celestial Intermediate
     Pole unit vector is the bottom row of the matrix.
 
-    2. The arguments x,y are components of the Celestial Intermediate
+ 2. The arguments x,y are components of the Celestial Intermediate
     Pole unit vector in the Geocentric Celestial Reference System.
 
-Reference:
+### References
 
     "Expressions for the Celestial Intermediate Pole and Celestial
     Ephemeris Origin consistent with the IAU 2000A precession-
@@ -39,8 +39,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-# void iauBpn2xy(double rbpn[3][3], double *x, double *y)
-
 function iauBpn2xy(rbpn::AbstractMatrix{<:Real})
     # Preallocate return values
     ref_x = Ref{Float64}(0.0)

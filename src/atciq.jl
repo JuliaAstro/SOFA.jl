@@ -16,7 +16,7 @@ SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Given:
+### Given
    rc,dc  double     ICRS RA,Dec at J2000.0 (radians)
    pr     double     RA proper motion (radians/year; Note 3)
    pd     double     Dec proper motion (radians/year)
@@ -40,18 +40,18 @@ Given:
       refa   double       refraction constant A (radians)
       refb   double       refraction constant B (radians)
 
-Returned:
+### Returned
    ri,di   double    CIRS RA,Dec (radians)
 
-Notes:
+### Notes
 
-   1. All the vectors are with respect to BCRS axes.
+1. All the vectors are with respect to BCRS axes.
 
-   2. Star data for an epoch other than J2000.0 (for example from the
+2. Star data for an epoch other than J2000.0 (for example from the
    Hipparcos catalog, which has an epoch of J1991.25) will require a
    preliminary call to iauPmsafe before use.
 
-   3. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
+3. The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 
 Called:
    iauPmpx      proper motion and parallax
@@ -67,7 +67,6 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-
 function iauAtciq(rc::Real, dc::Real,
                    pr::Real, pd::Real,
                    px::Real, rv::Real,
