@@ -1,13 +1,13 @@
 | Testing | Coverage | Documentation |
 | :-----: | :------: | :-----------: |
-| [![Build Status](https://travis-ci.org/sisl/SOFA.jl.svg?branch=master)](https://travis-ci.org/sisl/SOFA.jl) | [![Coverage Status](https://coveralls.io/repos/github/sisl/SOFA.jl/badge.svg?branch=master)](https://coveralls.io/github/sisl/SOFA.jl?branch=master) | [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://sisl.github.io/SOFA.jl/latest) |
+| [![Build Status](https://github.com/JuliaAstro/SOFA.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JuliaAstro/SOFA.jl/actions/workflows/CI.yml) | [![Coverage Status](https://codecov.io/gh/JuliaAstro/SOFA.jl/graph/badge.svg?token=XHWGNxf4cL)](https://codecov.io/gh/JuliaAstro/SOFA.jl) | [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://juliaastro.org/SOFA.jl/latest/) |
 
 
 > [!NOTE]
 > As of 2026-03-27 this repo will be transferred to [JuliaAstro](github.com/orgs/juliaastro/) for renewed maintenance and support.
 
 # SOFA.jl
-Unofficial wrapper of the IAU SOFA C libraries for fundamental astronomy. 
+Unofficial wrapper of the IAU SOFA C libraries for fundamental astronomy.
 
 ## Description
 
@@ -21,7 +21,7 @@ prove compliance and reproducibility of the core SOFA C functionality.
 The package versions correspond to the following releases of the SOFA C Library:
 
 | Package Version | SOFA Release |
-| --------------- | ------------ | 
+| --------------- | ------------ |
 | v2.0            | 2019-07-22   |
 | v1.0            | 2018-01-30   |
 
