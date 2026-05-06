@@ -71,15 +71,16 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauTpxev(v::AbstractVector{<:Real}, v0::AbstractVector{<:Real})
-   ref_xi = Ref{Float64}(0.0)
-   ref_eta = Ref{Float64}(0.0)
+    ref_xi = Ref{Float64}(0.0)
+    ref_eta = Ref{Float64}(0.0)
 
-   status = ccall((:iauTpxev, libsofa_c), Cint, 
-       (Ptr{Cdouble}, Ptr{Cdouble},
-       Ref{Cdouble}, Ref{Cdouble}), 
-       convert(Array{Float64, 1}, v),
-       convert(Array{Float64, 1}, v0),
-       ref_xi, ref_eta)
+    status = ccall(
+        (:iauTpxev, libsofa_c), Cint,
+        (Ptr{Cdouble}, Ptr{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Vector{Float64}, v),
+        convert(Vector{Float64}, v0),
+        ref_xi, ref_eta
+    )
 
-   return status, ref_xi[], ref_eta[]
+    return status, ref_xi[], ref_eta[]
 end

@@ -102,18 +102,22 @@ function iauAtioq(ri::Real, di::Real, astrom::iauASTROM)
 
     # Allocate return values
     ref_astrom = Ref{iauASTROM}(astrom)
-    ref_aob    = Ref{Float64}(0.0)
-    ref_zob    = Ref{Float64}(0.0)
-    ref_hob    = Ref{Float64}(0.0)
-    ref_dob    = Ref{Float64}(0.0)
-    ref_rob    = Ref{Float64}(0.0)
+    ref_aob = Ref{Float64}(0.0)
+    ref_zob = Ref{Float64}(0.0)
+    ref_hob = Ref{Float64}(0.0)
+    ref_dob = Ref{Float64}(0.0)
+    ref_rob = Ref{Float64}(0.0)
 
-     ccall((:iauAtioq, libsofa_c), Cvoid, 
-            (Cdouble, Cdouble, Ref{iauASTROM},
+    ccall(
+        (:iauAtioq, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Ref{iauASTROM},
             Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-            Ref{Cdouble}, Ref{Cdouble}), 
-            convert(Float64, ri), convert(Float64, di), ref_astrom,
-            ref_aob, ref_zob, ref_hob, ref_dob, ref_rob)
+            Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, ri), convert(Float64, di), ref_astrom,
+        ref_aob, ref_zob, ref_hob, ref_dob, ref_rob
+    )
 
     return ref_aob[], ref_zob[], ref_hob[], ref_dob[], ref_rob[]
 end

@@ -74,15 +74,19 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauFk5hz(r5::Real, d5::Real, date1::Real, date2::Real)
-   ref_rh = Ref{Float64}(0.0)
-   ref_dh = Ref{Float64}(0.0)
+    ref_rh = Ref{Float64}(0.0)
+    ref_dh = Ref{Float64}(0.0)
 
-   ccall((:iauFk5hz, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Cdouble, Cdouble,
-         Ref{Cdouble}, Ref{Cdouble}), 
-          convert(Float64, r5), convert(Float64, d5),
-          convert(Float64, date1), convert(Float64, date2),
-          ref_rh, ref_dh)
+    ccall(
+        (:iauFk5hz, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, r5), convert(Float64, d5),
+        convert(Float64, date1), convert(Float64, date2),
+        ref_rh, ref_dh
+    )
 
-   return ref_rh[], ref_dh[]
+    return ref_rh[], ref_dh[]
 end

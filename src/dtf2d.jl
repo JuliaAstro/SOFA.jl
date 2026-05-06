@@ -79,17 +79,19 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauDtf2d(scale::String, iy::Real, im::Real, id::Real, ihr::Real, imn::Real, sec::Real)
-   ref_d1 = Ref{Float64}(0.0)
-   ref_d2 = Ref{Float64}(0.0)
+    ref_d1 = Ref{Float64}(0.0)
+    ref_d2 = Ref{Float64}(0.0)
 
-   status = ccall((:iauDtf2d, libsofa_c), Cint,
-                  (Cstring, Cint, Cint, Cint, Cint, Cint, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
-                  scale, convert(Int32, iy), convert(Int32, im), convert(Int32, id),
-                  convert(Int32, ihr), convert(Int32, imn), convert(Float64, sec), ref_d1, ref_d2)
+    status = ccall(
+        (:iauDtf2d, libsofa_c), Cint,
+        (Cstring, Cint, Cint, Cint, Cint, Cint, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        scale, convert(Int32, iy), convert(Int32, im), convert(Int32, id),
+        convert(Int32, ihr), convert(Int32, imn), convert(Float64, sec), ref_d1, ref_d2
+    )
 
-   if status != 0
-      @warn "Non-zero return code form iauDtf2d"
-   end
+    if status != 0
+        @warn "Non-zero return code form iauDtf2d"
+    end
 
-   return status, ref_d1[], ref_d2[]
+    return status, ref_d1[], ref_d2[]
 end

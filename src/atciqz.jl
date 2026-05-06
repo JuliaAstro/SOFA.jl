@@ -67,18 +67,19 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauAtciqz(rc::Real, dc::Real,  astrom::iauASTROM)
+function iauAtciqz(rc::Real, dc::Real, astrom::iauASTROM)
 
-   # Allocate return value
-   ref_astrom = Ref{iauASTROM}(astrom)
-   ref_ri     = Ref{Float64}(0.0)
-   ref_di     = Ref{Float64}(0.0)
+    # Allocate return value
+    ref_astrom = Ref{iauASTROM}(astrom)
+    ref_ri = Ref{Float64}(0.0)
+    ref_di = Ref{Float64}(0.0)
 
-   ccall((:iauAtciqz, libsofa_c), Cvoid, 
-            (Cdouble, Cdouble, Ref{iauASTROM},  
-            Ref{Cdouble}, Ref{Cdouble}), 
-            convert(Float64, rc), convert(Float64, dc),
-            ref_astrom, ref_ri, ref_di)
+    ccall(
+        (:iauAtciqz, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ref{iauASTROM}, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, rc), convert(Float64, dc),
+        ref_astrom, ref_ri, ref_di
+    )
 
-   return ref_ri[], ref_di[]
+    return ref_ri[], ref_di[]
 end

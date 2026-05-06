@@ -25,12 +25,14 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPpp(a::AbstractVector{<:Real}, b::AbstractVector{<:Real})
-   apb = zeros(Float64, 3)
-   ccall((:iauPpp, libsofa_c), Cvoid,
-         (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
-         convert(Array{Float64, 1}, a),
-         convert(Array{Float64, 1}, b),
-         apb)
+    apb = zeros(Float64, 3)
+    ccall(
+        (:iauPpp, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Vector{Float64}, a),
+        convert(Vector{Float64}, b),
+        apb
+    )
 
-   return SVector{3}(apb)
+    return SVector{3}(apb)
 end

@@ -35,12 +35,14 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauRm2v(r::AbstractMatrix{<:Real})
-   w = zeros(Float64, 3)
+    w = zeros(Float64, 3)
 
-   ccall((:iauRm2v, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}),
-          convert(Array{Float64, 2}, r'),
-          w)
+    ccall(
+        (:iauRm2v, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Matrix{Float64}, r'),
+        w
+    )
 
-   return SVector{3}(w)
+    return SVector{3}(w)
 end

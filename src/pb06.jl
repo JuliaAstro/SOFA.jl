@@ -68,15 +68,17 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPb06(date1::Real, date2::Real)
-   ref_bzeta  = Ref{Float64}(0.0)
-   ref_bz     = Ref{Float64}(0.0)
-   ref_btheta = Ref{Float64}(0.0)
+    ref_bzeta = Ref{Float64}(0.0)
+    ref_bz = Ref{Float64}(0.0)
+    ref_btheta = Ref{Float64}(0.0)
 
-   ccall((:iauPb06, libsofa_c), Cvoid, 
-       (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
-       convert(Float64, date1),
-       convert(Float64, date2),
-       ref_bzeta, ref_bz, ref_btheta)
+    ccall(
+        (:iauPb06, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, date1),
+        convert(Float64, date2),
+        ref_bzeta, ref_bz, ref_btheta
+    )
 
-   return ref_bzeta[], ref_bz[], ref_btheta[]
+    return ref_bzeta[], ref_bz[], ref_btheta[]
 end

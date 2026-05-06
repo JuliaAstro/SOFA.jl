@@ -91,13 +91,15 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauXy06(date1::Real, date2::Real)
-   ref_x = Ref{Float64}(0.0)
-   ref_y = Ref{Float64}(0.0)
+    ref_x = Ref{Float64}(0.0)
+    ref_y = Ref{Float64}(0.0)
 
-   ccall((:iauXy06, libsofa_c), Cvoid,
-         (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
-         convert(Float64, date1), convert(Float64, date2),
-         ref_x, ref_y)
+    ccall(
+        (:iauXy06, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, date1), convert(Float64, date2),
+        ref_x, ref_y
+    )
 
-   return ref_x[], ref_y[]
+    return ref_x[], ref_y[]
 end

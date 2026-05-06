@@ -50,24 +50,25 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauCal2jd(iy::Real, im::Real, id::Real)
 
-   # Allocate return value
-   ref_djm0 = Ref{Float64}(0.0)
-   ref_djm  = Ref{Float64}(0.0)
+    # Allocate return value
+    ref_djm0 = Ref{Float64}(0.0)
+    ref_djm = Ref{Float64}(0.0)
 
-   status = ccall((:iauCal2jd, libsofa_c), Cint, 
-         (Cint, Cint, Cint, 
-         Ref{Cdouble}, Ref{Cdouble}), 
-         convert(Int32, iy), convert(Int32, im), convert(Int32, id),
-         ref_djm0, ref_djm)
+    status = ccall(
+        (:iauCal2jd, libsofa_c), Cint,
+        (Cint, Cint, Cint, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Int32, iy), convert(Int32, im), convert(Int32, id),
+        ref_djm0, ref_djm
+    )
 
-   # Warn on non-zero status code
-   if status == -1
-      @warn "bad year (Note 3: JD not computed"
-   elseif status == -2
-      @warn "bad month"
-   elseif status == -3
-      @warn "bad day"
-   end
+    # Warn on non-zero status code
+    if status == -1
+        @warn "bad year (Note 3: JD not computed"
+    elseif status == -2
+        @warn "bad month"
+    elseif status == -3
+        @warn "bad day"
+    end
 
-   return status, ref_djm0[], ref_djm[]
+    return status, ref_djm0[], ref_djm[]
 end

@@ -42,11 +42,13 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauLtpecl(epj::Real)
-   vec = zeros(Float64, 3)
-   ccall((:iauLtpecl, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}), 
-          convert(Float64, epj),
-          vec)
+    vec = zeros(Float64, 3)
+    ccall(
+        (:iauLtpecl, libsofa_c), Cvoid,
+        (Cdouble, Ref{Cdouble}),
+        convert(Float64, epj),
+        vec
+    )
 
-   return SVector{3}(vec)
+    return SVector{3}(vec)
 end

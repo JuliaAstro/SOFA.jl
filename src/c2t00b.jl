@@ -79,17 +79,21 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauC2t00b(tta::Real, ttb::Real, uta::Real, utb::Real, xp::Real, yp::Real)
 
-   # Allocate return value
-   rc2t = zeros(Float64, 3, 3)
+    # Allocate return value
+    rc2t = zeros(Float64, 3, 3)
 
-   ccall((:iauC2t00b, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Cdouble,
-         Cdouble, Cdouble, Cdouble,
-         Ptr{Cdouble}), 
-         convert(Float64, tta), convert(Float64, ttb),
-         convert(Float64, uta), convert(Float64, utb),
-         convert(Float64, xp), convert(Float64, yp),
-         rc2t)
+    ccall(
+        (:iauC2t00b, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Cdouble,
+            Cdouble, Cdouble, Cdouble,
+            Ptr{Cdouble},
+        ),
+        convert(Float64, tta), convert(Float64, ttb),
+        convert(Float64, uta), convert(Float64, utb),
+        convert(Float64, xp), convert(Float64, yp),
+        rc2t
+    )
 
-   return SMatrix{3,3}(rc2t')
+    return SMatrix{3, 3}(rc2t')
 end

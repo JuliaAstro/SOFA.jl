@@ -83,15 +83,16 @@ SOFA release 2019-07-22
 Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 """
 function iauFk45z(r1950::Real, d1950::Real, bepoch::Real)
-   ref_r2000 = Ref{Float64}(0.0)
-   ref_d2000 = Ref{Float64}(0.0)
-   
-   ccall((:iauFk45z, libsofa_c), Cvoid,
-         (Cdouble, Cdouble, Cdouble,
-         Ref{Cdouble}, Ref{Cdouble}, ),
-         convert(Float64, r1950), convert(Float64, d1950),
-         convert(Float64, bepoch),
-         ref_r2000, ref_d2000)
+    ref_r2000 = Ref{Float64}(0.0)
+    ref_d2000 = Ref{Float64}(0.0)
 
-   return ref_r2000[], ref_d2000[]
+    ccall(
+        (:iauFk45z, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, r1950), convert(Float64, d1950),
+        convert(Float64, bepoch),
+        ref_r2000, ref_d2000
+    )
+
+    return ref_r2000[], ref_d2000[]
 end

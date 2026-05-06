@@ -103,25 +103,31 @@ SOFA release 2019-07-22
 
 Copyright (C) 2019 IAU SOFA Board.  See notes at end.
 """
-function iauFk524(r2000::Real, d2000::Real, dr2000::Real, dd2000::Real,
-                  p2000::Real, v2000::Real)
-   ref_r1950 = Ref{Float64}(0.0)
-   ref_d1950 = Ref{Float64}(0.0)
-   ref_dr1950 = Ref{Float64}(0.0)
-   ref_dd1950 = Ref{Float64}(0.0)
-   ref_p1950 = Ref{Float64}(0.0)
-   ref_v1950 = Ref{Float64}(0.0)
-   
-   ccall((:iauFk524, libsofa_c), Cvoid,
-         (Cdouble, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
-         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, 
-         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, ),
-         convert(Float64, r2000), convert(Float64, d2000),
-         convert(Float64, dr2000), convert(Float64, dd2000),
-         convert(Float64, p2000), convert(Float64, v2000),
-         ref_r1950, ref_d1950,
-         ref_dr1950, ref_dd1950,
-         ref_p1950, ref_v1950)
+function iauFk524(
+        r2000::Real, d2000::Real, dr2000::Real, dd2000::Real,
+        p2000::Real, v2000::Real
+    )
+    ref_r1950 = Ref{Float64}(0.0)
+    ref_d1950 = Ref{Float64}(0.0)
+    ref_dr1950 = Ref{Float64}(0.0)
+    ref_dd1950 = Ref{Float64}(0.0)
+    ref_p1950 = Ref{Float64}(0.0)
+    ref_v1950 = Ref{Float64}(0.0)
 
-   return ref_r1950[], ref_d1950[], ref_dr1950[], ref_dd1950[], ref_p1950[], ref_v1950[]
+    ccall(
+        (:iauFk524, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, r2000), convert(Float64, d2000),
+        convert(Float64, dr2000), convert(Float64, dd2000),
+        convert(Float64, p2000), convert(Float64, v2000),
+        ref_r1950, ref_d1950,
+        ref_dr1950, ref_dd1950,
+        ref_p1950, ref_v1950
+    )
+
+    return ref_r1950[], ref_d1950[], ref_dr1950[], ref_dd1950[], ref_p1950[], ref_v1950[]
 end

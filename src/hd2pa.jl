@@ -50,8 +50,10 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauHd2pa(ha::Real, dec::Real, phi::Real)
-   return ccall((:iauHd2pa, libsofa_c), Cdouble, 
-         (Cdouble, Cdouble, Cdouble), 
-          convert(Float64, ha), convert(Float64, dec),
-          convert(Float64, phi))
+    return ccall(
+        (:iauHd2pa, libsofa_c), Cdouble,
+        (Cdouble, Cdouble, Cdouble),
+        convert(Float64, ha), convert(Float64, dec),
+        convert(Float64, phi)
+    )
 end

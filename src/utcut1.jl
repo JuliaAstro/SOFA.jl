@@ -67,13 +67,15 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauUtcut1(utc1::Real, utc2::Real, dut1::Real)
-   ref_ut11 = Ref{Float64}(0.0)
-   ref_ut12 = Ref{Float64}(0.0)
+    ref_ut11 = Ref{Float64}(0.0)
+    ref_ut12 = Ref{Float64}(0.0)
 
-   status = ccall((:iauUtcut1, libsofa_c), Cint,
-                   (Cdouble, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
-                   convert(Float64, utc1), convert(Float64, utc2), convert(Float64, dut1),
-                   ref_ut11, ref_ut12)
+    status = ccall(
+        (:iauUtcut1, libsofa_c), Cint,
+        (Cdouble, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, utc1), convert(Float64, utc2), convert(Float64, dut1),
+        ref_ut11, ref_ut12
+    )
 
-   return status, ref_ut11[], ref_ut12[]
+    return status, ref_ut11[], ref_ut12[]
 end

@@ -58,16 +58,20 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauEqec06(date1::Real, date2::Real, dr::Real, dd::Real)
-   # Initialize function return variables
-   ref_dl = Ref{Float64}(0.0)
-   ref_db = Ref{Float64}(0.0)
+    # Initialize function return variables
+    ref_dl = Ref{Float64}(0.0)
+    ref_db = Ref{Float64}(0.0)
 
-   ccall((:iauEqec06, libsofa_c), Cvoid,
-         (Cdouble, Cdouble, Cdouble, Cdouble, 
-         Ref{Cdouble}, Ref{Cdouble}),
-         convert(Float64, date1), convert(Float64, date2), 
-         convert(Float64, dr), convert(Float64, dd),
-         ref_dl, ref_db)
+    ccall(
+        (:iauEqec06, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, date1), convert(Float64, date2),
+        convert(Float64, dr), convert(Float64, dd),
+        ref_dl, ref_db
+    )
 
-   return ref_dl[], ref_db[]
+    return ref_dl[], ref_db[]
 end

@@ -82,8 +82,10 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauS00(date1::Real, date2::Real, x::Real, y::Real)
-   return ccall((:iauS00, libsofa_c), Cdouble,
-               (Cdouble, Cdouble, Cdouble, Cdouble),
-               convert(Float64, date1), convert(Float64, date2),
-               convert(Float64, x), convert(Float64, y))
+    return ccall(
+        (:iauS00, libsofa_c), Cdouble,
+        (Cdouble, Cdouble, Cdouble, Cdouble),
+        convert(Float64, date1), convert(Float64, date2),
+        convert(Float64, x), convert(Float64, y)
+    )
 end

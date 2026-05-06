@@ -28,14 +28,16 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPvmpv(a::AbstractMatrix{<:Real}, b::AbstractMatrix{<:Real})
-   # Preallocate return values
-   amb = zeros(Float64, 3, 2)
+    # Preallocate return values
+    amb = zeros(Float64, 3, 2)
 
-   ccall((:iauPvmpv, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}, Ref{Cdouble}), 
-          convert(Array{Float64, 2}, a'),
-          convert(Array{Float64, 2}, b'),
-          amb)
+    ccall(
+        (:iauPvmpv, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ptr{Cdouble}, Ref{Cdouble}),
+        convert(Matrix{Float64}, a'),
+        convert(Matrix{Float64}, b'),
+        amb
+    )
 
-   return SMatrix{2,3}(amb')
+    return SMatrix{2, 3}(amb')
 end

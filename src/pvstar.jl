@@ -98,20 +98,24 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPvstar(pv::AbstractMatrix{<:Real})
-   # Preallocate return values
-   ref_ra  = Ref{Float64}(0.0)
-   ref_dec = Ref{Float64}(0.0)
-   ref_pmr = Ref{Float64}(0.0)
-   ref_pmd = Ref{Float64}(0.0)
-   ref_px  = Ref{Float64}(0.0)
-   ref_rv  = Ref{Float64}(0.0)
+    # Preallocate return values
+    ref_ra = Ref{Float64}(0.0)
+    ref_dec = Ref{Float64}(0.0)
+    ref_pmr = Ref{Float64}(0.0)
+    ref_pmd = Ref{Float64}(0.0)
+    ref_px = Ref{Float64}(0.0)
+    ref_rv = Ref{Float64}(0.0)
 
-   status = ccall((:iauPvstar, libsofa_c), Cint, 
-         (Ptr{Cdouble},
-         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-         Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
-         convert(Array{Float64, 2}, pv'),
-         ref_ra, ref_dec, ref_pmr, ref_pmd, ref_px, ref_rv)
+    status = ccall(
+        (:iauPvstar, libsofa_c), Cint,
+        (
+            Ptr{Cdouble},
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Matrix{Float64}, pv'),
+        ref_ra, ref_dec, ref_pmr, ref_pmd, ref_px, ref_rv
+    )
 
-   return status, ref_ra[], ref_dec[], ref_pmr[], ref_pmd[], ref_px[], ref_rv[]
+    return status, ref_ra[], ref_dec[], ref_pmr[], ref_pmd[], ref_px[], ref_rv[]
 end

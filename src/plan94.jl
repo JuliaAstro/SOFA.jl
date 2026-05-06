@@ -165,12 +165,14 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauPlan94(date1::Real, date2::Real, np::Int)
     pv = zeros(Float64, 3, 2)
 
-    status = ccall((:iauPlan94, libsofa_c), Cint, 
-            (Cdouble, Cdouble, Cint, Ptr{Cdouble}), 
-            convert(Float64, date1),
-            convert(Float64, date2),
-            convert(Int32, np),
-            pv)
+    status = ccall(
+        (:iauPlan94, libsofa_c), Cint,
+        (Cdouble, Cdouble, Cint, Ptr{Cdouble}),
+        convert(Float64, date1),
+        convert(Float64, date2),
+        convert(Int32, np),
+        pv
+    )
 
-    return status, SMatrix{2,3}(pv')
+    return status, SMatrix{2, 3}(pv')
 end

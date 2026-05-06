@@ -50,10 +50,12 @@ function iauNumat(epsa::Real, dpsi::Real, deps::Real)
     # Allocate return values
     rmatn = zeros(Float64, 3, 3)
 
-    ccall((:iauNumat, libsofa_c), Cvoid,
-         (Cdouble, Cdouble, Cdouble, Ptr{Cdouble},),
-         convert(Float64, epsa), convert(Float64, dpsi), convert(Float64, deps),
-         rmatn)
+    ccall(
+        (:iauNumat, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Cdouble, Ptr{Cdouble}),
+        convert(Float64, epsa), convert(Float64, dpsi), convert(Float64, deps),
+        rmatn
+    )
 
-    return SMatrix{3,3}(rmatn')
- end
+    return SMatrix{3, 3}(rmatn')
+end

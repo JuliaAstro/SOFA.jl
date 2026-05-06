@@ -83,13 +83,17 @@ function iauPfw06(date1::Real, date2::Real)
     ref_psib = Ref{Float64}(0.0)
     ref_epsa = Ref{Float64}(0.0)
 
-    ccall((:iauPfw06, libsofa_c), Cvoid, 
-        (Cdouble, Cdouble,
-        Ref{Cdouble}, Ref{Cdouble},
-        Ref{Cdouble}, Ref{Cdouble}), 
+    ccall(
+        (:iauPfw06, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble,
+            Ref{Cdouble}, Ref{Cdouble},
+            Ref{Cdouble}, Ref{Cdouble},
+        ),
         convert(Float64, date1),
         convert(Float64, date2),
-        ref_gamb, ref_phib, ref_psib, ref_epsa)
+        ref_gamb, ref_phib, ref_psib, ref_epsa
+    )
 
     return ref_gamb[], ref_phib[], ref_psib[], ref_epsa[]
- end
+end

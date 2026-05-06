@@ -60,15 +60,16 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauHd2ae(ha::Real, dec::Real, phi::Real)
-   ref_az = Ref{Float64}(0.0)
-   ref_el = Ref{Float64}(0.0)
+    ref_az = Ref{Float64}(0.0)
+    ref_el = Ref{Float64}(0.0)
 
-   ccall((:iauHd2ae, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Cdouble,
-         Ref{Cdouble}, Ref{Cdouble}), 
-          convert(Float64, ha), convert(Float64, dec),
-          convert(Float64, phi),
-          ref_az, ref_el)
+    ccall(
+        (:iauHd2ae, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, ha), convert(Float64, dec),
+        convert(Float64, phi),
+        ref_az, ref_el
+    )
 
-   return ref_az[], ref_el[]
+    return ref_az[], ref_el[]
 end

@@ -55,17 +55,21 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauTpsts(xi::Real, eta::Real, a0::Real, b0::Real)
-   ref_a = Ref{Float64}(0.0)
-   ref_b = Ref{Float64}(0.0)
+    ref_a = Ref{Float64}(0.0)
+    ref_b = Ref{Float64}(0.0)
 
-   ccall((:iauTpsts, libsofa_c), Cvoid, 
-       (Cdouble, Cdouble, Cdouble, Cdouble,
-       Ref{Cdouble}, Ref{Cdouble}), 
-       convert(Float64, xi),
-       convert(Float64, eta),
-       convert(Float64, a0),
-       convert(Float64, b0),
-       ref_a, ref_b)
+    ccall(
+        (:iauTpsts, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, xi),
+        convert(Float64, eta),
+        convert(Float64, a0),
+        convert(Float64, b0),
+        ref_a, ref_b
+    )
 
-   return ref_a[], ref_b[]
+    return ref_a[], ref_b[]
 end

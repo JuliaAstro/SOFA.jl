@@ -121,36 +121,42 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauP06e(date1::Real, date2::Real)
-   ref_eps0   = Ref{Float64}(0.0)
-   ref_psia   = Ref{Float64}(0.0)
-   ref_oma    = Ref{Float64}(0.0)
-   ref_bpa    = Ref{Float64}(0.0)
-   ref_bqa    = Ref{Float64}(0.0)
-   ref_pia    = Ref{Float64}(0.0)
-   ref_bpia   = Ref{Float64}(0.0)
-   ref_epsa   = Ref{Float64}(0.0)
-   ref_chia   = Ref{Float64}(0.0)
-   ref_za     = Ref{Float64}(0.0)
-   ref_zetaa  = Ref{Float64}(0.0)
-   ref_thetaa = Ref{Float64}(0.0)
-   ref_pa     = Ref{Float64}(0.0)
-   ref_gam    = Ref{Float64}(0.0)
-   ref_phi    = Ref{Float64}(0.0)
-   ref_psi    = Ref{Float64}(0.0)
+    ref_eps0 = Ref{Float64}(0.0)
+    ref_psia = Ref{Float64}(0.0)
+    ref_oma = Ref{Float64}(0.0)
+    ref_bpa = Ref{Float64}(0.0)
+    ref_bqa = Ref{Float64}(0.0)
+    ref_pia = Ref{Float64}(0.0)
+    ref_bpia = Ref{Float64}(0.0)
+    ref_epsa = Ref{Float64}(0.0)
+    ref_chia = Ref{Float64}(0.0)
+    ref_za = Ref{Float64}(0.0)
+    ref_zetaa = Ref{Float64}(0.0)
+    ref_thetaa = Ref{Float64}(0.0)
+    ref_pa = Ref{Float64}(0.0)
+    ref_gam = Ref{Float64}(0.0)
+    ref_phi = Ref{Float64}(0.0)
+    ref_psi = Ref{Float64}(0.0)
 
-   ccall((:iauP06e, libsofa_c), Cvoid, 
-       (Cdouble, Cdouble,
-       Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-       Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-       Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-       Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
-       convert(Float64, date1), convert(Float64, date2),
-       ref_eps0, ref_psia, ref_oma, ref_bpa, ref_bqa, ref_pia, 
-       ref_bpia, ref_epsa, ref_chia, ref_za, ref_zetaa, ref_thetaa, 
-       ref_pa, ref_gam, ref_phi, ref_psi)
+    ccall(
+        (:iauP06e, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble,
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, date1), convert(Float64, date2),
+        ref_eps0, ref_psia, ref_oma, ref_bpa, ref_bqa, ref_pia,
+        ref_bpia, ref_epsa, ref_chia, ref_za, ref_zetaa, ref_thetaa,
+        ref_pa, ref_gam, ref_phi, ref_psi
+    )
 
-   return ref_eps0[], ref_psia[], ref_oma[], ref_bpa[], ref_bqa[],
-          ref_pia[], ref_bpia[], ref_epsa[], ref_chia[], ref_za[], 
-          ref_zetaa[], ref_thetaa[], ref_pa[], ref_gam[], ref_phi[], 
-          ref_psi[]
+    return (
+        ref_eps0[], ref_psia[], ref_oma[], ref_bpa[], ref_bqa[],
+        ref_pia[], ref_bpia[], ref_epsa[], ref_chia[], ref_za[],
+        ref_zetaa[], ref_thetaa[], ref_pa[], ref_gam[], ref_phi[],
+        ref_psi[],
+    )
 end

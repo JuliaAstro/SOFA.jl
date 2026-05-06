@@ -78,14 +78,16 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauNut06a(date1::Real, date2::Real)
-   # Allocate return values
-   ref_dpsi = Ref{Float64}(0.0)
-   ref_deps = Ref{Float64}(0.0)
+    # Allocate return values
+    ref_dpsi = Ref{Float64}(0.0)
+    ref_deps = Ref{Float64}(0.0)
 
-   ccall((:iauNut06a, libsofa_c), Cvoid, 
-        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}), 
+    ccall(
+        (:iauNut06a, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
         convert(Float64, date1), convert(Float64, date2),
-        ref_dpsi, ref_deps)
+        ref_dpsi, ref_deps
+    )
 
-   return ref_dpsi[], ref_deps[]
+    return ref_dpsi[], ref_deps[]
 end

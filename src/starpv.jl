@@ -115,18 +115,24 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauStarpv(ra::Real, dec::Real, pmr::Real, pmd::Real,
-                   px::Real, rv::Real)
+function iauStarpv(
+        ra::Real, dec::Real, pmr::Real, pmd::Real,
+        px::Real, rv::Real
+    )
 
-   pv = zeros(Float64, 3, 2)
+    pv = zeros(Float64, 3, 2)
 
-   status = ccall((:iauStarpv, libsofa_c), Cint, 
-       (Cdouble, Cdouble, Cdouble, Cdouble,
-       Cdouble, Cdouble, Ptr{Cdouble}), 
-       convert(Float64, ra), convert(Float64, dec),
-       convert(Float64, pmr), convert(Float64, pmd),
-       convert(Float64, px), convert(Float64, rv),
-       pv)
+    status = ccall(
+        (:iauStarpv, libsofa_c), Cint,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Cdouble, Cdouble, Ptr{Cdouble},
+        ),
+        convert(Float64, ra), convert(Float64, dec),
+        convert(Float64, pmr), convert(Float64, pmd),
+        convert(Float64, px), convert(Float64, rv),
+        pv
+    )
 
-   return status, SMatrix{2,3}(pv')
+    return status, SMatrix{2, 3}(pv')
 end

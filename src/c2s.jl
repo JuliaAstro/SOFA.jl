@@ -30,15 +30,16 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauC2s(p::AbstractVector{<:Real})
 
-   # Allocate return value
-   ref_theta = Ref{Float64}(0.0)
-   ref_phi   = Ref{Float64}(0.0)
+    # Allocate return value
+    ref_theta = Ref{Float64}(0.0)
+    ref_phi = Ref{Float64}(0.0)
 
-   ccall((:iauC2s, libsofa_c), Cvoid, 
-         (Ptr{Cdouble},
-         Ref{Cdouble}, Ref{Cdouble}), 
-         convert(Array{Float64, 1}, p),
-         ref_theta, ref_phi)
+    ccall(
+        (:iauC2s, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Vector{Float64}, p),
+        ref_theta, ref_phi
+    )
 
-   return ref_theta[], ref_phi[]
+    return ref_theta[], ref_phi[]
 end

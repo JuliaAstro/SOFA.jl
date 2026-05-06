@@ -55,15 +55,17 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauAe2hd(az::Real, el::Real, phi::Real)
-   ha  = zeros(Float64, 1)
-   dec = zeros(Float64, 1)
+    ha = zeros(Float64, 1)
+    dec = zeros(Float64, 1)
 
-   ccall((:iauAe2hd, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}), 
-         convert(Float64, az),
-         convert(Float64, el),
-         convert(Float64, phi),
-         ha, dec)
+    ccall(
+        (:iauAe2hd, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Float64, az),
+        convert(Float64, el),
+        convert(Float64, phi),
+        ha, dec
+    )
 
-   return ha[1], dec[1]
+    return ha[1], dec[1]
 end

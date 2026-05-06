@@ -101,38 +101,43 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauAticqn(ri::Real, di::Real, astrom::iauASTROM,
-                   n::Int, b::Array{iauLDBODY, 1})
+function iauAticqn(
+        ri::Real, di::Real, astrom::iauASTROM, n::Int, b::Vector{iauLDBODY}
+    )
 
-   # Allocate return value
-   ref_astrom = Ref{iauASTROM}(astrom)
-   ref_rc     = Ref{Float64}(0.0)
-   ref_dc     = Ref{Float64}(0.0)
-   ref_b      = Ref{iauLDBODY}(b[1])
+    # Allocate return value
+    ref_astrom = Ref{iauASTROM}(astrom)
+    ref_rc = Ref{Float64}(0.0)
+    ref_dc = Ref{Float64}(0.0)
+    ref_b = Ref{iauLDBODY}(b[1])
 
-   # println(b)
+    # println(b)
 
-   # Copy b, and transpose pv field
-   # for ld in b
-   #    ld.pv = [ld.pv[1, 1] ld.pv[1, 3] ld.pv[2, 2];
-   #             ld.pv[1, 2] ld.pv[2, 1] ld.pv[2, 3]]
-   # end
-   for ld in b
-      ld.pv = ld.pv'
-   end
+    # Copy b, and transpose pv field
+    # for ld in b
+    #    ld.pv = [ld.pv[1, 1] ld.pv[1, 3] ld.pv[2, 2];
+    #             ld.pv[1, 2] ld.pv[2, 1] ld.pv[2, 3]]
+    # end
+    for ld in b
+        ld.pv = ld.pv'
+    end
 
-   # println(b)
+    # println(b)
 
-   ccall((:iauAticqn, libsofa_c), Cvoid,
-            (Cdouble, Cdouble, Ref{iauASTROM}, Cint, Ref{iauLDBODY},
-            Ref{Cdouble}, Ref{Cdouble}),
-            convert(Float64, ri), convert(Float64, di),
-            ref_astrom, convert(Int32, n), ref_b, ref_rc, ref_dc)
+    ccall(
+        (:iauAticqn, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Ref{iauASTROM}, Cint, Ref{iauLDBODY},
+            Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, ri), convert(Float64, di),
+        ref_astrom, convert(Int32, n), ref_b, ref_rc, ref_dc
+    )
 
-   # Reverse transpose operation since Julia is pass by reference
-   for ld in b
-      ld.pv = ld.pv'
-   end
+    # Reverse transpose operation since Julia is pass by reference
+    for ld in b
+        ld.pv = ld.pv'
+    end
 
-   return ref_rc[], ref_dc[]
+    return ref_rc[], ref_dc[]
 end

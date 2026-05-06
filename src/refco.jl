@@ -150,18 +150,22 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauRefco(phpa::Real, tc::Real, rh::Real, wl::Real)
-   # Preallocate return values
-   ref_refa = Ref{Float64}(0.0)
-   ref_refb = Ref{Float64}(0.0)
+    # Preallocate return values
+    ref_refa = Ref{Float64}(0.0)
+    ref_refb = Ref{Float64}(0.0)
 
-   ccall((:iauRefco, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Cdouble, Cdouble,
-         Ref{Cdouble}, Ref{Cdouble}),
-          convert(Float64, phpa),
-          convert(Float64, tc),
-          convert(Float64, rh),
-          convert(Float64, wl),
-          ref_refa, ref_refb)
+    ccall(
+        (:iauRefco, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, phpa),
+        convert(Float64, tc),
+        convert(Float64, rh),
+        convert(Float64, wl),
+        ref_refa, ref_refb
+    )
 
-   return ref_refa[], ref_refb[]
+    return ref_refa[], ref_refb[]
 end

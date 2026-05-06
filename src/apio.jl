@@ -115,28 +115,34 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauApio(sp::Real, theta::Real,
-               elong::Real, phi::Real, hm::Real,
-               xp::Real, yp::Real,
-               refa::Real, refb::Real)
-   # Allocate return value
-   ref_astrom = Ref{iauASTROM}(iauASTROM())
+function iauApio(
+        sp::Real, theta::Real,
+        elong::Real, phi::Real, hm::Real,
+        xp::Real, yp::Real,
+        refa::Real, refb::Real
+    )
+    # Allocate return value
+    ref_astrom = Ref{iauASTROM}(iauASTROM())
 
-   ccall((:iauApio, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Cdouble,
-         Cdouble, Cdouble, Cdouble,
-         Cdouble, Cdouble, Cdouble,
-         Ref{iauASTROM}), 
-         convert(Float64, sp),
-         convert(Float64, theta),
-         convert(Float64, elong),
-         convert(Float64, phi),
-         convert(Float64, hm),
-         convert(Float64, xp),
-         convert(Float64, yp),
-         convert(Float64, refa),
-         convert(Float64, refb),
-         ref_astrom)
+    ccall(
+        (:iauApio, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Cdouble,
+            Cdouble, Cdouble, Cdouble,
+            Cdouble, Cdouble, Cdouble,
+            Ref{iauASTROM},
+        ),
+        convert(Float64, sp),
+        convert(Float64, theta),
+        convert(Float64, elong),
+        convert(Float64, phi),
+        convert(Float64, hm),
+        convert(Float64, xp),
+        convert(Float64, yp),
+        convert(Float64, refa),
+        convert(Float64, refb),
+        ref_astrom
+    )
 
     return ref_astrom[]
 end

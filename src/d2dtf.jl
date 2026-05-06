@@ -76,21 +76,23 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauD2dtf(scale::String, ndp::Int, d1::Real, d2::Real)
 
-   # Allocate output
-   ref_iy = Ref{Int32}(0.0)
-   ref_im = Ref{Int32}(0.0)
-   ref_id = Ref{Int32}(0.0)
-   ihmsf  = zeros(Int32, 4)
+    # Allocate output
+    ref_iy = Ref{Int32}(0.0)
+    ref_im = Ref{Int32}(0.0)
+    ref_id = Ref{Int32}(0.0)
+    ihmsf = zeros(Int32, 4)
 
-   status = ccall((:iauD2dtf, libsofa_c), Cint,
-                  (Cstring, Cint, Cdouble, Cdouble, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ptr{Cint}),
-                  scale, convert(Int32, ndp), 
-                  convert(Float64, d1), convert(Float64, d2),
-                   ref_iy, ref_im, ref_id, ihmsf)
+    status = ccall(
+        (:iauD2dtf, libsofa_c), Cint,
+        (Cstring, Cint, Cdouble, Cdouble, Ref{Cint}, Ref{Cint}, Ref{Cint}, Ptr{Cint}),
+        scale, convert(Int32, ndp),
+        convert(Float64, d1), convert(Float64, d2),
+        ref_iy, ref_im, ref_id, ihmsf
+    )
 
-   if status != 0
-       @warn "Non-zero return code form iauD2dtf: $status"
-   end
+    if status != 0
+        @warn "Non-zero return code form iauD2dtf: $status"
+    end
 
-   return status, ref_iy[], ref_im[], ref_id[], SVector{4}(ihmsf)
+    return status, ref_iy[], ref_im[], ref_id[], SVector{4}(ihmsf)
 end

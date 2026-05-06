@@ -35,12 +35,10 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauRz(psi::Real, r::AbstractMatrix{<:Real})
 
-   # Transpose matrix upfront
-   r = Array{Float64, 2}(r') # Transpose input up front
+    # Transpose matrix upfront
+    r = Matrix{Float64}(r') # Transpose input up front
 
-   ccall((:iauRz, libsofa_c), Cvoid,
-           (Cdouble, Ptr{Cdouble}),
-           psi, pointer(r))
+    ccall((:iauRz, libsofa_c), Cvoid, (Cdouble, Ptr{Cdouble}), psi, pointer(r))
 
-   return convert(Array{Float64, 2}, r')
+    return convert(Matrix{Float64}, r')
 end

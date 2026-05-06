@@ -64,21 +64,27 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauPvtob(elong::Real, phi::Real, hm::Real,
-                  xp::Real, yp::Real, sp::Real, theta::Real)
+function iauPvtob(
+        elong::Real, phi::Real, hm::Real,
+        xp::Real, yp::Real, sp::Real, theta::Real
+    )
 
     pv = zeros(Float64, 3, 2)
 
-    status = ccall((:iauPvtob, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
-          Ptr{Float64}), 
-         convert(Float64, elong),
-         convert(Float64, phi),
-         convert(Float64, hm),
-         convert(Float64, xp),
-         convert(Float64, yp),
-         convert(Float64, sp),
-         convert(Float64, theta), pv)
+    status = ccall(
+        (:iauPvtob, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
+            Ptr{Float64},
+        ),
+        convert(Float64, elong),
+        convert(Float64, phi),
+        convert(Float64, hm),
+        convert(Float64, xp),
+        convert(Float64, yp),
+        convert(Float64, sp),
+        convert(Float64, theta), pv
+    )
 
-    return SMatrix{2,3}(pv')
+    return SMatrix{2, 3}(pv')
 end

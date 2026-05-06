@@ -68,7 +68,9 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauGst94(uta::Real, utb::Real)
-   return ccall((:iauGst94, libsofa_c), Cdouble,
-               (Cdouble, Cdouble),
-               convert(Float64, uta), convert(Float64, utb))
+    return ccall(
+        (:iauGst94, libsofa_c), Cdouble,
+        (Cdouble, Cdouble),
+        convert(Float64, uta), convert(Float64, utb)
+    )
 end

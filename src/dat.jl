@@ -121,18 +121,20 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauDat(iy::Real, im::Real, id::Real, fd::Real)
-   # Allocate return values
-   ref_dat = Ref{Float64}(0.0)
+    # Allocate return values
+    ref_dat = Ref{Float64}(0.0)
 
-   status = ccall((:iauDat, libsofa_c), Cint,
-                  (Cint, Cint, Cint, Cdouble, Ref{Cdouble}),
-                  convert(Int32, iy), convert(Int32, im), 
-                  convert(Int32, id), convert(Float64, fd),
-                  ref_dat)
+    status = ccall(
+        (:iauDat, libsofa_c), Cint,
+        (Cint, Cint, Cint, Cdouble, Ref{Cdouble}),
+        convert(Int32, iy), convert(Int32, im),
+        convert(Int32, id), convert(Float64, fd),
+        ref_dat
+    )
 
-   if status != 0
-       @warn "Non-zero return code form iauD2dtf: $status"
-   end
+    if status != 0
+        @warn "Non-zero return code form iauD2dtf: $status"
+    end
 
-   return status, ref_dat[]
+    return status, ref_dat[]
 end

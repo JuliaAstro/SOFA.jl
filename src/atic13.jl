@@ -76,17 +76,21 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauAtic13(ri::Real, di::Real, date1::Real, date2::Real)
-   # Allocate return values
-   ref_rc = Ref{Float64}(0.0)
-   ref_dc = Ref{Float64}(0.0)
-   ref_eo  = Ref{Float64}(0.0)
+    # Allocate return values
+    ref_rc = Ref{Float64}(0.0)
+    ref_dc = Ref{Float64}(0.0)
+    ref_eo = Ref{Float64}(0.0)
 
-   status = ccall((:iauAtic13, libsofa_c), Cint, 
-            (Cdouble, Cdouble, Cdouble, Cdouble,
-            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
-            convert(Float64, ri), convert(Float64, di), 
-            convert(Float64, date1), convert(Float64, date2), 
-            ref_rc, ref_dc, ref_eo)
+    status = ccall(
+        (:iauAtic13, libsofa_c), Cint,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, ri), convert(Float64, di),
+        convert(Float64, date1), convert(Float64, date2),
+        ref_rc, ref_dc, ref_eo
+    )
 
     return ref_rc[], ref_dc[], ref_eo[]
 end
