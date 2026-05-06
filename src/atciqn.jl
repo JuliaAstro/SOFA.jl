@@ -104,35 +104,41 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauAtciqn(rc::Real, dc::Real, pr::Real, pd::Real,
-                   px::Real, rv::Real, astrom::iauASTROM,
-                   n::Int, b::Array{iauLDBODY, 1})
+function iauAtciqn(
+        rc::Real, dc::Real, pr::Real, pd::Real,
+        px::Real, rv::Real, astrom::iauASTROM,
+        n::Int, b::Vector{iauLDBODY}
+    )
 
-   # Allocate return value
-   ref_astrom = Ref{iauASTROM}(astrom)
-   ref_ri     = Ref{Float64}(0.0)
-   ref_di     = Ref{Float64}(0.0)
-   ref_b      = Ref{iauLDBODY}(b[1])
+    # Allocate return value
+    ref_astrom = Ref{iauASTROM}(astrom)
+    ref_ri = Ref{Float64}(0.0)
+    ref_di = Ref{Float64}(0.0)
+    ref_b = Ref{iauLDBODY}(b[1])
 
-   # for ld in b
-   #    # ld.pv = ld.pv'
-   #    ld.pv = ((ld.pv[1]))
-   # end
-   
-   ccall((:iauAtciqn, libsofa_c), Cvoid, 
-            (Cdouble, Cdouble,
+    # for ld in b
+    #    # ld.pv = ld.pv'
+    #    ld.pv = ((ld.pv[1]))
+    # end
+
+    ccall(
+        (:iauAtciqn, libsofa_c), Cvoid,
+        (
             Cdouble, Cdouble,
             Cdouble, Cdouble,
-            Ref{iauASTROM}, Cint, Ref{iauLDBODY},  
-            Ref{Cdouble}, Ref{Cdouble}), 
-            convert(Float64, rc), convert(Float64, dc),
-            convert(Float64, pr), convert(Float64, pd),
-            convert(Float64, px), convert(Float64, rv),
-            ref_astrom, convert(Int32, n), ref_b, ref_ri, ref_di)
-   
-   # for ld in b
-   #    ld.pv = ld.pv'
-   # end
+            Cdouble, Cdouble,
+            Ref{iauASTROM}, Cint, Ref{iauLDBODY},
+            Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, rc), convert(Float64, dc),
+        convert(Float64, pr), convert(Float64, pd),
+        convert(Float64, px), convert(Float64, rv),
+        ref_astrom, convert(Int32, n), ref_b, ref_ri, ref_di
+    )
 
-   return ref_ri[], ref_di[]
+    # for ld in b
+    #    ld.pv = ld.pv'
+    # end
+
+    return ref_ri[], ref_di[]
 end

@@ -25,14 +25,16 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPxp(a::AbstractVector{<:Real}, b::AbstractVector{<:Real})
-   # Preallocate return values
-   axb = zeros(Float64, 3)
+    # Preallocate return values
+    axb = zeros(Float64, 3)
 
-   ccall((:iauPxp, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
-          convert(Array{Float64, 1}, a),
-          convert(Array{Float64, 1}, b),
-          axb)
+    ccall(
+        (:iauPxp, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Vector{Float64}, a),
+        convert(Vector{Float64}, b),
+        axb
+    )
 
-   return SVector{3}(axb)
+    return SVector{3}(axb)
 end

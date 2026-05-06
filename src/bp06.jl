@@ -69,16 +69,17 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauBp06(date1::Real, date2::Real)
-   # Allocate return value
-   rb  = zeros(Float64, 3, 3)
-   rp  = zeros(Float64, 3, 3)
-   rbp = zeros(Float64, 3, 3)
+    # Allocate return value
+    rb = zeros(Float64, 3, 3)
+    rp = zeros(Float64, 3, 3)
+    rbp = zeros(Float64, 3, 3)
 
-   ccall((:iauBp06, libsofa_c), Cvoid, 
-       (Cdouble, Cdouble,
-       Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
-       convert(Float64, date1), convert(Float64, date2),
-       rb, rp, rbp)
+    ccall(
+        (:iauBp06, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Float64, date1), convert(Float64, date2),
+        rb, rp, rbp
+    )
 
-   return SMatrix{3,3}(rb'), SMatrix{3,3}(rp'), SMatrix{3,3}(rbp')
+    return SMatrix{3, 3}(rb'), SMatrix{3, 3}(rp'), SMatrix{3, 3}(rbp')
 end

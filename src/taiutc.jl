@@ -62,12 +62,14 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauTaiutc(tai1::Real, tai2::Real)
-   ref_utc1 = Ref{Float64}(0.0)
-   ref_utc2 = Ref{Float64}(0.0)
+    ref_utc1 = Ref{Float64}(0.0)
+    ref_utc2 = Ref{Float64}(0.0)
 
-   status = ccall((:iauTaiutc, libsofa_c), Cint,
-                   (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
-                   convert(Float64, tai1), convert(Float64, tai2), ref_utc1, ref_utc2)
+    status = ccall(
+        (:iauTaiutc, libsofa_c), Cint,
+        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, tai1), convert(Float64, tai2), ref_utc1, ref_utc2
+    )
 
-   return status, ref_utc1[], ref_utc2[]
+    return status, ref_utc1[], ref_utc2[]
 end

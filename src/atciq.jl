@@ -67,29 +67,35 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauAtciq(rc::Real, dc::Real,
-                   pr::Real, pd::Real,
-                   px::Real, rv::Real,
-                   astrom::iauASTROM)
+function iauAtciq(
+        rc::Real, dc::Real,
+        pr::Real, pd::Real,
+        px::Real, rv::Real,
+        astrom::iauASTROM
+    )
 
-   # Allocate return value
-   ref_astrom = Ref{iauASTROM}(astrom)
-   ref_ri     = Ref{Float64}(0.0)
-   ref_di     = Ref{Float64}(0.0)
+    # Allocate return value
+    ref_astrom = Ref{iauASTROM}(astrom)
+    ref_ri = Ref{Float64}(0.0)
+    ref_di = Ref{Float64}(0.0)
 
-   ccall((:iauAtciq, libsofa_c), Cvoid, 
-            (Cdouble, Cdouble,
+    ccall(
+        (:iauAtciq, libsofa_c), Cvoid,
+        (
             Cdouble, Cdouble,
-            Cdouble, Cdouble, Ref{iauASTROM}, 
-            Ref{Cdouble}, Ref{Cdouble}), 
-            convert(Float64, rc),
-            convert(Float64, dc),            
-            convert(Float64, pr),
-            convert(Float64, pd),            
-            convert(Float64, px),
-            convert(Float64, rv),
-            ref_astrom, ref_ri, ref_di)
-            
+            Cdouble, Cdouble,
+            Cdouble, Cdouble, Ref{iauASTROM},
+            Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, rc),
+        convert(Float64, dc),
+        convert(Float64, pr),
+        convert(Float64, pd),
+        convert(Float64, px),
+        convert(Float64, rv),
+        ref_astrom, ref_ri, ref_di
+    )
 
-   return ref_ri[], ref_di[]
+
+    return ref_ri[], ref_di[]
 end

@@ -74,8 +74,10 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauGmst00(uta::Real, utb::Real, tta::Real, ttb::Real)
-   return ccall((:iauGmst00, libsofa_c), Cdouble,
-               (Cdouble, Cdouble, Cdouble, Cdouble),
-               convert(Float64, uta), convert(Float64, utb),
-               convert(Float64, tta), convert(Float64, ttb))
+    return ccall(
+        (:iauGmst00, libsofa_c), Cdouble,
+        (Cdouble, Cdouble, Cdouble, Cdouble),
+        convert(Float64, uta), convert(Float64, utb),
+        convert(Float64, tta), convert(Float64, ttb)
+    )
 end

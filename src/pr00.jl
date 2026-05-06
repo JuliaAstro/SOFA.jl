@@ -72,14 +72,16 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPr00(date1::Real, date2::Real)
-   ref_dpsipr = Ref{Float64}(0.0)
-   ref_depspr = Ref{Float64}(0.0)
+    ref_dpsipr = Ref{Float64}(0.0)
+    ref_depspr = Ref{Float64}(0.0)
 
-   ccall((:iauPr00, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}), 
-         convert(Float64, date1),
-         convert(Float64, date2),
-         ref_dpsipr, ref_depspr)
+    ccall(
+        (:iauPr00, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, date1),
+        convert(Float64, date2),
+        ref_dpsipr, ref_depspr
+    )
 
-   return ref_dpsipr[], ref_depspr[]
+    return ref_dpsipr[], ref_depspr[]
 end

@@ -49,19 +49,25 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauPmpx(rc::Real, dc::Real, pr::Real, pd::Real,
-                 px::Real, rv::Real, pmt::Real, pob::AbstractVector{<:Real})
-   pco = zeros(Float64, 3)
-   
-   ccall((:iauPmpx, libsofa_c), Cvoid, 
-       (Cdouble, Cdouble, Cdouble, Cdouble,
-        Cdouble, Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}), 
-       convert(Float64, rc), convert(Float64, dc),
-       convert(Float64, pr), convert(Float64, pd),
-       convert(Float64, px), convert(Float64, rv),
-       convert(Float64, pmt),
-       convert(Array{Float64, 1}, pob),
-       pco)
+function iauPmpx(
+        rc::Real, dc::Real, pr::Real, pd::Real,
+        px::Real, rv::Real, pmt::Real, pob::AbstractVector{<:Real}
+    )
+    pco = zeros(Float64, 3)
 
-   return SVector{3}(pco)
+    ccall(
+        (:iauPmpx, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Cdouble, Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble},
+        ),
+        convert(Float64, rc), convert(Float64, dc),
+        convert(Float64, pr), convert(Float64, pd),
+        convert(Float64, px), convert(Float64, rv),
+        convert(Float64, pmt),
+        convert(Vector{Float64}, pob),
+        pco
+    )
+
+    return SVector{3}(pco)
 end

@@ -24,21 +24,23 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauS2pv(theta::Real, phi::Real, r::Real,
-                td::Real, pd::Real, rd::Real)
-   pv = zeros(Float64, 3, 2)
+function iauS2pv(
+        theta::Real, phi::Real, r::Real,
+        td::Real, pd::Real, rd::Real
+    )
+    pv = zeros(Float64, 3, 2)
 
-   ccall((:iauS2pv, libsofa_c), Cvoid, 
-       (Cdouble, Cdouble, Cdouble,
-       Cdouble, Cdouble, Cdouble,
-       Ptr{Cdouble}), 
-       convert(Float64, theta),
-       convert(Float64, phi),
-       convert(Float64, r),
-       convert(Float64, td),
-       convert(Float64, pd),
-       convert(Float64, rd),
-       pv)
+    ccall(
+        (:iauS2pv, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble, Ptr{Cdouble}),
+        convert(Float64, theta),
+        convert(Float64, phi),
+        convert(Float64, r),
+        convert(Float64, td),
+        convert(Float64, pd),
+        convert(Float64, rd),
+        pv
+    )
 
-   return SMatrix{2,3}(pv')
+    return SMatrix{2, 3}(pv')
 end

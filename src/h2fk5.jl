@@ -58,22 +58,26 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauH2fk5(rh::Real, dh::Real, drh::Real, ddh::Real, pxh::Real, rvh::Real)
-   ref_r5  = Ref{Float64}(0.0)
-   ref_d5  = Ref{Float64}(0.0)
-   ref_dr5 = Ref{Float64}(0.0)
-   ref_dd5 = Ref{Float64}(0.0)
-   ref_px5 = Ref{Float64}(0.0)
-   ref_rv5 = Ref{Float64}(0.0)
-   
-   ccall((:iauH2fk5, libsofa_c), Cdouble,
-         (Cdouble, Cdouble, Cdouble, Cdouble,
-         Cdouble, Cdouble, 
-         Ref{Cdouble},  Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-         Ref{Cdouble}, Ref{Cdouble}, ),
-         convert(Float64, rh), convert(Float64, dh),
-         convert(Float64, drh), convert(Float64, ddh),
-         convert(Float64, pxh), convert(Float64, rvh),
-         ref_r5, ref_d5, ref_dr5, ref_dd5, ref_px5, ref_rv5)
+    ref_r5 = Ref{Float64}(0.0)
+    ref_d5 = Ref{Float64}(0.0)
+    ref_dr5 = Ref{Float64}(0.0)
+    ref_dd5 = Ref{Float64}(0.0)
+    ref_px5 = Ref{Float64}(0.0)
+    ref_rv5 = Ref{Float64}(0.0)
 
-   return ref_r5[], ref_d5[], ref_dr5[], ref_dd5[], ref_px5[], ref_rv5[]
+    ccall(
+        (:iauH2fk5, libsofa_c), Cdouble,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Cdouble, Cdouble,
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+            Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, rh), convert(Float64, dh),
+        convert(Float64, drh), convert(Float64, ddh),
+        convert(Float64, pxh), convert(Float64, rvh),
+        ref_r5, ref_d5, ref_dr5, ref_dd5, ref_px5, ref_rv5
+    )
+
+    return ref_r5[], ref_d5[], ref_dr5[], ref_dd5[], ref_px5[], ref_rv5[]
 end

@@ -17,10 +17,10 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauZr()
-   r = zeros(Float64, 3, 3)
+    r = zeros(Float64, 3, 3)
 
-   ccall((:iauZr, libsofa_c), Cvoid, (Ptr{Cdouble},), r)
+    ccall((:iauZr, libsofa_c), Cvoid, (Ptr{Cdouble},), r)
 
     # Transpose since C call return row-major operation
-   return SMatrix{3,3}(r')
+    return SMatrix{3, 3}(r')
 end

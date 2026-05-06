@@ -71,17 +71,21 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPrec76(date01::Real, date02::Real, date11::Real, date12::Real)
-   # Preallocate return values
-   ref_zeta  = Ref{Float64}(0.0)
-   ref_z     = Ref{Float64}(0.0)
-   ref_theta = Ref{Float64}(0.0)
+    # Preallocate return values
+    ref_zeta = Ref{Float64}(0.0)
+    ref_z = Ref{Float64}(0.0)
+    ref_theta = Ref{Float64}(0.0)
 
-   ccall((:iauPrec76, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Cdouble, Cdouble,
-          Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
-          convert(Float64, date01), convert(Float64, date02),
-          convert(Float64, date11), convert(Float64, date12),
-          ref_zeta, ref_z, ref_theta)
+    ccall(
+        (:iauPrec76, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
+        ),
+        convert(Float64, date01), convert(Float64, date02),
+        convert(Float64, date11), convert(Float64, date12),
+        ref_zeta, ref_z, ref_theta
+    )
 
-   return ref_zeta[], ref_z[], ref_theta[]
+    return ref_zeta[], ref_z[], ref_theta[]
 end

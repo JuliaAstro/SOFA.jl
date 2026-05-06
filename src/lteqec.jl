@@ -56,15 +56,16 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauLteqec(epj::Real, dr::Real, dd::Real)
-   ref_dl = Ref{Float64}(0.0)
-   ref_db = Ref{Float64}(0.0)
-   ccall((:iauLteqec, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Cdouble,
-         Ref{Cdouble}, Ref{Cdouble}), 
-          convert(Float64, epj),
-          convert(Float64, dr),
-          convert(Float64, dd),
-          ref_dl, ref_db)
+    ref_dl = Ref{Float64}(0.0)
+    ref_db = Ref{Float64}(0.0)
+    ccall(
+        (:iauLteqec, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, epj),
+        convert(Float64, dr),
+        convert(Float64, dd),
+        ref_dl, ref_db
+    )
 
-   return ref_dl[], ref_db[]
+    return ref_dl[], ref_db[]
 end

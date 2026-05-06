@@ -50,11 +50,13 @@ function iauBi00()
     # Allocate return value
     ref_dpsibi = Ref{Float64}(0.0)
     ref_depsbi = Ref{Float64}(0.0)
-    ref_dra    = Ref{Float64}(0.0)
+    ref_dra = Ref{Float64}(0.0)
 
-    ccall((:iauBi00, libsofa_c), Cvoid, 
-        (Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
-        ref_dpsibi, ref_depsbi, ref_dra)
+    ccall(
+        (:iauBi00, libsofa_c), Cvoid,
+        (Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
+        ref_dpsibi, ref_depsbi, ref_dra
+    )
 
     return ref_dpsibi[], ref_depsbi[], ref_dra[]
 end

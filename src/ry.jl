@@ -35,12 +35,10 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauRy(theta::Real, r::AbstractMatrix{<:Real})
 
-   # Transpose matrix upfront
-   r = Array{Float64, 2}(r') # Transpose input up front
+    # Transpose matrix upfront
+    r = Matrix{Float64}(r') # Transpose input up front
 
-   ccall((:iauRy, libsofa_c), Cvoid,
-           (Cdouble, Ptr{Cdouble}),
-           theta, pointer(r))
+    ccall((:iauRy, libsofa_c), Cvoid, (Cdouble, Ptr{Cdouble}), theta, pointer(r))
 
-   return convert(Array{Float64, 2}, r')
+    return convert(Matrix{Float64}, r')
 end

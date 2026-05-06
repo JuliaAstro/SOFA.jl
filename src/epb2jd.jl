@@ -32,13 +32,15 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauEpb2jd(epb::Real)
-   ref_djm0 = Ref{Float64}(0.0)
-   ref_djm  = Ref{Float64}(0.0)
+    ref_djm0 = Ref{Float64}(0.0)
+    ref_djm = Ref{Float64}(0.0)
 
-   ccall((:iauEpb2jd, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}, Ref{Cdouble}), 
-         convert(Float64, epb),
-         ref_djm0, ref_djm)
+    ccall(
+        (:iauEpb2jd, libsofa_c), Cvoid,
+        (Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, epb),
+        ref_djm0, ref_djm
+    )
 
-   return ref_djm0[], ref_djm[]
+    return ref_djm0[], ref_djm[]
 end

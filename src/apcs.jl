@@ -125,26 +125,32 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauApcs(date1::Real, date2::Real, 
-               pv::AbstractMatrix{<:Real}, ebpv::AbstractMatrix{<:Real}, 
-               ehp::AbstractVector{<:Real})
-   # Allocate return value
-   ref_astrom = Ref{iauASTROM}(iauASTROM())
+function iauApcs(
+        date1::Real, date2::Real,
+        pv::AbstractMatrix{<:Real}, ebpv::AbstractMatrix{<:Real},
+        ehp::AbstractVector{<:Real}
+    )
+    # Allocate return value
+    ref_astrom = Ref{iauASTROM}(iauASTROM())
 
-   # Transpose to map Julia (FORTRAN) -> C style memory allocation
-   ebpv = Array{Float64, 2}(ebpv') 
-   pv   = Array{Float64, 2}(pv')
+    # Transpose to map Julia (FORTRAN) -> C style memory allocation
+    ebpv = Matrix{Float64}(ebpv')
+    pv = Matrix{Float64}(pv')
 
-   ccall((:iauApcs, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, 
-         Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, 
-         Ref{iauASTROM}), 
-         convert(Float64, date1),
-         convert(Float64, date2),
-         pointer(pv),
-         pointer(ebpv),
-         pointer(ehp),
-         ref_astrom)
+    ccall(
+        (:iauApcs, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble,
+            Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
+            Ref{iauASTROM},
+        ),
+        convert(Float64, date1),
+        convert(Float64, date2),
+        pointer(pv),
+        pointer(ebpv),
+        pointer(ehp),
+        ref_astrom
+    )
 
-   return ref_astrom[]
+    return ref_astrom[]
 end

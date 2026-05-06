@@ -42,11 +42,13 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauLtpequ(epj::Real)
-   veq = zeros(Float64, 3)
-   ccall((:iauLtpequ, libsofa_c), Cvoid,
-         (Cdouble, Ref{Cdouble}),
-          convert(Float64, epj),
-          veq)
+    veq = zeros(Float64, 3)
+    ccall(
+        (:iauLtpequ, libsofa_c), Cvoid,
+        (Cdouble, Ref{Cdouble}),
+        convert(Float64, epj),
+        veq
+    )
 
-   return SVector{3}(veq)
+    return SVector{3}(veq)
 end

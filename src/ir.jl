@@ -17,10 +17,10 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauIr()
-   # Allocate return values
-   I  = zeros(Float64, 3, 3)
+    # Allocate return values
+    I = zeros(Float64, 3, 3)
 
-   ccall((:iauIr, libsofa_c), Cvoid, (Ptr{Cdouble},), I)
+    ccall((:iauIr, libsofa_c), Cvoid, (Ptr{Cdouble},), I)
 
-   return SMatrix{3,3}(I')
+    return SMatrix{3, 3}(I')
 end

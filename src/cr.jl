@@ -24,12 +24,14 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauCr(r::AbstractMatrix{<:Real})
 
-   # Allocate return value
-   c = zeros(Float64, 3, 3)
+    # Allocate return value
+    c = zeros(Float64, 3, 3)
 
-   ccall((:iauCr, libsofa_c), Cvoid, 
-         (Ptr{Cdouble}, Ptr{Cdouble}), 
-         convert(Array{Float64, 2}, r'), c)
+    ccall(
+        (:iauCr, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Matrix{Float64}, r'), c
+    )
 
-   return SMatrix{3,3}(c')
+    return SMatrix{3, 3}(c')
 end

@@ -150,38 +150,44 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauAtco13(rc::Real, dc::Real, pr::Real, pd::Real, 
-                   px::Real, rv::Real, utc1::Real, utc2::Real, 
-                   dut1::Real, elong::Real, phi::Real, hm::Real, 
-                   xp::Real, yp::Real, phpa::Real, tc::Real, 
-                   rh::Real, wl::Real)
+function iauAtco13(
+        rc::Real, dc::Real, pr::Real, pd::Real,
+        px::Real, rv::Real, utc1::Real, utc2::Real,
+        dut1::Real, elong::Real, phi::Real, hm::Real,
+        xp::Real, yp::Real, phpa::Real, tc::Real,
+        rh::Real, wl::Real
+    )
 
-   # Allocate return values
-   ref_aob = Ref{Float64}(0.0)
-   ref_zob = Ref{Float64}(0.0)
-   ref_hob = Ref{Float64}(0.0)
-   ref_dob = Ref{Float64}(0.0)
-   ref_rob = Ref{Float64}(0.0)
-   ref_eo  = Ref{Float64}(0.0)
+    # Allocate return values
+    ref_aob = Ref{Float64}(0.0)
+    ref_zob = Ref{Float64}(0.0)
+    ref_hob = Ref{Float64}(0.0)
+    ref_dob = Ref{Float64}(0.0)
+    ref_rob = Ref{Float64}(0.0)
+    ref_eo = Ref{Float64}(0.0)
 
-   status = ccall((:iauAtco13, libsofa_c), Cint, 
-            (Cdouble, Cdouble, Cdouble, Cdouble,
+    status = ccall(
+        (:iauAtco13, libsofa_c), Cint,
+        (
             Cdouble, Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble, Cdouble,
-            Cdouble, Cdouble,  
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Cdouble, Cdouble,
             Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
-            convert(Float64, rc), convert(Float64, dc), 
-            convert(Float64, pr), convert(Float64, pd), 
-            convert(Float64, px), convert(Float64, rv), 
-            convert(Float64, utc1), convert(Float64, utc2), 
-            convert(Float64, dut1), convert(Float64, elong), 
-            convert(Float64, phi), convert(Float64, hm), 
-            convert(Float64, xp), convert(Float64, yp), 
-            convert(Float64, phpa), convert(Float64, tc), 
-            convert(Float64, rh), convert(Float64, wl),
-            ref_aob, ref_zob, ref_hob, ref_dob, ref_rob, ref_eo)
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, rc), convert(Float64, dc),
+        convert(Float64, pr), convert(Float64, pd),
+        convert(Float64, px), convert(Float64, rv),
+        convert(Float64, utc1), convert(Float64, utc2),
+        convert(Float64, dut1), convert(Float64, elong),
+        convert(Float64, phi), convert(Float64, hm),
+        convert(Float64, xp), convert(Float64, yp),
+        convert(Float64, phpa), convert(Float64, tc),
+        convert(Float64, rh), convert(Float64, wl),
+        ref_aob, ref_zob, ref_hob, ref_dob, ref_rob, ref_eo
+    )
 
-   return status, ref_aob[], ref_zob[], ref_hob[], ref_dob[], ref_rob[], ref_eo[]
+    return status, ref_aob[], ref_zob[], ref_hob[], ref_dob[], ref_rob[], ref_eo[]
 end

@@ -54,10 +54,12 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauPom00(xp, yp, sp)
     rpom = zeros(Float64, 3, 3)
 
-    ccall((:iauPom00, libsofa_c), Cvoid, 
-            (Cdouble, Cdouble, Cdouble, Ptr{Cdouble}),
-            xp, yp, sp, rpom)
+    ccall(
+        (:iauPom00, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Cdouble, Ptr{Cdouble}),
+        xp, yp, sp, rpom
+    )
 
-     # Transpose since C call return row-major operation
-    return SMatrix{3,3}(rpom')
+    # Transpose since C call return row-major operation
+    return SMatrix{3, 3}(rpom')
 end

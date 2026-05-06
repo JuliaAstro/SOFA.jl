@@ -23,11 +23,13 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 function iauS2c(theta::Real, phi::Real)
     c = zeros(Float64, 3)
 
-    ccall((:iauS2c, libsofa_c), Cvoid,
-       (Cdouble, Cdouble, Ptr{Cdouble}),
-       convert(Float64, theta),
-       convert(Float64, phi),
-       c)
+    ccall(
+        (:iauS2c, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ptr{Cdouble}),
+        convert(Float64, theta),
+        convert(Float64, phi),
+        c
+    )
 
-   return SVector{3}(c)
+    return SVector{3}(c)
 end

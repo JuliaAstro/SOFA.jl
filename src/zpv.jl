@@ -20,10 +20,10 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauZpv()
-   pv = zeros(Float64, 3, 2)
+    pv = zeros(Float64, 3, 2)
 
-   ccall((:iauZpv, libsofa_c), Cvoid, (Ptr{Cdouble},), pv)
+    ccall((:iauZpv, libsofa_c), Cvoid, (Ptr{Cdouble},), pv)
 
-   # Transpose since C call return row-major operation
-   return SMatrix{2,3}(pv')
+    # Transpose since C call return row-major operation
+    return SMatrix{2, 3}(pv')
 end

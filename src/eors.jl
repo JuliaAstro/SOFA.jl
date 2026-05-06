@@ -39,10 +39,12 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauEors(rnbp::AbstractMatrix{<:Real}, s::Real)
-   # Allocate return value
-   rm = zeros(Float64, 3, 3)
+    # Allocate return value
+    rm = zeros(Float64, 3, 3)
 
-   return ccall((:iauEors, libsofa_c), Cdouble, 
-               (Ptr{Cdouble}, Cdouble), 
-               convert(Array{Float64, 2}, rnbp'), convert(Float64, s))
+    return ccall(
+        (:iauEors, libsofa_c), Cdouble,
+        (Ptr{Cdouble}, Cdouble),
+        convert(Matrix{Float64}, rnbp'), convert(Float64, s)
+    )
 end

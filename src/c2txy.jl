@@ -82,18 +82,24 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauC2txy(tta::Real, ttb::Real, uta::Real, utb::Real,
-                   x::Real, y::Real, xp::Real, yp::Real)
+function iauC2txy(
+        tta::Real, ttb::Real, uta::Real, utb::Real,
+        x::Real, y::Real, xp::Real, yp::Real
+    )
 
-   # Allocate return value
-   rc2t = zeros(Float64, 3, 3)
+    # Allocate return value
+    rc2t = zeros(Float64, 3, 3)
 
-   ccall((:iauC2txy, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Cdouble, Cdouble,
-         Cdouble, Cdouble, Cdouble, Cdouble,
-         Ptr{Cdouble}), 
-         tta, ttb, uta, utb, x, y, xp, yp,
-         rc2t)
+    ccall(
+        (:iauC2txy, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Ptr{Cdouble},
+        ),
+        tta, ttb, uta, utb, x, y, xp, yp,
+        rc2t
+    )
 
-   return SMatrix{3,3}(rc2t')
+    return SMatrix{3, 3}(rc2t')
 end

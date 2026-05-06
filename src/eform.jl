@@ -61,18 +61,20 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauEform(n::Int)
-   # Initialize return variables
-   ref_a = Ref{Float64}(0.0)
-   ref_f = Ref{Float64}(0.0)
+    # Initialize return variables
+    ref_a = Ref{Float64}(0.0)
+    ref_f = Ref{Float64}(0.0)
 
-   status = ccall((:iauEform, libsofa_c), Cint,
-               (Cint, Ref{Float64}, Ref{Float64}),
-               convert(Int32, n),
-               ref_a, ref_f)
+    status = ccall(
+        (:iauEform, libsofa_c), Cint,
+        (Cint, Ref{Float64}, Ref{Float64}),
+        convert(Int32, n),
+        ref_a, ref_f
+    )
 
-   # if status != 0
-   #    @warn "iauEform return non-zero exit status: $status"
-   # end
+    # if status != 0
+    #    @warn "iauEform return non-zero exit status: $status"
+    # end
 
-   return status, ref_a[], ref_f[]
+    return status, ref_a[], ref_f[]
 end

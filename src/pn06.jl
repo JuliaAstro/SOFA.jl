@@ -94,24 +94,28 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPn06(date1::Real, date2::Real, dpsi::Real, deps::Real)
-   # Allocate return values
-   ref_epsa = Ref{Float64}(0.0)
-   rb       = zeros(Float64, 3, 3)
-   rp       = zeros(Float64, 3, 3)
-   rbp      = zeros(Float64, 3, 3)
-   rn       = zeros(Float64, 3, 3)
-   rbpn     = zeros(Float64, 3, 3)
+    # Allocate return values
+    ref_epsa = Ref{Float64}(0.0)
+    rb = zeros(Float64, 3, 3)
+    rp = zeros(Float64, 3, 3)
+    rbp = zeros(Float64, 3, 3)
+    rn = zeros(Float64, 3, 3)
+    rbpn = zeros(Float64, 3, 3)
 
-   ccall((:iauPn06, libsofa_c), Cvoid, 
-        (Cdouble, Cdouble, Cdouble, Cdouble,
-         Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
-         Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
-         convert(Float64, date1),
-         convert(Float64, date2),
-         convert(Float64, dpsi),
-         convert(Float64, deps),
-         ref_epsa, rb, rp, rbp, rn, rbpn)
+    ccall(
+        (:iauPn06, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
+            Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
+        ),
+        convert(Float64, date1),
+        convert(Float64, date2),
+        convert(Float64, dpsi),
+        convert(Float64, deps),
+        ref_epsa, rb, rp, rbp, rn, rbpn
+    )
 
-   return ref_epsa[], SMatrix{3,3}(rb'), SMatrix{3,3}(rp'),
-      SMatrix{3,3}(rbp'), SMatrix{3,3}(rn'), SMatrix{3,3}(rbpn')
+    return ref_epsa[], SMatrix{3, 3}(rb'), SMatrix{3, 3}(rp'),
+        SMatrix{3, 3}(rbp'), SMatrix{3, 3}(rn'), SMatrix{3, 3}(rbpn')
 end

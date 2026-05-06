@@ -53,11 +53,13 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauLtp(epj::Real)
-   rp = zeros(Float64, 3, 3)
-   ccall((:iauLtp, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}), 
-          convert(Float64, epj),
-          rp)
+    rp = zeros(Float64, 3, 3)
+    ccall(
+        (:iauLtp, libsofa_c), Cvoid,
+        (Cdouble, Ref{Cdouble}),
+        convert(Float64, epj),
+        rp
+    )
 
-   return SMatrix{3,3}(rp')
+    return SMatrix{3, 3}(rp')
 end

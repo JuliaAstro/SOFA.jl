@@ -110,14 +110,16 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauApcg13(date1::Real, date2::Real)
-   # Allocate return value
-   ref_astrom = Ref{iauASTROM}(iauASTROM())
+    # Allocate return value
+    ref_astrom = Ref{iauASTROM}(iauASTROM())
 
-   ccall((:iauApcg13, libsofa_c), Cvoid, 
-           (Cdouble, Cdouble, Ref{iauASTROM}), 
-           convert(Float64, date1),
-           convert(Float64, date2),
-           ref_astrom)
+    ccall(
+        (:iauApcg13, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ref{iauASTROM}),
+        convert(Float64, date1),
+        convert(Float64, date2),
+        ref_astrom
+    )
 
-   return ref_astrom[]
+    return ref_astrom[]
 end

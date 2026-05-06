@@ -51,12 +51,14 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauNutm80(date1::Real, date2::Real)
-   # Allocate return values
-   rmatn = zeros(Float64, 3, 3)
+    # Allocate return values
+    rmatn = zeros(Float64, 3, 3)
 
-   ccall((:iauNutm80, libsofa_c), Cvoid, 
-        (Cdouble, Cdouble, Ptr{Cdouble},), 
-        convert(Float64, date1), convert(Float64, date2), rmatn)
+    ccall(
+        (:iauNutm80, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ptr{Cdouble}),
+        convert(Float64, date1), convert(Float64, date2), rmatn
+    )
 
-   return SMatrix{3,3}(rmatn')
+    return SMatrix{3, 3}(rmatn')
 end

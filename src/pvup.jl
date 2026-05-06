@@ -28,14 +28,16 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPvup(dt::Real, pv::AbstractMatrix{<:Real})
-   # Preallocate return values
-   p = zeros(Float64, 3)
+    # Preallocate return values
+    p = zeros(Float64, 3)
 
-   ccall((:iauPvup, libsofa_c), Cvoid, 
-         (Cdouble, Ptr{Cdouble}, Ref{Cdouble}), 
-          convert(Float64, dt),
-          convert(Array{Float64, 2}, pv'),
-          p)
+    ccall(
+        (:iauPvup, libsofa_c), Cvoid,
+        (Cdouble, Ptr{Cdouble}, Ref{Cdouble}),
+        convert(Float64, dt),
+        convert(Matrix{Float64}, pv'),
+        p
+    )
 
-   return SVector{3}(p)
+    return SVector{3}(p)
 end

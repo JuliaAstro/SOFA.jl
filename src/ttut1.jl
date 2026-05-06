@@ -39,13 +39,15 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauTtut1(tt1::Real, tt2::Real, dt::Real)
-   ref_tdb1 = Ref{Float64}(0.0)
-   ref_tdb2 = Ref{Float64}(0.0)
+    ref_tdb1 = Ref{Float64}(0.0)
+    ref_tdb2 = Ref{Float64}(0.0)
 
-   status = ccall((:iauTtut1, libsofa_c), Cint,
-                   (Cdouble, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
-                   convert(Float64, tt1), convert(Float64, tt2), convert(Float64, dt), 
-                   ref_tdb1, ref_tdb2)
+    status = ccall(
+        (:iauTtut1, libsofa_c), Cint,
+        (Cdouble, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, tt1), convert(Float64, tt2), convert(Float64, dt),
+        ref_tdb1, ref_tdb2
+    )
 
-   return status, ref_tdb1[], ref_tdb2[]
+    return status, ref_tdb1[], ref_tdb2[]
 end

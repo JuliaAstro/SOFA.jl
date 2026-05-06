@@ -25,13 +25,15 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPmp(a::AbstractVector{<:Real}, b::AbstractVector{<:Real})
-   amb = zeros(Float64, 3)
-   
-   ccall((:iauPmp, libsofa_c), Cdouble, 
-       (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
-       convert(Array{Float64, 1}, a),
-       convert(Array{Float64, 1}, b),
-       amb)
+    amb = zeros(Float64, 3)
 
-   return SVector{3}(amb)
+    ccall(
+        (:iauPmp, libsofa_c), Cdouble,
+        (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Vector{Float64}, a),
+        convert(Vector{Float64}, b),
+        amb
+    )
+
+    return SVector{3}(amb)
 end

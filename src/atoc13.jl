@@ -142,28 +142,34 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauAtoc13(type_::Char, ob1::Real, ob2::Real,
-               utc1::Real, utc2::Real, dut1::Real,
-               elong::Real, phi::Real, hm::Real, xp::Real, yp::Real,
-               phpa::Real, tc::Real, rh::Real, wl::Real)
+function iauAtoc13(
+        type_::Char, ob1::Real, ob2::Real,
+        utc1::Real, utc2::Real, dut1::Real,
+        elong::Real, phi::Real, hm::Real, xp::Real, yp::Real,
+        phpa::Real, tc::Real, rh::Real, wl::Real
+    )
 
-   # Allocate return values
-   ref_type_  = Ref{UInt8}(convert(UInt8, type_))
-   ref_rc     = Ref{Float64}(0.0)
-   ref_dc     = Ref{Float64}(0.0)
+    # Allocate return values
+    ref_type_ = Ref{UInt8}(convert(UInt8, type_))
+    ref_rc = Ref{Float64}(0.0)
+    ref_dc = Ref{Float64}(0.0)
 
-   status = ccall((:iauAtoc13, libsofa_c), Cint, 
-       (Ref{UInt8}, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
-       Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
-       Cdouble, Cdouble, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}), 
-       ref_type_, convert(Float64, ob1), convert(Float64, ob2),
-       convert(Float64, utc1), convert(Float64, utc2),
-       convert(Float64, dut1), convert(Float64, elong),
-       convert(Float64, phi), convert(Float64, hm),
-       convert(Float64, xp), convert(Float64, yp),
-       convert(Float64, phpa), convert(Float64, tc),
-       convert(Float64, rh), convert(Float64, wl),
-       ref_rc, ref_dc)
+    status = ccall(
+        (:iauAtoc13, libsofa_c), Cint,
+        (
+            Ref{UInt8}, Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
+            Cdouble, Cdouble, Cdouble, Cdouble, Cdouble,
+            Cdouble, Cdouble, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble},
+        ),
+        ref_type_, convert(Float64, ob1), convert(Float64, ob2),
+        convert(Float64, utc1), convert(Float64, utc2),
+        convert(Float64, dut1), convert(Float64, elong),
+        convert(Float64, phi), convert(Float64, hm),
+        convert(Float64, xp), convert(Float64, yp),
+        convert(Float64, phpa), convert(Float64, tc),
+        convert(Float64, rh), convert(Float64, wl),
+        ref_rc, ref_dc
+    )
 
-   return status, ref_rc[], ref_dc[]
+    return status, ref_rc[], ref_dc[]
 end
