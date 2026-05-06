@@ -20,7 +20,5 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPm(p::AbstractVector{<:Real})
-
-   return ccall((:iauPm, libsofa_c), Cdouble, 
-       (Ptr{Cdouble},), p)
+    return ccall((:iauPm, libsofa_c), Cdouble, (Ptr{Cdouble},), p)
 end

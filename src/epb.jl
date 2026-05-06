@@ -32,7 +32,9 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauEpb(dj1::Real, dj2::Real)
-    return ccall((:iauEpb, libsofa_c), Cdouble,
-                 (Cdouble, Cdouble),
-                 convert(Float64, dj1), convert(Float64, dj2))
+    return ccall(
+        (:iauEpb, libsofa_c), Cdouble,
+        (Cdouble, Cdouble),
+        convert(Float64, dj1), convert(Float64, dj2)
+    )
 end

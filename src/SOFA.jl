@@ -44,27 +44,30 @@ mutable struct iauASTROM
     refa::Float64                       # refraction constant A (radians)
     refb::Float64                       # refraction constant B (radians)
 
-    function iauASTROM(;pmt::Real=0.0,
-               em::Real=0.0,
-               bm1::Real=0.0,
-               along::Real=0.0,
-               phi::Real=0.0,
-               xpl::Real=0.0,
-               ypl::Real=0.0,
-               sphi::Real=0.0,
-               cphi::Real=0.0,
-               diurab::Real=0.0,
-               eral::Real=0.0,
-               refa::Real=0.0,
-               refb::Real=0.0)
-    
-        new(convert(Float64, pmt), 
+    function iauASTROM(;
+            pmt::Real = 0.0,
+            em::Real = 0.0,
+            bm1::Real = 0.0,
+            along::Real = 0.0,
+            phi::Real = 0.0,
+            xpl::Real = 0.0,
+            ypl::Real = 0.0,
+            sphi::Real = 0.0,
+            cphi::Real = 0.0,
+            diurab::Real = 0.0,
+            eral::Real = 0.0,
+            refa::Real = 0.0,
+            refb::Real = 0.0
+        )
+
+        return new(
+            convert(Float64, pmt),
             (0.0, 0.0, 0.0),
             (0.0, 0.0, 0.0),
-            convert(Float64, em), 
+            convert(Float64, em),
             (0.0, 0.0, 0.0),
             convert(Float64, bm1),
-            ((0.0, 0.0, 0.0),(0.0, 0.0, 0.0),(0.0, 0.0, 0.0)),
+            ((0.0, 0.0, 0.0), (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)),
             convert(Float64, along),
             convert(Float64, phi),
             convert(Float64, xpl),
@@ -75,7 +78,7 @@ mutable struct iauASTROM
             convert(Float64, eral),
             convert(Float64, refa),
             convert(Float64, refb),
-            )
+        )
     end
 end
 
@@ -84,18 +87,20 @@ export iauLDBODY
 Body parameters for light deflection
 """
 mutable struct iauLDBODY
-    bm::Float64            # mass of the body (solar masses)
-    dl::Float64            # deflection limiter (radians^2/2)
-    pv::Array{Float64, 2}  # barycentric PV of the body (au, au/day)
+    bm::Float64             # mass of the body (solar masses)
+    dl::Float64             # deflection limiter (radians^2/2)
+    pv::Matrix{Float64}     # barycentric PV of the body (au, au/day)
 
-    function iauLDBODY(;bm::Real=0.0, dl::Real=0.0,
-                        pv=[0.0 0.0 0.0; 0.0 0.0 0.0])
+    function iauLDBODY(;
+            bm::Real = 0.0, dl::Real = 0.0,
+            pv = [0.0 0.0 0.0; 0.0 0.0 0.0]
+        )
 
         if size(pv) != (2, 3)
             error("Invalid size for rnpb. Must be a (2, 3).")
-        end 
+        end
 
-        new(convert(Float64, bm), convert(Float64, dl), convert(Array{Float64, 2}, pv))
+        return new(convert(Float64, bm), convert(Float64, dl), convert(Matrix{Float64}, pv))
     end
 end
 

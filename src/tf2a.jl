@@ -39,15 +39,17 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauTf2a(s::Char, ihour::Int, imin::Int, sec::Real)
-    ref_rad  = Ref{Float64}(0.0)
+    ref_rad = Ref{Float64}(0.0)
 
-    status = ccall((:iauTf2a, libsofa_c), Cint, 
-        (Cchar, Cint, Cint, Cdouble, Ref{Cdouble}), 
+    status = ccall(
+        (:iauTf2a, libsofa_c), Cint,
+        (Cchar, Cint, Cint, Cdouble, Ref{Cdouble}),
         convert(UInt8, s),
         convert(Int32, ihour),
         convert(Int32, imin),
         convert(Float64, sec),
-        ref_rad)
+        ref_rad
+    )
 
     return status, ref_rad[]
 end

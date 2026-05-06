@@ -62,11 +62,13 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauLtecm(epj::Real)
-   rm = zeros(Float64, 3, 3)
-   ccall((:iauLtecm, libsofa_c), Cvoid, 
-         (Cdouble, Ref{Cdouble}), 
-          convert(Float64, epj),
-          rm)
+    rm = zeros(Float64, 3, 3)
+    ccall(
+        (:iauLtecm, libsofa_c), Cvoid,
+        (Cdouble, Ref{Cdouble}),
+        convert(Float64, epj),
+        rm
+    )
 
-   return SMatrix{3,3}(rm')
+    return SMatrix{3, 3}(rm')
 end

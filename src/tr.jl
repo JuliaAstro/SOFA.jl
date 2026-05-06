@@ -26,12 +26,14 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauTr(r::AbstractMatrix{<:Real})
-   rt = zeros(Float64, 3, 3)
+    rt = zeros(Float64, 3, 3)
 
-   ccall((:iauTr, libsofa_c), Cvoid, 
-       (Ptr{Cdouble}, Ptr{Cdouble}), 
-       convert(Array{Float64, 2}, r'),
-       rt)
+    ccall(
+        (:iauTr, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Matrix{Float64}, r'),
+        rt
+    )
 
-   return SMatrix{3,3}(rt')
+    return SMatrix{3, 3}(rt')
 end

@@ -24,12 +24,14 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauP2pv(p::AbstractVector{<:Real})
-   pv = zeros(Float64, 3, 2)
+    pv = zeros(Float64, 3, 2)
 
-   ccall((:iauP2pv, libsofa_c), Cvoid, 
-       (Ptr{Cdouble}, Ptr{Cdouble}), 
-       convert(Array{Float64, 1}, p),
-       pv)
+    ccall(
+        (:iauP2pv, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Vector{Float64}, p),
+        pv
+    )
 
-   return SMatrix{2,3}(pv')
+    return SMatrix{2, 3}(pv')
 end

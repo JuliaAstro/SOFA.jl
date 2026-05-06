@@ -57,12 +57,14 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauA2tf(ndp::Int, angle::Real)
-    sign  = Array{UInt8}(undef, 1)
-    ihmsf = Array{Int32}(undef, 4)
+    sign = Vector{UInt8}(undef, 1)
+    ihmsf = Vector{Int32}(undef, 4)
 
-    ccall((:iauA2tf, libsofa_c), Cvoid,
+    ccall(
+        (:iauA2tf, libsofa_c), Cvoid,
         (Cint, Cdouble, Ptr{UInt8}, Ptr{Cint}),
-        convert(Int32, ndp), convert(Float64, angle), sign, ihmsf)
+        convert(Int32, ndp), convert(Float64, angle), sign, ihmsf
+    )
 
 
     return Char(sign[1]), ihmsf

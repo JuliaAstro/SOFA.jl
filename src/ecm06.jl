@@ -65,14 +65,15 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauEcm06(date1::Real, date2::Real)
-   # Allocate return value
-   rm = zeros(Float64, 3, 3)
+    # Allocate return value
+    rm = zeros(Float64, 3, 3)
 
-   ccall((:iauEcm06, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble,
-         Ptr{Cdouble}), 
-         convert(Float64, date1), convert(Float64, date2),
-         rm)
+    ccall(
+        (:iauEcm06, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ptr{Cdouble}),
+        convert(Float64, date1), convert(Float64, date2),
+        rm
+    )
 
-   return SMatrix{3,3}(rm')
+    return SMatrix{3, 3}(rm')
 end

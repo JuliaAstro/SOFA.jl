@@ -80,24 +80,30 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauAtci13(rc::Real, dc::Real, pr::Real,
-                  pd::Real, px::Real, rv::Real,
-                  date1::Real, date2::Real)
+function iauAtci13(
+        rc::Real, dc::Real, pr::Real,
+        pd::Real, px::Real, rv::Real,
+        date1::Real, date2::Real
+    )
 
     # Allocate return value
     ref_ri = Ref{Float64}(0.0)
     ref_di = Ref{Float64}(0.0)
     ref_eo = Ref{Float64}(0.0)
 
-    status = ccall((:iauAtci13, libsofa_c), Cvoid,
-            (Cdouble, Cdouble, Cdouble, Cdouble,
+    status = ccall(
+        (:iauAtci13, libsofa_c), Cvoid,
+        (
             Cdouble, Cdouble, Cdouble, Cdouble,
-            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
-            convert(Float64, rc), convert(Float64, dc),
-            convert(Float64, pr), convert(Float64, pd),
-            convert(Float64, px), convert(Float64, rv),
-            convert(Float64, date1), convert(Float64, date2),
-            ref_ri, ref_di, ref_eo)
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, rc), convert(Float64, dc),
+        convert(Float64, pr), convert(Float64, pd),
+        convert(Float64, px), convert(Float64, rv),
+        convert(Float64, date1), convert(Float64, date2),
+        ref_ri, ref_di, ref_eo
+    )
 
- return ref_ri[], ref_di[], ref_eo[]
+    return ref_ri[], ref_di[], ref_eo[]
 end

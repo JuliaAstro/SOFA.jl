@@ -115,21 +115,24 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauApcs13(date1::Real, date2::Real,
-                  pv::AbstractMatrix{<:Real})
-   # Allocate return value
-   ref_astrom = Ref{iauASTROM}(iauASTROM())
+function iauApcs13(
+        date1::Real, date2::Real,
+        pv::AbstractMatrix{<:Real}
+    )
+    # Allocate return value
+    ref_astrom = Ref{iauASTROM}(iauASTROM())
 
-   # Transpose to map Julia (FORTRAN) -> C style memory allocation
-   pv   = Array{Float64, 2}(pv')
+    # Transpose to map Julia (FORTRAN) -> C style memory allocation
+    pv = Matrix{Float64}(pv')
 
-   status = ccall((:iauApcs13, libsofa_c), Cvoid, 
-            (Cdouble, Cdouble, Ptr{Cdouble},
-            Ref{iauASTROM}), 
-            convert(Float64, date1),
-            convert(Float64, date2),
-            pointer(pv),
-            ref_astrom)
+    status = ccall(
+        (:iauApcs13, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ptr{Cdouble}, Ref{iauASTROM}),
+        convert(Float64, date1),
+        convert(Float64, date2),
+        pointer(pv),
+        ref_astrom
+    )
 
-   return ref_astrom[]
+    return ref_astrom[]
 end

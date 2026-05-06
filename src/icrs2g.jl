@@ -67,14 +67,15 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauIcrs2g(dr::Real, dd::Real)
-  ref_dl = Ref{Float64}(0.0)
-  ref_db = Ref{Float64}(0.0)
+    ref_dl = Ref{Float64}(0.0)
+    ref_db = Ref{Float64}(0.0)
 
-  ccall((:iauIcrs2g, libsofa_c), Cvoid, 
-        (Cdouble, Cdouble,
-        Ref{Cdouble}, Ref{Cdouble}), 
-         convert(Float64, dr), convert(Float64, dd),
-         ref_dl, ref_db)
+    ccall(
+        (:iauIcrs2g, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, dr), convert(Float64, dd),
+        ref_dl, ref_db
+    )
 
-  return ref_dl[], ref_db[]
+    return ref_dl[], ref_db[]
 end

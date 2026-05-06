@@ -58,15 +58,16 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauC2teqx(rbpn::AbstractMatrix{<:Real}, gst::Real, rpom::AbstractMatrix{<:Real})
 
-   # Allocate return value
-   rc2t = zeros(Float64, 3, 3)
+    # Allocate return value
+    rc2t = zeros(Float64, 3, 3)
 
-   ccall((:iauC2teqx, libsofa_c), Cvoid,
-         (Ptr{Cdouble}, Cdouble, Ptr{Cdouble},
-         Ptr{Cdouble}),
-         convert(Array{Float64, 2}, rbpn'), convert(Float64, gst),
-         convert(Array{Float64, 2}, rpom'),
-         rc2t)
+    ccall(
+        (:iauC2teqx, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Matrix{Float64}, rbpn'), convert(Float64, gst),
+        convert(Matrix{Float64}, rpom'),
+        rc2t
+    )
 
-   return SMatrix{3,3}(rc2t')
+    return SMatrix{3, 3}(rc2t')
 end

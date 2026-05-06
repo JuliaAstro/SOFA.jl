@@ -32,14 +32,16 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauP2s(p::AbstractVector{<:Real})
-   ref_theta = Ref{Float64}(0.0)
-   ref_phi   = Ref{Float64}(0.0)
-   ref_r     = Ref{Float64}(0.0)
+    ref_theta = Ref{Float64}(0.0)
+    ref_phi = Ref{Float64}(0.0)
+    ref_r = Ref{Float64}(0.0)
 
-   ccall((:iauP2s, libsofa_c), Cvoid, 
-       (Ptr{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
-       convert(Array{Float64, 1}, p),
-       ref_theta, ref_phi, ref_r)
+    ccall(
+        (:iauP2s, libsofa_c), Cvoid,
+        (Ptr{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Vector{Float64}, p),
+        ref_theta, ref_phi, ref_r
+    )
 
-   return ref_theta[], ref_phi[], ref_r[]
+    return ref_theta[], ref_phi[], ref_r[]
 end

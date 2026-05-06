@@ -175,27 +175,33 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauApco13(utc1::Real, utc2::Real, dut1::Real,
-                  elong::Real, phi::Real, hm::Real,
-                  xp::Real, yp::Real,
-                  phpa::Real, tc::Real, rh::Real, wl::Real)
-   # Allocate return value
-   ref_astrom = Ref{iauASTROM}(iauASTROM())
-   ref_eo     = Ref{Float64}(0.0)
+function iauApco13(
+        utc1::Real, utc2::Real, dut1::Real,
+        elong::Real, phi::Real, hm::Real,
+        xp::Real, yp::Real,
+        phpa::Real, tc::Real, rh::Real, wl::Real
+    )
+    # Allocate return value
+    ref_astrom = Ref{iauASTROM}(iauASTROM())
+    ref_eo = Ref{Float64}(0.0)
 
 
-   status = ccall((:iauApco13, libsofa_c), Cint, 
-            (Cdouble, Cdouble, Cdouble, Cdouble,
+    status = ccall(
+        (:iauApco13, libsofa_c), Cint,
+        (
             Cdouble, Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble, Cdouble,
-             Ref{iauASTROM}, Ref{Cdouble}), 
-            convert(Float64, utc1), convert(Float64, utc2),
-            convert(Float64, dut1), convert(Float64, elong),
-            convert(Float64, phi), convert(Float64, hm),
-            convert(Float64, xp), convert(Float64, yp),
-            convert(Float64, phpa), convert(Float64, tc),
-            convert(Float64, rh), convert(Float64, wl),
-            ref_astrom, ref_eo)
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Ref{iauASTROM}, Ref{Cdouble},
+        ),
+        convert(Float64, utc1), convert(Float64, utc2),
+        convert(Float64, dut1), convert(Float64, elong),
+        convert(Float64, phi), convert(Float64, hm),
+        convert(Float64, xp), convert(Float64, yp),
+        convert(Float64, phpa), convert(Float64, tc),
+        convert(Float64, rh), convert(Float64, wl),
+        ref_astrom, ref_eo
+    )
 
-   return status, ref_astrom[], ref_eo[]
+    return status, ref_astrom[], ref_eo[]
 end

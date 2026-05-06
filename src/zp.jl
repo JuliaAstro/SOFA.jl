@@ -17,10 +17,10 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauZp()
-   p = zeros(Float64, 3)
+    p = zeros(Float64, 3)
 
-   ccall((:iauZp, libsofa_c), Cvoid, (Ptr{Cdouble},), p)
+    ccall((:iauZp, libsofa_c), Cvoid, (Ptr{Cdouble},), p)
 
-   # Transpose since C call return row-major operation
-   return SVector{3}(p)
+    # Transpose since C call return row-major operation
+    return SVector{3}(p)
 end

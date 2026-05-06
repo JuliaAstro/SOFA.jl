@@ -66,8 +66,10 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauGst06a(uta::Real, utb::Real, tta::Real, ttb::Real)
 
-   return ccall((:iauGst06a, libsofa_c), Cdouble,
-               (Cdouble, Cdouble, Cdouble, Cdouble),
-               convert(Float64, uta), convert(Float64, utb),
-               convert(Float64, tta), convert(Float64, ttb))
+    return ccall(
+        (:iauGst06a, libsofa_c), Cdouble,
+        (Cdouble, Cdouble, Cdouble, Cdouble),
+        convert(Float64, uta), convert(Float64, utb),
+        convert(Float64, tta), convert(Float64, ttb)
+    )
 end

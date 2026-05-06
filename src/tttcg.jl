@@ -38,12 +38,14 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauTttcg(tt1::Real, tt2::Real)
-   ref_tcg1 = Ref{Float64}(0.0)
-   ref_tcg2 = Ref{Float64}(0.0)
+    ref_tcg1 = Ref{Float64}(0.0)
+    ref_tcg2 = Ref{Float64}(0.0)
 
-   status = ccall((:iauTttcg, libsofa_c), Cint,
-                   (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
-                   convert(Float64, tt1), convert(Float64, tt2), ref_tcg1, ref_tcg2)
+    status = ccall(
+        (:iauTttcg, libsofa_c), Cint,
+        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, tt1), convert(Float64, tt2), ref_tcg1, ref_tcg2
+    )
 
-   return status, ref_tcg1[], ref_tcg2[]
+    return status, ref_tcg1[], ref_tcg2[]
 end

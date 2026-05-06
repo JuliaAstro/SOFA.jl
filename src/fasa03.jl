@@ -40,5 +40,5 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauFasa03(t::Real)
-   return ccall((:iauFasa03, libsofa_c), Cdouble, (Cdouble,), convert(Float64, t))
+    return ccall((:iauFasa03, libsofa_c), Cdouble, (Cdouble,), convert(Float64, t))
 end

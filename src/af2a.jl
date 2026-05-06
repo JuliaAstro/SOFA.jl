@@ -37,15 +37,17 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauAf2a(sign::Char, ideg::Int, iamin::Int, asec::Real)
-    rad  = zeros(Float64, 1)
+    rad = zeros(Float64, 1)
 
-    status = ccall((:iauAf2a, libsofa_c), Cint, 
-        (Cchar, Cint, Cint, Cdouble, Ptr{Cdouble}), 
+    status = ccall(
+        (:iauAf2a, libsofa_c), Cint,
+        (Cchar, Cint, Cint, Cdouble, Ptr{Cdouble}),
         convert(UInt8, sign),
         convert(Int32, ideg),
         convert(Int32, iamin),
         convert(Float64, asec),
-        rad)
+        rad
+    )
 
     return status, rad[1]
 end

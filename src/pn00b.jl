@@ -102,20 +102,24 @@ function iauPn00b(date1::Real, date2::Real)
     ref_dpsi = Ref{Float64}(0.0)
     ref_deps = Ref{Float64}(0.0)
     ref_epsa = Ref{Float64}(0.0)
-    rb       = zeros(Float64, 3, 3)
-    rp       = zeros(Float64, 3, 3)
-    rbp      = zeros(Float64, 3, 3)
-    rn       = zeros(Float64, 3, 3)
-    rbpn     = zeros(Float64, 3, 3)
- 
-    ccall((:iauPn00b, libsofa_c), Cvoid, 
-         (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble},
-          Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
-          Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
-          convert(Float64, date1),
-          convert(Float64, date2),
-          ref_dpsi, ref_deps, ref_epsa, rb, rp, rbp, rn, rbpn)
- 
-    return ref_dpsi[], ref_deps[], ref_epsa[], SMatrix{3,3}(rb'), SMatrix{3,3}(rp'),
-       SMatrix{3,3}(rbp'), SMatrix{3,3}(rn'), SMatrix{3,3}(rbpn')
- end
+    rb = zeros(Float64, 3, 3)
+    rp = zeros(Float64, 3, 3)
+    rbp = zeros(Float64, 3, 3)
+    rn = zeros(Float64, 3, 3)
+    rbpn = zeros(Float64, 3, 3)
+
+    ccall(
+        (:iauPn00b, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble},
+            Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
+            Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
+        ),
+        convert(Float64, date1),
+        convert(Float64, date2),
+        ref_dpsi, ref_deps, ref_epsa, rb, rp, rbp, rn, rbpn
+    )
+
+    return ref_dpsi[], ref_deps[], ref_epsa[], SMatrix{3, 3}(rb'), SMatrix{3, 3}(rp'),
+        SMatrix{3, 3}(rbp'), SMatrix{3, 3}(rn'), SMatrix{3, 3}(rbpn')
+end

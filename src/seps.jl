@@ -27,10 +27,12 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauSeps(al::Real, ap::Real, bl::Real, bp::Real)
-   return ccall((:iauSeps, libsofa_c), Cdouble, 
-       (Cdouble, Cdouble, Cdouble, Cdouble), 
-       convert(Float64, al),
-       convert(Float64, ap),
-       convert(Float64, bl),
-       convert(Float64, bp))
+    return ccall(
+        (:iauSeps, libsofa_c), Cdouble,
+        (Cdouble, Cdouble, Cdouble, Cdouble),
+        convert(Float64, al),
+        convert(Float64, ap),
+        convert(Float64, bl),
+        convert(Float64, bp)
+    )
 end

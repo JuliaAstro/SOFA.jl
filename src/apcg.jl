@@ -109,15 +109,17 @@ function iauApcg(date1::Real, date2::Real, ebpv::AbstractMatrix{<:Real}, ehp::Ab
     ref_astrom = Ref{iauASTROM}(iauASTROM())
 
     # Transpose to map Julia (FORTRAN) -> C style memory allocation
-    ebpv = Array{Float64, 2}(ebpv') # Transpose input up front
+    ebpv = Matrix{Float64}(ebpv') # Transpose input up front
 
-    ccall((:iauApcg, libsofa_c), Cvoid, 
-            (Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}, Ref{iauASTROM}), 
-            convert(Float64, date1),
-            convert(Float64, date2),
-            pointer(ebpv),
-            pointer(ehp),
-            ref_astrom)
+    ccall(
+        (:iauApcg, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}, Ref{iauASTROM}),
+        convert(Float64, date1),
+        convert(Float64, date2),
+        pointer(ebpv),
+        pointer(ehp),
+        ref_astrom
+    )
 
     return ref_astrom[]
 end

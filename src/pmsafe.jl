@@ -106,31 +106,37 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauPmsafe(ra1::Real, dec1::Real, pmr1::Real, pmd1::Real,
-                 px1::Real, rv1::Real, ep1a::Real, ep1b::Real,
-                 ep2a::Real, ep2b::Real)
+function iauPmsafe(
+        ra1::Real, dec1::Real, pmr1::Real, pmd1::Real,
+        px1::Real, rv1::Real, ep1a::Real, ep1b::Real,
+        ep2a::Real, ep2b::Real
+    )
 
-    ref_ra2  = Ref{Float64}(0.0)
+    ref_ra2 = Ref{Float64}(0.0)
     ref_dec2 = Ref{Float64}(0.0)
     ref_pmr2 = Ref{Float64}(0.0)
     ref_pmd2 = Ref{Float64}(0.0)
-    ref_px2  = Ref{Float64}(0.0)
-    ref_rv2  = Ref{Float64}(0.0)
-    
-   
-    status = ccall((:iauPmsafe, libsofa_c), Cint, 
-       (Cdouble, Cdouble, Cdouble, Cdouble,
-        Cdouble, Cdouble, Cdouble, 
-        Cdouble, Cdouble, Cdouble,
-        Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
-        Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), 
-       convert(Float64, ra1), convert(Float64, dec1),
-       convert(Float64, pmr1), convert(Float64, pmd1),
-       convert(Float64, px1), convert(Float64, rv1),
-       convert(Float64, ep1a), convert(Float64, ep1b),
-       convert(Float64, ep2a), convert(Float64, ep2b),
-       ref_ra2, ref_dec2, ref_pmr2, ref_pmd2, ref_px2, ref_rv2)
-       
+    ref_px2 = Ref{Float64}(0.0)
+    ref_rv2 = Ref{Float64}(0.0)
 
-   return status, ref_ra2[], ref_dec2[], ref_pmr2[], ref_pmd2[], ref_px2[], ref_rv2[]
+
+    status = ccall(
+        (:iauPmsafe, libsofa_c), Cint,
+        (
+            Cdouble, Cdouble, Cdouble, Cdouble,
+            Cdouble, Cdouble, Cdouble,
+            Cdouble, Cdouble, Cdouble,
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+            Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+        ),
+        convert(Float64, ra1), convert(Float64, dec1),
+        convert(Float64, pmr1), convert(Float64, pmd1),
+        convert(Float64, px1), convert(Float64, rv1),
+        convert(Float64, ep1a), convert(Float64, ep1b),
+        convert(Float64, ep2a), convert(Float64, ep2b),
+        ref_ra2, ref_dec2, ref_pmr2, ref_pmd2, ref_px2, ref_rv2
+    )
+
+
+    return status, ref_ra2[], ref_dec2[], ref_pmr2[], ref_pmd2[], ref_px2[], ref_rv2[]
 end

@@ -53,12 +53,14 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauTcbtdb(tcb1::Real, tcb2::Real)
-   ref_tdb1 = Ref{Float64}(0.0)
-   ref_tdb2 = Ref{Float64}(0.0)
+    ref_tdb1 = Ref{Float64}(0.0)
+    ref_tdb2 = Ref{Float64}(0.0)
 
-   status = ccall((:iauTcbtdb, libsofa_c), Cint,
-                   (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
-                   convert(Float64, tcb1), convert(Float64, tcb2), ref_tdb1, ref_tdb2)
+    status = ccall(
+        (:iauTcbtdb, libsofa_c), Cint,
+        (Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}),
+        convert(Float64, tcb1), convert(Float64, tcb2), ref_tdb1, ref_tdb2
+    )
 
-   return status, ref_tdb1[], ref_tdb2[]
+    return status, ref_tdb1[], ref_tdb2[]
 end

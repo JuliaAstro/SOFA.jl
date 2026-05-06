@@ -90,17 +90,21 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauAtoiq(type_::Char, ob1::Real, ob2::Real, astrom::iauASTROM)
 
-   # Allocate return values
-   ref_type_  = Ref{UInt8}(convert(UInt8, type_))
-   ref_astrom = Ref{iauASTROM}(astrom)
-   ref_ri     = Ref{Float64}(0.0)
-   ref_di     = Ref{Float64}(0.0)
+    # Allocate return values
+    ref_type_ = Ref{UInt8}(convert(UInt8, type_))
+    ref_astrom = Ref{iauASTROM}(astrom)
+    ref_ri = Ref{Float64}(0.0)
+    ref_di = Ref{Float64}(0.0)
 
-   ccall((:iauAtoiq, libsofa_c), Cvoid, 
-       (Ref{UInt8}, Cdouble, Cdouble, Ref{iauASTROM},
-       Ref{Cdouble}, Ref{Cdouble}), 
-       ref_type_, convert(Float64, ob1), convert(Float64, ob2),
-       ref_astrom, ref_ri, ref_di)
+    ccall(
+        (:iauAtoiq, libsofa_c), Cvoid,
+        (
+            Ref{UInt8}, Cdouble, Cdouble, Ref{iauASTROM},
+            Ref{Cdouble}, Ref{Cdouble},
+        ),
+        ref_type_, convert(Float64, ob1), convert(Float64, ob2),
+        ref_astrom, ref_ri, ref_di
+    )
 
-   return ref_ri[], ref_di[]
+    return ref_ri[], ref_di[]
 end

@@ -39,15 +39,17 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauTf2d(s::Char, ihour::Int, imin::Int, sec::Real)
-    ref_days  = Ref{Float64}(0.0)
+    ref_days = Ref{Float64}(0.0)
 
-    status = ccall((:iauTf2d, libsofa_c), Cint,
+    status = ccall(
+        (:iauTf2d, libsofa_c), Cint,
         (Cchar, Cint, Cint, Cdouble, Ref{Cdouble}),
         convert(UInt8, s),
         convert(Int32, ihour),
         convert(Int32, imin),
         convert(Float64, sec),
-        ref_days)
+        ref_days
+    )
 
     return status, ref_days[]
 end

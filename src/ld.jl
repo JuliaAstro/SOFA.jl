@@ -72,16 +72,22 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauLd(rh::Real, p::AbstractVector{<:Real}, q::AbstractVector{<:Real},
-               e::AbstractVector{<:Real}, em::Real, dlim::Real)
-   p1 = zeros(Float64, 3)
+function iauLd(
+        rh::Real, p::AbstractVector{<:Real}, q::AbstractVector{<:Real},
+        e::AbstractVector{<:Real}, em::Real, dlim::Real
+    )
+    p1 = zeros(Float64, 3)
 
-   ccall((:iauLd, libsofa_c), Cvoid, 
-         (Cdouble, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
-         Cdouble, Cdouble, Ptr{Cdouble}), 
-          convert(Float64, rh), convert(Array{Float64, 1}, p),
-          convert(Array{Float64, 1}, q), convert(Array{Float64, 1}, e),
-          convert(Float64, em), convert(Float64, dlim), p1)
+    ccall(
+        (:iauLd, libsofa_c), Cvoid,
+        (
+            Cdouble, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
+            Cdouble, Cdouble, Ptr{Cdouble},
+        ),
+        convert(Float64, rh), convert(Vector{Float64}, p),
+        convert(Vector{Float64}, q), convert(Vector{Float64}, e),
+        convert(Float64, em), convert(Float64, dlim), p1
+    )
 
-   return SVector{3}(p1)
+    return SVector{3}(p1)
 end

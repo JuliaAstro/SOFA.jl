@@ -32,13 +32,15 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPn(p::AbstractVector{<:Real})
-   # Allocate return values
-   ref_r = Ref{Float64}(0.0)
-   u = zeros(Float64, 3)
+    # Allocate return values
+    ref_r = Ref{Float64}(0.0)
+    u = zeros(Float64, 3)
 
-   ccall((:iauPn, libsofa_c), Cvoid, 
+    ccall(
+        (:iauPn, libsofa_c), Cvoid,
         (Ptr{Cdouble}, Ref{Cdouble}, Ptr{Cdouble}),
-         convert(Array{Float64, 1}, p), ref_r, u)
+        convert(Vector{Float64}, p), ref_r, u
+    )
 
-   return ref_r[], SVector{3}(u)
+    return ref_r[], SVector{3}(u)
 end

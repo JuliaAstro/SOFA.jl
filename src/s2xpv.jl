@@ -28,15 +28,16 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauS2xpv(s1::Real, s2::Real, pv::AbstractMatrix{<:Real})
-   spv = zeros(Float64, 3, 2)
+    spv = zeros(Float64, 3, 2)
 
-   ccall((:iauS2xpv, libsofa_c), Cvoid, 
-       (Cdouble, Cdouble,
-       Ptr{Cdouble}, Ptr{Cdouble}), 
-       convert(Float64, s1),
-       convert(Float64, s2),
-       convert(Array{Float64, 2}, pv'),
-       spv)
+    ccall(
+        (:iauS2xpv, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Float64, s1),
+        convert(Float64, s2),
+        convert(Matrix{Float64}, pv'),
+        spv
+    )
 
-   return SMatrix{2,3}(spv')
+    return SMatrix{2, 3}(spv')
 end

@@ -83,16 +83,17 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauTporv(xi::Real, eta::Real, v::AbstractVector{<:Real})
-   v01 = zeros(Float64, 3)
-   v02 = zeros(Float64, 3)
+    v01 = zeros(Float64, 3)
+    v02 = zeros(Float64, 3)
 
-   status = ccall((:iauTporv, libsofa_c), Cint, 
-       (Cdouble, Cdouble, Ref{Cdouble},
-       Ptr{Cdouble}, Ptr{Cdouble}), 
-       convert(Float64, xi),
-       convert(Float64, eta),
-       convert(Array{Float64, 1}, v),
-       v01, v02)
+    status = ccall(
+        (:iauTporv, libsofa_c), Cint,
+        (Cdouble, Cdouble, Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Float64, xi),
+        convert(Float64, eta),
+        convert(Vector{Float64}, v),
+        v01, v02
+    )
 
-   return status, SVector{3}(v01), SVector{3}(v02)
+    return status, SVector{3}(v01), SVector{3}(v02)
 end

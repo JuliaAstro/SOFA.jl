@@ -55,14 +55,16 @@ Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauD2tf(ndp::Int, days::Real)
 
-   # Allocate output
-   ref_sign = Ref{UInt8}(0)
-   ihmsf  = zeros(Int32, 4)
+    # Allocate output
+    ref_sign = Ref{UInt8}(0)
+    ihmsf = zeros(Int32, 4)
 
-   ccall((:iauD2tf, libsofa_c), Cvoid,
-         (Cint, Cdouble, Ref{Cuchar}, Ptr{Cint}),
-         convert(Int32, ndp), convert(Float64, days),
-         ref_sign, ihmsf)
+    ccall(
+        (:iauD2tf, libsofa_c), Cvoid,
+        (Cint, Cdouble, Ref{Cuchar}, Ptr{Cint}),
+        convert(Int32, ndp), convert(Float64, days),
+        ref_sign, ihmsf
+    )
 
-   return convert(Char, ref_sign[]), SVector{4}(ihmsf)
+    return convert(Char, ref_sign[]), SVector{4}(ihmsf)
 end

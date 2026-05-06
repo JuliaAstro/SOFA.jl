@@ -61,15 +61,17 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauJdcalf(ndp::Int, dj1::Real, dj2::Real)
-   iymdf = zeros(Int32, 4)
+    iymdf = zeros(Int32, 4)
 
-   status = ccall((:iauJdcalf, libsofa_c), Cint, 
-       (Cint, Cdouble, Cdouble, Ptr{Cint}), 
-       convert(Int32, ndp), convert(Float64, dj1), convert(Float64, dj2), iymdf)
+    status = ccall(
+        (:iauJdcalf, libsofa_c), Cint,
+        (Cint, Cdouble, Cdouble, Ptr{Cint}),
+        convert(Int32, ndp), convert(Float64, dj1), convert(Float64, dj2), iymdf
+    )
 
-   if status != 0
-       @warn "iauJdcalf return non-zero exit code"
-   end
+    if status != 0
+        @warn "iauJdcalf return non-zero exit code"
+    end
 
-   return status, SVector{4}(iymdf)
+    return status, SVector{4}(iymdf)
 end

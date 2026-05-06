@@ -21,8 +21,10 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPdp(a::AbstractVector{<:Real}, b::AbstractVector{<:Real})
-   return ccall((:iauPdp, libsofa_c), Cdouble, 
-       (Ptr{Cdouble}, Ptr{Cdouble}), 
-       convert(Array{Float64, 1}, a),
-       convert(Array{Float64, 1}, b))
+    return ccall(
+        (:iauPdp, libsofa_c), Cdouble,
+        (Ptr{Cdouble}, Ptr{Cdouble}),
+        convert(Vector{Float64}, a),
+        convert(Vector{Float64}, b)
+    )
 end

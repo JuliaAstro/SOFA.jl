@@ -151,43 +151,49 @@ SOFA release 2018-01-30
 
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
-function iauApco(date1::Real, date2::Real, 
-                 ebpv::AbstractMatrix{<:Real}, ehp::AbstractVector{<:Real},
-                 x::Real, y::Real, s::Real, theta::Real,
-                 elong::Real, phi::Real, hm::Real,
-                 xp::Real, yp::Real, sp::Real,
-                 refa::Real, refb::Real)
+function iauApco(
+        date1::Real, date2::Real,
+        ebpv::AbstractMatrix{<:Real}, ehp::AbstractVector{<:Real},
+        x::Real, y::Real, s::Real, theta::Real,
+        elong::Real, phi::Real, hm::Real,
+        xp::Real, yp::Real, sp::Real,
+        refa::Real, refb::Real
+    )
 
-   # Allocate return value
-   ref_astrom = Ref{iauASTROM}(iauASTROM())
+    # Allocate return value
+    ref_astrom = Ref{iauASTROM}(iauASTROM())
 
-   # Transpose to map Julia (FORTRAN) -> C style memory allocation
-   ebpv = Array{Float64, 2}(ebpv') # Transpose input up front
+    # Transpose to map Julia (FORTRAN) -> C style memory allocation
+    ebpv = Matrix{Float64}(ebpv') # Transpose input up front
 
-   ccall((:iauApco, libsofa_c), Cvoid, 
-            (Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}, 
+    ccall(
+        (:iauApco, libsofa_c), Cvoid,
+        (
+            Cdouble, Cdouble, Ptr{Cdouble}, Ptr{Cdouble},
             Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble,
             Cdouble, Cdouble, Cdouble,
-            Ref{iauASTROM}), 
-            convert(Float64, date1),
-            convert(Float64, date2),
-            pointer(ebpv),
-            pointer(ehp),
-            convert(Float64, x),
-            convert(Float64, y),
-            convert(Float64, s),
-            convert(Float64, theta),
-            convert(Float64, elong),
-            convert(Float64, phi),
-            convert(Float64, hm),
-            convert(Float64, xp),
-            convert(Float64, yp),
-            convert(Float64, sp),
-            convert(Float64, refa),
-            convert(Float64, refb),
-            ref_astrom)
+            Ref{iauASTROM},
+        ),
+        convert(Float64, date1),
+        convert(Float64, date2),
+        pointer(ebpv),
+        pointer(ehp),
+        convert(Float64, x),
+        convert(Float64, y),
+        convert(Float64, s),
+        convert(Float64, theta),
+        convert(Float64, elong),
+        convert(Float64, phi),
+        convert(Float64, hm),
+        convert(Float64, xp),
+        convert(Float64, yp),
+        convert(Float64, sp),
+        convert(Float64, refa),
+        convert(Float64, refb),
+        ref_astrom
+    )
 
-   return ref_astrom[]
+    return ref_astrom[]
 end

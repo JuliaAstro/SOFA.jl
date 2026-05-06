@@ -56,13 +56,15 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPmat00(date1::Real, date2::Real)
-   rbp = zeros(Float64, 3, 3)
+    rbp = zeros(Float64, 3, 3)
 
-   ccall((:iauPmat00, libsofa_c), Cvoid, 
-       (Cdouble, Cdouble, Ptr{Cdouble}),
-       convert(Float64, date1),
-       convert(Float64, date2),
-       rbp)
+    ccall(
+        (:iauPmat00, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ptr{Cdouble}),
+        convert(Float64, date1),
+        convert(Float64, date2),
+        rbp
+    )
 
-   return SMatrix{3,3}(rbp')
+    return SMatrix{3, 3}(rbp')
 end

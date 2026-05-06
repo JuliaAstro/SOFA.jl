@@ -58,13 +58,15 @@ SOFA release 2018-01-30
 Copyright (C) 2018 IAU SOFA Board.  See notes at end.
 """
 function iauPnm80(date1::Real, date2::Real)
-   rmatpn = zeros(Float64, 3, 3)
+    rmatpn = zeros(Float64, 3, 3)
 
-   ccall((:iauPnm80, libsofa_c), Cvoid, 
-       (Cdouble, Cdouble, Ptr{Cdouble}),
-       convert(Float64, date1),
-       convert(Float64, date2),
-       rmatpn)
+    ccall(
+        (:iauPnm80, libsofa_c), Cvoid,
+        (Cdouble, Cdouble, Ptr{Cdouble}),
+        convert(Float64, date1),
+        convert(Float64, date2),
+        rmatpn
+    )
 
-   return SMatrix{3,3}(rmatpn')
+    return SMatrix{3, 3}(rmatpn')
 end
