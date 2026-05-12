@@ -1,7 +1,7 @@
 name = "SOFA"
 uuid = "ad3d3fd0-b5f2-51ee-b274-8cdbe62317e2"
 authors = ["Duncan Eddy <duncan.eddy@gmail.com>"]
-version = "1.0.2"
+version = "1.0.3"
 
 [workspace]
 projects = ["test", "docs"]
