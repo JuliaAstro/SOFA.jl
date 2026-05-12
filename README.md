@@ -1,12 +1,12 @@
-| Testing | Coverage | Documentation |
-| :-----: | :------: | :-----------: |
-| [![Build Status](https://github.com/JuliaAstro/SOFA.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JuliaAstro/SOFA.jl/actions/workflows/CI.yml) | [![Coverage Status](https://codecov.io/gh/JuliaAstro/SOFA.jl/graph/badge.svg?token=XHWGNxf4cL)](https://codecov.io/gh/JuliaAstro/SOFA.jl) | [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://juliaastro.org/SOFA.jl/latest/) |
-
-
-> [!NOTE]
-> As of 2026-03-27 this repo will be transferred to [JuliaAstro](github.com/orgs/juliaastro/) for renewed maintenance and support.
-
 # SOFA.jl
+
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.org/SOFA/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.org/SOFA.jl/dev)
+
+[![CI](https://github.com/JuliaAstro/SOFA.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JuliaAstro/SOFA.jl/actions/workflows/CI.yml)
+[![codecov](https://codecov.io/gh/JuliaAstro/SOFA.jl/graph/badge.svg)](https://codecov.io/gh/JuliaAstro/SOFA.jl)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Unofficial wrapper of the IAU SOFA C libraries for fundamental astronomy.
 
 ## Description
@@ -22,8 +22,8 @@ The package versions correspond to the following releases of the SOFA C Library:
 
 | Package Version | SOFA Release |
 | --------------- | ------------ |
-| v2.0            | 2019-07-22   |
-| v1.0            | 2018-01-30   |
+| v1.0            | 2019-07-22   |
+| v0.1            | 2018-01-30   |
 
 ## Notes
 
