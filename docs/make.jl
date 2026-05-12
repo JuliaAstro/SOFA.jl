@@ -10,6 +10,7 @@ makedocs(
     sitename  = "SOFA.jl",
     format = Documenter.HTML(;
         canonical = "https://juliaastro.org/SOFA/stable/",
+        size_threshold = 800 * 1024, # 800 KiB
     ),
     pages = [
         "Home" => "index.md",
