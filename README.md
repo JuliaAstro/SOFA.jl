@@ -8,7 +8,7 @@
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Unofficial wrapper of the IAU SOFA C libraries for fundamental astronomy.
+Unofficial wrapper of the IAU SOFA C libraries for fundamental astronomy. See the [Astrometry.jl > SOFA](https://juliaastro.org/Astrometry/stable/SOFA/) sub-package for the pure Julia implementation.
 
 ## Description
 
