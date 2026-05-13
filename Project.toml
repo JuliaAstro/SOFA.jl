@@ -11,9 +11,6 @@ Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 SOFA_jll = "d1004450-2f34-5761-9671-ec24e6a6fe03"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
-[sources]
-SOFA_jll = {url = "https://github.com/icweaver/SOFA_jll-preview"}
-
 [compat]
 Libdl = "1"
 StaticArrays = "^1.0.1"
