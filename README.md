@@ -21,10 +21,16 @@ prove compliance and reproducibility of the core SOFA C functionality.
 
 The package versions correspond to the following releases of the SOFA C Library:
 
-| Package Version | SOFA Release |
-| --------------- | ------------ |
-| v1.0            | 2019-07-22   |
-| v0.1            | 2018-01-30   |
+| Package Version | SOFA Release | build      |
+| :-------------- | :----------- | :--------  |
+| v2.0            | 2023-10-11   | pure Julia |
+| v1.5            | 2023-10-11   | jll        |
+| v1.4            | 2021-05-12   | jll        |
+| v1.3            | 2021-01-25_a | jll        |
+| v1.2            | 2020-07-21   | jll        |
+| v1.1            | 2019-07-22   | jll        |
+| v1.0            | 2019-07-22   | manual     |
+| v0.1            | 2018-01-30   | manual     |
 
 ## Notes
 
