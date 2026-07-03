@@ -2208,7 +2208,7 @@ let
    @test isapprox(za, 0.2921789846651790546e-3, atol=1e-14)
    @test isapprox(zetaa, 0.3178773290332009310e-3, atol=1e-14)
    @test isapprox(thetaa, 0.2650932701657497181e-3, atol=1e-14)
-   @test isapprox(pa, 0.6651637681381016344e-3, atol=1e-14)
+   @test isapprox(pa, 0.6651637681381016288e-3, atol=1e-14)
    @test isapprox(gam, 0.1398077115963754987e-5, atol=1e-14)
    @test isapprox(phi, 0.4090864090837462602, atol=1e-14)
    @test isapprox(psi, 0.6664464807480920325e-3, atol=1e-14)

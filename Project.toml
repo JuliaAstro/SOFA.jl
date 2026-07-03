@@ -1,7 +1,7 @@
 name = "SOFA"
 uuid = "ad3d3fd0-b5f2-51ee-b274-8cdbe62317e2"
 authors = ["Duncan Eddy <duncan.eddy@gmail.com>"]
-version = "1.1.1"
+version = "1.2.0"
 
 [workspace]
 projects = ["test", "docs"]
@@ -14,5 +14,5 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 [compat]
 Libdl = "1"
 StaticArrays = "^1.0.1"
-SOFA_jll = "2019.7.22"
+SOFA_jll = "~2020.7.21"
 julia = "1.10.0"
