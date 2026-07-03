@@ -608,6 +608,39 @@ let
     @test isapprox(dc, 0.1740632537627034482, atol=1e-12)
 end
 
+let
+    rc = 2.71
+    dc = 0.174
+    pr = 1e-5
+    pd = 5e-6
+    px = 0.1
+    rv = 55.0
+    date1 = 2456165.5
+    date2 = 0.401182685
+
+    ra, da = iauAtcc13(rc, dc, pr, pd, px, rv, date1, date2)
+
+    @test isapprox(ra, 2.710126504531372384, atol=1e-12)
+    @test isapprox(da, 0.1740632537628350152, atol=1e-12)
+end
+
+let
+    date1 = 2456165.5
+    date2 = 0.401182685
+    astrom, eo = iauApci13(date1, date2)
+    rc = 2.71
+    dc = 0.174
+    pr = 1e-5
+    pd = 5e-6
+    px = 0.1
+    rv = 55.0
+
+    ra, da = iauAtccq(rc, dc, pr, pd, px, rv, astrom)
+
+    @test isapprox(ra, 2.710126504531372384, atol=1e-12)
+    @test isapprox(da, 0.1740632537628350152, atol=1e-12)
+end
+
 # let
 #     b = [iauLDBODY(), iauLDBODY(), iauLDBODY()]
 #     date1 = 2456165.5
@@ -2282,6 +2315,18 @@ let
    @test isapprox(phib,  0.4091014602391312808, atol=1e-12)
    @test isapprox(psib, -0.9501954178013031895e-3, atol=1e-14)
    @test isapprox(epsa,  0.4091014316587367491, atol=1e-12)
+end
+
+let
+    pv = iauMoon98(2400000.5, 43999.9)
+
+    @test isapprox(pv[1, 1], -0.2601295959971044180e-2, atol=1e-11)
+    @test isapprox(pv[1, 2],  0.6139750944302742189e-3, atol=1e-11)
+    @test isapprox(pv[1, 3],  0.2640794528229828909e-3, atol=1e-11)
+
+    @test isapprox(pv[2, 1], -0.1244321506649895021e-3, atol=1e-11)
+    @test isapprox(pv[2, 2], -0.5219076942678119398e-3, atol=1e-11)
+    @test isapprox(pv[2, 3], -0.1716132214378462047e-3, atol=1e-11)
 end
 
 let
