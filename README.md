@@ -19,7 +19,7 @@ prove compliance and reproducibility of the core SOFA C functionality.
 
 ## Package Version <-> SOFA Release Correspondence
 
-The package versions correspond to the following releases of the SOFA C Library:
+The planned package versions below correspond to the following releases of the SOFA C Library:
 
 | Package Version | SOFA Release | build      |
 | :-------------- | :----------- | :--------  |
