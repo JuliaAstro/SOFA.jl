@@ -293,6 +293,8 @@ function tpstv(ξ::F, η::F, v0::V) where
     SVector(x - (ξ*y + η*x*z)/r, y + (ξ*x - η*y*z)/r, z + η*r)/f
 end
 
+const TINY = 1e-6
+
 """
     tpxes(a::AbstractFloat, b::AbstractFloat, a0::AbstractFloat, b0::AbstractFloat)
 

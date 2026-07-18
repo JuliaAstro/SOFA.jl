@@ -8,7 +8,7 @@
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Unofficial pure Julia implementation of the IAU SOFA library for fundamental astronomy. For the wrapper of the SOFA C library, see the v1.x releases maintained on the `release-1.x` branches.
+A pure Julia implementation of the IAU SOFA library for fundamental astronomy. For the wrapper of the SOFA C library, see the v1.x releases maintained on the `release-1.x` branches.
 
 ## Description
 

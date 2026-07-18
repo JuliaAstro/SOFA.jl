@@ -1,14 +1,3 @@
-const SECPERDAY = 86400.0
-const ASTRUNIT = 1.495978707e11
-const LIGHTSPEED = 299792458.0
-const AULIGHT = ASTRUNIT/LIGHTSPEED/SECPERDAY/DAYPERYEAR
-const MJDAY0 = 2400000.5
-const MODJULDAY0 = 51544.5
-const JULIANDAY2000 = 2451545.0
-const DAYINYEAR1900 = 365.242198781
-const DAYINYEAR2000 = 365.25
-const DAYINMONTH = SVector(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
-
 struct PeriodicTerms
     #  angular harmonics
     n::Vector{Int8}
@@ -104,11 +93,10 @@ end
 proper_motion(object, pmotion, parallax, rvelocity) =
     proper_motion(object, pmotion, parallax, rvelocity, 0., (0., 0., 0.))
 
-
 """
    @const_smatrix_from_series name series field
 
-Defines a global constant SMatrix instances with a agiven `name` from
+Defines a global constant SMatrix instances with a given `name` from
 a `series` and using its `field` name.
 """
 macro const_smatrix_from_series(name, series, field)
@@ -117,4 +105,3 @@ macro const_smatrix_from_series(name, series, field)
         const $(esc(name)) = SMatrix{size(tmp)...}(tmp...)
     end
 end
-
