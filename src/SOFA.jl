@@ -72,6 +72,37 @@ export pdp, pm, pmp, pn, ppp, ppsp, pvdpv, pvm, pvmpv, pvppv, pvu, pvup, pvxpv,
 
 using LinearAlgebra, StaticArrays, StaticUnivariatePolynomials
 
-include("sofa_base.jl")
+include("base.jl")
+
+include("constants/constants.jl")
+include("util.jl")
+include("constants/constants1980.jl")
+include("constants/constants2000.jl")
+include("constants/constants2000A.jl")
+include("constants/constants2000B.jl")
+include("constants/constants2006.jl")
+include("constants/constants2006F.jl")
+include("constants/constants2011.jl")
+include("constants/constantsHipparcos.jl")
+include("constants/constantsFK4toFK5.jl")
+include("constants/constantsplanet.jl")
+
+include("ephemerisDE405.jl")
+
+include("calendars.jl")
+include("astrometry.jl")
+include("ephemerides.jl")
+include("coefficients.jl")
+include("precession.jl")
+include("rotations.jl")
+include("spacemotion.jl")
+include("starcatalogs.jl")
+include("ecliptic.jl")
+include("galactic.jl")
+include("geocentric.jl")
+include("timescales.jl")
+include("equatorial.jl")
+include("gnomonic.jl")
+include("vectorops.jl")
 
 end

@@ -141,21 +141,6 @@ const LEAPSECOND =
      Leapsecond(2015,  7, 36.0),
      Leapsecond(2017,  1, 37.0))
 
-include("constants.jl")
-include("util.jl")
-include("constants1980.jl")
-include("constants2000.jl")
-include("constants2000A.jl")
-include("constants2000B.jl")
-include("constants2006.jl")
-include("constants2006F.jl")
-include("constants2011.jl")
-include("constantsHipparcos.jl")
-include("constantsFK4toFK5.jl")
-include("constantsplanet.jl")
-
-include("ephemerisDE405.jl")
-
 #   Ephemeris series evaluation (originally Astrometry.jl src/model2000.jl)
 
 function ephem_position(coef0, coef1, coef2, Δt)
@@ -180,19 +165,3 @@ function ephem_velocity(coef0, coef1, coef2, Δt)
       sum(A2 .* (2 .* cos.(ϕ2 .+ ν2 .* Δt) .-
                  ν2 .* Δt .* sin.(ϕ2 .+ ν2 .* Δt)))*Δt)/DAYPERYEAR
 end
-
-include("SOFA/calendars.jl")
-include("SOFA/astrometry.jl")
-include("SOFA/ephemerides.jl")
-include("SOFA/coefficients.jl")
-include("SOFA/precession.jl")
-include("SOFA/rotations.jl")
-include("SOFA/spacemotion.jl")
-include("SOFA/starcatalogs.jl")
-include("SOFA/ecliptic.jl")
-include("SOFA/galactic.jl")
-include("SOFA/geocentric.jl")
-include("SOFA/timescales.jl")
-include("SOFA/equatorial.jl")
-include("SOFA/gnomonic.jl")
-include("SOFA/vectorops.jl")
