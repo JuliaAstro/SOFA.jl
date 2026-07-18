@@ -72,6 +72,6 @@ export pdp, pm, pmp, pn, ppp, ppsp, pvdpv, pvm, pvmpv, pvppv, pvu, pvup, pvxpv,
 
 using LinearAlgebra, StaticArrays, StaticUnivariatePolynomials
 
-include("sofa.jl")
+include("sofa_base.jl")
 
 end
