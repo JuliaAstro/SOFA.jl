@@ -1,7 +1,7 @@
 name = "SOFA"
 uuid = "ad3d3fd0-b5f2-51ee-b274-8cdbe62317e2"
 authors = ["Duncan Eddy <duncan.eddy@gmail.com>", "Paul Barrett <pebarrett@gmail.com>"]
-version = "2.0.0-DEV"
+version = "2.0.0"
 
 [workspace]
 projects = ["test", "docs"]
@@ -15,4 +15,4 @@ StaticUnivariatePolynomials = "6f584044-cad5-5b68-a429-1e244a824f76"
 LinearAlgebra = "1"
 StaticArrays = "1.9"
 StaticUnivariatePolynomials = "0.6"
-julia = "1.10.0"
+julia = "1.10"
