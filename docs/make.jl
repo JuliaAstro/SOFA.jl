@@ -7,7 +7,7 @@ makedocs(
     modules   = [SOFA],
     # Doctests are run as part of the test suite instead (test/doctest.jl)
     doctest   = false,
-    authors   = "Duncan Eddy",
+    authors   = "Duncan Eddy, Paul Barrett",
     repo = GitHub("JuliaAstro/SOFA.jl"),
     sitename  = "SOFA.jl",
     format = Documenter.HTML(;
