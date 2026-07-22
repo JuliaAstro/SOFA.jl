@@ -37,6 +37,51 @@ The planned package versions below correspond to the following releases of the S
 1. All computed values are returned by the function call. No values are returned by reference.
 2. As of v2.0, function names follow the SOFA names without the `iau` prefix (e.g. `cal2jd` instead of `iauCal2jd`).
 
+## Dev docs
+
+List available tests:
+
+```julia-repl
+julia> using Pkg
+
+julia> Pkg.test("SOFA"; test_args = `--list`)
+Available tests:
+ - spacemotion
+ - ephemerides
+ - astrometry
+ - starcatalogs
+ - gnomonic
+ - galactic
+ - calendars
+ - precession
+ - vectorops
+ - rotations
+ - doctest
+ - equatorial
+ - ecliptic
+ - aqua
+ - timescales
+ - geocentric
+ - coefficients
+```
+
+
+Run single test (partial matches supported):
+
+```julia-repl
+julia> Pkg.test("SOFA"; test_args = `--verbose spacem`)
+                  │   Test   │   Init   │ Compile │ ──────────────── CPU ──────────────── │
+Test     (Worker) │ time (s) │ time (s) │   (%)   │ GC (s) │ GC % │ Alloc (MB) │ RSS (MB) │
+spacemotion   (1) │        started at 2026-07-22T01:54:00.660
+spacemotion   (1) │     1.86 │     3.21 │   99.70 │   0.03 │  1.6 │     217.08 │   456.26 │
+
+Test Summary:   | Pass  Total  Time
+  Overall       |    3      3  7.1s
+    spacemotion |    3      3  1.8s
+    SUCCESS
+     Testing SOFA tests passed
+```
+
 ## Compliance with SOFA License
 
 This distribution is permitted and compliant with the SOFA license. See the LICENSE for details.
