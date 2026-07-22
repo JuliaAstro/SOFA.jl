@@ -8,14 +8,14 @@
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Unofficial wrapper of the IAU SOFA C libraries for fundamental astronomy. See the [Astrometry.jl > SOFA](https://juliaastro.org/Astrometry/stable/SOFA/) sub-package for the pure Julia implementation.
+A pure Julia implementation of the IAU SOFA library for fundamental astronomy. For the wrapper of the SOFA C library, see the v1.x releases maintained on the `release-1.x` branches.
 
 ## Description
 
-The purpose of this package is to wrap the SOFA C library of fundamental astonomical function to make it easily accessible in Julia. This package serves as a _wrapper_ only. All functions ultimately call the original, unmodified, SOFA C library functions which are compiled as part of the package build process.
+This package provides a pure Julia implementation of the SOFA library of fundamental astronomical functions, originally developed by Paul Barrett as the `SOFA` submodule of [Astrometry.jl](https://github.com/JuliaAstro/Astrometry.jl). No compiled C library is required.
 
-The full SOFA C test suite is reproduced as part of the package to
-prove compliance and reproducibility of the core SOFA C functionality.
+The SOFA C test suite is reproduced as part of the package to
+prove compliance and reproducibility of the core SOFA functionality.
 
 ## Package Version <-> SOFA Release Correspondence
 
@@ -35,8 +35,12 @@ The planned package versions below correspond to the following releases of the S
 ## Notes
 
 1. All computed values are returned by the function call. No values are returned by reference.
-2. Wrappers for _iauAtciqn_, _iauAticqn_, and _iauLdn_ do not currently work properly.
+2. As of v2.0, function names follow the SOFA names without the `iau` prefix (e.g. `cal2jd` instead of `iauCal2jd`).
 
 ## Compliance with SOFA License
 
 This distribution is permitted and compliant with the SOFA license. See the LICENSE for details.
+
+This package is derived from, but is not an official product of, the International
+Astronomical Union SOFA collection (http://www.iausofa.org), and is not endorsed
+by the IAU SOFA Board.

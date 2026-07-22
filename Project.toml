@@ -1,18 +1,18 @@
 name = "SOFA"
 uuid = "ad3d3fd0-b5f2-51ee-b274-8cdbe62317e2"
-authors = ["Duncan Eddy <duncan.eddy@gmail.com>"]
-version = "1.1.1"
+authors = ["Duncan Eddy <duncan.eddy@gmail.com>", "Paul Barrett <pebarrett@gmail.com>"]
+version = "2.0.0"
 
 [workspace]
 projects = ["test", "docs"]
 
 [deps]
-Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
-SOFA_jll = "d1004450-2f34-5761-9671-ec24e6a6fe03"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+StaticUnivariatePolynomials = "6f584044-cad5-5b68-a429-1e244a824f76"
 
 [compat]
-Libdl = "1"
-StaticArrays = "^1.0.1"
-SOFA_jll = "2019.7.22"
-julia = "1.10.0"
+LinearAlgebra = "1"
+StaticArrays = "1.9"
+StaticUnivariatePolynomials = "0.6"
+julia = "1.10"
