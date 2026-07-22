@@ -3,7 +3,7 @@
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.org/SOFA/stable)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.org/SOFA.jl/dev)
 
-[![CI](https://github.com/JuliaAstro/SOFA.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JuliaAstro/SOFA.jl/actions/workflows/CI.yml)
+[![Test](https://github.com/JuliaAstro/SOFA.jl/actions/workflows/Test.yml/badge.svg)](https://github.com/JuliaAstro/SOFA.jl/actions/workflows/Test.yml)
 [![codecov](https://codecov.io/gh/JuliaAstro/SOFA.jl/graph/badge.svg)](https://codecov.io/gh/JuliaAstro/SOFA.jl)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
