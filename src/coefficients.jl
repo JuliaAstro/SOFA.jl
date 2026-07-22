@@ -81,6 +81,13 @@ Moon minus mean longitude of the ascending node.
 
  - `F`     -- F, radians (Note 2)
 
+# Examples
+
+```jldoctest
+julia> faf03(0.8)
+0.2597711366751447
+```
+
 # Note
 
 1) Though t is strictly TDB, it is usually more convenient to use TT,
@@ -147,6 +154,13 @@ Moon.
 # Output
 
  - `l`     -- l, radians (Note 2)
+
+# Examples
+
+```jldoctest
+julia> fal03(0.8)
+5.132369751109105
+```
 
 # Note
 

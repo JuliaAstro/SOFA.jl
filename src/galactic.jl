@@ -15,6 +15,13 @@ Transformation from Galactic Coordinates to ICRS.
  - `ras`   -- ICRS right ascension (radians)
  - `dec`   -- ICRS declination (radians)
 
+# Examples
+
+```jldoctest
+julia> g2icrs(5.5850536063818546, -0.7853981633974483)
+(RA = 5.9338074302227195, Dec = -1.1784870613579947)
+```
+
 # Note
 
 1) The IAU 1958 system of Galactic coordinates was defined with
@@ -84,6 +91,13 @@ Transformation from ICRS to Galactic Coordinates.
 
  - `lon`   -- galactic longitude (radians)
  - `lat`   -- galactic latitude (radians)
+
+# Examples
+
+```jldoctest
+julia> icrs2g(5.9338074302227188, -1.1784870613579944)
+(lon = 5.585053606381855, lat = -0.7853981633974483)
+```
 
 # Note
 

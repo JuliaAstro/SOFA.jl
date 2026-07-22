@@ -18,6 +18,13 @@ date) to ICRS RA,Dec, using the IAU 2006 precession model.
  - `ras`   -- ICRS right ascension (radians)
  - `dec`   -- ICRS declination (radians)
 
+# Examples
+
+```jldoctest
+julia> eceq06(2456165.5, 0.401182685, 5.1, -0.9)
+(ras = 5.533459733613627, dec = -1.2465429325544806)
+```
+
 # Note
 
 1) The TT date day1+day2 is a Julian Date, apportioned in any
@@ -127,6 +134,13 @@ precession model.
 
 - `lon`    -- ecliptic longitude (radians)
 - `lat`    -- ecliptic latitude (radians)
+
+# Examples
+
+```jldoctest
+julia> eqec06(1234.5, 2440000.5, 1.234, 0.987)
+(lon = 1.3425099189946545, lat = 0.5926215259704608)
+```
 
 # Note
 

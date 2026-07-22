@@ -1465,6 +1465,13 @@ Transform ICRS star data, epoch J2000.0, to CIRS.
   - `ri, di` -- CIRS geocentric RA,Dec (radians)
   - `eo`     -- equation of the origins (ERA-GST, Note 5)
 
+# Examples
+
+```jldoctest
+julia> atci13(2.71, 0.174, 1e-5, 5e-6, 0.1, 55.0, 2456165.5, 0.401182685)
+(ra = 2.7101215729686965, dec = 0.172937136721954, eo = -0.0029006187126573756)
+```
+
 # Note
 
 1) Star data for an epoch other than J2000.0 (for example from the
@@ -3119,6 +3126,13 @@ zenith distance.
 
  - `refa` -- tan Z coefficient (radians)
  - `refb` -- tan^3 Z coefficient (radians)
+
+# Examples
+
+```jldoctest
+julia> refco(800.0, 10.0, 0.9, 0.4)
+(0.0002264949956241415, -2.598658261729344e-7)
+```
 
 # Note
 

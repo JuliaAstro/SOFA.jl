@@ -5,6 +5,8 @@ using SOFA
 # Generate documents
 makedocs(
     modules   = [SOFA],
+    # Doctests are run as part of the test suite instead (test/doctest.jl)
+    doctest   = false,
     authors   = "Duncan Eddy",
     repo = GitHub("JuliaAstro/SOFA.jl"),
     sitename  = "SOFA.jl",

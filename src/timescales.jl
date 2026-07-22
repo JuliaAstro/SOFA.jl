@@ -125,6 +125,13 @@ For a given UTC date, calculate Δ(AT) = TAI-UTC.
 
  - `Δt`    -- TAI - UTC (in seconds)
 
+# Examples
+
+```jldoctest
+julia> dat(2017, 9, 1, 0.0)
+37.0
+```
+
 # Note
 
 1) UTC began at 1960 January 1.0 (JD 2436934.5) and it is improper to
@@ -520,6 +527,13 @@ Terrestrial Time, TT.
 
  - `tt1`   -- TT as part 1 of Julian Date
  - `tt2`   -- TT as part 2 of Julian Date
+
+# Examples
+
+```jldoctest
+julia> taitt(2453750.5, 0.892482639)
+(day = 2.4537505e6, fraction = 0.892855139)
+```
 
 # Note
 
@@ -1192,6 +1206,13 @@ International Atomic Time, TAI.
 
  - `tai1`  -- TAI as part 1 of Julian Date (Note 5)
  - `tai2`  -- TAI as part 2 of Julian Date
+
+# Examples
+
+```jldoctest
+julia> utctai(2453750.5, 0.892100694)
+(day = 2.4537505e6, fraction = 0.8924826384444444)
+```
 
 # Note
 

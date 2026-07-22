@@ -161,6 +161,13 @@ was determined.
  - `ra`    -- J2000.0 FK5 RA (rad)
  - `dec`   -- J2000.0 FK5 Dec (rad)
 
+# Examples
+
+```jldoctest
+julia> fk45z(0.01602284975382961, -0.11643479290999060, 1954.677617625256806)
+(RA = 0.02719295911606862, Dec = -0.1115766001565927)
+```
+
 # Note
 
 1) The epoch bepoch is strictly speaking Besselian, but if a Julian
@@ -524,6 +531,13 @@ Status:  support function.
 
  - `ra`    -- Hipparcos RA (radians)
  - `dec`   -- Hipparcos Dec (radians)
+
+# Examples
+
+```jldoctest
+julia> fk5hz(1.76779433, -0.2917517103, 2400000.5, 54479.0)
+(RA = 1.7677941914644242, Dec = -0.2917516001679885)
+```
 
 # Note
 

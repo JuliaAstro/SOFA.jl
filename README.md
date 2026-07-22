@@ -82,6 +82,16 @@ Test Summary:   | Pass  Total  Time
      Testing SOFA tests passed
 ```
 
+Run documentation (assuming LiveServer.jl is in your global environment):
+
+```julia-repl
+> julia --proj=docs/
+
+julia> using LiveServer
+
+julia> servedocs(include_dirs = ["src"])
+```
+
 ## Compliance with SOFA License
 
 This distribution is permitted and compliant with the SOFA license. See the LICENSE for details.
