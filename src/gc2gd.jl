@@ -51,9 +51,9 @@ Called:
 
 This revision:  2013 September 1
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauGc2gd(n::Int, xyz::AbstractVector{<:Real})
     ref_elong = Ref{Float64}(0.0)

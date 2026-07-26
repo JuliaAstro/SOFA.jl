@@ -95,11 +95,11 @@ Called:
    iauC2s       p-vector to spherical
    iauAnp       normalize angle into range +/- pi
 
-This revision:   2013 October 9
+This revision:   2021 January 6
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauAticqn(
         ri::Real, di::Real, astrom::iauASTROM, n::Int, b::Vector{iauLDBODY}

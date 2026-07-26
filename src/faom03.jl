@@ -28,13 +28,13 @@ Returned (function value):
    IERS Technical Note No. 32, BKG (2004)
 
    Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
-   Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
+   Francou, G., Laskar, J., 1994, Astron.Astrophys. 282, 663-683.
 
-This revision:  2013 June 18
+This revision:  2020 November 16
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauFaom03(t::Real)
     return ccall((:iauFaom03, libsofa_c), Cdouble, (Cdouble,), convert(Float64, t))

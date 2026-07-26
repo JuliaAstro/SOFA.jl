@@ -46,9 +46,9 @@ Status:  support function.
 
 This revision:  2015 December 6
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauLtpb(epj::Real)
     rpb = zeros(Float64, 3, 3)

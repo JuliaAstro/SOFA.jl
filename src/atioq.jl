@@ -92,11 +92,11 @@ Called:
     iauC2s       p-vector to spherical
     iauAnp       normalize angle into range 0 to 2pi
 
-This revision:   2016 March 9
+This revision:   2020 December 7
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauAtioq(ri::Real, di::Real, astrom::iauASTROM)
 

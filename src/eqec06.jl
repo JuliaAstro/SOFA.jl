@@ -53,9 +53,9 @@ Called:
 
 This revision:  2016 February 9
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauEqec06(date1::Real, date2::Real, dr::Real, dd::Real)
     # Initialize function return variables

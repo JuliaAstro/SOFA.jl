@@ -26,16 +26,16 @@ Note:
 
 ### References
 
-   McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),.
+   McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
    IERS Technical Note No. 32, BKG (2004)
 
    IAU 2000 Resolution B1.9
 
-This revision:  2013 June 18
+This revision:  2020 October 23
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauTcgtt(tcg1::Real, tcg2::Real)
     ref_tt1 = Ref{Float64}(0.0)

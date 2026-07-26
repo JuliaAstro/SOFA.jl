@@ -10,10 +10,10 @@ Status:  support function.
 
 ### Given
    rnpb  double[3][3]  classical nutation x precession x bias matrix
-   s     double        the quantity s (the CIO locator)
+   s     double        the quantity s (the CIO locator) in radians
 
 Returned (function value):
-         double        the equation of the origins in radians.
+         double        the equation of the origins in radians
 
 ### Notes
 
@@ -32,11 +32,11 @@ Returned (function value):
 
    Wallace, P. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 
-This revision:  2013 June 18
+This revision:  2020 November 14
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauEors(rnbp::AbstractMatrix{<:Real}, s::Real)
     # Allocate return value

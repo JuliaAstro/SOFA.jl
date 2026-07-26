@@ -48,9 +48,9 @@ Returned (function value):
 
 This revision:  2013 June 18
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauSp00(date1::Real, date2::Real)
     return ccall(

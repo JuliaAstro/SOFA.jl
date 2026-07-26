@@ -19,10 +19,10 @@ Returned (function value):
 
 1. The UT1 and TT dates uta+utb and tta+ttb respectively, are both
    Julian Dates, apportioned in any convenient way between the
-   argument pairs.  For example, JD=2450123.7 could be expressed in
-   any of these ways, among others:
 
-         Part A        Part B
+   argument pairs.  For example, JD(UT1)=2450123.7 could be
+   expressed in any of these ways, among others:
+           uta            utb
 
       2450123.7           0.0       (JD method)
       2451545.0       -1421.3       (J2000 method)
@@ -62,11 +62,11 @@ Called:
 
    Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 
-This revision:  2013 June 18
+This revision:  2020 November 18
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauGst06(
         uta::Real, utb::Real, tta::Real, ttb::Real,

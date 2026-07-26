@@ -12,7 +12,7 @@ Status:  vector/matrix support function.
    p        double[3]      p-vector
 
 ### Returned
-   trp      double[3]      r * p
+   trp      double[3]      r^T * p
 
 Note:
    It is permissible for p and trp to be the same array.
@@ -21,11 +21,11 @@ Called:
    iauTr        transpose r-matrix
    iauRxp       product of r-matrix and p-vector
 
-This revision:  2013 June 18
+This revision:  2020 May 24
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauTrxp(r::AbstractMatrix{<:Real}, p::AbstractVector{<:Real})
     trp = zeros(Float64, 3)

@@ -62,9 +62,9 @@ Called:
 
 This revision:   2018 January 2
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauG2icrs(dl::Real, db::Real)
     ref_dr = Ref{Float64}(0.0)

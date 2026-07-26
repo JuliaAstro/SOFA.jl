@@ -156,11 +156,11 @@ Reference:  Simon, J.L, Bretagnon, P., Chapront, J.,
             Chapront-Touze, M., Francou, G., and Laskar, J.,
             Astron.Astrophys., 282, 663 (1994).
 
-This revision:  2017 October 12
+This revision:  2019 June 23
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauPlan94(date1::Real, date2::Real, np::Int)
     pv = zeros(Float64, 3, 2)

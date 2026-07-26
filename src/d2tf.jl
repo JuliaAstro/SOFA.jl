@@ -12,7 +12,7 @@ Status:  vector/matrix support function.
    days    double  interval in days
 
 ### Returned
-   sign    char    '+' or '-'
+   sign    char*   '+' or '-'
    ihmsf   int[4]  hours, minutes, seconds, fraction
 
 ### Notes
@@ -47,11 +47,11 @@ Status:  vector/matrix support function.
    case where days is very nearly 1.0 and rounds up to 24 hours,
    by testing for ihmsf[0]=24 and setting ihmsf[0-3] to zero.
 
-This revision:  2013 June 18
+This revision:  2020 April 20
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauD2tf(ndp::Int, days::Real)
 

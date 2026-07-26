@@ -19,7 +19,7 @@ Status:  support function.
  1. The arguments xp and yp are the coordinates (in radians) of the
     Celestial Intermediate Pole with respect to the International
     Terrestrial Reference System (see IERS Conventions 2003),
-    measured along the meridians to 0 and 90 deg west respectively.
+   measured along the meridians 0 and 90 deg west respectively.
 
  2. The argument sp is the TIO locator s', in radians, which
     positions the Terrestrial Intermediate Origin on the equator.  It
@@ -45,11 +45,11 @@ Called:
     McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
     IERS Technical Note No. 32, BKG (2004)
 
-This revision:  2013 June 18
+This revision:  2020 October 31
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauPom00(xp, yp, sp)
     rpom = zeros(Float64, 3, 3)

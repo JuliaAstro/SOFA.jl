@@ -1,7 +1,7 @@
 export iauPnm00a
 """
 Form the matrix of precession-nutation for a given date (including
-frame bias), equinox-based, IAU 2000A model.
+frame bias), equinox based, IAU 2000A model.
 
 This function is part of the International Astronomical Union's
 SOFA (Standards Of Fundamental Astronomy) software collection.
@@ -9,17 +9,17 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 Status:  support function.
 
 ### Given
-   date1,date2  double     TT as a 2-part Julian Date (Note 1)
+   date1,date2 double       TT as a 2-part Julian Date (Note 1)
 
 ### Returned
-   rbpn         double[3][3]    classical NPB matrix (Note 2)
+   rbpn        double[3][3] bias-precession-nutation matrix (Note 2)
 
 ### Notes
 
 1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
-   JD(TT)=2450123.7 could be expressed in any of these ways,
-   among others:
+   JD(TT)=2450123.7 could be expressed in any of these ways, among
+   others:
 
          date1          date2
 
@@ -40,7 +40,7 @@ Status:  support function.
    of date date1+date2 and the p-vector V(GCRS) is with respect to
    the Geocentric Celestial Reference System (IAU, 2000).
 
-3. A faster, but slightly less accurate result (about 1 mas), can be
+3. A faster, but slightly less accurate, result (about 1 mas) can be
    obtained by using instead the iauPnm00b function.
 
 Called:
@@ -52,11 +52,11 @@ Called:
    24th General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.
    (2000)
 
-This revision:  2013 June 18
+This revision:  2020 November 27
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauPnm00a(date1::Real, date2::Real)
     rbpn = zeros(Float64, 3, 3)

@@ -121,9 +121,9 @@ Called:
 
 This revision:   2017 March 16
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauApcs(
         date1::Real, date2::Real,

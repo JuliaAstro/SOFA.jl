@@ -49,11 +49,11 @@ Called:
    24th General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.
    (2000)
 
-This revision:  2013 June 18
+This revision:  2020 November 24
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauPmat00(date1::Real, date2::Real)
     rbp = zeros(Float64, 3, 3)

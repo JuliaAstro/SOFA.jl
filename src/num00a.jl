@@ -39,7 +39,7 @@ Status:  support function.
    of date and the p-vector V(mean) is with respect to the mean
    equatorial triad of date.
 
-3. A faster, but slightly less accurate result (about 1 mas), can be
+3. A faster, but slightly less accurate, result (about 1 mas) can be
    obtained by using instead the iauNum00b function.
 
 Called:
@@ -51,11 +51,11 @@ Called:
    P. Kenneth Seidelmann (ed), University Science Books (1992),
    Section 3.222-3 (p114).
 
-This revision:  2013 June 18
+This revision:  2020 November 27
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauNum00a(date1::Real, date2::Real)
     # Allocate return values

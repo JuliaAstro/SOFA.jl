@@ -44,9 +44,9 @@ Called:
 
 This revision:   2013 October 9
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauAb(pnat::AbstractVector{<:Real}, v::AbstractVector{<:Real}, s::Real, bm1::Float64)
     ppr = zeros(Float64, 3)

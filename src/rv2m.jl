@@ -20,16 +20,16 @@ Status:  vector/matrix support function.
    supplied to This function has the same direction as the Euler
    axis, and its magnitude is the angle in radians.
 
-2. If w is null, the unit matrix is returned.
+2. If w is null, the identity matrix is returned.
 
 3. The reference frame rotates clockwise as seen looking along the
    rotation vector from the origin.
 
-This revision:  2015 January 30
+This revision:  2020 August 21
 
-SOFA release 2018-01-30
+SOFA release 2021-01-25
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauRv2m(w::AbstractVector{<:Real})
     r = zeros(Float64, 3, 3)
