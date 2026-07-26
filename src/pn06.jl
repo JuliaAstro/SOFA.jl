@@ -19,7 +19,7 @@ Status:  support function.
    rp           double[3][3]    precession matrix (Note 5)
    rbp          double[3][3]    bias-precession matrix (Note 6)
    rn           double[3][3]    nutation matrix (Note 7)
-   rbpn         double[3][3]    GCRS-to-true matrix (Note 8)
+   rbpn         double[3][3]    GCRS-to-true matrix (Notes 8,9)
 
 ### Notes
 
@@ -87,11 +87,11 @@ Called:
 
    Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 
-This revision:  2013 November 14
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauPn06(date1::Real, date2::Real, dpsi::Real, deps::Real)
     # Allocate return values

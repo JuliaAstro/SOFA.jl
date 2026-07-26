@@ -43,11 +43,11 @@ Returned (function value):
    P. Kenneth Seidelmann (ed), University Science Books (1992),
    Expression 3.222-1 (p114).
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauObl80(date1::Real, date2::Real)
     return ccall(

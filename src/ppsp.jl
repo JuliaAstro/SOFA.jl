@@ -22,11 +22,11 @@ Called:
    iauSxp       multiply p-vector by scalar
    iauPpp       p-vector plus p-vector
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauPpsp(a::AbstractVector{<:Real}, s::Real, b::AbstractVector{<:Real})
     apsb = zeros(Float64, 3)

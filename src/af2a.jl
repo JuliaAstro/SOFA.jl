@@ -30,11 +30,11 @@ Returned (function value):
  3. If there are multiple errors, the status value reflects only the
     first, the smallest taking precedence.
 
-    This revision:  2013 June 18
+    This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauAf2a(sign::Char, ideg::Int, iamin::Int, asec::Real)
     rad = zeros(Float64, 1)

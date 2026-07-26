@@ -49,11 +49,11 @@ Called:
 
    F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 
-This revision:  2017 October 12
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauFk52h(r5::Real, d5::Real, dr5::Real, dd5::Real, px5::Real, rv5::Real)
     ref_rh = Ref{Float64}(0.0)

@@ -60,11 +60,11 @@ Called:
     derived from the ESA Hipparcos Space Astrometry Mission.  ESA
     Publications Division, Noordwijk, Netherlands.
 
-This revision:   2018 January 2
+This revision:   2021 January 25
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauIcrs2g(dr::Real, dd::Real)
     ref_dl = Ref{Float64}(0.0)

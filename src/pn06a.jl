@@ -81,11 +81,11 @@ Called:
 
     Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
-This revision:  2013 November 13
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauPn06a(date1::Real, date2::Real)
     # Allocate return values

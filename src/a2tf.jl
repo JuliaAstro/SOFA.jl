@@ -12,11 +12,8 @@ Status:  vector/matrix support function.
    angle   double  angle in radians
 
 ### Returned
-   sign    char    '+' or '-'
+   sign    char*   '+' or '-'
    ihmsf   int[4]  hours, minutes, seconds, fraction
-
-### Called
-   iauD2tf      decompose days to hms
 
 ### Notes
 
@@ -50,11 +47,14 @@ Status:  vector/matrix support function.
     case where angle is very nearly 2pi and rounds up to 24 hours,
     by testing for ihmsf[1]=24 and setting ihmsf[1:4] to zero.
 
-This revision:  2013 July 31
+### Called
+   iauD2tf      decompose days to hms
 
-SOFA release 2018-01-30
+This revision:  2021 May 11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+SOFA release 2021-05-12
+
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauA2tf(ndp::Int, angle::Real)
     sign = Vector{UInt8}(undef, 1)

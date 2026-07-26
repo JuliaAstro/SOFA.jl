@@ -40,10 +40,11 @@ Returned (function value):
    the Gregorian Calendar, nor is the AD/BC numbering convention
    observed.
 
-3. Refer to the function iauJd2cal.
 
-4. NDP should be 4 or less if internal overflows are to be
-   avoided on machines which use 16-bit integers.
+3. See also the function iauJd2cal.
+4. The number of decimal places ndp should be 4 or less if internal
+   overflows are to be avoided on platforms which use 16-bit
+   integers.
 
 Called:
    iauJd2cal    JD to Gregorian calendar
@@ -54,11 +55,11 @@ Called:
    P. Kenneth Seidelmann (ed), University Science Books (1992),
    Section 12.92 (p604).
 
-This revision:  2016 December 2
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauJdcalf(ndp::Int, dj1::Real, dj2::Real)
     iymdf = zeros(Int32, 4)

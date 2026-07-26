@@ -1,13 +1,14 @@
 export iauPlan94
 """
+Approximate heliocentric position and velocity of a nominated major
+planet:  Mercury, Venus, EMB, Mars, Jupiter, Saturn, Uranus or
+Neptune (but not the Earth itself).
 This function is part of the International Astronomical Union's
 SOFA (Standards Of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
-Approximate heliocentric position and velocity of a nominated major
-planet:  Mercury, Venus, EMB, Mars, Jupiter, Saturn, Uranus or
-Neptune (but not the Earth itself).
+n.b. Not IAU-endorsed and without canonical status.
 
 ### Given
    date1  double       TDB date part A (Note 1)
@@ -150,17 +151,17 @@ Returned (function value):
    which in turn takes precedence over the remote date warning.
 
 Called:
-   iauAnp       normalize angle into range 0 to 2pi
+   iauAnpm      normalize angle into range +/- pi
 
 Reference:  Simon, J.L, Bretagnon, P., Chapront, J.,
             Chapront-Touze, M., Francou, G., and Laskar, J.,
             Astron.Astrophys., 282, 663 (1994).
 
-This revision:  2017 October 12
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauPlan94(date1::Real, date2::Real, np::Int)
     pv = zeros(Float64, 3, 2)

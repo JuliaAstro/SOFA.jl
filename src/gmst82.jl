@@ -59,11 +59,11 @@ Called:
 
    Aoki et al., Astron.Astrophys., 105, 359-361 (1982).
 
-This revision:  2017 October 12
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauGmst82(dj1::Real, dj2::Real)
     return ccall(

@@ -13,11 +13,11 @@ Status:  vector/matrix support function.
 Returned (function value):
    double     angle in range +/-pi
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauAnpm(a::Real)
     return ccall((:iauAnpm, libsofa_c), Cdouble, (Cdouble,), convert(Float64, a))

@@ -65,11 +65,11 @@ Status:  canonical model.
    Wallace, P.T., "Software for Implementing the IAU 2000
    Resolutions", in IERS Workshop 5.1 (2002).
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauPr00(date1::Real, date2::Real)
     ref_dpsipr = Ref{Float64}(0.0)

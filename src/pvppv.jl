@@ -1,5 +1,7 @@
 export iauPvppv
 """
+Add one pv-vector to another.
+
 This function is part of the International Astronomical Union's
 SOFA (Standards Of Fundamental Astronomy) software collection.
 
@@ -19,11 +21,11 @@ Note:
 Called:
    iauPpp       p-vector plus p-vector
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauPvppv(a::AbstractMatrix{<:Real}, b::AbstractMatrix{<:Real})
     # Preallocate return values

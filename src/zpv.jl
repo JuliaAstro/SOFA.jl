@@ -8,16 +8,16 @@ SOFA (Standards Of Fundamental Astronomy) software collection.
 Status:  vector/matrix support function.
 
 ### Returned
-   pv       double[2][3]      pv-vector
+   pv       double[2][3]      zero pv-vector
 
 Called:
    iauZp        zero p-vector
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauZpv()
     pv = zeros(Float64, 3, 2)

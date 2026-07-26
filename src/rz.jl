@@ -27,11 +27,11 @@ Given and returned:
       (                                 )
       (       0            0         1  )
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauRz(psi::Real, r::AbstractMatrix{<:Real})
 

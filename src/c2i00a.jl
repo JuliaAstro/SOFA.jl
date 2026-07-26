@@ -47,7 +47,7 @@ Status:  support function.
    Reference System (see IERS Conventions 2003), ERA is the Earth
    Rotation Angle and RPOM is the polar motion matrix.
 
-3. A faster, but slightly less accurate result (about 1 mas), can be
+3. A faster, but slightly less accurate, result (about 1 mas) can be
    obtained by using instead the iauC2i00b function.
 
 Called:
@@ -67,11 +67,11 @@ Called:
    McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
    IERS Technical Note No. 32, BKG (2004)
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauC2i00a(date1::Real, date2::Real)
     # Allocate return value

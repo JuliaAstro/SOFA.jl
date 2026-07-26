@@ -58,11 +58,11 @@ Called:
    iauRx        rotate around X-axis
    iauRxr       product of two r-matrices
 
-This revision:  2015 December 11
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauEcm06(date1::Real, date2::Real)
     # Allocate return value

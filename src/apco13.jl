@@ -169,11 +169,11 @@ Called:
    iauApco      astrometry parameters, ICRS-observed
    iauEors      equation of the origins, given NPB matrix and s
 
-This revision:   2013 December 5
+This revision:   2021 February 24
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauApco13(
         utc1::Real, utc2::Real, dut1::Real,

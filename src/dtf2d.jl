@@ -72,11 +72,11 @@ Called:
    iauDat       delta(AT) = TAI-UTC
    iauJd2cal    JD to Gregorian calendar
 
-This revision:  2013 July 26
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauDtf2d(scale::String, iy::Real, im::Real, id::Real, ihr::Real, imn::Real, sec::Real)
     ref_d1 = Ref{Float64}(0.0)

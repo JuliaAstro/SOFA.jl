@@ -64,11 +64,11 @@ Status:  canonical model.
    Lieske, J.H., 1979, Astron.Astrophys. 73, 282, equations
    (6) & (7), p283.
 
-This revision:  2013 November 19
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauPrec76(date01::Real, date02::Real, date11::Real, date12::Real)
     # Preallocate return values

@@ -14,7 +14,7 @@ Status:  support function.
 
 ### Returned
    x,y          double  Celestial Intermediate Pole (Note 2)
-   s            double  the CIO locator s (Note 2)
+   s            double  the CIO locator s (Note 3)
 
 ### Notes
 
@@ -57,11 +57,11 @@ Called:
 
    Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauXys06a(date1::Real, date2::Real)
     ref_x = Ref{Float64}(0.0)

@@ -104,11 +104,11 @@ Called:
    from FK4 B1950.0 to FK5 J2000.0 using matrices in 6-space".
    Astron.J. 97, 274.
 
-This revision:   2018 December 5
+This revision:   2021 February 24
 
-SOFA release 2019-07-22
+SOFA release 2021-05-12
 
-Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauFk425(
         r1950::Real, d1950::Real, dr1950::Real, dd1950::Real,

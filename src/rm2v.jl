@@ -28,11 +28,11 @@ Status:  vector/matrix support function.
 3. The reference frame rotates clockwise as seen looking along
    the rotation vector from the origin.
 
-This revision:  2015 January 30
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauRm2v(r::AbstractMatrix{<:Real})
     w = zeros(Float64, 3)

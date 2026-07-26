@@ -11,7 +11,7 @@ Status:  support function.
    date1,date2  double    TT as a 2-part Julian Date (Note 1)
 
 Returned (function value):
-               double    equation of the origins in radians
+                double    the equation of the origins in radians
 
 ### Notes
 
@@ -53,11 +53,11 @@ Called:
 
    Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauEo06a(date1::Real, date2::Real)
     return ccall(

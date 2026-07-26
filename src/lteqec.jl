@@ -49,11 +49,11 @@ Called:
    expressions, valid for long time intervals (Corrigendum),
    Astron.Astrophys. 541, C1
 
-This revision:  2016 February 9
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauLteqec(epj::Real, dr::Real, dd::Real)
     ref_dl = Ref{Float64}(0.0)

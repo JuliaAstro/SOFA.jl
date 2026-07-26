@@ -37,13 +37,16 @@ Status:  support function.
 
     NxPxB = R_1(-eps).R_3(-psi).R_1(phib).R_3(gamb)
 
- 3. Three different matrices can be constructed, depending on the
-    supplied angles:
+ 3. The present function can construct three different matrices,
+    depending on which angles are supplied as the arguments gamb,
+    phib, psi and eps:
 
     - To obtain the nutation x precession x frame bias matrix,
-      generate the four precession angles, generate the nutation
-      components and add them to the psi_bar and epsilon_A angles,
-      and call the present function.
+      first generate the four precession angles known conventionally
+      as gamma_bar, phi_bar, psi_bar and epsilon_A, then generate
+      the nutation components Dpsi and Depsilon and add them to
+      psi_bar and epsilon_A, and finally call the present function
+      using those four angles as arguments.
 
     - To obtain the precession x frame bias matrix, generate the
       four precession angles and call the present function.
@@ -60,14 +63,15 @@ Called:
     iauRx        rotate around X-axis
 
 ### References
+   Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
     Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauFw2m(gamb::Real, phib::Real, psi::Real, eps::Real)
     r = zeros(Float64, 3, 3)

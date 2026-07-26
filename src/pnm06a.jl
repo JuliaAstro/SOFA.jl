@@ -1,7 +1,8 @@
 export iauPnm06a
 """
 Form the matrix of precession-nutation for a given date (including
-frame bias), IAU 2006 precession and IAU 2000A nutation models.
+frame bias), equinox based, IAU 2006 precession and IAU 2000A
+nutation models.
 
 This function is part of the International Astronomical Union's
 SOFA (Standards Of Fundamental Astronomy) software collection.
@@ -12,14 +13,14 @@ Status:  support function.
    date1,date2 double       TT as a 2-part Julian Date (Note 1)
 
 ### Returned
-   rnpb        double[3][3] bias-precession-nutation matrix (Note 2)
+   rbpn        double[3][3] bias-precession-nutation matrix (Note 2)
 
 ### Notes
 
 1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
-   JD(TT)=2450123.7 could be expressed in any of these ways,
-   among others:
+   JD(TT)=2450123.7 could be expressed in any of these ways, among
+   others:
 
          date1          date2
 
@@ -35,7 +36,7 @@ Status:  support function.
    optimum resolution.  The MJD method and the date & time methods
    are both good compromises between resolution and convenience.
 
-2. The matrix operates in the sense V(date) = rnpb * V(GCRS), where
+2. The matrix operates in the sense V(date) = rbpn * V(GCRS), where
    the p-vector V(date) is with respect to the true equatorial triad
    of date date1+date2 and the p-vector V(GCRS) is with respect to
    the Geocentric Celestial Reference System (IAU, 2000).
@@ -49,11 +50,11 @@ Called:
 
    Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855.
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauPnm06a(date1::Real, date2::Real)
     rbpn = zeros(Float64, 3, 3)

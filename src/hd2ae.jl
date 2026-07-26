@@ -53,11 +53,11 @@ Status:  support function.
 
 7.  Again for efficiency, no range checking of arguments is carried out.
 
-Last revision:   2017 September 12
+Last revision:   2021 February 24
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauHd2ae(ha::Real, dec::Real, phi::Real)
     ref_az = Ref{Float64}(0.0)

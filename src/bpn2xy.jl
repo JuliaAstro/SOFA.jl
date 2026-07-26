@@ -33,11 +33,11 @@ Status:  support function.
     n.b. The celestial ephemeris origin (CEO) was renamed "celestial
         intermediate origin" (CIO) by IAU 2006 Resolution 2.
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauBpn2xy(rbpn::AbstractMatrix{<:Real})
     # Preallocate return values

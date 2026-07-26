@@ -29,7 +29,7 @@ Status:  support function.
       v      double[3]    unchanged
       bm1    double       unchanged
       bpn    double[3][3] unchanged
-      along  double       longitude + s' (radians)
+    along  double       adjusted longitude (radians)
       xpl    double       polar motion xp wrt local meridian (radians)
       ypl    double       polar motion yp wrt local meridian (radians)
       sphi   double       sine of geodetic latitude
@@ -106,14 +106,18 @@ Status:  support function.
    iauAtioq and iauAtoiq.
 
 Called:
+   iauIr        initialize r-matrix to identity
+   iauRz        rotate around Z-axis
+   iauRy        rotate around Y-axis
+   iauRx        rotate around X-axis
+   iauAnpm      normalize angle into range +/- pi
    iauPvtob     position/velocity of terrestrial station
-   iauAper      astrometry parameters: update ERA
 
-This revision:   2013 October 9
+This revision:   2021 February 24
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauApio(
         sp::Real, theta::Real,

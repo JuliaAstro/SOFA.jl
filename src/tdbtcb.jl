@@ -46,11 +46,11 @@ Returned (function value):
 
    IAU 2006 Resolution B3
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauTdbtcb(tdb1::Real, tdb2::Real)
     ref_tcb1 = Ref{Float64}(0.0)

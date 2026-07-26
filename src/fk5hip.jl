@@ -34,11 +34,11 @@ Called:
 
    F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 
-This revision:  2017 October 12
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauFk5hip()
     r5h = zeros(Float64, 3, 3)

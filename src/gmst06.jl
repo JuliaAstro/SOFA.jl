@@ -57,11 +57,11 @@ Called:
    Capitaine, N., Wallace, P.T. & Chapront, J., 2005,
    Astron.Astrophys. 432, 355
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauGmst06(uta::Real, utb::Real, tta::Real, ttb::Real)
     return ccall(

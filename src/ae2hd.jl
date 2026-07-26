@@ -50,9 +50,9 @@ to hour angle and declination.
 
 Last revision:   2017 September 12
 
-SOFA release 2018-01-30
+SOFA release 2021-05-12
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2021 IAU SOFA Board.  See notes at end.
 """
 function iauAe2hd(az::Real, el::Real, phi::Real)
     ha = zeros(Float64, 1)
