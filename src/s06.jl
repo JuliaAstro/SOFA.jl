@@ -72,11 +72,11 @@ Called:
    McCarthy, D.D., Petit, G. (eds.) 2004, IERS Conventions (2003),
    IERS Technical Note No. 32, BKG
 
-This revision:  2013 June 18
+This revision:  2019 June 23
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauS06(date1::Real, date2::Real, x::Real, y::Real)
     return ccall(

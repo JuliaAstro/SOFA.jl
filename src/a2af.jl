@@ -14,9 +14,6 @@ Status:  vector/matrix support function.
 - `sign::Char`    '+' or '-'
 - `idmsf::Vector{Int32}`  degrees, arcminutes, arcseconds, fraction
 
-Called:
-   iauD2tf      decompose days to hms
-
 ### Notes
 1. The argument ndp is interpreted as follows:
 | ndp | resolution |
@@ -39,9 +36,14 @@ Called:
 
 3. The absolute value of angle may exceed 2pi.  In cases where it does not, it is up to the caller to test for and handle the case where angle is very nearly 2pi and rounds up to 360 degrees, by testing for idmsf[0]=360 and setting idmsf[0-3] to zero.
 
-This revision:  2013 June 18
+Called:
+   iauD2tf      decompose days to hms
 
-SOFA release 2018-01-30
+This revision:  2020 April 1
+
+SOFA release 2020-07-21
+
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauA2af(ndp::Int, angle::Real)
     sign = Vector{UInt8}(undef, 1)

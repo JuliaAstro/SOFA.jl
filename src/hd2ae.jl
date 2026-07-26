@@ -55,9 +55,9 @@ Status:  support function.
 
 Last revision:   2017 September 12
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauHd2ae(ha::Real, dec::Real, phi::Real)
     ref_az = Ref{Float64}(0.0)

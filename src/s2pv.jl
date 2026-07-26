@@ -20,9 +20,9 @@ Status:  vector/matrix support function.
 
 This revision:  2013 June 18
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauS2pv(
         theta::Real, phi::Real, r::Real,

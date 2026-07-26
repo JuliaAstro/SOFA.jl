@@ -62,9 +62,9 @@ Called:
 
 This revision:  2013 August 12
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauUtcut1(utc1::Real, utc2::Real, dut1::Real)
     ref_ut11 = Ref{Float64}(0.0)

@@ -114,11 +114,11 @@ Returned (function value):
 Called:
    iauCal2jd    Gregorian calendar to JD
 
-This revision:  2017 October 7
+This revision:  2020 May 31
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauDat(iy::Real, im::Real, id::Real, fd::Real)
     # Allocate return values

@@ -70,9 +70,9 @@ Called:
 
 This revision:  2014 February 15
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauD2dtf(scale::String, ndp::Int, d1::Real, d2::Real)
 

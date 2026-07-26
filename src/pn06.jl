@@ -89,9 +89,9 @@ Called:
 
 This revision:  2013 November 14
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauPn06(date1::Real, date2::Real, dpsi::Real, deps::Real)
     # Allocate return values

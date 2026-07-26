@@ -46,11 +46,11 @@ Called:
    P. Kenneth Seidelmann (ed), University Science Books (1992),
    Section 3.222 (p111).
 
-This revision:  2013 June 18
+This revision:  2019 June 23
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauNut80(date1::Real, date2::Real)
     # Allocate return values

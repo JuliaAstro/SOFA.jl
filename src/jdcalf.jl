@@ -54,11 +54,11 @@ Called:
    P. Kenneth Seidelmann (ed), University Science Books (1992),
    Section 12.92 (p604).
 
-This revision:  2016 December 2
+This revision:  2020 April 13
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauJdcalf(ndp::Int, dj1::Real, dj2::Real)
     iymdf = zeros(Int32, 4)

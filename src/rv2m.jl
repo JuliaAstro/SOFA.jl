@@ -27,9 +27,9 @@ Status:  vector/matrix support function.
 
 This revision:  2015 January 30
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauRv2m(w::AbstractVector{<:Real})
     r = zeros(Float64, 3, 3)

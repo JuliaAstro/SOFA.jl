@@ -90,11 +90,11 @@ Called:
    McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
    IERS Technical Note No. 32, BKG (2004)
 
-This revision:  2017 October 12
+This revision:  2019 June 23
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauEect00(date1::Real, date2::Real)
     return ccall(

@@ -115,11 +115,11 @@ Status:  canonical model.
    Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
    Francou, G., Laskar, J., Astron.Astrophys. 282, 663-683 (1994)
 
-This revision:  2013 June 18
+This revision:  2019 June 23
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauNut00b(date1::Real, date2::Real)
     # Allocate return values

@@ -78,9 +78,9 @@ Called:
 
 This revision:   2018 December 5
 
-SOFA release 2019-07-22
+SOFA release 2020-07-21
 
-Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauFk45z(r1950::Real, d1950::Real, bepoch::Real)
     ref_r2000 = Ref{Float64}(0.0)

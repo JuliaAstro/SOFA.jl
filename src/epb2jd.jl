@@ -27,9 +27,9 @@ Note:
 
 This revision:  2013 August 13
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauEpb2jd(epb::Real)
     ref_djm0 = Ref{Float64}(0.0)

@@ -109,9 +109,9 @@ Called:
 
 This revision:   2013 September 25
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauAper13(ut11::Real, ut12::Real, astrom::iauASTROM)
     ref_astrom = Ref{iauASTROM}(astrom)

@@ -31,11 +31,11 @@ Note:
 
    IAU 2000 Resolution B1.9
 
-This revision:  2013 June 18
+This revision:  2019 June 20
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauTttcg(tt1::Real, tt2::Real)
     ref_tcg1 = Ref{Float64}(0.0)

@@ -56,9 +56,9 @@ Returned (function value):
 
 This revision:  2014 November 7
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauGc2gde(a::Real, f::Real, xyz::AbstractVector{<:Real})
     ref_elong = Ref{Float64}(0.0)

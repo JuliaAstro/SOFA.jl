@@ -84,11 +84,11 @@ Called:
 
    Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 
-This revision:  2013 August 21
+This revision:  2019 June 23
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauXy06(date1::Real, date2::Real)
     ref_x = Ref{Float64}(0.0)

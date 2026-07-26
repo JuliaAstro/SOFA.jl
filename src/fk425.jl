@@ -106,9 +106,9 @@ Called:
 
 This revision:   2018 December 5
 
-SOFA release 2019-07-22
+SOFA release 2020-07-21
 
-Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauFk425(
         r1950::Real, d1950::Real, dr1950::Real, dd1950::Real,

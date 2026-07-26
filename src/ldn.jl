@@ -78,9 +78,9 @@ Called:
 
 This revision:   2017 March 16
 
-SOFA release 2018-01-30
+SOFA release 2020-07-21
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2020 IAU SOFA Board.  See notes at end.
 """
 function iauLdn(
         n::Real, b::Vector{iauLDBODY},
