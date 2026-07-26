@@ -283,6 +283,15 @@ n.b. Not IAU-endorsed and without canonical status.
 
  - `pv`     -- planet p,v (heliocentric, J2000.0, au,au/d)
 
+# Examples
+
+```jldoctest
+julia> plan94(2400000.5, 43999.9, 1)
+2-element StaticArraysCore.SVector{2, StaticArraysCore.SVector{3, Float64}} with indices SOneTo(2):
+ [0.2945293959257513, -0.24522041766009367, -0.16154277005719264]
+ [0.014138678714045446, 0.01946548301104765, 0.00892980978389929]
+```
+
 # Note
 
 1) The date date1+date2 is in the TDB time scale (in practice TT can

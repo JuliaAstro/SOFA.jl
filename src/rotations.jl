@@ -417,6 +417,13 @@ Earth rotation angle (IAU 2000 model).
 
  - `era`   -- Earth rotation angle (radians), range 0-2pi
 
+# Examples
+
+```jldoctest
+julia> era00(2400000.5, 54388.0)
+0.40228372400281165
+```
+
 # Note
 
 1) The UT1 date dj1+dj2 is a Julian Date, apportioned in any
@@ -548,6 +555,13 @@ Greenwich mean sidereal time (consistent with IAU 2006 precession).
 # Output
 
  - `gmst`  -- Greenwich mean sidereal time (radians)
+
+# Examples
+
+```jldoctest
+julia> gmst06(2400000.5, 53736.0, 2400000.5, 53736.0)
+1.7541749718700859
+```
 
 # Note
 

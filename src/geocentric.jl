@@ -14,6 +14,13 @@ Earth reference ellipsoids.
  - `radius` -- equatorial radius (meters, Note 2)
  - `oblate` -- oblateness (Note 2)
 
+# Examples
+
+```jldoctest
+julia> eform(:WGS84)
+(radius = 6.378137e6, oblate = 0.0033528106647474805)
+```
+
 # Note
 
 1) The identifier n is a number that specifies the choice of reference
@@ -193,6 +200,16 @@ reference ellipsoid.
 # Output
 
  - `pos`   -- geocentric vector (Note 2)
+
+# Examples
+
+```jldoctest
+julia> gd2gc(:WGS84, 3.1, -0.5, 2500.0)
+3-element StaticArraysCore.SVector{3, Float64} with indices SOneTo(3):
+     -5.599000557704994e6
+ 233011.67223479153
+     -3.040909470698336e6
+```
 
 # Note
 

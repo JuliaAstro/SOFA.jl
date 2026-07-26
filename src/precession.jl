@@ -2302,6 +2302,13 @@ Mean obliquity of the ecliptic, IAU 2006 precession model.
 
  - `ϵ`     -- obliquity of the ecliptic (radians, Note 2)
 
+# Examples
+
+```jldoctest
+julia> obl06(2400000.5, 54388.0)
+0.4090749229387258
+```
+
 # Note
 
 1) The TT date day1+day2 is a Julian Date, apportioned in any
@@ -3983,6 +3990,13 @@ coordinates.  Compatible with IAU 2006/2000A precession-nutation.
 # Output
 
  - `s`     -- the CIO locator s in radians (Note 2)
+
+# Examples
+
+```jldoctest
+julia> s06(2400000.5, 53736.0, 0.5791308486706011e-3, 0.4020579816732961e-4)
+-1.2200322130764632e-8
+```
 
 # Note
 

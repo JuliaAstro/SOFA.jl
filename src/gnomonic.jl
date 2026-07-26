@@ -188,6 +188,13 @@ for the spherical coordinates of the star.
 
  - `a, b`   -- star's spherical coordinates
 
+# Examples
+
+```jldoctest
+julia> tpsts(-0.03, 0.07, 2.3, 1.5)
+(a = 0.7596127167359623, b = 1.5408646451092631)
+```
+
 # Note
 
 1) The tangent plane projection is also called the "gnomonic
@@ -310,6 +317,13 @@ coordinates in the tangent plane.
 # Output
 
  - `ξ, η`   -- rectangular coordinates of star image (Note 2)
+
+# Examples
+
+```jldoctest
+julia> tpxes(1.3, 1.55, 2.3, 1.5)
+(ξ = -0.017532009832369765, η = 0.059629400057787156)
+```
 
 # Note
 

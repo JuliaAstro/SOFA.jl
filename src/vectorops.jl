@@ -14,6 +14,13 @@ Decompose radians into degrees, arcminutes, arcseconds, and fraction.
 
  - `dms`   -- angle in sign, degrees, minutes, seconds, and fraction
 
+# Examples
+
+```jldoctest
+julia> a2af(4, 2.345)
+('+', 134, 21, 30, 9706)
+```
+
 # Note
 
 1) The argument ndp is interpreted as follows:
@@ -114,6 +121,13 @@ Convert degrees, arcminutes, arcseconds to radians.
 
  - `angle`  -- angle in radians
 
+# Examples
+
+```jldoctest
+julia> af2a('-', 45, 13, 27.2)
+-0.7893115794313645
+```
+
 # Note
 
 1) The result is computed even if any of the range checks fail.
@@ -146,6 +160,14 @@ Normalize angle into the range 0 <= a < 2p.
 # Output
 
  - `angle` -- angle in radians in range 0-2pi
+
+# Examples
+
+```jldoctest
+julia> anp(-0.1)
+6.183185307179587
+```
+
 """
 function anp(angle::Real)
     mod2pi(angle)
@@ -863,6 +885,13 @@ Angular separation between two sets of spherical coordinates.
 
  - `θ`      -- angular separation (radians)
 
+# Examples
+
+```jldoctest
+julia> seps(1.0, 0.1, 0.2, -3.0)
+2.346722016996999
+```
+
 """
 function seps(λa::F, ϕa::F, λb::F, ϕb::F) where F<:Real
     #=
@@ -893,6 +922,13 @@ P-vector to spherical coordinates.
 
  - `θ`     -- longitude angle (radians)
  - `ϕ`     -- latitude angle (radians)
+
+# Examples
+
+```jldoctest
+julia> c2s([100.0, -50.0, 25.0])
+(-0.4636476090008061, 0.21998797739545944)
+```
 
 # Note
 
@@ -998,6 +1034,16 @@ Convert spherical coordinates to Cartesian.
 
  - `c`     -- direction cosines
 
+# Examples
+
+```jldoctest
+julia> s2c(3.0123, -0.999)
+3-element StaticArraysCore.MVector{3, Float64} with indices SOneTo(3):
+ -0.5366267667260525
+  0.06977111097651444
+ -0.8409302618566215
+```
+
 """
 function s2c(θ::F, ϕ::F) where F<:Real
     MVector(cos(θ)*cos(ϕ), sin(θ)*cos(ϕ), sin(ϕ))
@@ -1061,6 +1107,14 @@ P-vector inner (=scalar=dot) product.
 # Output
 
  - `r`     -- a . b
+
+# Examples
+
+```jldoctest
+julia> pdp([2.0, 2.0, 3.0], [1.0, 3.0, 4.0])
+20.0
+```
+
 """
 pdp(a::V, b::V) where V<:AbstractVector{<:Real} = sum(a.*b)
 

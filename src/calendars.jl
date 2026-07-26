@@ -14,6 +14,13 @@
  - `mjd0`  -- MJD zero-point: always 2400000.5
  - `mjd`   -- Modified Julian Date for 0 hrs
 
+# Examples
+
+```jldoctest
+julia> cal2jd(2003, 6, 1)
+(mjd0 = 2.4000005e6, mjd = 52791)
+```
+
 # Note
 
 1) The algorithm used is valid from -4800 March 1, but this
@@ -50,6 +57,13 @@ Julian Date to Besselian Epoch.
 # Output
 
  - `bessel` -- Besselian Epoch
+
+# Examples
+
+```jldoctest
+julia> epb(2415019.8135, 30103.18648)
+1982.418424159279
+```
 
 # Note
 
@@ -137,6 +151,13 @@ Julian Epoch to Julian Date.
  - `mjd0`  -- MJD zero-point: always 2400000.5
  - `mjd`   -- Modified Julian Date
 
+# Examples
+
+```jldoctest
+julia> epj2jd(1996.8)
+(mjd0 = 2.4000005e6, mjd = 50375.69999999998)
+```
+
 # Note
 
 The Julian Date is returned in two pieces, in the usual ERFA manner,
@@ -167,6 +188,13 @@ Julian Date to Gregorian year, month, day, and fraction of a day.
  - `month` -- month
  - `day`   -- day
  - `fraction` -- fraction of day
+
+# Examples
+
+```jldoctest
+julia> jd2cal(2400000.5, 50123.9999)
+(year = 1996, month = 2, day = 10, fraction = 0.9999000000025262)
+```
 
 # Note
 

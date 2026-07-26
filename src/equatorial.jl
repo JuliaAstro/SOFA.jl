@@ -16,6 +16,13 @@ hour angle and declination
 
  - `equatorial` -- hour angle and declination
 
+# Examples
+
+```jldoctest
+julia> ae2hd(5.5, 1.1, 0.7)
+(0.5933291115507306, 0.9613934761647818)
+```
+
 # Note
 
 1) All the arguments are angles in radians.
@@ -139,6 +146,13 @@ Parallactic angle for a given hour angle and declination.
 # Output
 
  - `angle` -- parallactic angle
+
+# Examples
+
+```jldoctest
+julia> hd2pa(1.1, 1.2, 0.3)
+1.9062274280019955
+```
 
 # Note
 
