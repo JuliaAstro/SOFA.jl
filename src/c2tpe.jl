@@ -4,7 +4,7 @@ Form the celestial to terrestrial matrix given the date, the UT1,
 the nutation and the polar motion.  IAU 2000.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -49,7 +49,7 @@ Status:  support function.
 3. The arguments xp and yp are the coordinates (in radians) of the
    Celestial Intermediate Pole with respect to the International
    Terrestrial Reference System (see IERS Conventions 2003),
-   measured along the meridians to 0 and 90 deg west respectively.
+   measured along the meridians 0 and 90 deg west respectively.
 
 4. The matrix rc2t transforms from celestial to terrestrial
    coordinates:
@@ -80,11 +80,11 @@ Called:
    McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
    IERS Technical Note No. 32, BKG (2004)
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauC2tpe(
         tta::Real, ttb::Real, uta::Real, utb::Real,

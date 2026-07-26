@@ -35,7 +35,7 @@ For a given UTC date, calculate Delta(AT) = TAI-UTC.
    :__________________________________________:
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  user-replaceable support function.
 
@@ -114,11 +114,11 @@ Returned (function value):
 Called:
    iauCal2jd    Gregorian calendar to JD
 
-This revision:  2017 October 7
+This revision:  2023 January 17
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauDat(iy::Real, im::Real, id::Real, fd::Real)
     # Allocate return values

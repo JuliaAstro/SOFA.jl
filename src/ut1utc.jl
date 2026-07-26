@@ -36,8 +36,8 @@ Returned (function value):
 
 3. JD cannot unambiguously represent UTC during a leap second unless
    special measures are taken.  The convention in the present
-   function is that the returned quasi JD day UTC1+UTC2 represents
-   UTC days whether the length is 86399, 86400 or 86401 SI seconds.
+   function is that the returned quasi-JD UTC1+UTC2 represents UTC
+   days whether the length is 86399, 86400 or 86401 SI seconds.
 
 4. The function iauD2dtf can be used to transform the UTC quasi-JD
    into calendar date and clock time, including UTC leap second handling.
@@ -59,11 +59,11 @@ Called:
    Explanatory Supplement to the Astronomical Almanac,
    P. Kenneth Seidelmann (ed), University Science Books (1992)
 
-This revision:  2013 June 18
+This revision:  2023 May 6
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauUt1utc(ut11::Real, ut12::Real, dta::Real)
     ref_tt1 = Ref{Float64}(0.0)

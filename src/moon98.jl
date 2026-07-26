@@ -3,7 +3,7 @@ export iauMoon98
 Approximate geocentric position and velocity of the Moon.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -14,7 +14,7 @@ n.b. Not IAU-endorsed and without canonical status.
     date2  double         TT date part B (Notes 1,4)
 
 ### Returned
-    pv     double[2][3]   Moon p,v, GCRS (AU, AU/d, Note 5)
+   pv     double[2][3]   Moon p,v, GCRS (au, au/d, Note 5)
 
 ### Notes
 
@@ -68,11 +68,11 @@ Called:
     iauRxp       product of r-matrix and p-vector
     iauRxpv      product of r-matrix and pv-vector
 
-This revision:  2021 May 11
+This revision:  2023 March 20
 
-SOFA release 2021-05-12
+SOFA release 2023-10-11
 
-Copyright (C) 2021 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauMoon98(date1::Real, date2::Real)
 

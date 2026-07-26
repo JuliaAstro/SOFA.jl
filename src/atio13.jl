@@ -128,11 +128,11 @@ Called:
    iauApio13    astrometry parameters, CIRS-observed, 2013
    iauAtioq     quick CIRS to observed
 
-This revision:   2016 February 2 
+This revision:   2021 February 24
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauAtio13(
         ri::Real, di::Real, utc1::Real, utc2::Real, dut1::Real,

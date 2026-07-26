@@ -66,11 +66,11 @@ Called:
    iauPdp       scalar product of two p-vectors
    iauPxp       vector product of two p-vectors
 
-This revision:   2013 October 9
+This revision:   2021 February 24
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauLd(
         rh::Real, p::AbstractVector{<:Real}, q::AbstractVector{<:Real},

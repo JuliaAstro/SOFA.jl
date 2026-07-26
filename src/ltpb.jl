@@ -11,7 +11,7 @@ Status:  support function.
    epj     double         Julian epoch (TT)
 
 ### Returned
-   rpb     double[3][3]   precession-bias matrix, J2000.0 to date
+   rpb     double[3][3]   precession+bias matrix, J2000.0 to date
 
 ### Notes
 
@@ -44,11 +44,11 @@ Status:  support function.
    expressions, valid for long time intervals (Corrigendum),
    Astron.Astrophys. 541, C1
 
-This revision:  2015 December 6
+This revision:  2023 March 20
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauLtpb(epj::Real)
     rpb = zeros(Float64, 3, 3)

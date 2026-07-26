@@ -35,11 +35,11 @@ Status:  support function.
   expressions, valid for long time intervals (Corrigendum),
   Astron.Astrophys. 541, C1
 
-This revision:  2016 February 9
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauLtpequ(epj::Real)
     veq = zeros(Float64, 3)

@@ -1,8 +1,7 @@
 export iauLteqec
 """
-Transformation from ICRS equatorial coordinates to ecliptic
-coordinates (mean equinox and ecliptic of date) using a long-term
-precession model.
+Transformation from ICRS RA,Dec to ecliptic coordinates (mean equinox
+and ecliptic of date), using a long-term precession model.
 
 This function is part of the International Astronomical Union's
 SOFA (Standards of Fundamental Astronomy) software collection.
@@ -49,11 +48,11 @@ Called:
    expressions, valid for long time intervals (Corrigendum),
    Astron.Astrophys. 541, C1
 
-This revision:  2016 February 9
+This revision:  2023 March 18
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauLteqec(epj::Real, dr::Real, dd::Real)
     ref_dl = Ref{Float64}(0.0)

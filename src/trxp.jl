@@ -3,7 +3,7 @@ export iauTrxp
 Multiply a p-vector by the transpose of an r-matrix.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
@@ -12,7 +12,7 @@ Status:  vector/matrix support function.
    p        double[3]      p-vector
 
 ### Returned
-   trp      double[3]      r * p
+   trp      double[3]      r^T * p
 
 Note:
    It is permissible for p and trp to be the same array.
@@ -21,11 +21,11 @@ Called:
    iauTr        transpose r-matrix
    iauRxp       product of r-matrix and p-vector
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauTrxp(r::AbstractMatrix{<:Real}, p::AbstractVector{<:Real})
     trp = zeros(Float64, 3)

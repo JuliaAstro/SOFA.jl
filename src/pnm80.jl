@@ -4,21 +4,21 @@ Form the matrix of precession/nutation for a given date, IAU 1976
 precession model, IAU 1980 nutation model.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
 ### Given
-   date1,date2    double         TDB date (Note 1)
+   date1,date2 double       TT as a 2-part Julian Date (Note 1)
 
 ### Returned
    rmatpn         double[3][3]   combined precession/nutation matrix
 
 ### Notes
 
-1. The TDB date date1+date2 is a Julian Date, apportioned in any
+1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
-   JD(TDB)=2450123.7 could be expressed in any of these ways,
+   JD(TT)=2450123.7 could be expressed in any of these ways,
    among others:
 
          date1          date2
@@ -51,11 +51,11 @@ Called:
    P. Kenneth Seidelmann (ed), University Science Books (1992),
    Section 3.3 (p145).
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauPnm80(date1::Real, date2::Real)
     rmatpn = zeros(Float64, 3, 3)

@@ -3,7 +3,7 @@ export iauSxp
 Multiply a p-vector by a scalar.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
@@ -17,11 +17,11 @@ Status:  vector/matrix support function.
 Note:
    It is permissible for p and sp to be the same array.
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauSxp(s::Real, p::AbstractVector{<:Real})
     sp = zeros(Float64, 3)

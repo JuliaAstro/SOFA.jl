@@ -13,7 +13,7 @@ Status:  support function.
 
 ### Given
    rc,dc  double   ICRS right ascension at J2000.0 (radians, Note 1)
-   pr     double   RA proper motion (radians/year; Note 2)
+   pr     double   RA proper motion (radians/year, Note 2)
    pd     double   Dec proper motion (radians/year)
    px     double   parallax (arcsec)
    rv     double   radial velocity (km/s, +ve if receding)
@@ -35,7 +35,7 @@ Status:  support function.
    hob    double*  observed hour angle (radians)
    dob    double*  observed declination (radians)
    rob    double*  observed right ascension (CIO-based, radians)
-   eo     double*  equation of the origins (ERA-GST)
+   eo     double*  equation of the origins (ERA-GST, radians)
 
 Returned (function value):
          int      status: +1 = dubious year (Note 4)
@@ -144,11 +144,11 @@ Called:
    iauAtciq     quick ICRS to CIRS
    iauAtioq     quick CIRS to observed
 
-This revision:   2016 February 2
+This revision:   2022 May 3
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauAtco13(
         rc::Real, dc::Real, pr::Real, pd::Real,

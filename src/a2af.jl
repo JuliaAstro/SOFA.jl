@@ -2,7 +2,7 @@ export iauA2af
 """
 Decompose radians into degrees, arcminutes, arcseconds, fraction.
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
@@ -13,9 +13,6 @@ Status:  vector/matrix support function.
 ### Returned
 - `sign::Char`    '+' or '-'
 - `idmsf::Vector{Int32}`  degrees, arcminutes, arcseconds, fraction
-
-Called:
-   iauD2tf      decompose days to hms
 
 ### Notes
 1. The argument ndp is interpreted as follows:
@@ -39,9 +36,14 @@ Called:
 
 3. The absolute value of angle may exceed 2pi.  In cases where it does not, it is up to the caller to test for and handle the case where angle is very nearly 2pi and rounds up to 360 degrees, by testing for idmsf[0]=360 and setting idmsf[0-3] to zero.
 
-This revision:  2013 June 18
+Called:
+   iauD2tf      decompose days to hms
 
-SOFA release 2018-01-30
+This revision:  2021 May 11
+
+SOFA release 2023-10-11
+
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauA2af(ndp::Int, angle::Real)
     sign = Vector{UInt8}(undef, 1)

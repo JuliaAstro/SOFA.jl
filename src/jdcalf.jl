@@ -4,7 +4,7 @@ Julian Date to Gregorian Calendar, expressed in a form convenient
 for formatting messages:  rounded to a specified precision.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -20,7 +20,7 @@ Returned (function value):
             int      status:
                         -1 = date out of range
                         0 = OK
-                        +1 = NDP not 0-9 (interpreted as 0)
+                        +1 = ndp not 0-9 (interpreted as 0)
 
 ### Notes
 
@@ -40,10 +40,11 @@ Returned (function value):
    the Gregorian Calendar, nor is the AD/BC numbering convention
    observed.
 
-3. Refer to the function iauJd2cal.
 
-4. NDP should be 4 or less if internal overflows are to be
-   avoided on machines which use 16-bit integers.
+3. See also the function iauJd2cal.
+4. The number of decimal places ndp should be 4 or less if internal
+   overflows are to be avoided on platforms which use 16-bit
+   integers.
 
 Called:
    iauJd2cal    JD to Gregorian calendar
@@ -54,11 +55,11 @@ Called:
    P. Kenneth Seidelmann (ed), University Science Books (1992),
    Section 12.92 (p604).
 
-This revision:  2016 December 2
+This revision:  2023 January 16
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauJdcalf(ndp::Int, dj1::Real, dj2::Real)
     iymdf = zeros(Int32, 4)

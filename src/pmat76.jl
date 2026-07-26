@@ -3,7 +3,7 @@ export iauPmat76
 Precession matrix from J2000.0 to a specified date, IAU 1976 model.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -64,11 +64,11 @@ Called:
 
    Kaplan,G.H., 1981. USNO circular no. 163, pA2.
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauPmat76(date1::Real, date2::Real)
     rmatp = zeros(Float64, 3, 3)

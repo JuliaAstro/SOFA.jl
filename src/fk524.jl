@@ -97,11 +97,11 @@ Called:
    from FK4 B2000.0 to FK5 J2000.0 using matrices in 6-space".
    Astron.J. 97, 274.
 
-This revision:   2018 December 5
+This revision:   2023 March 20
 
-SOFA release 2019-07-22
+SOFA release 2023-10-11
 
-Copyright (C) 2019 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauFk524(
         r2000::Real, d2000::Real, dr2000::Real, dd2000::Real,

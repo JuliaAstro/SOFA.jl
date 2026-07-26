@@ -36,7 +36,7 @@ Status:  support function.
       v      double[3]    barycentric observer velocity (vector, c)
       bm1    double       sqrt(1-|v|^2): reciprocal of Lorenz factor
       bpn    double[3][3] bias-precession-nutation matrix
-      along  double       longitude + s' (radians)
+    along  double       adjusted longitude (radians)
       xpl    double       polar motion xp wrt local meridian (radians)
       ypl    double       polar motion yp wrt local meridian (radians)
       sphi   double       sine of geodetic latitude
@@ -80,6 +80,8 @@ Status:  support function.
    CONVENTION:  the longitude required by the present function is
    right-handed, i.e. east-positive, in accordance with geographical
    convention.
+   The adjusted longitude stored in the astrom array takes into
+   account the TIO locator and polar motion.
 
 4. xp and yp are the coordinates (in radians) of the Celestial
    Intermediate Pole with respect to the International Terrestrial
@@ -138,18 +140,22 @@ Status:  support function.
    iauAtioq, iauAtoiq, iauAtciq* and iauAticq*.
 
 Called:
-   iauAper      astrometry parameters: update ERA
+   iauIr        initialize r-matrix to identity
+   iauRz        rotate around Z-axis
+   iauRy        rotate around Y-axis
+   iauRx        rotate around X-axis
+   iauAnpm      normalize angle into range +/- pi
    iauC2ixys    celestial-to-intermediate matrix, given X,Y and s
    iauPvtob     position/velocity of terrestrial station
    iauTrxpv     product of transpose of r-matrix and pv-vector
    iauApcs      astrometry parameters, ICRS-GCRS, space observer
    iauCr        copy r-matrix
 
-This revision:   2013 October 9
+This revision:   2021 February 24
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauApco(
         date1::Real, date2::Real,

@@ -3,7 +3,7 @@ export iauP06e
 Precession angles, IAU 2006, equinox based.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  canonical models.
 
@@ -65,12 +65,15 @@ Returned (see Note 2):
    za     z_A         equatorial precession: -3rd 323 Euler angle
    zetaa  zeta_A      equatorial precession: -1st 323 Euler angle
    thetaa theta_A     equatorial precession: 2nd 323 Euler angle
-   pa     p_A         general precession
+   pa     p_A         general precession (n.b. see below)
    gam    gamma_J2000 J2000.0 RA difference of ecliptic poles
    phi    phi_J2000   J2000.0 codeclination of ecliptic pole
    psi    psi_J2000   longitude difference of equator poles, J2000.0
 
    The returned values are all radians.
+   Note that the t^5 coefficient in the series for p_A from
+   Capitaine et al. (2003) is incorrectly signed in Hilton et al.
+   (2006).
 
 3. Hilton et al. (2006) Table 1 also contains angles that depend on
    models distinct from the P03 precession theory itself, namely the
@@ -108,17 +111,19 @@ Returned (see Note 2):
    arguments.  The quantities are stored in the stated order.
 
 ### References
+   Capitaine, N., Wallace, P.T. & Chapront, J., 2003,
+   Astron.Astrophys., 412, 567
 
    Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 
 Called:
    iauObl06     mean obliquity, IAU 2006
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauP06e(date1::Real, date2::Real)
     ref_eps0 = Ref{Float64}(0.0)

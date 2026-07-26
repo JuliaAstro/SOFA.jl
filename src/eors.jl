@@ -4,16 +4,16 @@ Equation of the origins, given the classical NPB matrix and the
 quantity s.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
 ### Given
    rnpb  double[3][3]  classical nutation x precession x bias matrix
-   s     double        the quantity s (the CIO locator)
+   s     double        the quantity s (the CIO locator) in radians
 
 Returned (function value):
-         double        the equation of the origins in radians.
+         double        the equation of the origins in radians
 
 ### Notes
 
@@ -32,11 +32,11 @@ Returned (function value):
 
    Wallace, P. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 
-This revision:  2013 June 18
+This revision:  2023 May 6
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauEors(rnbp::AbstractMatrix{<:Real}, s::Real)
     # Allocate return value

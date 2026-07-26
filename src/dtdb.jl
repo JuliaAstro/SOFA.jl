@@ -34,7 +34,7 @@ Adopted values for the various constants can be found in the IERS
 Conventions (McCarthy & Petit 2003).
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -155,11 +155,11 @@ Returned (function value):
    Simon, J.L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
    Francou, G. & Laskar, J., Astron.Astrophys., 282, 663-683 (1994).
 
-This revision:  2018 January 2
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauDtdb(
         date1::Real, date2::Real,

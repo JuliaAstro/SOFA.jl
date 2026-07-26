@@ -3,7 +3,7 @@ export iauD2tf
 Decompose days to hours, minutes, seconds, fraction.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
@@ -12,7 +12,7 @@ Status:  vector/matrix support function.
    days    double  interval in days
 
 ### Returned
-   sign    char    '+' or '-'
+   sign    char*   '+' or '-'
    ihmsf   int[4]  hours, minutes, seconds, fraction
 
 ### Notes
@@ -47,11 +47,11 @@ Status:  vector/matrix support function.
    case where days is very nearly 1.0 and rounds up to 24 hours,
    by testing for ihmsf[0]=24 and setting ihmsf[0-3] to zero.
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauD2tf(ndp::Int, days::Real)
 

@@ -3,7 +3,7 @@ export iauRv2m
 Form the r-matrix corresponding to a given r-vector.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
@@ -20,16 +20,16 @@ Status:  vector/matrix support function.
    supplied to This function has the same direction as the Euler
    axis, and its magnitude is the angle in radians.
 
-2. If w is null, the unit matrix is returned.
+2. If w is null, the identity matrix is returned.
 
 3. The reference frame rotates clockwise as seen looking along the
    rotation vector from the origin.
 
-This revision:  2015 January 30
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauRv2m(w::AbstractVector{<:Real})
     r = zeros(Float64, 3, 3)

@@ -3,7 +3,7 @@ export iauJd2cal
 Julian Date to Gregorian year, month, day, and fraction of a day.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -36,6 +36,9 @@ Returned (function value):
       2451545.0       -1421.3       (J2000 method)
       2400000.5       50123.2       (MJD method)
       2450123.5           0.2       (date & time method)
+   Separating integer and fraction uses the "compensated summation"
+   algorithm of Kahan-Neumaier to preserve as much precision as
+   possible irrespective of the jd1+jd2 apportionment.
 
 3. In early eras the conversion is from the "proleptic Gregorian
    calendar";  no account is taken of the date(s) of adoption of
@@ -47,12 +50,14 @@ Returned (function value):
    Explanatory Supplement to the Astronomical Almanac,
    P. Kenneth Seidelmann (ed), University Science Books (1992),
    Section 12.92 (p604).
+   Klein, A., A Generalized Kahan-Babuska-Summation-Algorithm.
+   Computing, 76, 279-293 (2006), Section 3.
 
-This revision:  2017 January 12
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauJd2cal(dj1::Real, dj2::Real)
     ref_iy = Ref{Int32}(0.0)

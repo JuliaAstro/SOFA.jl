@@ -32,11 +32,11 @@ Returned (function value):
 3.  If there are multiple errors, the status value reflects only the
     first, the smallest taking precedence.
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauTf2a(s::Char, ihour::Int, imin::Int, sec::Real)
     ref_rad = Ref{Float64}(0.0)

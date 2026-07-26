@@ -46,7 +46,7 @@ Status:  support function.
       eral   double       "local" Earth rotation angle (radians)
       refa   double       refraction constant A (radians)
       refb   double       refraction constant B (radians)
-   eo     double*    equation of the origins (ERA-GST)
+   eo     double*    equation of the origins (ERA-GST, radians)
 
 Returned (function value):
    int        status: +1 = dubious year (Note 2)
@@ -169,11 +169,11 @@ Called:
    iauApco      astrometry parameters, ICRS-observed
    iauEors      equation of the origins, given NPB matrix and s
 
-This revision:   2013 December 5
+This revision:   2022 May 3
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauApco13(
         utc1::Real, utc2::Real, dut1::Real,

@@ -4,7 +4,7 @@ Greenwich mean sidereal time (model consistent with IAU 2000
 resolutions).
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  canonical model.
 
@@ -19,8 +19,8 @@ Returned (function value):
 
 1. The UT1 and TT dates uta+utb and tta+ttb respectively, are both
    Julian Dates, apportioned in any convenient way between the
-   argument pairs.  For example, JD=2450123.7 could be expressed in
-   any of these ways, among others:
+   argument pairs.  For example, JD(UT1)=2450123.7 could be
+   expressed in any of these ways, among others:
 
          Part A         Part B
 
@@ -67,11 +67,11 @@ Called:
    McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
    IERS Technical Note No. 32, BKG (2004)
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauGmst00(uta::Real, utb::Real, tta::Real, ttb::Real)
     return ccall(

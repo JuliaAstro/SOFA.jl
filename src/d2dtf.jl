@@ -68,11 +68,11 @@ Called:
    iauD2tf      decompose days to hms
    iauDat       delta(AT) = TAI-UTC
 
-This revision:  2014 February 15
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauD2dtf(scale::String, ndp::Int, d1::Real, d2::Real)
 

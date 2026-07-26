@@ -1,6 +1,6 @@
 export iauIcrs2g
 """
-Transformation from ICRS to Galactic Coordinates.
+Transformation from ICRS to Galactic coordinates.
 
 This function is part of the International Astronomical Union's
 SOFA (Standards of Fundamental Astronomy) software collection.
@@ -12,8 +12,8 @@ Status:  support function.
     dd     double      ICRS declination (radians)
 
 ### Returned
-    dl     double      galactic longitude (radians)
-    db     double      galactic latitude (radians)
+   dl     double      Galactic longitude (radians)
+   db     double      Galactic latitude (radians)
 
 ### Notes
 
@@ -37,7 +37,7 @@ Status:  support function.
     coordinates with the above factors taken into account.  The
     matrix is derived from three angles, namely the ICRS coordinates
     of the Galactic pole and the longitude of the ascending node of
-    the galactic equator on the ICRS equator.  They are given in
+   the Galactic equator on the ICRS equator.  They are given in
     degrees to five decimal places and for canonical purposes are
     regarded as exact.  In the Hipparcos Catalogue the matrix
     elements are given to 10 decimal places (about 20 microarcsec).
@@ -60,11 +60,11 @@ Called:
     derived from the ESA Hipparcos Space Astrometry Mission.  ESA
     Publications Division, Noordwijk, Netherlands.
 
-This revision:   2018 January 2
+This revision:   2023 April 16
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauIcrs2g(dr::Real, dd::Real)
     ref_dl = Ref{Float64}(0.0)

@@ -36,7 +36,7 @@ Status:  support function.
       eral   double       unchanged
       refa   double       unchanged
       refb   double       unchanged
-   eo     double*     equation of the origins (ERA-GST)
+   eo     double*     equation of the origins (ERA-GST, radians)
 
 ### Notes
 
@@ -108,11 +108,11 @@ Called:
    iauApci      astrometry parameters, ICRS-CIRS
    iauEors      equation of the origins, given NPB matrix and s
 
-This revision:   2013 October 9
+This revision:   2022 May 3
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauApci13(date1::Real, date2::Real)
     # Allocate return value

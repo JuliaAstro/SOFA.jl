@@ -4,7 +4,7 @@ Greenwich apparent sidereal time (consistent with IAU 2000
 resolutions but using the truncated nutation model IAU 2000B).
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -18,8 +18,8 @@ Returned (function value):
 
 1. The UT1 date uta+utb is a Julian Date, apportioned in any
    convenient way between the argument pair.  For example,
-   JD=2450123.7 could be expressed in any of these ways, among
-   others:
+   JD(UT1)=2450123.7 could be expressed in any of these ways,
+   among others:
 
             uta            utb
 
@@ -46,7 +46,7 @@ Returned (function value):
       component of GMST and the equation of the equinoxes.  This
       results in errors of order 0.1 mas at present.
 
-   . The IAU 2000B abridged nutation model (McCarthy & Luzum, 2001)
+   . The IAU 2000B abridged nutation model (McCarthy & Luzum, 2003)
       is used, introducing errors of up to 1 mas.
 
 3. This GAST is compatible with the IAU 2000 resolutions and must be
@@ -75,11 +75,11 @@ Called:
    McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003),
    IERS Technical Note No. 32, BKG (2004)
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauGst00b(uta::Real, utb::Real)
     return ccall(

@@ -4,7 +4,7 @@ Form the matrix of precession-nutation for a given date (including
 frame bias), equinox-based, IAU 2000B model.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -18,8 +18,8 @@ Status:  support function.
 
 1. The TT date date1+date2 is a Julian Date, apportioned in any
    convenient way between the two arguments.  For example,
-   JD(TT)=2450123.7 could be expressed in any of these ways,
-   among others:
+   JD(TT)=2450123.7 could be expressed in any of these ways, among
+   others:
 
          date1          date2
 
@@ -52,11 +52,11 @@ Called:
    24th General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.
    (2000)
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauPnm00b(date1::Real, date2::Real)
     rbpn = zeros(Float64, 3, 3)

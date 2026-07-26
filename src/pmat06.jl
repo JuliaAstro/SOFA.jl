@@ -4,7 +4,7 @@ Precession matrix (including frame bias) from GCRS to a specified
 date, IAU 2006 model.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -47,14 +47,17 @@ Called:
 ### References
 
    Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
+   IAU: Trans. International Astronomical Union, Vol. XXIVB;  Proc.
+   24th General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.
+   (2000)
 
    Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauPmat06(date1::Real, date2::Real)
     rbp = zeros(Float64, 3, 3)

@@ -4,7 +4,7 @@ Fundamental argument, IERS Conventions (2003):
 mean longitude of Mars.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  canonical model.
 
@@ -33,11 +33,11 @@ Returned (function value):
    Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
    Astron.Astrophys.Supp.Ser. 135, 111
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauFama03(t::Real)
     return ccall((:iauFama03, libsofa_c), Cdouble, (Cdouble,), convert(Float64, t))

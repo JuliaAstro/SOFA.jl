@@ -4,7 +4,7 @@ Greenwich apparent sidereal time (consistent with IAU 1982/94
 resolutions).
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -18,7 +18,7 @@ Returned (function value):
 
 1. The UT1 date uta+utb is a Julian Date, apportioned in any
    convenient way between the argument pair.  For example,
-   JD=2450123.7 could be expressed in any of these ways, among
+   JD(UT1)=2450123.7 could be expressed in any of these ways, among
    others:
 
             uta            utb
@@ -61,11 +61,11 @@ Called:
 
    IAU Resolution C7, Recommendation 3 (1994)
 
-This revision:  2008 May 16
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauGst94(uta::Real, utb::Real)
     return ccall(

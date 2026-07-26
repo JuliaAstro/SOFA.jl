@@ -14,7 +14,7 @@ Status:  support function.
 
 ### Returned
     rc,dc  double  ICRS astrometric RA,Dec (radians)
-    eo     double  equation of the origins (ERA-GST, Note 4)
+   eo     double  equation of the origins (ERA-GST, radians, Note 4)
 
 ### Notes
 
@@ -69,11 +69,11 @@ Called:
     iauApci13    astrometry parameters, ICRS-CIRS, 2013
     iauAticq     quick CIRS to ICRS astrometric
 
-This revision:   2013 October 9
+This revision:   2022 May 3
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauAtic13(ri::Real, di::Real, date1::Real, date2::Real)
     # Allocate return values

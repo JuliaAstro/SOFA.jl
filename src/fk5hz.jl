@@ -1,10 +1,10 @@
 export iauFk5hz
 """
 Transform an FK5 (J2000.0) star position into the system of the
-Hipparcos catalogue, assuming zero Hipparcos proper motion.
+Hipparcos catalog, assuming zero Hipparcos proper motion.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -45,7 +45,7 @@ Status:  support function.
    are both good compromises between resolution and convenience.
 
 3. The FK5 to Hipparcos transformation is modeled as a pure
-   rotation and spin;  zonal errors in the FK5 catalogue are not
+   rotation and spin;  zonal errors in the FK5 catalog are not
    taken into account.
 
 4. The position returned by this function is in the Hipparcos
@@ -67,11 +67,11 @@ Called:
 
    F.Mignard & M.Froeschle, 2000, Astron.Astrophys. 354, 732-739.
 
-This revision:  2013 June 18
+This revision:  2023 March 6
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauFk5hz(r5::Real, d5::Real, date1::Real, date2::Real)
     ref_rh = Ref{Float64}(0.0)

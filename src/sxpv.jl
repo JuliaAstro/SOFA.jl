@@ -3,7 +3,7 @@ export iauSxpv
 Multiply a pv-vector by a scalar.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  vector/matrix support function.
 
@@ -15,16 +15,16 @@ Status:  vector/matrix support function.
    spv     double[2][3]    s * pv
 
 Note:
-   It is permissible for pv and spv to be the same array
+   It is permissible for pv and spv to be the same array.
 
 Called:
    iauS2xpv     multiply pv-vector by two scalars
 
-This revision:  2013 August 7
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauSxpv(s::Real, pv::AbstractMatrix{<:Real})
     spv = zeros(Float64, 3, 2)

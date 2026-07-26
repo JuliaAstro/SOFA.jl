@@ -78,9 +78,9 @@ Returned (function value):
 
 This revision:   2018 January 2
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauTporv(xi::Real, eta::Real, v::AbstractVector{<:Real})
     v01 = zeros(Float64, 3)

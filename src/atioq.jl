@@ -79,8 +79,9 @@ Status:  support function.
     then adjusting for refraction.  The HA,Dec is obtained by
     rotating back into equatorial coordinates, and is the position
     that would be seen by a perfect equatorial with its polar axis
-    aligned to the Earth's axis of rotation.  Finally, the RA is
-    obtained by subtracting the HA from the local ERA.
+   aligned to the Earth's axis of rotation.  Finally, the
+   (CIO-based) RA is obtained by subtracting the HA from the local
+   ERA.
 
  6. The star-independent CIRS-to-observed-place parameters in ASTROM
     may be computed with iauApio[13] or iauApco[13].  If nothing has
@@ -92,11 +93,11 @@ Called:
     iauC2s       p-vector to spherical
     iauAnp       normalize angle into range 0 to 2pi
 
-This revision:   2016 March 9
+This revision:   2022 August 30
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauAtioq(ri::Real, di::Real, astrom::iauASTROM)
 

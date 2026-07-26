@@ -1,13 +1,14 @@
 export iauPlan94
 """
-This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
 
-Status:  support function.
 
-Approximate heliocentric position and velocity of a nominated major
+Approximate heliocentric position and velocity of a nominated
 planet:  Mercury, Venus, EMB, Mars, Jupiter, Saturn, Uranus or
 Neptune (but not the Earth itself).
+This function is part of the International Astronomical Union's
+SOFA (Standards of Fundamental Astronomy) software collection.
+Status:  support function.
+n.b. Not IAU-endorsed and without canonical status.
 
 ### Given
    date1  double       TDB date part A (Note 1)
@@ -50,9 +51,9 @@ Returned (function value):
 2. If an np value outside the range 1-8 is supplied, an error status
    (function value -1) is returned and the pv vector set to zeroes.
 
-3. For np=3 the result is for the Earth-Moon Barycenter.  To obtain
-   the heliocentric position and velocity of the Earth, use instead
-   the SOFA function iauEpv00.
+3. For np=3 the result is for the Earth-Moon barycenter (EMB).  To
+   obtain the heliocentric position and velocity of the Earth, use
+   instead the SOFA function iauEpv00.
 
 4. On successful return, the array pv contains the following:
 
@@ -103,8 +104,8 @@ Returned (function value):
       Neptune         158000              14.4
 
    Comparisons against DE200 over the interval 1800-2100 gave the
-   following maximum absolute differences.  (The results using
-   DE406 were essentially the same.)
+   following maximum absolute differences (the results using
+   DE406 were essentially the same):
 
                   L (arcsec)   B (arcsec)     R (km)   Rdot (m/s)
 
@@ -150,17 +151,17 @@ Returned (function value):
    which in turn takes precedence over the remote date warning.
 
 Called:
-   iauAnp       normalize angle into range 0 to 2pi
+   iauAnpm      normalize angle into range +/- pi
 
 Reference:  Simon, J.L, Bretagnon, P., Chapront, J.,
             Chapront-Touze, M., Francou, G., and Laskar, J.,
             Astron.Astrophys., 282, 663 (1994).
 
-This revision:  2017 October 12
+This revision:  2023 May 5
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauPlan94(date1::Real, date2::Real, np::Int)
     pv = zeros(Float64, 3, 2)

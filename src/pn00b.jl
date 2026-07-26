@@ -5,7 +5,7 @@ supporting classical (equinox-based) use directly and CIO-based
 use indirectly.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -46,7 +46,7 @@ Status:  support function.
     longitude and obliquity are in radians and with respect to the
     equinox and ecliptic of date.  For more accurate results, but
     at the cost of increased computation, use the iauPn00a function.
-    For the utmost accuracy, use the iauPn00  function, where the
+    For the utmost accuracy, use the iauPn00 function, where the
     nutation components are caller-specified.
 
 3.  The mean obliquity is consistent with the IAU 2000 precession.
@@ -91,11 +91,11 @@ Called:
     n.b. The celestial ephemeris origin (CEO) was renamed "celestial
         intermediate origin" (CIO) by IAU 2006 Resolution 2.
 
-This revision:  2013 November 13
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauPn00b(date1::Real, date2::Real)
     # Allocate return values

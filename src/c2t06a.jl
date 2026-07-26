@@ -1,11 +1,11 @@
 export iauC2t06a
 """
 Form the celestial to terrestrial matrix given the date, the UT1 and
-the polar motion, using the IAU 2006 precession and IAU 2000A
-nutation models.
+the polar motion, using the IAU 2006/2000A precession-nutation
+model.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -20,8 +20,8 @@ Status:  support function.
 ### Notes
 
 1. The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
-   apportioned in any convenient way between the arguments uta and
-   utb.  For example, JD(UT1)=2450123.7 could be expressed in any of
+   apportioned in any convenient way between the two arguments.  For
+   example, JD(UT1)=2450123.7 could be expressed in any of
    these ways, among others:
 
             uta            utb
@@ -43,7 +43,7 @@ Status:  support function.
 2. The arguments xp and yp are the coordinates (in radians) of the
    Celestial Intermediate Pole with respect to the International
    Terrestrial Reference System (see IERS Conventions 2003),
-   measured along the meridians to 0 and 90 deg west respectively.
+   measured along the meridians 0 and 90 deg west respectively.
 
 3. The matrix rc2t transforms from celestial to terrestrial
    coordinates:
@@ -70,11 +70,11 @@ Called:
    McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003),
    IERS Technical Note No. 32, BKG
 
-This revision:  2013 June 18
+This revision:  2023 January 18
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauC2t06a(tta::Real, ttb::Real, uta::Real, utb::Real, xp::Real, yp::Real)
 

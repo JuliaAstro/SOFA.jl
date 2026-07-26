@@ -58,11 +58,11 @@ Called:
     iauPom00     polar motion matrix
     iauTrxp      product of transpose of r-matrix and p-vector
 
-This revision:   2013 October 9
+This revision:   2021 February 24
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauPvtob(
         elong::Real, phi::Real, hm::Real,

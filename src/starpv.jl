@@ -3,7 +3,7 @@ export iauStarpv
 Convert star catalog coordinates to position+velocity vector.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -109,11 +109,11 @@ Called:
 
    Stumpff, P., 1985, Astron.Astrophys. 144, 232-240.
 
-This revision:  2017 March 16
+This revision:  2023 May 4
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauStarpv(
         ra::Real, dec::Real, pmr::Real, pmd::Real,

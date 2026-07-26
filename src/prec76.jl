@@ -7,7 +7,7 @@ precession between two dates, using the IAU 1976 model (as for the
 FK5 catalog).
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  canonical model.
 
@@ -64,11 +64,11 @@ Status:  canonical model.
    Lieske, J.H., 1979, Astron.Astrophys. 73, 282, equations
    (6) & (7), p283.
 
-This revision:  2013 November 19
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauPrec76(date01::Real, date02::Real, date11::Real, date12::Real)
     # Preallocate return values

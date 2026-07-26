@@ -3,7 +3,7 @@ export iauStarpm
 Star proper motion:  update star catalog data for space motion.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -43,19 +43,19 @@ Returned (function value):
    parts (A and B).  For example, JD(TDB)=2450123.7 could be
    expressed in any of these ways, among others:
 
-            epna          epnb
+          epNa            epNb
 
       2450123.7           0.0       (JD method)
       2451545.0       -1421.3       (J2000 method)
       2400000.5       50123.2       (MJD method)
       2450123.5           0.2       (date & time method)
 
-   The JD method is the most natural and convenient to use in
-   cases where the loss of several decimal digits of resolution
-   is acceptable.  The J2000 method is best matched to the way
-   the argument is handled internally and will deliver the
-   optimum resolution.  The MJD method and the date & time methods
-   are both good compromises between resolution and convenience.
+   The JD method is the most natural and convenient to use in cases
+   where the loss of several decimal digits of resolution is
+   acceptable.  The J2000 method is best matched to the way the
+   argument is handled internally and will deliver the optimum
+   resolution.  The MJD method and the date & time methods are both
+   good compromises between resolution and convenience.
 
 2. In accordance with normal star-catalog conventions, the object's
    right ascension and declination are freed from the effects of
@@ -101,11 +101,11 @@ Called:
    iauPdp       scalar product of two p-vectors
    iauPvstar    space motion pv-vector to star catalog data
 
-This revision:  2013 June 18
+This revision:  2023 May 3
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauStarpm(
         ra1::Real, dec1::Real, pmr1::Real, pmd1::Real,

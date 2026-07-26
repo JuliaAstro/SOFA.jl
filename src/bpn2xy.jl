@@ -4,7 +4,7 @@ Extract from the bias-precession-nutation matrix the X,Y coordinates
 of the Celestial Intermediate Pole.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -33,11 +33,11 @@ Status:  support function.
     n.b. The celestial ephemeris origin (CEO) was renamed "celestial
         intermediate origin" (CIO) by IAU 2006 Resolution 2.
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauBpn2xy(rbpn::AbstractMatrix{<:Real})
     # Preallocate return values

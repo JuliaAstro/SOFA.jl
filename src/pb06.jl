@@ -5,7 +5,7 @@ precession from epoch J2000.0, using the IAU 2006 model.  Frame
 bias (the offset between ICRS and mean J2000.0) is included.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -61,11 +61,11 @@ Called:
    iauPmat06    PB matrix, IAU 2006
    iauRz        rotate around Z-axis
 
-This revision:  2013 June 18
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauPb06(date1::Real, date2::Real)
     ref_bzeta = Ref{Float64}(0.0)

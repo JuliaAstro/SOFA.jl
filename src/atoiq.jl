@@ -38,34 +38,32 @@ Status:  support function.
 
 ### Notes
 
-1. "Observed" Az,El means the position that would be seen by a
+1. "Observed" Az,ZD means the position that would be seen by a
    perfect geodetically aligned theodolite.  This is related to
    the observed HA,Dec via the standard rotation, using the geodetic
    latitude (corrected for polar motion), while the observed HA and
-   RA are related simply through the Earth rotation angle and the
-   site longitude.  "Observed" RA,Dec or HA,Dec thus means the
-   position that would be seen by a perfect equatorial with its
-   polar axis aligned to the Earth's axis of rotation.  By removing
-   from the observed place the effects of atmospheric refraction and
-   diurnal aberration, the CIRS RA,Dec is obtained.
+   (CIO-based) RA are related simply through the Earth rotation
+   angle and the site longitude.  "Observed" RA,Dec or HA,Dec thus
+   means the position that would be seen by a perfect equatorial
+   with its polar axis aligned to the Earth's axis of rotation.
 
 2. Only the first character of the type argument is significant.
    "R" or "r" indicates that ob1 and ob2 are the observed right
-   ascension and declination;  "H" or "h" indicates that they are
-   hour angle (west +ve) and declination;  anything else ("A" or
-   "a" is recommended) indicates that ob1 and ob2 are azimuth (north
-   zero, east 90 deg) and zenith distance.  (Zenith distance is used
-   rather than altitude in order to reflect the fact that no
-   allowance is made for depression of the horizon.)
+   ascension (CIO-based) and declination;  "H" or "h" indicates that
+   they are hour angle (west +ve) and declination;  anything else
+   ("A" or "a" is recommended) indicates that ob1 and ob2 are
+   azimuth (north zero, east 90 deg) and zenith distance.  (Zenith
+   distance is used rather than altitude in order to reflect the
+   fact that no allowance is made for depression of the horizon.)
 
 3. The accuracy of the result is limited by the corrections for
    refraction, which use a simple A*tan(z) + B*tan^3(z) model.
    Providing the meteorological parameters are known accurately and
-   there are no gross local effects, the predicted observed
+   there are no gross local effects, the predicted intermediate
    coordinates should be within 0.05 arcsec (optical) or 1 arcsec
    (radio) for a zenith distance of less than 70 degrees, better
    than 30 arcsec (optical or radio) at 85 degrees and better than
-   20 arcmin (optical) or 30 arcmin (radio) at the horizon.
+   20 arcmin (optical) or 25 arcmin (radio) at the horizon.
 
    Without refraction, the complementary functions iauAtioq and
    iauAtoiq are self-consistent to better than 1 microarcsecond all
@@ -82,11 +80,11 @@ Called:
    iauC2s       p-vector to spherical
    iauAnp       normalize angle into range 0 to 2pi
 
-This revision:   2013 October 9
+This revision:   2022 August 30
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauAtoiq(type_::Char, ob1::Real, ob2::Real, astrom::iauASTROM)
 

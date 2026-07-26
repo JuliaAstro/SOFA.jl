@@ -4,7 +4,7 @@ Nutation, IAU 2000A model (MHB2000 luni-solar and planetary nutation
 with free core nutation omitted).
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  canonical model.
 
@@ -147,11 +147,11 @@ Called:
    Wallace, P.T., "Software for Implementing the IAU 2000
    Resolutions", in IERS Workshop 5.1 (2002)
 
-This revision:  2013 June 18
+This revision:  2021 July 20
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauNut00a(date1::Real, date2::Real)
     # Allocate return values

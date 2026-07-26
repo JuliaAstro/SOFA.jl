@@ -5,7 +5,7 @@ supporting classical (equinox-based) use directly and CIO-based use
 indirectly.
 
 This function is part of the International Astronomical Union's
-SOFA (Standards Of Fundamental Astronomy) software collection.
+SOFA (Standards of Fundamental Astronomy) software collection.
 
 Status:  support function.
 
@@ -81,11 +81,11 @@ Called:
 
     Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
-This revision:  2013 November 13
+This revision:  2021 May 11
 
-SOFA release 2018-01-30
+SOFA release 2023-10-11
 
-Copyright (C) 2018 IAU SOFA Board.  See notes at end.
+Copyright (C) 2023 IAU SOFA Board.  See notes at end.
 """
 function iauPn06a(date1::Real, date2::Real)
     # Allocate return values
