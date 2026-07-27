@@ -31,3 +31,17 @@
 @test all(abs.(SOFA.plan94(2400000.5, 43999.9, 1)[2] .-
                [0.1413867871404614441e-1, 0.1946548301104706582e-1, 0.8929809783898904786e-2])
           .<= 1e-11)
+
+####    Regression tests (v2.0.0 pre-release review)    ####
+
+#   plan94: the valid planet range is 1-8
+@test_throws AssertionError SOFA.plan94(2400000.5, 43999.9, 9)
+
+#   plan94/epv00: out-of-range dates warn but still compute, as in C
+let pv = @test_logs (:warn, r"years 1000 and 3000") SOFA.plan94(2400000.5, -320000.0, 3)
+    @test all(abs.(pv[1] .- (0.9308038666832975759, 0.3258319040261346000,
+                             0.1422794544481140560)) .<= 1e-11)
+    @test all(abs.(pv[2] .- (-0.6429458958255170006e-2, 0.1468570657704237764e-1,
+                             0.6406996426270981189e-2)) .<= 1e-11)
+end
+@test length(@test_logs (:warn, r"1900 and 2100") SOFA.epv00(2400000.5, -300000.0)) == 2

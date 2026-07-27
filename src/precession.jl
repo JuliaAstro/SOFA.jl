@@ -200,7 +200,7 @@ of the Celestial Intermediate Pole.
 
 # Input
 
- - `rbpn`  -- celestial-to-true matrix (Note 1)
+ - `r`     -- celestial-to-true matrix (Note 1)
 
 # Output
 
@@ -239,7 +239,7 @@ IAU 2000A precession-nutation model.
 
 # Output
 
- - `rc2i`  -- celestial-to-intermediate matrix (Note 2)
+ - `c2i`   -- celestial-to-intermediate matrix (Note 2)
 
 # Note
 
@@ -275,7 +275,7 @@ IAU 2000A precession-nutation model.
    Rotation Angle and RPOM is the polar motion matrix.
 
 3) A faster, but slightly less accurate, result (about 1 mas) can be
-   obtained by using instead the eraC2i00b function.
+   obtained by using instead the c2i00b function.
 
 # References
 
@@ -344,7 +344,7 @@ IAU 2000B precession-nutation model.
    Rotation Angle and RPOM is the polar motion matrix.
 
 3) The present function is faster, but slightly less accurate (about 1
-   mas), than the eraC2i00a function.
+   mas), than the c2i00a function.
 
 # References
 
@@ -431,7 +431,7 @@ end
 Form the celestial-to-intermediate matrix for a given date given the
 bias-precession-nutation matrix.  IAU 2000.
 
-#Input
+# Input
 
  - `day1`  -- TT as Julian Date (Note 1)
  - `day2`  -- ... Julian Date
@@ -477,7 +477,7 @@ bias-precession-nutation matrix.  IAU 2000.
    Reference System (see IERS Conventions 2003), ERA is the Earth
    Rotation Angle and RPOM is the polar motion matrix.
 
-4) Although its name does not include "00", This function is in fact
+4) Although its name does not include "00", this function is in fact
    specific to the IAU 2000 models.
 
 # References
@@ -503,7 +503,7 @@ end
 Form the celestial to intermediate-frame-of-date matrix for a given
 date when the CIP X,Y coordinates are known.  IAU 2000.
 
-#Input
+# Input
 
  - `day1`  -- TT as Julian Date (Note 1)
  - `day2`  -- ... Julian Date
@@ -549,7 +549,7 @@ date when the CIP X,Y coordinates are known.  IAU 2000.
    Reference System (see IERS Conventions 2003), ERA is the Earth
    Rotation Angle and RPOM is the polar motion matrix.
 
-4) Although its name does not include "00", This function is in fact
+4) Although its name does not include "00", this function is in fact
    specific to the IAU 2000 models.
 
 # References
@@ -616,22 +616,22 @@ the polar motion, using the IAU 2000A precession-nutation model.
 
 # Input
 
- - `tta, ttb` -- TT as a 2-part Julian Date (Note 1)
- - `uta, utb` -- UT1 as a 2-part Julian Date (Note 1)
- - `xp, yp`   -- CIP coordinates (radians, Note 2)
+ - `tt1, tt2` -- TT as a 2-part Julian Date (Note 1)
+ - `ut1, ut2` -- UT1 as a 2-part Julian Date (Note 1)
+ - `x, y`     -- CIP coordinates (radians, Note 2)
 
-# Outpu
+# Output
 
  - `rc2t`  -- celestial-to-terrestrial matrix (Note 3)
 
 # Note
 
-1) The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
-   apportioned in any convenient way between the arguments uta and
-   utb.  For example, JD(UT1)=2450123.7 could be expressed in any of
+1) The TT and UT1 dates tt1+tt2 and ut1+ut2 are Julian Dates,
+   apportioned in any convenient way between the arguments ut1 and
+   ut2.  For example, JD(UT1)=2450123.7 could be expressed in any of
    these ways, among others:
 
-           uta            utb
+           ut1            ut2
 
        2450123.7           0.0       (JD method)
        2451545.0       -1421.3       (J2000 method)
@@ -641,10 +641,10 @@ the polar motion, using the IAU 2000A precession-nutation model.
    The JD method is the most natural and convenient to use in cases
    where the loss of several decimal digits of resolution is
    acceptable.  The J2000 and MJD methods are good compromises between
-   resolution and convenience.  In the case of uta,utb, the date &
+   resolution and convenience.  In the case of ut1,ut2, the date &
    time method is best matched to the Earth rotation angle algorithm
-   used: maximum precision is delivered when the uta argument is for
-   0hrs UT1 on the day in question and the utb argument lies in the
+   used: maximum precision is delivered when the ut1 argument is for
+   0hrs UT1 on the day in question and the ut2 argument lies in the
    range 0 to 1, or vice versa.
 
 2) The arguments xp and yp are the coordinates (in radians) of the
@@ -666,7 +666,7 @@ the polar motion, using the IAU 2000A precession-nutation model.
    and RPOM is the polar motion matrix.
 
 4) A faster, but slightly less accurate, result (about 1 mas) can be
-   obtained by using instead the eraC2t00b function.
+   obtained by using instead the c2t00b function.
 
 # References
 
@@ -690,9 +690,9 @@ the polar motion, using the IAU 2000B precession-nutation model.
 
 # Input
 
- - `tta, ttb` -- TT as a 2-part Julian Date (Note 1)
- - `uta, utb` -- UT1 as a 2-part Julian Date (Note 1)
- - `xp, yp`   -- coordinates of the pole (radians, Note 2)
+ - `tt1, tt2` -- TT as a 2-part Julian Date (Note 1)
+ - `ut1, ut2` -- UT1 as a 2-part Julian Date (Note 1)
+ - `x, y`     -- coordinates of the pole (radians, Note 2)
 
 # Output
 
@@ -700,12 +700,12 @@ the polar motion, using the IAU 2000B precession-nutation model.
 
 # Note
 
-1) The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
-   apportioned in any convenient way between the arguments uta and
-   utb.  For example, JD(UT1)=2450123.7 could be expressed in any of
+1) The TT and UT1 dates tt1+tt2 and ut1+ut2 are Julian Dates,
+   apportioned in any convenient way between the arguments ut1 and
+   ut2.  For example, JD(UT1)=2450123.7 could be expressed in any of
    these ways, among others:
 
-           uta            utb
+           ut1            ut2
 
        2450123.7           0.0       (JD method)
        2451545.0       -1421.3       (J2000 method)
@@ -715,10 +715,10 @@ the polar motion, using the IAU 2000B precession-nutation model.
    The JD method is the most natural and convenient to use in cases
    where the loss of several decimal digits of resolution is
    acceptable.  The J2000 and MJD methods are good compromises between
-   resolution and convenience.  In the case of uta,utb, the date &
+   resolution and convenience.  In the case of ut1,ut2, the date &
    time method is best matched to the Earth rotation angle algorithm
-   used: maximum precision is delivered when the uta argument is for
-   0hrs UT1 on the day in question and the utb argument lies in the
+   used: maximum precision is delivered when the ut1 argument is for
+   0hrs UT1 on the day in question and the ut2 argument lies in the
    range 0 to 1, or vice versa.
 
 2) The arguments xp and yp are the coordinates (in radians) of the
@@ -740,7 +740,7 @@ the polar motion, using the IAU 2000B precession-nutation model.
    and RPOM is the polar motion matrix.
 
 4) The present function is faster, but slightly less accurate (about 1
-   mas), than the eraC2t00a function.
+   mas), than the c2t00a function.
 
 # References
 
@@ -748,10 +748,10 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function c2t00b(tt1::F, tt2::F, ut1::F, ut2::F, x::F, y::F) where F<:AbstractFloat
-    #  Form the celestial-to-intermediate matrix for this TT (IAU 2000A),
-    #  predict the Earth rotation angle for this UT1, estimate s', form the
-    #  polar motion matrix, and combine to form the celestial-to-terrestrial
-    #  matrix.
+    #  Form the celestial-to-intermediate matrix for this TT (IAU 2000B),
+    #  predict the Earth rotation angle for this UT1, form the polar motion
+    #  matrix (neglecting s'), and combine to form the
+    #  celestial-to-terrestrial matrix.
     c2tcio(c2i00b(tt1, tt2), era00(ut1, ut2), pom00(x, y, 0.0))
 end
 
@@ -762,10 +762,10 @@ end
 Form the celestial to terrestrial matrix given the date, the UT1 and
 the polar motion, using the IAU 2006/2000A precession-nutation model.
 
-#  Input
+# Input
 
- - `tta, ttb` -- TT as a 2-part Julian Date (Note 1)
- - `uta, utb` -- UT1 as a 2-part Julian Date (Note 1)
+ - `tt1, tt2` -- TT as a 2-part Julian Date (Note 1)
+ - `ut1, ut2` -- UT1 as a 2-part Julian Date (Note 1)
  - `xp, yp`   -- coordinates of the pole (radians, Note 2)
 
 # Output
@@ -774,12 +774,12 @@ the polar motion, using the IAU 2006/2000A precession-nutation model.
 
 # Note
 
-1) The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
-   apportioned in any convenient way between the two arguments uta and
-   utb.  For example, JD(UT1)=2450123.7 could be expressed in any of
+1) The TT and UT1 dates tt1+tt2 and ut1+ut2 are Julian Dates,
+   apportioned in any convenient way between the two arguments ut1 and
+   ut2.  For example, JD(UT1)=2450123.7 could be expressed in any of
    these ways, among others:
 
-           uta            utb
+           ut1            ut2
 
        2450123.7           0.0       (JD method)
        2451545.0       -1421.3       (J2000 method)
@@ -789,11 +789,23 @@ the polar motion, using the IAU 2006/2000A precession-nutation model.
    The JD method is the most natural and convenient to use in cases
    where the loss of several decimal digits of resolution is
    acceptable.  The J2000 and MJD methods are good compromises between
-   resolution and convenience.  In the case of uta,utb, the date &
+   resolution and convenience.  In the case of ut1,ut2, the date &
    time method is best matched to the Earth rotation angle algorithm
-   used: maximum precision is delivered when the uta argument is for
-   0hrs UT1 on the day in question and the utb argument lies in the
+   used: maximum precision is delivered when the ut1 argument is for
+   0hrs UT1 on the day in question and the ut2 argument lies in the
    range 0 to 1, or vice versa.
+
+2) The arguments x and y are the coordinates (in radians) of the
+   Celestial Intermediate Pole with respect to the International
+   Terrestrial Reference System (see IERS Conventions 2003), measured
+   along the meridians 0 and 90 deg west respectively.
+
+3) The matrix rc2t transforms from celestial to terrestrial
+   coordinates:
+
+      [TRS] = RPOM * R_3(ERA) * RC2I * [CRS]
+
+            = rc2t * [CRS]
 
    where [CRS] is a vector in the Geocentric Celestial Reference
    System and [TRS] is a vector in the International Terrestrial
@@ -807,7 +819,7 @@ McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
 function c2t06a(tt1::F, tt2::F, ut1::F, ut2::F, x::F, y::F) where F<:AbstractFloat
-    #  Form the celestial-to-intermediate matrix for this TT (IAU 2000A),
+    #  Form the celestial-to-intermediate matrix for this TT (IAU 2006/2000A),
     #  predict the Earth rotation angle for this UT1, estimate s', form the
     #  polar motion matrix, and combine to form the celestial-to-terrestrial
     #  matrix.
@@ -815,7 +827,7 @@ function c2t06a(tt1::F, tt2::F, ut1::F, ut2::F, x::F, y::F) where F<:AbstractFlo
 end
 
 """
-    c2tcio(c2i::AbstractMatrix{<:AbstractFloat}, era::AbstractFloat, pm::AbstractMatrix{<:AbstractFloat}) = pm*Rz(era)*c2i
+    c2tcio(c2i::AbstractMatrix{<:AbstractFloat}, era::AbstractFloat, pm::AbstractMatrix{<:AbstractFloat})
 
 Assemble the celestial to terrestrial matrix from CIO-based components
 (the celestial-to-intermediate matrix, the Earth Rotation Angle and
@@ -865,7 +877,7 @@ function c2tcio(c2i::M, era::F, pm::M) where
 end
 
 """
-    c2teqx(bpn::AbstractMatrix{<:AbstractFloat}, gst::AbstractFloat, pm::AbstractMatrix{<:AbstractFloat}) = pm*Rz(gst)*bpn
+    c2teqx(bpn::AbstractMatrix{<:AbstractFloat}, gst::AbstractFloat, pm::AbstractMatrix{<:AbstractFloat})
 
 Assemble the celestial to terrestrial matrix from equinox-based
 components (the celestial-to-true matrix, the Greenwich Apparent
@@ -923,9 +935,9 @@ nutation and the polar motion.  IAU 2000.
 
 # Input
 
- - `tta, ttb`   -- TT as a 2-part Julian Date (Note 1)
- - `uta, utb`   -- UT1 as a 2-part Julian Date (Note 1)
- - `dpsi, deps` -- nutation (Note 2)
+ - `tt1, tt2`   -- TT as a 2-part Julian Date (Note 1)
+ - `ut1, ut2`   -- UT1 as a 2-part Julian Date (Note 1)
+ - `ψ, ϵ`       -- nutation (Note 2)
  - `xp, yp`     -- coordinates of the pole (radians, Note 3)
 
 # Output
@@ -934,12 +946,12 @@ nutation and the polar motion.  IAU 2000.
 
 # Note
 
-1) The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
-   apportioned in any convenient way between the arguments uta and
-   utb.  For example, JD(UT1)=2450123.7 could be expressed in any of
+1) The TT and UT1 dates tt1+tt2 and ut1+ut2 are Julian Dates,
+   apportioned in any convenient way between the arguments ut1 and
+   ut2.  For example, JD(UT1)=2450123.7 could be expressed in any of
    these ways, among others:
 
-           uta            utb
+           ut1            ut2
 
        2450123.7           0.0       (JD method)
        2451545.0       -1421.3       (J2000 method)
@@ -949,10 +961,10 @@ nutation and the polar motion.  IAU 2000.
    The JD method is the most natural and convenient to use in cases
    where the loss of several decimal digits of resolution is
    acceptable.  The J2000 and MJD methods are good compromises between
-   resolution and convenience.  In the case of uta,utb, the date &
+   resolution and convenience.  In the case of ut1,ut2, the date &
    time method is best matched to the Earth rotation angle algorithm
-   used: maximum precision is delivered when the uta argument is for
-   0hrs UT1 on the day in question and the utb argument lies in the
+   used: maximum precision is delivered when the ut1 argument is for
+   0hrs UT1 on the day in question and the ut2 argument lies in the
    range 0 to 1, or vice versa.
 
 2) The caller is responsible for providing the nutation components;
@@ -979,7 +991,7 @@ nutation and the polar motion.  IAU 2000.
    bias-precession-nutation matrix, GST is the Greenwich (apparent)
    Sidereal Time and RPOM is the polar motion matrix.
 
-5) Although its name does not include "00", This function is in fact
+5) Although its name does not include "00", this function is in fact
    specific to the IAU 2000 models.
 
 # References
@@ -1005,10 +1017,10 @@ end
 Form the celestial to terrestrial matrix given the date, the UT1, the
 CIP coordinates and the polar motion.  IAU 2000.
 
-# Output
+# Input
 
- - `tta, ttb` -- TT as a 2-part Julian Date (Note 1)
- - `uta, utb` -- UT1 as a 2-part Julian Date (Note 1)
+ - `tt1, tt2` -- TT as a 2-part Julian Date (Note 1)
+ - `ut1, ut2` -- UT1 as a 2-part Julian Date (Note 1)
  - `x, y`     -- Celestial Intermediate Pole (Note 2)
  - `xp, yp`   -- coordinates of the pole (radians, Note 3)
 
@@ -1018,12 +1030,12 @@ CIP coordinates and the polar motion.  IAU 2000.
 
 # Note
 
-1) The TT and UT1 dates tta+ttb and uta+utb are Julian Dates,
-   apportioned in any convenient way between the arguments uta and
-   utb.  For example, JD(UT1)=2450123.7 could be expressed in any o
+1) The TT and UT1 dates tt1+tt2 and ut1+ut2 are Julian Dates,
+   apportioned in any convenient way between the arguments ut1 and
+   ut2.  For example, JD(UT1)=2450123.7 could be expressed in any of
    these ways, among others:
 
-           uta            utb
+           ut1            ut2
 
        2450123.7           0.0       (JD method)
        2451545.0       -1421.3       (J2000 method)
@@ -1033,10 +1045,10 @@ CIP coordinates and the polar motion.  IAU 2000.
    The JD method is the most natural and convenient to use in cases
    where the loss of several decimal digits of resolution is
    acceptable.  The J2000 and MJD methods are good compromises between
-   resolution and convenience.  In the case of uta,utb, the date &
+   resolution and convenience.  In the case of ut1,ut2, the date &
    time method is best matched to the Earth rotation angle algorithm
-   used: maximum precision is delivered when the uta argument is for
-   0hrs UT1 on the day in question and the utb argument lies in the
+   used: maximum precision is delivered when the ut1 argument is for
+   0hrs UT1 on the day in question and the ut2 argument lies in the
    range 0 to 1, or vice versa.
 
 2) The Celestial Intermediate Pole coordinates are the x,y components
@@ -1059,7 +1071,7 @@ CIP coordinates and the polar motion.  IAU 2000.
    Reference System (see IERS Conventions 2003), ERA is the Earth
    Rotation Angle and RPOM is the polar motion matrix.
 
-5) Although its name does not include "00", This function is in fact
+5) Although its name does not include "00", this function is in fact
    specific to the IAU 2000 models.
 
 # References
@@ -1079,7 +1091,7 @@ end
 
 Equation of the origins, IAU 2006 precession and IAU 2000A nutation.
 
-# Output
+# Input
 
  - `day1`  -- TT as Julian Date (Note 1)
  - `day2`  -- ... as Julian Date
@@ -1126,7 +1138,7 @@ function eo06a(day1::F, day2::F) where F<:AbstractFloat
     #  Classical nutation-precession-bias matrix.
     bpn = pnm06a(day1, day2)
     #  Extract CIP coordinates, the CIO locator (s), and solve for
-    #  the equation of the origin.
+    #  the equation of the origins.
     eors(bpn, s06(day1, day2, bpn2xy(bpn)...))
 end
 
@@ -1177,8 +1189,8 @@ Form rotation matrix given the Fukushima-Williams angles.
 
 # Input
 
- - `γb`    -- F-W angle γ_bar (radians)
- - `ϕb`    -- F-W angle ϕ_bar (radians)
+ - `γ`     -- F-W angle γ_bar (radians)
+ - `ϕ`     -- F-W angle ϕ_bar (radians)
  - `ψ`     -- F-W angle ψ (radians)
  - `ϵ`     -- F-W angle ϵ (radians)
 
@@ -1518,7 +1530,7 @@ Form the matrix of nutation for a given date, IAU 2000A model.
    equatorial triad of date.
 
 3) A faster, but slightly less accurate, result (about 1 mas) can be
-   obtained by using instead the eraNum00b function.
+   obtained by using instead the num00b function.
 
 # References
 
@@ -1569,7 +1581,7 @@ Form the matrix of nutation for a given date, IAU 2000B model.
    equatorial triad of date.
 
 3) The present function is faster, but slightly less accurate (about 1
-   mas), than the eraNum00a function.
+   mas), than the num00a function.
 
 # References
 
@@ -1631,8 +1643,8 @@ Form the matrix of nutation.
 
 # Input
 
- - `epsa`  -- mean obliquity of date (Note 1)
- - `dpsi, deps` -- nutation (Note 2)
+ - `ϵA`    -- mean obliquity of date (Note 1)
+ - `δψ, δϵ` -- nutation (Note 2)
 
 # Output
 
@@ -1673,7 +1685,7 @@ with free core nutation omitted).
  - `day1`   -- TT as Julian Date (Note 1)
  - `day2`   -- ... as Julian Date
 
-# Ouput
+# Output
 
  - `dpsi, deps` -- nutation, luni-solar + planetary (Note 2)
 
@@ -1729,13 +1741,13 @@ with free core nutation omitted).
    offsets between the GCRS and mean poles and (ii) the adjustments in
    longitude and obliquity due to the changed precession rates.  These
    additional functions, namely frame bias and precession adjustments,
-   are supported by the ERFA functions eraBi00 and eraPr00.
+   are supported by the SOFA functions bi00 and pr00.
 
 6) The MHB2000 algorithm also provides "total" nutations, comprising
    the arithmetic sum of the frame bias, precession adjustments,
    luni-solar nutation and planetary nutation.  These total nutations
    can be used in combination with an existing IAU 1976 precession
-   implementation, such as eraPmat76, to deliver GCRS- to-true
+   implementation, such as pmat76, to deliver GCRS- to-true
    predictions of sub-mas accuracy at current dates.  However, there
    are three shortcomings in the MHB2000 model that must be taken into
    account if more accurate or definitive results are required (see
@@ -1765,9 +1777,9 @@ with free core nutation omitted).
          order distortion in the pattern of the precession-nutation
          effect.
 
-   For these reasons, the ERFA functions do not generate the "total
+   For these reasons, the SOFA functions do not generate the "total
    nutations" directly, though they can of course easily be generated
-   by calling eraBi00, eraPr00 and the present function and adding the
+   by calling bi00, pr00 and the present function and adding the
    results.
 
 7) The MHB2000 model contains 41 instances where the same frequency
@@ -1797,7 +1809,7 @@ Wallace, P.T., "Software for Implementing the IAU 2000 Resolutions",
 in IERS Workshop 5.1 (2002)
 """
 function nut00a(day1::AbstractFloat, day2::AbstractFloat)
-    #   Interval between fundamental data J2000.0 and given date (JC.)
+    #   Interval between fundamental date J2000.0 and given date (JC.)
     Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
 
     FACTOR_MICROARCSEC = 1 / 3.6e10
@@ -1821,7 +1833,7 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
     ln = ln_2000A_nutation
     la = la_2000A_nutation
 
-    #  Convert from 0.1 μas to radians
+    #  Convert the fundamental arguments from arcsec to radians
     @inbounds begin
         arg1 = deg2rad(rem(l, ARCSECPER2PI) / 3600)
         arg2 = deg2rad(rem(lp, ARCSECPER2PI) / 3600)
@@ -1835,8 +1847,9 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
         ϕl[i] = mod2pi(angle)
     end
 
+    #  Sum the series, smallest terms first, as in the C library.
     sum1 = sum2 = zero(eltype(la))
-    @inbounds for i in axes(la, 1)
+    @inbounds for i in reverse(axes(la, 1))
         s, c = sincos(ϕl[i])
         sum1 += (la[i,1] + la[i,2] * Δt) * s + la[i,3] * c
         sum2 += (la[i,4] + la[i,5] * Δt) * c + la[i,6] * s
@@ -1873,7 +1886,7 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
     fne = mod2pi(Polynomial(lne_2003mhb...)(Δt))
     #  General accumulated precession in longitude (IERS 2003).
     fpa = Polynomial(lge_2003...)(Δt)
-    
+
     pn = pn_2000A_nutation
     pa = pa_2000A_nutation
 
@@ -1888,8 +1901,9 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
     end
 
     #  Convert from 0.1 μas to radians
+    #  Sum the series, smallest terms first, as in the C library.
     sum1 = sum2 = zero(eltype(pa))
-    @inbounds for i in axes(pa, 1)
+    @inbounds for i in reverse(axes(pa, 1))
         s, c = sincos(ϕp[i])
         sum1 += pa[i,1] * s + pa[i,2] * c
         sum2 += pa[i,3] * s + pa[i,4] * c
@@ -1963,7 +1977,7 @@ Nutation, IAU 2000B model.
    The function delivers a pole accurate to 1 mas from 1900 to 2100
    (usually better than 1 mas, very occasionally just outside 1 mas).
    The full IAU 2000A model, which is implemented in the function
-   eraNut00a (q.v.), delivers considerably greater accuracy at current
+   nut00a (q.v.), delivers considerably greater accuracy at current
    dates; however, to realize this improved accuracy, corrections for
    the essentially unpredictable free-core-nutation (FCN) must also be
    included.
@@ -1973,19 +1987,19 @@ Nutation, IAU 2000B model.
    (i) the offsets between the GCRS and mean poles and (ii) the
    adjustments in longitude and obliquity due to the changed
    precession rates.  These additional functions, namely frame bias
-   and precession adjustments, are supported by the ERFA functions
-   eraBi00 and eraPr00.
+   and precession adjustments, are supported by the SOFA functions
+   bi00 and pr00.
 
 6) The MHB_2000_SHORT algorithm also provides "total" nutations,
    comprising the arithmetic sum of the frame bias, precession
    adjustments, and nutation (luni-solar + planetary).  These total
    nutations can be used in combination with an existing IAU 1976
-   precession implementation, such as eraPmat76, to deliver GCRS-
+   precession implementation, such as pmat76, to deliver GCRS-
    to-true predictions of mas accuracy at current epochs.  However,
-   for symmetry with the eraNut00a function (q.v. for the reasons),
-   the ERFA functions do not generate the "total nutations" directly.
+   for symmetry with the nut00a function (q.v. for the reasons),
+   the SOFA functions do not generate the "total nutations" directly.
    Should they be required, they could of course easily be generated
-   by calling eraBi00, eraPr00 and the present function and adding the
+   by calling bi00, pr00 and the present function and adding the
    results.
 
 7) The IAU 2000B model includes "planetary bias" terms that are fixed
@@ -1993,10 +2007,10 @@ Nutation, IAU 2000B model.
    quoted in McCarthy & Luzum (2003), namely Dpsi = -1.5835 mas and
    Depsilon = +1.6339 mas, are optimized for the "total nutations"
    method described in Note 6.  The Luzum (2001) values used in this
-   ERFA implementation, namely -0.135 mas and +0.388 mas, are
+   SOFA implementation, namely -0.135 mas and +0.388 mas, are
    optimized for the "rigorous" method, where frame bias, precession
    and nutation are applied separately and in that order.  During the
-   interval 1995-2050, the ERFA implementation delivers a maximum
+   interval 1995-2050, the SOFA implementation delivers a maximum
    error of 1.001 mas (not including FCN).
 
 # References
@@ -2045,8 +2059,9 @@ function nut00b(day1::AbstractFloat, day2::AbstractFloat)
         arg5 = deg2rad(rem(ω, ARCSECPER2PI) / 3600)
     end
 
+    #  Sum the series, smallest terms first, as in the C library.
     sum1 = sum2 = zero(eltype(la))
-    @inbounds for i in axes(ln, 1)
+    @inbounds for i in reverse(axes(ln, 1))
         angle = ln[i,1] * arg1 + ln[i,2] * arg2 + ln[i,3] * arg3 + ln[i,4] * arg4 + ln[i,5] * arg5
         angle = mod2pi(angle)
         s, c = sincos(angle)
@@ -2199,8 +2214,8 @@ function nut80(day1::AbstractFloat, day2::AbstractFloat)
 
     ####    Fundamental arguments
     #
-    #  
-    #  The nean longitude of the Moon minus the mean longitude of
+    #
+    #  The mean longitude of the Moon minus the mean longitude of
     #  the Moon's perigee.
     l = deg2rad(Polynomial(l0_1980...)(Δt)/3600.0) + 2π*rem(l0_1980t*Δt, 1.0)
     #  The mean longitude of the Sun minus the mean longitude of
@@ -2212,7 +2227,7 @@ function nut80(day1::AbstractFloat, day2::AbstractFloat)
     #  The mean elongation of the Moon from the Sun.
     d = deg2rad(Polynomial(D_1980...)(Δt)/3600.0) + 2π*rem(D_1980t*Δt, 1.0)
     #  The mean longitude of the ascending node of the lunar orbit on
-    #  the ecliptic, measured from the mean equinox of data.
+    #  the ecliptic, measured from the mean equinox of date.
     ω = deg2rad(Polynomial(Ω_1980...)(Δt)/3600.0) + 2π*rem(Ω_1980t*Δt, 1.0)
 
     #  Summation of luni-solar nutation series.
@@ -2227,15 +2242,16 @@ function nut80(day1::AbstractFloat, day2::AbstractFloat)
         arg5 = rem2pi(ω, RoundNearest)
     end
 
+    #  Sum the series, smallest terms first, as in the C library.
     sum1 = sum2 = zero(eltype(la))
-    @inbounds for i in axes(ln, 1)
+    @inbounds for i in reverse(axes(ln, 1))
         angle = ln[i,1] * arg1 + ln[i,2] * arg2 + ln[i,3] * arg3 + ln[i,4] * arg4 + ln[i,5] * arg5
         s, c = sincos(angle)
         sum1 += (la[i,1] + la[i,2] * Δt) * s
         sum2 += (la[i,3] + la[i,4] * Δt) * c
     end
 
-    # Convert from 0.1 μas to radians
+    # Convert from 0.1 mas to radians
     DEG2RAD_FACTOR = deg2rad(1 / 3.6e7)
     δψl = sum1 * DEG2RAD_FACTOR
     δϵl = sum2 * DEG2RAD_FACTOR
@@ -2420,22 +2436,22 @@ Precession angles, IAU 2006, equinox based.
    Capitaine et al. "P03" precession theory, adopted by the IAU in
    2006.  The angles are set out in Table 1 of Hilton et al. (2006):
 
-   eps0   epsilon_0   obliquity at J2000.0
-   psia   psi_A       luni-solar precession
-   oma    omega_A     inclination of equator wrt J2000.0 ecliptic
-   bpa    P_A         ecliptic pole x, J2000.0 ecliptic triad
-   bqa    Q_A         ecliptic pole -y, J2000.0 ecliptic triad
-   pia    pi_A        angle between moving and J2000.0 ecliptics
-   bpia   Pi_A        longitude of ascending node of the ecliptic
-   epsa   epsilon_A   obliquity of the ecliptic
-   chia   chi_A       planetary precession
-   za     z_A         equatorial precession: -3rd 323 Euler angle
-   zetaa  zeta_A      equatorial precession: -1st 323 Euler angle
-   thetaa theta_A     equatorial precession: 2nd 323 Euler angle
-   pa     p_A         general precession (n.b. see below)
-   gam    gamma_J2000 J2000.0 RA difference of ecliptic poles
-   phi    phi_J2000   J2000.0 codeclination of ecliptic pole
-   psi    psi_J2000   longitude difference of equator poles, J2000.0
+   ϵ0     epsilon_0   obliquity at J2000.0
+   ψA     psi_A       luni-solar precession
+   ωA     omega_A     inclination of equator wrt J2000.0 ecliptic
+   Pa     P_A         ecliptic pole x, J2000.0 ecliptic triad
+   Qa     Q_A         ecliptic pole -y, J2000.0 ecliptic triad
+   πA     pi_A        angle between moving and J2000.0 ecliptics
+   ΠA     Pi_A        longitude of ascending node of the ecliptic
+   ϵA     epsilon_A   obliquity of the ecliptic
+   χA     chi_A       planetary precession
+   ζA     zeta_A      equatorial precession: -1st 323 Euler angle
+   θA     theta_A     equatorial precession: 2nd 323 Euler angle
+   zA     z_A         equatorial precession: -3rd 323 Euler angle
+   pA     p_A         general precession (n.b. see below)
+   γ      gamma_J2000 J2000.0 RA difference of ecliptic poles
+   ϕ      phi_J2000   J2000.0 codeclination of ecliptic pole
+   ψ      psi_J2000   longitude difference of equator poles, J2000.0
 
    The returned values are all radians.
 
@@ -2445,13 +2461,13 @@ Precession angles, IAU 2006, equinox based.
 3) Hilton et al. (2006) Table 1 also contains angles that depend on
    models distinct from the P03 precession theory itself, namely the
    IAU 2000A frame bias and nutation.  The quoted polynomials are used
-   in other ERFA functions:
+   in other SOFA functions:
 
-   . eraXy06  contains the polynomial parts of the X and Y series.
+   . xy06  contains the polynomial parts of the X and Y series.
 
-   . eraS06  contains the polynomial part of the s+XY/2 series.
+   . s06  contains the polynomial part of the s+XY/2 series.
 
-   . eraPfw06  implements the series for the Fukushima-Williams
+   . pfw06  implements the series for the Fukushima-Williams
      angles that are with respect to the GCRS pole (i.e. the variants
      that include frame bias).
 
@@ -2460,11 +2476,11 @@ Precession angles, IAU 2006, equinox based.
    implementation can be constructed using various combinations of the
    angles returned by the present function.
 
-5) The parameterization used by ERFA is the version of the Fukushima-
+5) The parameterization used by SOFA is the version of the Fukushima-
    Williams angles that refers directly to the GCRS pole.  These
-   angles may be calculated by calling the function eraPfw06.  ERFA
+   angles may be calculated by calling the function pfw06.  SOFA
    also supports the direct computation of the CIP GCRS X,Y by series,
-   available by calling eraXy06.
+   available by calling xy06.
 
 6) The agreement between the different parameterizations is at the 1
    microarcsecond level in the present era.
@@ -2507,9 +2523,9 @@ function p06e(day1::AbstractFloat, day2::AbstractFloat)
     χA = Polynomial(χA_2006...)(Δt)
     #  Equatorial precession: minus the first of the 323 Euler angles.
     ζA = Polynomial(ζA_2006...)(Δt)
-    #  Equatorial precession: minus the second of the 323 Euler angles.
+    #  Equatorial precession: the second of the 323 Euler angles.
     θA = Polynomial(θA_2006...)(Δt)
-    #  Equatorial precession: minus the third of the 323 Euler anlges.
+    #  Equatorial precession: minus the third of the 323 Euler angles.
     zA = Polynomial(zA_2006...)(Δt)
     #  General precession
     pA = Polynomial(pA_2006...)(Δt)
@@ -2576,11 +2592,11 @@ precession from epoch J2000.0, using the IAU 2006 model.  Frame bias
    The precession-bias matrix is R_3(-z) x R_2(+theta) x R_3(-zeta).
 
 4) Should zeta_A, z_A, theta_A angles be required that do not contain
-   frame bias, they are available by calling the ERFA function
-   eraP06e.
+   frame bias, they are available by calling the SOFA function
+   p06e.
 """
 function pb06(day1::AbstractFloat, day2::AbstractFloat)
-    #  Precesion matrix via Fukushima-Williams angles
+    #  Precession matrix via Fukushima-Williams angles
     r = pmat06(day1, day2)
     #  Solve for z, choosing the ±π alternative.
     x, y = -r[1,3] < 0.0 ? (r[1,3], -r[2,3]) : (-r[1,3], r[2,3])
@@ -2853,7 +2869,7 @@ indirectly.
 
  - `day1`  -- TT as Julian Date (Note 1)
  - `day2`  -- ... as Julian Date
- - `dpsi,deps` -- nutation (Note 2)
+ - `ψ, ϵ`  -- nutation (Note 2)
 
 # Output
 
@@ -2948,7 +2964,7 @@ indirectly.
 # Input
 
  - `day1`  -- TT as Julian Date (Note 1)
- - `day2   -- ... as Julian Date
+ - `day2`  -- ... as Julian Date
 
 # Output
 
@@ -2984,9 +3000,9 @@ indirectly.
 2) The nutation components (luni-solar + planetary, IAU 2000A) in
    longitude and obliquity are in radians and with respect to the
    equinox and ecliptic of date.  Free core nutation is omitted; for
-   the utmost accuracy, use the eraPn00 function, where the nutation
+   the utmost accuracy, use the pn00 function, where the nutation
    components are caller-specified.  For faster but slightly less
-   accurate results, use the eraPn00b function.
+   accurate results, use the pn00b function.
 
 3) The mean obliquity is consistent with the IAU 2000 precession.
 
@@ -3076,8 +3092,8 @@ indirectly.
 2) The nutation components (luni-solar + planetary, IAU 2000B) in
    longitude and obliquity are in radians and with respect to the
    equinox and ecliptic of date.  For more accurate results, but at
-   the cost of increased computation, use the eraPn00a function.  For
-   the utmost accuracy, use the eraPn00 function, where the nutation
+   the cost of increased computation, use the pn00a function.  For
+   the utmost accuracy, use the pn00 function, where the nutation
    components are caller-specified.
 
 3) The mean obliquity is consistent with the IAU 2000 precession.
@@ -3218,7 +3234,7 @@ function pn06(day1::AbstractFloat, day2::AbstractFloat, δψ::AbstractFloat, δ�
     rbpn = fw2m(γb, ϕb, ψb + δψ, ϵb + δϵ)
     #  Solve for nutation matrix
     rn = rbpn*rbp'
-    (ϵb = ϵb, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
+    (ϵA = ϵb, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
 end
 
 """
@@ -3267,7 +3283,7 @@ indirectly.
 2) The nutation components (luni-solar + planetary, IAU 2000A) in
    longitude and obliquity are in radians and with respect to the
    equinox and ecliptic of date.  Free core nutation is omitted; for
-   the utmost accuracy, use the eraPn06 function, where the nutation
+   the utmost accuracy, use the pn06 function, where the nutation
    components are caller-specified.
 
 3) The mean obliquity is consistent with the IAU 2006 precession.
@@ -3347,7 +3363,7 @@ frame bias), equinox based, IAU 2000A model.
    Geocentric Celestial Reference System (IAU, 2000).
 
 3) A faster, but slightly less accurate, result (about 1 mas) can be
-   obtained by using instead the eraPnm00b function.
+   obtained by using instead the pnm00b function.
 
 # References
 
@@ -3401,7 +3417,7 @@ frame bias), equinox-based, IAU 2000B model.
    Geocentric Celestial Reference System (IAU, 2000).
 
 3) The present function is faster, but slightly less accurate (about 1
-   mas), than the eraPnm00a function.
+   mas), than the pnm00a function.
 
 # References
 
@@ -3459,11 +3475,11 @@ models.
 Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855.
 """
 function pnm06a(day1::AbstractFloat, day2::AbstractFloat)
-    #  Fukashima-Williams angles for frame bias and precession
+    #  Fukushima-Williams angles for frame bias and precession
     γB, ϕB, ψB, ϵA = pfw06(day1, day2)
     #  Nutation components
     δϕ, δϵ = nut06a(day1, day2)
-    #  Equinox based nutation x precesion x bias matrix
+    #  Equinox based nutation x precession x bias matrix
     fw2m(γB, ϕB, ψB + δϕ, ϵA + δϵ)
 end
 
@@ -3545,7 +3561,7 @@ Form the matrix of polar motion for a given date, IAU 2000.
    in essence unpredictable.  However, it is dominated by a secular
    drift of about 47 microarcseconds per century, and so can be taken
    into account by using s' = -47*t, where t is centuries since
-   J2000.0.  The function eraSp00 implements this approximation.
+   J2000.0.  The function sp00 implements this approximation.
 
 3) The matrix operates in the sense V(TRS) = rpom * V(CIP), meaning
    that it is the final rotation when computing the pointing direction
@@ -3626,7 +3642,7 @@ in IERS Workshop 5.1 (2002).
 """
 function pr00(day1::AbstractFloat, day2::AbstractFloat)
     Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
-    #  Precession and obliquity corrections (radians/century)/
+    #  Precession and obliquity corrections (radians/century).
     #  Precession rate contributions with respect to IAU 1976/1980
     ψ, ϵ = deg2rad.((ψ_corr_2000, ϵ_corr_2000).*Δt./3600)
     (ψ = ψ, ϵ = ϵ)
@@ -3643,10 +3659,10 @@ catalog).
 
 # Input
 
- - `day01` -- TDB starting date (Note 1)
- - `day02` -- ... starting date
- - `day11` -- TDB ending date (Note 1)
+ - `day11` -- TDB starting date (Note 1)
  - `day12` -- ... starting date
+ - `day21` -- TDB ending date (Note 1)
+ - `day22` -- ... ending date
 
 # Output
 
@@ -3656,12 +3672,12 @@ catalog).
 
 # Note
 
-1) The dates date01+date02 and date11+date12 are Julian Dates,
-   apportioned in any convenient way between the arguments daten1 and
-   daten2.  For example, JD(TDB)=2450123.7 could be expressed in any
-   of these ways, among others:
+1) The dates day11+day12 and day21+day22 are Julian Dates, apportioned
+   in any convenient way between the pairs of arguments.  For example,
+   JD(TDB)=2450123.7 could be expressed in any of these ways, among
+   others:
 
-         daten1        daten2
+         part 1        part 2
 
        2450123.7           0.0       (JD method)
        2451545.0       -1421.3       (J2000 method)
@@ -3671,7 +3687,7 @@ catalog).
    The JD method is the most natural and convenient to use in cases
    where the loss of several decimal digits of resolution is
    acceptable.  The J2000 method is best matched to the way the
-   argument is handled internally and will deliver the optimum optimum
+   argument is handled internally and will deliver the optimum
    resolution.  The MJD method and the date & time methods are both
    good compromises between resolution and convenience.  The two dates
    may be expressed using different methods, but at the risk of losing
@@ -3807,25 +3823,26 @@ function s00(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::Abst
     ϕ4 = ϕ4_2000As*ϕ
     a4 = a4_2000As
 
+    #  Sum the series, smallest terms first, as in the C library.
     sum0 = sum1 = sum2 = sum3 = sum4 = zero(eltype(a0))
 
-    @inbounds for i in axes(a0, 1)
+    @inbounds for i in reverse(axes(a0, 1))
         s, c = sincos(ϕ0[i])
         sum0 += a0[i,1] * s + a0[i,2] * c
     end
-    @inbounds for i in axes(a1, 1)
+    @inbounds for i in reverse(axes(a1, 1))
         s, c = sincos(ϕ1[i])
         sum1 += a1[i,1] * s + a1[i,2] * c
     end
-    @inbounds for i in axes(a2, 1)
+    @inbounds for i in reverse(axes(a2, 1))
         s, c = sincos(ϕ2[i])
         sum2 += a2[i,1] * s + a2[i,2] * c
     end
-    @inbounds for i in axes(a3, 1)
+    @inbounds for i in reverse(axes(a3, 1))
         s, c = sincos(ϕ3[i])
         sum3 += a3[i,1] * s + a3[i,2] * c
     end
-    @inbounds for i in axes(a4, 1)
+    @inbounds for i in reverse(axes(a4, 1))
         s, c = sincos(ϕ4[i])
         sum4 += a4[i,1] * s + a4[i,2] * c
     end
@@ -3882,7 +3899,7 @@ precession-nutation model.
    more compact than a direct series for s would be.  The present
    function uses the full IAU 2000A nutation model when predicting the
    CIP position.  Faster results, with no significant loss of
-   accuracy, can be obtained via the function eraS00b, which uses
+   accuracy, can be obtained via the function s00b, which uses
    instead the IAU 2000B truncated model.
 
 # References
@@ -3918,7 +3935,7 @@ precession-nutation model.
 
 # Output
 
- - 's'     -- the CIO locator s in radians (Note 2)
+ - `s`     -- the CIO locator s in radians (Note 2)
 
 # Note
 
@@ -3951,7 +3968,7 @@ precession-nutation model.
    are the x and y components of the CIP unit vector; this series is
    more compact than a direct series for s would be.  The present
    function uses the IAU 2000B truncated nutation model when
-   predicting the CIP position.  The function eraS00a uses instead the
+   predicting the CIP position.  The function s00a uses instead the
    full IAU 2000A model, but with no significant increase in accuracy
    and at some cost in speed.
 
@@ -3969,7 +3986,7 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function s00b(day1::AbstractFloat, day2::AbstractFloat)
-    #  Bias-precession-nutation matrix (IAU 2000A), extract the CIP
+    #  Bias-precession-nutation matrix (IAU 2000B), extract the CIP
     #  coordinates, and compute the CIO locator s.
     s00(day1, day2, bpn2xy(pnm00b(day1, day2))...)
 end
@@ -4076,25 +4093,26 @@ function s06(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::Abst
     ϕ4 = ϕ4_2006_equinox*ϕ
     a4 = a4_2006_equinox
 
+    #  Sum the series, smallest terms first, as in the C library.
     sum0 = sum1 = sum2 = sum3 = sum4 = zero(eltype(a0))
 
-    @inbounds for i in axes(a0, 1)
+    @inbounds for i in reverse(axes(a0, 1))
         s, c = sincos(ϕ0[i])
         sum0 += a0[i,1] * s + a0[i,2] * c
     end
-    @inbounds for i in axes(a1, 1)
+    @inbounds for i in reverse(axes(a1, 1))
         s, c = sincos(ϕ1[i])
         sum1 += a1[i,1] * s + a1[i,2] * c
     end
-    @inbounds for i in axes(a2, 1)
+    @inbounds for i in reverse(axes(a2, 1))
         s, c = sincos(ϕ2[i])
         sum2 += a2[i,1] * s + a2[i,2] * c
     end
-    @inbounds for i in axes(a3, 1)
+    @inbounds for i in reverse(axes(a3, 1))
         s, c = sincos(ϕ3[i])
         sum3 += a3[i,1] * s + a3[i,2] * c
     end
-    @inbounds for i in axes(a4, 1)
+    @inbounds for i in reverse(axes(a4, 1))
         s, c = sincos(ϕ4[i])
         sum4 += a4[i,1] * s + a4[i,2] * c
     end
@@ -4269,8 +4287,8 @@ IAU 2006 precession and IAU 2000A nutation.
 3) The fundamental arguments used are as adopted in IERS Conventions
    (2003) and are from Simon et al. (1994) and Souchay et al.  (1999).
 
-4) This is an alternative to the angles-based method, via the ERFA
-   function eraFw2xy and as used in eraXys06a for example.  The two
+4) This is an alternative to the angles-based method, via the SOFA
+   function fw2xy and as used in xys06a for example.  The two
    methods agree at the 1 microarcsecond level (at present), a
    negligible amount compared with the intrinsic accuracy of the
    models.  However, it would be unwise to mix the two methods
@@ -4314,12 +4332,10 @@ function xy06(day1::AbstractFloat, day2::AbstractFloat)
         Polynomial( lur_2003...)(Δt),
         Polynomial( lne_2003...)(Δt),
         Polynomial( lge_2003...)(Δt)])
-    
-    #  Polynomial part of precession-nutation
-    xypr = SVector(sum(Polynomial(cip_x_2006...)(Δt)),
-            sum(Polynomial(cip_y_2006...)(Δt)))
 
-    # !!! The following code can be improved by rearranging the data arrays.
+    #  Polynomial part of precession-nutation
+    xypr = SVector(Polynomial(cip_x_2006...)(Δt),
+            Polynomial(cip_y_2006...)(Δt))
 
     jaxy = SVector(0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1) .+ 1
     jasc = SVector(0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0) .+ 1
@@ -4397,7 +4413,7 @@ precession-nutation model.
    Origin on the equator of the CIP.
 
 4) A faster, but slightly less accurate result (about 1 mas for X,Y),
-   can be obtained by using instead the eraXys00b function.
+   can be obtained by using instead the xys00b function.
 
 # References
 
@@ -4456,7 +4472,7 @@ precession-nutation model.
    Origin on the equator of the CIP.
 
 4) The present function is faster, but slightly less accurate (about 1
-   mas in X,Y), than the eraXys00a function.
+   mas in X,Y), than the xys00a function.
 
 # References
 
@@ -4464,7 +4480,7 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function xys00b(day1::AbstractFloat, day2::AbstractFloat)
-    #  Form bias-precession-nutation matrix (IAU 2000A) and extract x, y.
+    #  Form bias-precession-nutation matrix (IAU 2000B) and extract x, y.
     x, y = bpn2xy(pnm00b(day1, day2))
     #  Obtain s
     (x = x, y = y, s = s00(day1, day2, x, y))
@@ -4515,7 +4531,7 @@ and IAU 2000A nutation models.
    Origin on the equator of the CIP.
 
 4) Series-based solutions for generating X and Y are also available:
-   see Capitaine & Wallace (2006) and eraXy06.
+   see Capitaine & Wallace (2006) and xy06.
 
 # References
 
@@ -4524,7 +4540,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
 function xys06a(day1::AbstractFloat, day2::AbstractFloat)
-    #  Form bias-precession-nutation matrix (IAU 2000A) and extract x, y.
+    #  Form bias-precession-nutation matrix (IAU 2006/2000A) and extract x, y.
     x, y = bpn2xy(pnm06a(day1, day2))
     #  Obtain s
     (x = x, y = y, s = s06(day1, day2, x, y))

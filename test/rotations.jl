@@ -34,3 +34,11 @@
 @test abs(SOFA.gst06a(2400000.5, 53736.0, 2400000.5, 53736.0) - 1.754166137675019159) <= 1e-12
 
 @test abs(SOFA.gst94(2400000.5, 53736.0) - 1.754166136020645203) <= 1e-12
+
+####    Regression tests (v2.0.0 pre-release review)    ####
+
+#   gmst06: result must be in [0, 2pi) (was normalized into [-pi, pi])
+let g = SOFA.gmst06(2400000.5, 53826.0, 2400000.5, 53826.0)
+    @test 0.0 <= g < 2pi
+    @test abs(g - SOFA.gmst00(2400000.5, 53826.0, 2400000.5, 53826.0)) <= 1e-6
+end

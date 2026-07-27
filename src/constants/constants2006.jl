@@ -47,7 +47,7 @@ const cip_y_2006 = (-0.006951,   -0.025896, -22.4072747,  0.00190059, 0.00111252
 const ϵsun_1994 = (280.46645683, 1296027711.03429)
 #   Solar mean anomaly (Simon et al. 1994)
 const ϵmsun_1994 = (357.52910918, 1295965810.481)
-#   Mean anomaly of Moon from Sun (Simon et al. 1994)
+#   Mean elongation of Moon from Sun (Simon et al. 1994)
 const D_1994 = (297.85019547, 16029616012.090)
 #   Mean longitude of Jupiter (Simon et al. 1994)
 const ϵju_1994 = (34.35151874, 109306899.89453)

@@ -12,14 +12,14 @@ Transformation from Galactic Coordinates to ICRS.
 
 # Output
 
- - `ras`   -- ICRS right ascension (radians)
+ - `ra`   -- ICRS right ascension (radians)
  - `dec`   -- ICRS declination (radians)
 
 # Examples
 
 ```jldoctest
 julia> g2icrs(5.5850536063818546, -0.7853981633974483)
-(RA = 5.9338074302227195, Dec = -1.1784870613579947)
+(ra = 5.9338074302227195, dec = -1.1784870613579947)
 ```
 
 # Note
@@ -47,11 +47,11 @@ julia> g2icrs(5.5850536063818546, -0.7853981633974483)
    galactic equator on the ICRS equator.  They are given in degrees to
    five decimal places and for canonical purposes are regarded as
    exact.  In the Hipparcos Catalogue the matrix elements are given to
-   10 decimal places (about 20 microarcsec).  In the present ERFA
+   10 decimal places (about 20 microarcsec).  In the present SOFA
    function the matrix elements have been recomputed from the
    canonical three angles and are given to 30 decimal places.
 
-2) The inverse transformation is performed by the function eraIcrs2g.
+2) The inverse transformation is performed by the function icrs2g.
 
 # References
 
@@ -64,27 +64,27 @@ function g2icrs(lon::AbstractFloat, lat::AbstractFloat)
     #=
     L2,B2 system of galactic coordinates in the form presented in the
     Hipparcos Catalogue.  In degrees:
-  
+
     P = 192.85948    right ascension of the Galactic north pole in ICRS
     Q =  27.12825    declination of the Galactic north pole in ICRS
     R =  32.93192    Galactic longitude of the ascending node of
                      the Galactic equator on the ICRS equator
-  
+
     ICRS to galactic rotation matrix, obtained by computing Rz(-R)
     Rx(π/2-Q) Rz(π/2+P) to the full precision shown.
     =#
-    ras, dec = c2s(r_gal_icrs'*s2c(lon, lat))
-    (RA = anp(ras), Dec = anpm(dec))
+    ra, dec = c2s(r_gal_icrs'*s2c(lon, lat))
+    (ra = anp(ra), dec = anpm(dec))
 end
 
 """
-    icrs2g(ras::AbstractFloat, dec::AbstractFloat)
+    icrs2g(ra::AbstractFloat, dec::AbstractFloat)
 
 Transformation from ICRS to Galactic Coordinates.
 
 # Input
 
- - `ras`   -- ICRS right ascension (radians)
+ - `ra`   -- ICRS right ascension (radians)
  - `dec`   -- ICRS declination (radians)
 
 # Output
@@ -124,11 +124,11 @@ julia> icrs2g(5.9338074302227188, -1.1784870613579944)
    galactic equator on the ICRS equator.  They are given in degrees to
    five decimal places and for canonical purposes are regarded as
    exact.  In the Hipparcos Catalogue the matrix elements are given to
-   10 decimal places (about 20 microarcsec).  In the present ERFA
+   10 decimal places (about 20 microarcsec).  In the present SOFA
    function the matrix elements have been recomputed from the
    canonical three angles and are given to 30 decimal places.
 
-2) The inverse transformation is performed by the function eraG2icrs.
+2) The inverse transformation is performed by the function g2icrs.
 
 # References
 
@@ -137,19 +137,19 @@ catalogues.  Astrometric and photometric star catalogues derived from
 the ESA Hipparcos Space Astrometry Mission.  ESA Publications
 Division, Noordwijk, Netherlands.
 """
-function icrs2g(ras::AbstractFloat, dec::AbstractFloat)
+function icrs2g(ra::AbstractFloat, dec::AbstractFloat)
     #=
     L2,B2 system of galactic coordinates in the form presented in the
     Hipparcos Catalogue.  In degrees:
-  
+
     P = 192.85948    right ascension of the Galactic north pole in ICRS
     Q =  27.12825    declination of the Galactic north pole in ICRS
     R =  32.93192    Galactic longitude of the ascending node of
                      the Galactic equator on the ICRS equator
-  
+
     ICRS to galactic rotation matrix, obtained by computing R_3(-R)
     R_1(π/2-Q) R_3(π/2+P) to the full precision shown:
     =#
-    @inline lon, lat = c2s(r_gal_icrs*s2c(ras, dec))
+    @inline lon, lat = c2s(r_gal_icrs*s2c(ra, dec))
     (lon = anp(lon), lat = anpm(lat))
 end

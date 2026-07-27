@@ -65,7 +65,7 @@ Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 Astron.Astrophys.Supp.Ser. 135, 111
 """
-fae03(Δt::AbstractFloat) = mod2pi(Polynomial(lea_2003...)(Δt))
+fae03(Δt::AbstractFloat) = rem(Polynomial(lea_2003...)(Δt), 2π)
 
 """
     faf03(Δt::AbstractFloat)
@@ -139,7 +139,7 @@ Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 Astron.Astrophys.Supp.Ser. 135, 111
 """
-faju03(Δt::AbstractFloat) = mod2pi(Polynomial(lju_2003...)(Δt))
+faju03(Δt::AbstractFloat) = rem(Polynomial(lju_2003...)(Δt), 2π)
 
 """
     fal03(Δt::AbstractFloat)
@@ -178,7 +178,7 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-fal03(Δt::AbstractFloat) = deg2rad(rem(Polynomial(l0_2003A...)(Δt), ARCSECPER2PI)/3600)
+fal03(Δt::AbstractFloat) = deg2rad(1/3600)*rem(Polynomial(l0_2003A...)(Δt), ARCSECPER2PI)
 
 """
     falp03(Δt::AbstractFloat)
@@ -190,7 +190,7 @@ Sun.
 
  - `Δt`    -- TDB, Julian centuries since J2000.0 (Note 1)
 
-# Output\
+# Output
 
  - `l`     -- l', radians (Note 2)
 
@@ -244,7 +244,7 @@ Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 Astron.Astrophys.Supp.Ser. 135, 111
 """
-fama03(Δt::AbstractFloat) = mod2pi(Polynomial(lma_2003...)(Δt))
+fama03(Δt::AbstractFloat) = rem(Polynomial(lma_2003...)(Δt), 2π)
 
 """
     fame03(Δt::AbstractFloat)
@@ -279,7 +279,7 @@ Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 Astron.Astrophys.Supp.Ser. 135, 111
 """
-fame03(Δt::AbstractFloat) = mod2pi(Polynomial(lme_2003...)(Δt))
+fame03(Δt::AbstractFloat) = rem(Polynomial(lme_2003...)(Δt), 2π)
 
 """
     fane03(Δt::AbstractFloat)
@@ -311,7 +311,7 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-fane03(Δt::AbstractFloat) = mod2pi(Polynomial(lne_2003...)(Δt))
+fane03(Δt::AbstractFloat) = rem(Polynomial(lne_2003...)(Δt), 2π)
 
 """
     faom03(Δt::AbstractFloat)
@@ -324,6 +324,7 @@ Moon's ascending node.
  - `Δt`    -- TDB, Julian centuries since J2000.0 (Note 1)
 
 # Output
+
  - `Ω`     -- Ω, radians (Note 2)
 
 # Note
@@ -378,7 +379,7 @@ Astron.Astrophys. 58, 1-16
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-fapa03(Δt::AbstractFloat) = mod2pi(Polynomial(lge_2003...)(Δt))
+fapa03(Δt::AbstractFloat) = Polynomial(lge_2003...)(Δt)
 
 """
     fasa03(Δt::AbstractFloat)
@@ -413,7 +414,7 @@ Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 Astron.Astrophys.Supp.Ser. 135, 111
 """
-fasa03(Δt::AbstractFloat) = mod2pi(Polynomial(lsa_2003...)(Δt))
+fasa03(Δt::AbstractFloat) = rem(Polynomial(lsa_2003...)(Δt), 2π)
 
 """
     faur03(Δt::AbstractFloat)
@@ -445,7 +446,7 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-faur03(Δt::AbstractFloat) = mod2pi(Polynomial(lur_2003...)(Δt))
+faur03(Δt::AbstractFloat) = rem(Polynomial(lur_2003...)(Δt), 2π)
 
 """
     fave03(Δt::AbstractFloat)
@@ -480,4 +481,4 @@ Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 Astron.Astrophys.Supp.Ser. 135, 111
 """
-fave03(Δt::AbstractFloat) = mod2pi(Polynomial(lve_2003...)(Δt))
+fave03(Δt::AbstractFloat) = rem(Polynomial(lve_2003...)(Δt), 2π)

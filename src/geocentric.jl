@@ -23,24 +23,23 @@ julia> eform(:WGS84)
 
 # Note
 
-1) The identifier n is a number that specifies the choice of reference
-   ellipsoid.  The following are supported:
-
-      ellipsoid
+1) The identifier `model` is a Symbol that specifies the choice of
+   reference ellipsoid.  The following are supported:
 
       :WGS84
       :GRS80
       :WGS72
 
-   The n value has no significance outside the ERFA software.  For
-   convenience, symbols ERFA_WGS84 etc. are defined in erfam.h.
+   Unlike the SOFA C library, which uses a numerical code, the
+   identifier is passed by name; any other value throws an
+   AssertionError.
 
 2) The ellipsoid parameters are returned in the form of equatorial
    radius in meters (a) and flattening (f).  The latter is a number
    around 0.00335, i.e. around 1/298.
 
-3) For the case where an unsupported n value is supplied, zero a and f
-   are returned, as well as error status.
+3) For the case where an unsupported model is supplied, an
+   AssertionError is thrown.
 
 # References
 
@@ -69,43 +68,41 @@ end
 
 """
     gc2gd(model::Symbol, pos::AbstractVector{<:AbstractFloat})
-    
+
 Transform geocentric coordinates to geodetic using the specified
 reference ellipsoid.
 
 # Input
 
- - `model::Int`: ellipsoid identifier (Note 1)
- - `pos::AbstractVector{<:AbstractFloat}`: geocentric vector (Note 2)
+ - `model` -- ellipsoid identifier (Note 1)
+ - `pos`   -- geocentric vector (Note 2)
 
 # Output
 
- - `ϵ::AbstractFloat`: longitude (radians, east +ve, Note 3)
- - `ϕ::AbstractFloat`: latitude (geodetic, radians, Note 3)
- - `r::AbstractFloat`: height above ellipsoid (geodetic, Notes 2,3)
+ - `ϵ`     -- longitude (radians, east +ve, Note 3)
+ - `ϕ`     -- latitude (geodetic, radians, Note 3)
+ - `r`     -- height above ellipsoid (geodetic, Notes 2,3)
 
 # Note
 
-1) The identifier n is a number that specifies the choice of reference
-   ellipsoid.  The following are supported:
-
-      ellipsoid
+1) The identifier `model` is a Symbol that specifies the choice of
+   reference ellipsoid.  The following are supported:
 
       :WGS84
       :GRS80
       :WGS72
 
-   The n value has no significance outside the ERFA software.  For
-   convenience, symbols ERFA_WGS84 etc. are defined in erfam.h.
+   Unlike the SOFA C library, which uses a numerical code, the
+   identifier is passed by name; any other value throws an
+   AssertionError.
 
 2) The geocentric vector (xyz, given) and height (height, returned)
    are in meters.
 
-3) An error status -1 means that the identifier n is illegal.  An
-   error status -2 is theoretically impossible.  In all error cases,
-   all three results are set to -1e9.
+3) An unsupported model identifier or degenerate ellipsoid parameters
+   cause an AssertionError to be thrown.
 
-4) The inverse transformation is performed in the function eraGd2gc.
+4) The inverse transformation is performed in the function gd2gc.
 """
 function gc2gd(model::Symbol, pos::AbstractVector{<:AbstractFloat})
     gc2gde(values(eform(model))..., pos)
@@ -147,10 +144,10 @@ ellipsoid of specified form.
 5) If an error occurs (status < 0), elong, phi and height are
    unchanged.
 
-6) The inverse transformation is performed in the function eraGd2gce.
+6) The inverse transformation is performed in the function gd2gce.
 
-7) The transformation for a standard ellipsoid (such as ERFA_WGS84)
-   can more conveniently be performed by calling eraGc2gd, which uses
+7) The transformation for a standard ellipsoid (such as WGS84)
+   can more conveniently be performed by calling gc2gd, which uses
    a numerical code to identify the required A and F values.
 
 # References
@@ -161,12 +158,19 @@ accelerated by Halley's method", J.Geodesy (2006) 79: 689-693
 function gc2gde(radius::AbstractFloat, oblate::AbstractFloat, pos::AbstractVector{<:AbstractFloat})
     @assert 0.0 <= oblate < 1.0 "Oblateness out of range [0 - 1)."
     @assert radius > 0.0 "Radius is <= 0."
-    @assert (1.0 - (2.0 - oblate)*oblate) >= 0.0 "Oblateness is too larage."
+    @assert (1.0 - (2.0 - oblate)*oblate) > 0.0 "Oblateness is too large."
 
-    if sum(pos[1:2].^2) > 1e-32*radius^2
-        #  Prepare Newton corection factors
-        s ,  e = abs(pos[3])/radius, (2.0 - oblate)*oblate
-        ec, pn = sqrt(1.0 - e), sqrt(sum(pos[1:2].^2))/radius
+    #  Functions of the ellipsoid parameters.
+    e = (2.0 - oblate)*oblate
+    ec = sqrt(1.0 - e)
+    p2 = sum(pos[1:2].^2)
+
+    #  Compute longitude.
+    ϵ = p2 > 0.0 ? atan(pos[2], pos[1]) : 0.0
+
+    if p2 > 1e-32*radius^2
+        #  Prepare Newton correction factors
+        s, pn = abs(pos[3])/radius, sqrt(p2)/radius
         a0 = sqrt((ec*pn)^2 + s^2)
         d0, f0 = ec*s*a0^3 + e*s^3, pn*a0^3 - e*(ec*pn)^3
 
@@ -174,14 +178,16 @@ function gc2gde(radius::AbstractFloat, oblate::AbstractFloat, pos::AbstractVecto
         b0 = 1.5*(e*s*ec*pn)^2*pn*(a0 - ec)
         s1 = d0*f0 - b0*s
         cc = ec*(f0*f0 - b0*ec*pn)
-        ϵ = atan(pos[2], pos[1])
         ϕ = atan(s1/cc)
-        r = (sqrt(sum(pos[1:2].^2))*cc + abs(pos[3])*s1 -
+        r = (sqrt(p2)*cc + abs(pos[3])*s1 -
              radius*sqrt((ec*s1)^2 + cc^2))/sqrt(s1^2 + cc^2)
     else
-        ϵ, ϕ, r = 0.0, π/2, abs(pos[3]) - radius*ec
+        #  Exception: on or near the polar axis.
+        ϕ, r = π/2, abs(pos[3]) - radius*ec
     end
-    (ϵ = ϵ, ϕ = ϕ, r = r)
+
+    #  Restore the sign of the latitude.
+    (ϵ = ϵ, ϕ = pos[3] < 0.0 ? -ϕ : ϕ, r = r)
 end
 
 """
@@ -213,27 +219,26 @@ julia> gd2gc(:WGS84, 3.1, -0.5, 2500.0)
 
 # Note
 
-1) The identifier n is a number that specifies the choice of reference
-   ellipsoid.  The following are supported:
-
-      ellipsoid
+1) The identifier `model` is a Symbol that specifies the choice of
+   reference ellipsoid.  The following are supported:
 
       :WGS84
       :GRS80
       :WGS72
 
-   The n value has no significance outside the ERFA software.  For
-   convenience, symbols ERFA_WGS84 etc. are defined in erfam.h.
+   Unlike the SOFA C library, which uses a numerical code, the
+   identifier is passed by name; any other value throws an
+   AssertionError.
 
 2) The height (height, given) and the geocentric vector (xyz,
    returned) are in meters.
 
-3) No validation is performed on the arguments elong, phi and height.
-   An error status -1 means that the identifier n is illegal.  An
-   error status -2 protects against cases that would lead to
-   arithmetic exceptions.  In all error cases, xyz is set to zeros.
+3) No validation is performed on the arguments ϵ, ϕ and r.  An
+   unsupported model identifier or ellipsoid parameters that would
+   lead to arithmetic exceptions cause an AssertionError to be
+   thrown.
 
-4) The inverse transformation is performed in the function eraGc2gd.
+4) The inverse transformation is performed in the function gc2gd.
 """
 function gd2gc(model::Symbol, ϵ::AbstractFloat, ϕ::AbstractFloat, r::AbstractFloat)
     @inline gd2gce(values(eform(model))..., ϵ, ϕ, r)
@@ -273,10 +278,10 @@ of specified form.
    status -1 protects against (unrealistic) cases that would lead to
    arithmetic exceptions.  If an error occurs, xyz is unchanged.
 
-5) The inverse transformation is performed in the function eraGc2gde.
+5) The inverse transformation is performed in the function gc2gde.
 
-6) The transformation for a standard ellipsoid (such as ERFA_WGS84)
-   can more conveniently be performed by calling eraGd2gc, which uses
+6) The transformation for a standard ellipsoid (such as WGS84)
+   can more conveniently be performed by calling gd2gc, which uses
    a numerical code to identify the required a and f values.
 
 # References
@@ -288,7 +293,7 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992), Section 4.22, p202.
 """
 function gd2gce(radius::AbstractFloat, oblate::AbstractFloat, ϵ::AbstractFloat, ϕ::AbstractFloat, r::AbstractFloat)
-    @assert (cos(ϕ)^2 + ((1.0-oblate)*sin(ϕ))^2) >= 0.0 "Equatorial radius is <= 0"
+    @assert (cos(ϕ)^2 + ((1.0-oblate)*sin(ϕ))^2) > 0.0 "Illegal ellipsoid parameters."
     d  = sqrt(cos(ϕ)^2 + ((1.0-oblate)*sin(ϕ))^2)
     rr = radius/d + r
     SVector(rr*cos(ϕ)*cos(ϵ), rr*cos(ϕ)*sin(ϵ), ((1.0-oblate)^2*radius/d + r)*sin(ϕ))

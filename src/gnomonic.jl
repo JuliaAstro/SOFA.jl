@@ -42,9 +42,9 @@ coordinates of the tangent point.
    combination of ξ and dec.
 
 6) Also near the poles, cases can arise where there are two useful
-   solutions.  The return value indicates whether the second of the
-   two solutions returned is useful; 1 indicates only one useful
-   solution, the usual case.
+   solutions.  When only the first solution is useful (the usual
+   case), the second solution is returned as `nothing`; when there is
+   no solution at all, every returned field is `nothing`.
 
 7) The basis of the algorithm is to solve the spherical triangle PSC,
    where P is the north celestial pole, S is the star and C is the
@@ -59,9 +59,9 @@ coordinates of the tangent point.
 
        spherical      vector         solve for
 
-       eraTpxes      eraTpxev          ξ,η
-       eraTpsts      eraTpstv          star
-     > eraTpors <    eraTporv         origin
+       tpxes      tpxev          ξ,η
+       tpsts      tpstv          star
+     > tpors <    tporv         origin
 
 # References
 
@@ -73,13 +73,17 @@ Chapter 13.
 """
 function tpors(ξ::F, η::F, a::F, b::F) where F<:AbstractFloat
     r  = sqrt(1.0 + η*η + ξ*ξ)
-    w2 = (r*cos(b))^2 - ξ*ξ
+    rsb, rcb = r*sin(b), r*cos(b)
+    w2 = rcb*rcb - ξ*ξ
     if w2 >= 0.0
-        wp = ξ == 0.0 && sqrt(w2) == 0.0 ? 1.0 : sqrt(w2)
-        a01, b01 = mod2pi(a - atan(ξ, wp)), atan(r*sin(b) - η*wp, r*sin(b)*η + wp)
-        wn = -wp
-        a02, b02 = mod2pi(a - atan(ξ, wn)), atan(r*sin(b) - η*wn, r*sin(b)*η + wn)
-        res = abs(r*sin(b)) < 1.0 ? (a01, b01, nothing, nothing) : (a01, b01, a02, b02)
+        w = sqrt(w2)
+        s, c = rsb - η*w, rsb*η + w
+        if ξ == 0.0 && w == 0.0 w = 1.0 end
+        a01, b01 = mod2pi(a - atan(ξ, w)), atan(s, c)
+        w = -w
+        s, c = rsb - η*w, rsb*η + w
+        a02, b02 = mod2pi(a - atan(ξ, w)), atan(s, c)
+        res = abs(rsb) < 1.0 ? (a01, b01, nothing, nothing) : (a01, b01, a02, b02)
     else
         res = (nothing, nothing, nothing, nothing)
     end
@@ -123,9 +127,9 @@ the tangent point.
    where the tangent point would have to be.
 
 5) Also near the poles, cases can arise where there are two useful
-   solutions.  The return value indicates whether the second of the
-   two solutions returned is useful; 1 indicates only one useful
-   solution, the usual case.
+   solutions.  When only the first solution is useful (the usual
+   case), the second solution is returned as `nothing`; when there is
+   no solution at all, every returned field is `nothing`.
 
 6) The basis of the algorithm is to solve the spherical triangle PSC,
    where P is the north celestial pole, S is the star and C is the
@@ -142,9 +146,9 @@ the tangent point.
 
        spherical      vector         solve for
 
-       eraTpxes      eraTpxev         xi,eta
-       eraTpsts      eraTpstv          star
-       eraTpors    > eraTporv <       origin
+       tpxes      tpxev         xi,eta
+       tpsts      tpstv          star
+       tpors    > tporv <       origin
 
 # References
 
@@ -213,9 +217,9 @@ julia> tpsts(-0.03, 0.07, 2.3, 1.5)
 
        spherical      vector         solve for
 
-       eraTpxes      eraTpxev         xi,eta
-     > eraTpsts <    eraTpstv          star
-       eraTpors      eraTporv         origin
+       tpxes      tpxev         xi,eta
+     > tpsts <    tpstv          star
+       tpors      tporv         origin
 
 # References
 
@@ -276,9 +280,9 @@ the direction cosines of the star.
 
        spherical      vector         solve for
 
-       eraTpxes      eraTpxev           ξ,η
-       eraTpsts    > eraTpstv <        star
-       eraTpors      eraTporv         origin
+       tpxes      tpxev           ξ,η
+       tpsts    > tpstv <        star
+       tpors      tporv         origin
 
 # References
 
@@ -343,9 +347,9 @@ julia> tpxes(1.3, 1.55, 2.3, 1.5)
 
        spherical      vector         solve for
 
-     > eraTpxes <    eraTpxev           ξ,η
-       eraTpsts      eraTpstv          star
-       eraTpors      eraTporv         origin
+     > tpxes <    tpxev           ξ,η
+       tpsts      tpstv          star
+       tpors      tporv         origin
 
 # References
 
@@ -414,9 +418,9 @@ coordinates in the tangent plane.
 
        spherical      vector         solve for
 
-       eraTpxes    > eraTpxev <         ξ,η
-       eraTpsts      eraTpstv          star
-       eraTpors      eraTporv         origin
+       tpxes    > tpxev <         ξ,η
+       tpsts      tpstv          star
+       tpors      tporv         origin
 
 # References
 

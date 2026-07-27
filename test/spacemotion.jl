@@ -13,3 +13,10 @@
 @test all(abs.(SOFA.starpv(0.01686756, -1.093989828, -1.78323516e-5,
                            2.336024047e-6, 0.74723, -21.6)[2] .-
                [-0.4051854008955659551e-2, -0.6253919754414777970e-2, 0.1189353714588109341e-1]) .<= [1e-13, 1e-15, 1e-13])
+
+####    Regression tests (v2.0.0 pre-release review)    ####
+
+#   pvstar: superluminal velocity and null position are rejected
+#   (the sanity check had inverted logic)
+@test_throws AssertionError SOFA.pvstar([[1e5, 0.0, 0.0], [200.0, 0.0, 0.0]])
+@test_throws AssertionError SOFA.pvstar([[0.0, 0.0, 0.0], [1e-5, 0.0, 0.0]])

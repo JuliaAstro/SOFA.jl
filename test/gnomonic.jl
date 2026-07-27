@@ -20,3 +20,12 @@
 
 @test all(abs.(values(SOFA.tpxev(SOFA.s2c(1.3, 1.55), SOFA.s2c(2.3, 1.5))) .-
                (-0.01753200983236980595, 0.05962940005778712891)) .<= 1e-13)
+
+####    Regression tests (v2.0.0 pre-release review)    ####
+
+#   tpors: the pole-degenerate case must compute solution 1 with the
+#   pre-substitution w, as in the C
+let rt = SOFA.tpors(0.0, 0.07, 2.3, pi/2), r = sqrt(1.0 + 0.07^2)
+    @test rt.a01 ≈ 2.3
+    @test rt.b01 ≈ atan(r, r*0.07)
+end
