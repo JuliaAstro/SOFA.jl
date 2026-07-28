@@ -683,3 +683,29 @@ let sun = SOFA.Ldbody(1.0, 6e-6, [[-0.000712174377, -0.00230478303, -0.001058659
 
     @test SOFA.ldn(0, [sun], ob, sc) == sc
 end
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   aticq/aticqn: Float64-typed work arrays demoted BigFloat coordinates
+let a = SOFA.apci13(2456165.5, 0.401182685)[1]
+    rF = SOFA.aticq(2.710121572969038991, 0.1729371367218230438, a)
+    rB = SOFA.aticq(big"2.710121572969038991", big"0.1729371367218230438", a)
+    @test rB.ra isa BigFloat && rB.dec isa BigFloat
+    @test abs(rB.ra - rF.ra) <= 1e-15 && abs(rB.dec - rF.dec) <= 1e-15
+end
+
+let a = SOFA.apci13(2456165.5, 0.401182685)[1],
+    b = [SOFA.Ldbody(0.00028574, 3e-10,
+                     [[-7.81014427, -5.60956681, -1.98079819],
+                      [0.0030723249, -0.00406995477, -0.00181335842]]),
+         SOFA.Ldbody(0.00095435, 3e-9,
+                     [[0.738098796, 4.63658692, 1.9693136],
+                      [-0.00755816922, 0.00126913722, 0.000727999001]]),
+         SOFA.Ldbody(1.0, 6e-6,
+                     [[-0.000712174377, -0.00230478303, -0.00105865966],
+                      [6.29235213e-6, -3.30888387e-7, -2.96486623e-7]])]
+    rF = SOFA.aticqn(2.709994899247599271, 0.1728740720983623469, a, 3, b)
+    rB = SOFA.aticqn(big"2.709994899247599271", big"0.1728740720983623469", a, 3, b)
+    @test rB.ra isa BigFloat && rB.dec isa BigFloat
+    @test abs(rB.ra - rF.ra) <= 1e-15 && abs(rB.dec - rF.dec) <= 1e-15
+end
