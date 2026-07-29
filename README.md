@@ -5,7 +5,7 @@
 
 [![Test](https://github.com/JuliaAstro/SOFA.jl/actions/workflows/Test.yml/badge.svg)](https://github.com/JuliaAstro/SOFA.jl/actions/workflows/Test.yml)
 [![codecov](https://codecov.io/gh/JuliaAstro/SOFA.jl/graph/badge.svg)](https://codecov.io/gh/JuliaAstro/SOFA.jl)
-[![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
+[![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/main/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A pure Julia implementation of the IAU SOFA library for fundamental astronomy. For the wrapper of the SOFA C library, see the v1.x releases maintained on the `release-1.x` branches.
