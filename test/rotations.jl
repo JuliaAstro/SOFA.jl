@@ -42,3 +42,8 @@ let g = SOFA.gmst06(2400000.5, 53826.0, 2400000.5, 53826.0)
     @test 0.0 <= g < 2pi
     @test abs(g - SOFA.gmst00(2400000.5, 53826.0, 2400000.5, 53826.0)) <= 1e-6
 end
+
+#   era00: C sorts the two date parts before fmod, so the result is exactly
+#   swap-invariant; the pre-fix `mod` on the big part broke this by ~4e-12 rad
+#   whenever both parts are negative (JD < 0)
+@test SOFA.era00(-0.25, -0.5) == SOFA.era00(-0.5, -0.25)
