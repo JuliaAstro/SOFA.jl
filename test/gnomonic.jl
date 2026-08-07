@@ -23,8 +23,9 @@
 
 ####    Regression tests (v2.0.0 pre-release review)    ####
 
-#   tpors: the pole-degenerate case must compute solution 1 with the
-#   pre-substitution w, as in the C
+#   tpors: near-pole sanity check, hand-derived from the spherical triangle
+#   (the exact ξ = 0, w = 0 degenerate branch is unreachable in floating
+#   point, since cos(b) is never exactly zero)
 let rt = SOFA.tpors(0.0, 0.07, 2.3, pi/2), r = sqrt(1.0 + 0.07^2)
     @test rt.a01 ≈ 2.3
     @test rt.b01 ≈ atan(r, r*0.07)
