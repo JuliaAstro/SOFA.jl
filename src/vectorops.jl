@@ -138,7 +138,7 @@ function af2a(sign::Char, degree::Integer, minute::Integer, second::Real)
     @assert 0   <= degree < 360   "degree out of range [0-359]."
     @assert 0   <= minute <  60   "minute out of range [0-59]."
     @assert 0.0 <= second <  60.0 "second out of range [0-60]."
-
+    
     onet = one(typeof(second))
     deg2rad(1/3600) * (sign == '-' ? -onet : onet) *
        (60*onet * (60*onet * abs(degree) + abs(minute)) + abs(second))
@@ -282,7 +282,7 @@ function tf2a(sign::Char, hour::Integer, minute::Integer, second::Real)
     @assert 0   <= hour   <   24  "hour out of range [0-23]."
     @assert 0   <= minute <   60  "minute out of range [0-59]."
     @assert 0.0 <= second < 60.0 "second out of range [0-60]."
-
+    
     15*deg2rad(1/3600) * (sign == '-' ? -1.0 : 1.0) *
         (60.0 * (60.0 * abs(hour) + abs(minute)) + abs(second))
 end
@@ -313,7 +313,7 @@ function tf2d(sign::Char, hour::Integer, minute::Integer, second::Real)
     @assert 0   <= hour   <   24  "hour out of range [0-23]."
     @assert 0   <= minute <   60  "minute out of range [0-59]."
     @assert 0.0 <= second < 60.0 "second out of range [0-60]."
-
+    
     (sign == '-' ? -1.0 : 1.0) *
         (60.0 * (60.0 * abs(hour) + abs(minute)) + abs(second)) / SECPERDAY
 end
@@ -935,7 +935,7 @@ julia> c2s([100.0, -50.0, 25.0])
 function c2s(pos::AbstractVector{<:Real})
     zerot = zero(eltype(pos))
     NamedTuple{(:θ, :ϕ)}(
-        ((pos[1]^2 + pos[2]^2) == zerot ? zerot : atan(pos[2], pos[1]),
+    ((pos[1]^2 + pos[2]^2) == zerot ? zerot : atan(pos[2], pos[1]),
          pos[3] == zerot ? zerot : atan(pos[3], sqrt(pos[1]^2 + pos[2]^2))))
 end
 
@@ -995,7 +995,7 @@ Convert position/velocity from Cartesian to spherical coordinates.
    such cases zeroes are returned for all three.
 """
 function pv2s(pv::V) where V<:AbstractVector{<:AbstractVector{<:Real}}
-
+    
     zerot = zero(eltype(pv[1]))
     x,  y,  z  = pv[norm(pv[1]) == zerot ? 2 : 1]
     dx, dy, dz = pv[2]

@@ -22,7 +22,7 @@ This function converts a star's catalog data from the old FK4
 
  - `ra`     -- J2000.0 RA (rad)
  - `dec`    -- J2000.0 Dec (rad)
- - `δra`    -- J2000.0 RA proper motion (rad/Jul-year)
+ - `δra   ` -- J2000.0 RA proper motion (rad/Jul-year)
  - `δdec`   -- J2000.0 Dec proper motions (rad/Jul-year)
  - `plx`    -- parallax (arcsec)
  - `rv`     -- radial velocity (km/s, +ve = moving away)

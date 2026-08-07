@@ -33,7 +33,7 @@ function leapday(year::Integer, month::Integer)
 end
 
 function calendar2MJD(year::Integer, month::Integer, day::Integer)
-
+    
     @assert -4799 <= year "Year less than -4799."
     @assert 1 <= month <= 12 "Month out of range [1-12]."
     dayinmonth = DAYINMONTH[month] + (leapday(year, month) ? 1 : 0)

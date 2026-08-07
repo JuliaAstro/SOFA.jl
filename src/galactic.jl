@@ -64,12 +64,12 @@ function g2icrs(lon::AbstractFloat, lat::AbstractFloat)
     #=
     L2,B2 system of galactic coordinates in the form presented in the
     Hipparcos Catalogue.  In degrees:
-
+  
     P = 192.85948    right ascension of the Galactic north pole in ICRS
     Q =  27.12825    declination of the Galactic north pole in ICRS
     R =  32.93192    Galactic longitude of the ascending node of
                      the Galactic equator on the ICRS equator
-
+  
     ICRS to galactic rotation matrix, obtained by computing Rz(-R)
     Rx(π/2-Q) Rz(π/2+P) to the full precision shown.
     =#
@@ -141,12 +141,12 @@ function icrs2g(ra::AbstractFloat, dec::AbstractFloat)
     #=
     L2,B2 system of galactic coordinates in the form presented in the
     Hipparcos Catalogue.  In degrees:
-
+  
     P = 192.85948    right ascension of the Galactic north pole in ICRS
     Q =  27.12825    declination of the Galactic north pole in ICRS
     R =  32.93192    Galactic longitude of the ascending node of
                      the Galactic equator on the ICRS equator
-
+  
     ICRS to galactic rotation matrix, obtained by computing R_3(-R)
     R_1(π/2-Q) R_3(π/2+P) to the full precision shown:
     =#

@@ -1,6 +1,6 @@
 #### Astronomy / Time Scales
 
-"""
+""" 
     d2dtf(scale::AbstractString, ndp::Int, day1::AbstractFloat, day2::AbstractFloat)
 
 Format for output a 2-part Julian Date (or in the case of UTC a
@@ -84,14 +84,14 @@ function d2dtf(scale::AbstractString, ndp::Int, day1::AbstractFloat, day2::Abstr
 
         # Check for sudden change in TAI-UTC (seconds)
         Δt = Δt24h - (2*Δt12h - Δt00h)
-
+        
         # if leap second day, scale the fraction of a day into SI.
         leap = abs(Δt) > 0.5
         if leap subday += subday*Δt/SECPERDAY end
     end
 
     sign, hour, minute, second, subsec = d2tf(ndp, subday)
-
+    
     # Check for rounded time >24 hours
     if hour > 23
         # Check for leap second day
@@ -195,7 +195,7 @@ function dat(year::Integer, month::Integer, day::Integer, subday::AbstractFloat)
                 Δt = drift.offset + (mjd - drift.mjd + subday)*drift.rate
                 break
             end
-        end
+        end                     
     else
         # Find leap second
         for leap in reverse(LEAPSECOND)
@@ -393,7 +393,7 @@ function dtdb(day1::AbstractFloat, day2::AbstractFloat, ut1::AbstractFloat, east
         u * sin(tsol)))
 
     #  Fairhead et al. model
-
+    
     wf = Polynomial(SVector(
         sum(tdb_tt_2003_0[1,:] .*
             sin.(tdb_tt_2003_0[3,:] .+ tdb_tt_2003_0[2,:].*Δt)),
@@ -405,7 +405,7 @@ function dtdb(day1::AbstractFloat, day2::AbstractFloat, ut1::AbstractFloat, east
             sin.(tdb_tt_2003_3[3,:] .+ tdb_tt_2003_3[2,:].*Δt)),
         sum(tdb_tt_2003_4[1,:] .*
             sin.(tdb_tt_2003_4[3,:] .+ tdb_tt_2003_4[2,:].*Δt)))...)(Δt)
-
+    
     wj = sum(mass_plan_1994_0[1,:] .*
              sin.(mass_plan_1994_0[3,:] .+ mass_plan_1994_0[2,:].*Δt)) +
              mass_plan_1994_2 * Δt^2
@@ -433,7 +433,7 @@ UTC a quasi-JD form that includes special provision for leap seconds).
 # Output
 
  - `day1`   -- part 1 of Julian Date (Notes 3,4)
- - `day2`   -- part 2 of Julian Date (Notes 3,4)
+ -` day2`   -- part 2 of Julian Date (Notes 3,4)
 
 # Note
 
@@ -507,7 +507,7 @@ function dtf2d(scale::AbstractString, year::Int, month::Int, day::Int, hour::Int
 
     # The time in days
     subday = ((60.0*(60*hour + minute)) + second)/(SECPERDAY + Δt)
-
+    
     (day = julday, fraction = subday)
 end
 
@@ -1274,10 +1274,10 @@ function utctai(day1::AbstractFloat, day2::AbstractFloat)
 
     #  Scale from (pre-1972) UTC second to SI seconds.
     frac *= 1.0 + dlod/SECPERDAY
-
+    
     #  Today's calendar date to JD
     today1, today2 = cal2jd(year, month, day)
-
+    
     big1 ?
         (day = utc1, fraction = today1 - utc1 + today2 + frac + dat00/SECPERDAY) :
         (day = today1 - utc1 + today2 + frac + dat00/SECPERDAY, fraction = utc1)
@@ -1338,7 +1338,7 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
 function utcut1(day1::AbstractFloat, day2::AbstractFloat, dut1::AbstractFloat)
-
+    
     #  Look up TAI-UTC.
     year, month, day, frac = jd2cal(day1, day2)
 

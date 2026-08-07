@@ -11,8 +11,8 @@ Convert star position & velocity vector to catalog coordinates.
 
 # Output (Note 2)
 
- - `ra`   -- right ascension (radians)
- - `dec`   -- declination (radians)
+ - `ra`  -- right ascension (radians)
+ - `dec` -- declination (radians)
  - `pmras` -- RA proper motion (radians/year)
  - `pmdec` -- Dec proper motion (radians/year)
  - `plx`   -- parallax (arcsec)
@@ -107,8 +107,8 @@ Convert star catalog coordinates to position+velocity vector.
 
 # Input (Note 1)
 
- - `ra`   -- right ascension (radians)
- - `dec`   -- declination (radians)
+ - `ra`  -- right ascension (radians)
+ - `dec` -- declination (radians)
  - `pmras` -- RA proper motion (radians/year)
  - `pmdec` -- Dec proper motion (radians/year)
  - `plx`   -- parallax (arcseconds)

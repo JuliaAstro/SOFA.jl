@@ -68,7 +68,7 @@ end
 
 """
     gc2gd(model::Symbol, pos::AbstractVector{<:AbstractFloat})
-
+    
 Transform geocentric coordinates to geodetic using the specified
 reference ellipsoid.
 

@@ -32,7 +32,7 @@
 
 ####    Test Vector-Matrix Copy, Extend, Extract    ####
 
-@test all(abs.(SOFA.cp([0.3, 1.2, -2.5]) .- [0.3, 1.2, -2.5]) .<= 1e-12)
+@test all(abs.(SOFA.cp([0.3, 1.2, -2.5]) .- [0.3, 1.2, -2.5]) .<= 1e-12) 
 
 @test all(abs.(SOFA.cpv([[0.3, 1.2, -2.5], [-0.5, 3.1, 0.9]])[1] .- [0.3, 1.2, -2.5]) .<= 1e-12)
 

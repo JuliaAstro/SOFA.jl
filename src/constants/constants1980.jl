@@ -18,7 +18,7 @@ const θA_1976 = (-0.42665, -0.000217, -0.041833)
 
 #   IAU 1980 model
 
-#   Initial obliquity of the ecliptic
+#   Initial obliquity of the ecliptic 
 const ϵ0_1980  = 84381.448
 #   Mean obliquity of the ecliptic (from SOFA)
 const ϵ_1980   = (ϵ0_1980, -46.8150, -0.00059, 0.001813)

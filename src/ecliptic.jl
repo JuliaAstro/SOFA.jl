@@ -118,7 +118,7 @@ end
 
 """
     eqec06(day1::AbstractFloat, day2::AbstractFloat, ra::AbstractFloat, dec::AbstractFloat)
-
+    
 Transformation from ICRS equatorial coordinates to ecliptic
 coordinates (mean equinox and ecliptic of date) using IAU 2006
 precession model.
@@ -280,7 +280,7 @@ function ltecm(epoch::AbstractFloat)
 
     #  Equatorial and ecliptic poles
     @inline equ, ecl = ltpequ(epoch), ltpecl(epoch)
-
+    
     #  Create matrix
     w = vec2mat(equ)*ecl
     eqx = w/norm(w)

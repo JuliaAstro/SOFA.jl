@@ -199,11 +199,11 @@ function moon98(day1::AbstractFloat, day2::AbstractFloat)
     Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
 
     #  Arguments (radians) and derivatives (radians per Julian century).
-
+    
     #  Moon's mean longitude.
     λm  = deg2rad(rem(Polynomial(λmoon_1994...)(Δt), 360.0))
     dλm = deg2rad(Polynomial(SVector(1., 2., 3., 4.).*λmoon_1994[2:5]...)(Δt))
-
+    
     #  Moon's mean elongation.
     dm  = deg2rad(rem(Polynomial(dmoon_1998...)(Δt), 360.0))
     ddm = deg2rad(Polynomial(SVector(1., 2., 3., 4.).*dmoon_1998[2:5]...)(Δt))
@@ -438,9 +438,9 @@ function plan94(day1::AbstractFloat, day2::AbstractFloat, planet::Integer)
     #  Compute the mean elements.
     μ = 0.35953620*Δt
 
-    a = Polynomial(a_1994[planet,:]...)(Δt) + 1e-7 *
+    a = Polynomial(a_1994[planet,:]...)(Δt) + 1e-7 * 
         (sum(a_cos_1994[planet,1:8].*cos.(p_1994[planet,1:8].*μ) .+
-             a_sin_1994[planet,1:8].*sin.(p_1994[planet,1:8].*μ)) +
+             a_sin_1994[planet,1:8].*sin.(p_1994[planet,1:8].*μ)) + 
          (a_cos_1994[planet,9]*cos(p_1994[planet,9]*μ) +
           a_sin_1994[planet,9]*sin(p_1994[planet,9]*μ))*Δt)
     λ = deg2rad(Polynomial(((3600., 1., 1.).*λ_1994[planet,:])...)(Δt)/3600.) + 1e-7 *

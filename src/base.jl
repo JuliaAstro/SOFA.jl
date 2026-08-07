@@ -29,7 +29,7 @@ struct Astrom
     eh::AbstractVector{<:Real}          # Sun to observer (vector, unit)
     em::AbstractFloat                   # distance from Sun to observer (AU)
     v::AbstractVector{<:Real}           # barycentric observer velocity (vector, c)
-    bm1::AbstractFloat                  # inverse Lorenz factor, i.e., sqrt(1-v^2)
+    bm1::AbstractFloat                  # inverse Lorenz factor, i.e., sqrt(1-v^2) 
     bpn::AbstractMatrix{<:Real}         # bias-precession-nutation matrix
     along::AbstractFloat                # longitude + s' + dERA(DUT) (radians)
     phi::AbstractFloat                  # geodetic latitude (radians)

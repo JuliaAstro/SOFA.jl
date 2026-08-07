@@ -431,7 +431,7 @@ end
 Form the celestial-to-intermediate matrix for a given date given the
 bias-precession-nutation matrix.  IAU 2000.
 
-# Input
+#Input
 
  - `day1`  -- TT as Julian Date (Note 1)
  - `day2`  -- ... Julian Date
@@ -503,7 +503,7 @@ end
 Form the celestial to intermediate-frame-of-date matrix for a given
 date when the CIP X,Y coordinates are known.  IAU 2000.
 
-# Input
+#Input
 
  - `day1`  -- TT as Julian Date (Note 1)
  - `day2`  -- ... Julian Date
@@ -762,7 +762,7 @@ end
 Form the celestial to terrestrial matrix given the date, the UT1 and
 the polar motion, using the IAU 2006/2000A precession-nutation model.
 
-# Input
+#  Input
 
  - `tt1, tt2` -- TT as a 2-part Julian Date (Note 1)
  - `ut1, ut2` -- UT1 as a 2-part Julian Date (Note 1)
@@ -1886,7 +1886,7 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
     fne = mod2pi(Polynomial(lne_2003mhb...)(Δt))
     #  General accumulated precession in longitude (IERS 2003).
     fpa = Polynomial(lge_2003...)(Δt)
-
+    
     pn = pn_2000A_nutation
     pa = pa_2000A_nutation
 
@@ -2214,7 +2214,7 @@ function nut80(day1::AbstractFloat, day2::AbstractFloat)
 
     ####    Fundamental arguments
     #
-    #
+    #  
     #  The mean longitude of the Moon minus the mean longitude of
     #  the Moon's perigee.
     l = deg2rad(Polynomial(l0_1980...)(Δt)/3600.0) + 2π*rem(l0_1980t*Δt, 1.0)
@@ -4332,7 +4332,7 @@ function xy06(day1::AbstractFloat, day2::AbstractFloat)
         Polynomial( lur_2003...)(Δt),
         Polynomial( lne_2003...)(Δt),
         Polynomial( lge_2003...)(Δt)])
-
+    
     #  Polynomial part of precession-nutation
     xypr = SVector(Polynomial(cip_x_2006...)(Δt),
             Polynomial(cip_y_2006...)(Δt))
