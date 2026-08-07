@@ -674,7 +674,12 @@ end
       SOFA.pmsafe(1.0, 0.5, 1e-12, 1e-12, 5e-7, 0.0,
                   2400000.5, 50000.0, 2400000.5, 51000.0)
 
-#   ldn: the n argument limits the number of bodies (n = 0 is a no-op)
-let sc = [0.763276255802708629, 0.608633767554302260, 0.216735680569489626]
-    @test SOFA.ldn(0, SOFA.Ldbody[], sc, sc) == sc
+#   ldn: the n argument limits the number of bodies processed . n = 0 applies no
+#   deflection even when the body list is populated (Note 3: "not even for the Sun")
+let sun = SOFA.Ldbody(1.0, 6e-6, [[-0.000712174377, -0.00230478303, -0.00105865966],
+                                  [6.29235213e-6, -3.30888387e-7, -2.96486623e-7]]),
+    ob = [-0.974170437, -0.2115201, -0.0917583114],
+    sc = [-0.763276255, -0.608633767, -0.216735680]
+
+    @test SOFA.ldn(0, [sun], ob, sc) == sc
 end
