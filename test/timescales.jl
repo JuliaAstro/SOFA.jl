@@ -99,8 +99,9 @@ end
 @test_throws AssertionError SOFA.dat(2000, 13, 1, 0.0)
 @test_throws AssertionError SOFA.dat(2000, 4, 31, 0.0)
 
-#   dat: the pre-1972 drift path uses the corrected cal2jd
-#   (1.4228180 + 1 day of 0.001296 s/day drift)
+#   dat: hand-derived drift-formula check (1.4228180 + 1 day of 0.001296
+#   s/day drift); no valid dat date can reach the cal2jd century-term bug,
+#   whose windows only precede century years not divisible by 400
 @test abs(SOFA.dat(1961, 1, 2, 0.0) - 1.424114) <= 1e-9
 
 #   d2dtf: rounding to 10s or coarser on a leap-second day goes up to
