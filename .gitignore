@@ -3,3 +3,8 @@
 *.jl.mem
 docs/build
 Manifest.toml
+/benchmark/results/
+.CondaPkg/
+__pycache__/
+python_scalar.csv
+python_array.csv

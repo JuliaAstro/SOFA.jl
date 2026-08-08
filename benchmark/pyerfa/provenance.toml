@@ -1,0 +1,10 @@
+sofa_jl = "2.0.0"
+julia_threads = 1
+julia_version = "1.12.6"
+pyerfa = "2.0.1.5"
+erfa_version = "2.0.1"
+cpu = "AMD Ryzen 5 PRO 6650U with Radeon Graphics"
+date = "2026-08-08T00:35:49.807"
+numpy = "2.2.6"
+sofa_version = "20231011"
+python = "3.12.13 | packaged by conda-forge | (main, Mar  5 2026, 17:07:43) [GCC 14.3.0]"

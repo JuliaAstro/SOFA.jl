@@ -1,0 +1,25 @@
+name: Benchmark
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  # Skip intermediate builds: always.
+  # Cancel intermediate builds: only if it is a pull request build.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    # benchpkg clones the base repo directly, where fork head SHAs are not
+    # reachable; skip fork PRs instead of failing them.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - uses: MilesCranmer/AirspeedVelocity.jl@action-v1
+        with:
+          julia-version: "1"
+          # Take the suite from the PR checkout; the default freezes the
+          # script at main, which fails until the suite is merged there.
+          script: "benchmark/benchmarks.jl"
+          job-summary: "true"
