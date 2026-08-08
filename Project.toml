@@ -4,7 +4,7 @@ authors = ["Duncan Eddy <duncan.eddy@gmail.com>", "Paul Barrett <pebarrett@gmail
 version = "2.0.0"
 
 [workspace]
-projects = ["test", "docs"]
+projects = ["test", "docs", "benchmark"]
 
 [deps]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
