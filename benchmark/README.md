@@ -2,13 +2,13 @@
 
 Two independent layers:
 
-1. **Regression tracking** (`benchmarks.jl`) — a
+1. **Regression tracking** (`benchmarks.jl`): a
    [BenchmarkTools](https://github.com/JuliaCI/BenchmarkTools.jl) suite run by
    [AirspeedVelocity.jl](https://github.com/MilesCranmer/AirspeedVelocity.jl)
    on every pull request. ~29 representative benchmarks spanning cheap to
    expensive kernels in eight groups mirroring `src/`, plus the automatic
    `time_to_load` measurement.
-2. **Cross-language comparison** (`pyerfa/`) — SOFA.jl vs
+2. **Cross-language comparison** (`pyerfa/`): SOFA.jl vs.
    [pyerfa](https://github.com/liberfa/pyerfa), the numpy ufunc binding of the
    ERFA C library. ERFA is the relicensed IAU SOFA C code, and the pinned
    `pyerfa==2.0.1.5` bundles liberfa 2.0.1, derived from **SOFA release
@@ -18,9 +18,11 @@ Two independent layers:
 ## CI
 
 `.github/workflows/Benchmark.yml` runs the suite on the PR head and on `main`
-and writes a comparison table to the GitHub Actions **job summary** (no PR
-comments, no extra permissions). A regression shows up as a time ratio > 1
-with confidence intervals.
+and posts the comparison tables as a PR comment (updated in place on each
+push; requires the `pull-requests: write` permission granted in the workflow).
+A regression shows up as a time ratio > 1 with confidence intervals. Fork PRs
+are skipped: benchpkg cannot reach fork head SHAs and their read-only token
+could not post the comment.
 
 ## Running the suite locally
 
@@ -28,7 +30,7 @@ Quick run with a summary table (uses this directory's environment, which is a
 workspace member — the parent SOFA checkout is used automatically):
 
 ```sh
-julia --project=benchmark -e 'using Pkg; Pkg.instantiate()'   # first time
+julia --project=benchmark -e 'using Pkg; Pkg.instantiate()'
 julia --project=benchmark benchmark/benchmarks.jl
 ```
 
@@ -37,7 +39,7 @@ including uncommitted changes, followed by a summary of the committed pyerfa
 comparison CSVs (when present):
 
 ```sh
-julia -e 'using Pkg; Pkg.add("AirspeedVelocity")'             # global, once
+julia -e 'using Pkg; Pkg.add("AirspeedVelocity")'
 JULIA_LOAD_PATH="benchmark:@v#.#:@stdlib" julia benchmark/table.jl
 ```
 

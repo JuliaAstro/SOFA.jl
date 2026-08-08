@@ -9,11 +9,17 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 
+# Needed to post/update the benchmark results comment on the PR.
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   benchmark:
     runs-on: ubuntu-latest
     # benchpkg clones the base repo directly, where fork head SHAs are not
-    # reachable; skip fork PRs instead of failing them.
+    # reachable (and fork PRs only get a read-only token, so the results
+    # comment could not be posted either); skip fork PRs instead of failing.
     if: github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - uses: MilesCranmer/AirspeedVelocity.jl@action-v1
@@ -22,4 +28,3 @@ jobs:
           # Take the suite from the PR checkout; the default freezes the
           # script at main, which fails until the suite is merged there.
           script: "benchmark/benchmarks.jl"
-          job-summary: "true"
