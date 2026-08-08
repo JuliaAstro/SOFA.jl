@@ -440,3 +440,12 @@
 
 @test all(abs.(values(SOFA.xys06a(2400000.5, 53736.0)) .-
                (0.5791308482835292617e-3, 0.4020580099454020310e-4, -0.1220032294164579896e-7)) .<= 1e-14)
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   nut00a: Float64-typed phase buffers demoted BigFloat dates
+let nF = SOFA.nut00a(2400000.5, 53736.0),
+    nB = SOFA.nut00a(big"2400000.5", big"53736.0")
+    @test nB.ψ isa BigFloat && nB.ϵ isa BigFloat
+    @test abs(nB.ψ - nF.ψ) <= 1e-16 && abs(nB.ϵ - nF.ϵ) <= 1e-16
+end

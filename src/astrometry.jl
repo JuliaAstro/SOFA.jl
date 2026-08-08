@@ -1961,7 +1961,8 @@ function aticq(ri::AbstractFloat, di::AbstractFloat, a::Astrom)
 	#  Bias-precession-nutation, giving GCRS proper direction.
 	ppr = a.bpn'*s2c(ri, di)
 	#  Aberration, giving GCRS natural direction.
-	d, pnat, pco = zeros(Float64, 3), zeros(Float64, 3), zeros(Float64, 3)
+    T = eltype(ppr)
+    d, pnat, pco = zeros(T, 3), zeros(T, 3), zeros(T, 3)
     for j ∈ 1:2
 		w = ppr .- d
 		bf = copy(w) ./ norm(w)
@@ -1971,7 +1972,7 @@ function aticq(ri::AbstractFloat, di::AbstractFloat, a::Astrom)
 		pnat .= copy(w) ./ norm(w)
 	end
 	#  Light deflection by the Sun, giving BCRS coordinate direction.
-	d = zeros(Float64, 3)
+    d = zeros(T, 3)
     for j ∈ 1:5
 		w = pnat .- d
 		bf = copy(w) ./ norm(w)
@@ -2057,7 +2058,8 @@ function aticqn(ri::AbstractFloat, di::AbstractFloat, a::Astrom, n::Int,
 	#  Bias-precession-nutation, giving GCRS proper direction.
 	ppr = a.bpn'*s2c(ri, di)
 	#  Aberration, giving GCRS natural direction.
-	d, pnat, pco = zeros(Float64, 3), zeros(Float64, 3), zeros(Float64, 3)
+    T = eltype(ppr)
+    d, pnat, pco = zeros(T, 3), zeros(T, 3), zeros(T, 3)
 	for j ∈ 1:2
 		bf = (ppr .- d) ./ norm(ppr .- d)
 		af = ab(bf, a.v, a.em, a.bm1)
@@ -2065,7 +2067,7 @@ function aticqn(ri::AbstractFloat, di::AbstractFloat, a::Astrom, n::Int,
 		pnat .= (ppr .- d) ./ norm(ppr .- d)
 	end
 	#  Light deflection, giving BCRS coordinate direction.
-	d = zeros(Float64, 3)
+    d = zeros(T, 3)
 	for j ∈ 1:5
 		bf = (pnat .- d) ./ norm(pnat .- d)
 		af = ldn(n, b, a.eb, bf)
@@ -2747,8 +2749,8 @@ Astronomical Almanac, 3rd ed., University Science Books (2013).
 Klioner, Sergei A., "A practical relativistic model for micro-
 arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 """
-function ld(bm::F, p::V, q::W, e::X, em::F, dlim::F) where
-{F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
+function ld(bm::AbstractFloat, p::V, q::W, e::X, em::AbstractFloat, dlim::AbstractFloat) where
+{V <: AbstractVector{<:AbstractFloat},
 	W <: AbstractVector{<:AbstractFloat}, X <: AbstractVector{<:AbstractFloat}}
 	#  2*G*bm/(em*c^2*(q*(q+e))).
 	#  Apply the deflection.

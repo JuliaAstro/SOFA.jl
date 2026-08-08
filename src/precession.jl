@@ -1841,7 +1841,7 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
         arg4 = deg2rad(rem(d, ARCSECPER2PI) / 3600)
         arg5 = deg2rad(rem(ω, ARCSECPER2PI) / 3600)
     end
-    ϕl = Vector{Float64}(undef, size(ln, 1))
+    ϕl = Vector{typeof(arg1)}(undef, size(ln, 1))
     @inbounds for i in axes(ln, 1)
         angle = ln[i,1] * arg1 + ln[i,2] * arg2 + ln[i,3] * arg3 + ln[i,4] * arg4 + ln[i,5] * arg5
         ϕl[i] = mod2pi(angle)
@@ -1891,7 +1891,7 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
     pa = pa_2000A_nutation
 
     planet_args = (l00, f00, d00, ω00, fme, fve, fea, fma, fju, fsa, fur, fne, fpa)
-    ϕp = Vector{Float64}(undef, size(pn, 1))
+    ϕp = Vector{eltype(planet_args)}(undef, size(pn, 1))
     @inbounds for i in axes(pn, 1)
         angle = zero(eltype(planet_args))
         for j in 1:length(planet_args)
