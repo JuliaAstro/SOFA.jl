@@ -27,7 +27,8 @@ could not post the comment.
 The workflow also runs the pyerfa comparison fresh on the PR head
 (`compare.jl` + `comment.jl`) and posts it as a second comment, likewise
 updated in place. Those CI numbers come from a shared runner and are
-indicative; the committed CSVs below remain the quiet-machine reference.
+indicative; run `compare.jl` on a quiet machine for reference-quality
+numbers.
 
 ## Running the suite locally
 
@@ -83,14 +84,15 @@ system liberfa and void the version contract. The script hard-fails if
 `erfa.version.sofa_version != "20231011"` and cross-validates numerical results
 on both sides before timing anything.
 
-Committed outputs (regenerate on a quiet machine, then commit together):
+Outputs, written next to the script (gitignored — CI regenerates them per PR
+and posts them as a comment; run locally for reference-quality numbers):
 
 - `pyerfa/scalar_comparison.csv` — scalar call, name for name: SOFA.jl vs
   `erfa.<name>` (checked wrapper, what users call) vs `erfa.ufunc.<name>` (raw
   kernel). Ratios > 1 mean SOFA.jl is faster.
 - `pyerfa/array_comparison.csv` — Julia broadcast vs erfa ufunc over arrays of
   10² to 10⁶ elements: the per-element amortization story.
-- `pyerfa/provenance.toml` — versions, CPU, and date of the committed numbers.
+- `pyerfa/provenance.toml` — versions, CPU, and date of the numbers.
 
 Methodology: single-threaded on both sides (`julia -t 1`, `OPENBLAS/OMP/MKL/
 NUMEXPR_NUM_THREADS=1`); Julia timed with Chairmarks (built-in warmup), Python

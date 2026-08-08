@@ -5,7 +5,8 @@
 #     julia -t 1 --project=benchmark/pyerfa benchmark/pyerfa/compare.jl
 #
 # Writes scalar_comparison.csv, array_comparison.csv, and provenance.toml
-# next to this script (committed); the raw Python-side CSVs are gitignored.
+# next to this script (gitignored, like the raw Python-side CSVs): CI
+# regenerates them per PR, and local runs produce reference numbers.
 #
 # pyerfa's pip wheel bundles liberfa 2.0.1, which is derived from SOFA
 # release 20231011 — the same release SOFA.jl v2 implements. The provenance
@@ -53,7 +54,7 @@ end
     "numpy $(prov["numpy"]) loaded; CondaPkg pins 2.2 — is a user-site numpy leaking into sys.path?"
 end
 # provenance.toml is written at the very end, after both CSVs, so a partial
-# run can never pair fresh metadata with stale committed numbers.
+# run can never pair fresh metadata with stale numbers from an earlier run.
 
 # ── Cross-validation: both sides must agree before timing means anything ────
 

@@ -89,5 +89,5 @@ end
 println(io, "*Julia $(prov["julia_version"]), numpy $(prov["numpy"]), ",
         "single-threaded, $(prov["cpu"]), $(prov["date"]). ",
         "Timings from a shared CI runner — treat ratios as indicative; ",
-        "the committed CSVs in `benchmark/pyerfa/` remain the ",
-        "quiet-machine reference.*")
+        "run `benchmark/pyerfa/compare.jl` on a quiet machine for ",
+        "reference-quality numbers.*")

@@ -8,3 +8,6 @@ Manifest.toml
 __pycache__/
 python_scalar.csv
 python_array.csv
+scalar_comparison.csv
+array_comparison.csv
+provenance.toml
