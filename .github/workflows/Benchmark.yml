@@ -22,12 +22,18 @@ jobs:
     # comment could not be posted either); skip fork PRs instead of failing.
     if: github.event.pull_request.head.repo.full_name == github.repository
     steps:
+      # job-summary mode keeps the action from posting its own comment; we
+      # post one merged comment below instead (ASV results + pyerfa). The
+      # action leaves its rendered comment body behind as body.md in the
+      # workspace — an implementation detail of action-v1 worth rechecking
+      # on action upgrades.
       - uses: MilesCranmer/AirspeedVelocity.jl@action-v1
         with:
           julia-version: "1"
           # Take the suite from the PR checkout; the default freezes the
           # script at main, which fails until the suite is merged there.
           script: "benchmark/benchmarks.jl"
+          job-summary: "true"
 
       # The action above leaves the PR head checked out and Julia on PATH;
       # reuse both for a fresh pyerfa comparison run on this PR.
@@ -42,21 +48,22 @@ jobs:
           julia -t 1 --project=benchmark/pyerfa -e 'using Pkg; Pkg.instantiate()'
           julia -t 1 --project=benchmark/pyerfa benchmark/pyerfa/compare.jl
           julia benchmark/pyerfa/comment.jl > pyerfa-comment.md
+          cat body.md pyerfa-comment.md > combined-comment.md
         env:
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
 
-      - name: Find pyerfa comment
+      - name: Find benchmark comment
         uses: peter-evans/find-comment@v4
-        id: find-pyerfa
+        id: find-benchmark
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: "github-actions[bot]"
-          body-includes: "SOFA.jl vs pyerfa"
+          body-includes: "Benchmark Results (Julia"
 
-      - name: Create or update pyerfa comment
+      - name: Create or update benchmark comment
         uses: peter-evans/create-or-update-comment@v5
         with:
-          comment-id: ${{ steps.find-pyerfa.outputs.comment-id }}
+          comment-id: ${{ steps.find-benchmark.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
-          body-path: pyerfa-comment.md
+          body-path: combined-comment.md
           edit-mode: replace

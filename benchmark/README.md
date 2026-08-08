@@ -25,10 +25,10 @@ are skipped: benchpkg cannot reach fork head SHAs and their read-only token
 could not post the comment.
 
 The workflow also runs the pyerfa comparison fresh on the PR head
-(`compare.jl` + `comment.jl`) and posts it as a second comment, likewise
-updated in place. Those CI numbers come from a shared runner and are
-indicative; run `compare.jl` on a quiet machine for reference-quality
-numbers.
+(`compare.jl` + `comment.jl`) and appends it to the same comment, below the
+AirspeedVelocity tables (the ASV results additionally appear in the Actions
+job summary). Those CI numbers come from a shared runner and are indicative;
+run `compare.jl` on a quiet machine for reference-quality numbers.
 
 ## Running the suite locally
 

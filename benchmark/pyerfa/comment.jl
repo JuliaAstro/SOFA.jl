@@ -42,8 +42,8 @@ end
 prov = TOML.parsefile(joinpath(DIR, "provenance.toml"))
 io = stdout
 
-# The first line doubles as the marker the workflow's find-comment step
-# searches for; keep it stable.
+# Section heading: in CI this body is appended to the AirspeedVelocity
+# comment body (body.md) to form one merged PR comment.
 println(io, "## SOFA.jl vs pyerfa")
 println(io)
 sha = get(ENV, "PR_HEAD_SHA", "")
