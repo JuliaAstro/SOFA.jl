@@ -24,6 +24,11 @@ A regression shows up as a time ratio > 1 with confidence intervals. Fork PRs
 are skipped: benchpkg cannot reach fork head SHAs and their read-only token
 could not post the comment.
 
+The workflow also runs the pyerfa comparison fresh on the PR head
+(`compare.jl` + `comment.jl`) and posts it as a second comment, likewise
+updated in place. Those CI numbers come from a shared runner and are
+indicative; the committed CSVs below remain the quiet-machine reference.
+
 ## Running the suite locally
 
 Quick run with a summary table (uses this directory's environment, which is a
