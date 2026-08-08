@@ -15,14 +15,14 @@ date) to ICRS RA,Dec, using the IAU 2006 precession model.
 
 # Output
 
- - `ras`   -- ICRS right ascension (radians)
+ - `ra`   -- ICRS right ascension (radians)
  - `dec`   -- ICRS declination (radians)
 
 # Examples
 
 ```jldoctest
 julia> eceq06(2456165.5, 0.401182685, 5.1, -0.9)
-(ras = 5.533459733613627, dec = -1.2465429325544806)
+(ra = 5.533459733613627, dec = -1.2465429325544806)
 ```
 
 # Note
@@ -56,8 +56,8 @@ julia> eceq06(2456165.5, 0.401182685, 5.1, -0.9)
    than 25 mas) to disturb this classical picture.
 """
 function eceq06(day1::AbstractFloat, day2::AbstractFloat, lon::AbstractFloat, lat::AbstractFloat)
-    @inline ras, dec = c2s(ecm06(day1, day2)'*s2c(lon, lat))
-    NamedTuple{(:ras, :dec)}((anp(ras), anpm(dec)))
+    @inline ra, dec = c2s(ecm06(day1, day2)'*s2c(lon, lat))
+    (ra = anp(ra), dec = anpm(dec))
 end
 
 """
@@ -117,7 +117,7 @@ function ecm06(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    eqec06(day1::AbstractFloat, day2::AbstractFloat, ras::AbstractFloat, dec::AbstractFloat)
+    eqec06(day1::AbstractFloat, day2::AbstractFloat, ra::AbstractFloat, dec::AbstractFloat)
     
 Transformation from ICRS equatorial coordinates to ecliptic
 coordinates (mean equinox and ecliptic of date) using IAU 2006
@@ -127,7 +127,7 @@ precession model.
 
  - `day1`  -- TT as a 2-part Julian date (Note 1)
  - `day2`  -- ... Julian date (Note 1)
- - `ras`   -- ICRS right ascension (radians)
+ - `ra`   -- ICRS right ascension (radians)
  - `dec`   -- ICRS declination (radians)
 
 # Output
@@ -172,8 +172,8 @@ julia> eqec06(1234.5, 2440000.5, 1.234, 0.987)
    equinox and ecliptic of date), with only frame bias (always less
    than 25 mas) to disturb this classical picture.
 """
-function eqec06(day1::AbstractFloat, day2::AbstractFloat, ras::AbstractFloat, dec::AbstractFloat)
-    @inline lon, lat = c2s(ecm06(day1, day2)*s2c(ras, dec))
+function eqec06(day1::AbstractFloat, day2::AbstractFloat, ra::AbstractFloat, dec::AbstractFloat)
+    @inline lon, lat = c2s(ecm06(day1, day2)*s2c(ra, dec))
     (lon = anp(lon), lat = anpm(lat))
 end
 
@@ -191,7 +191,7 @@ date) to ICRS RA,Dec, using a long-term precession model.
 
 # Output
 
- - `ras`   -- ICRS right ascension (radians)
+ - `ra`   -- ICRS right ascension (radians)
  - `dec`   -- ICRS declination (radians)
 
 # Note
@@ -222,8 +222,8 @@ expressions, valid for long time intervals (Corrigendum),
 Astron.Astrophys. 541, C1
 """
 function lteceq(epoch::AbstractFloat, lon::AbstractFloat, lat::AbstractFloat)
-    @inline ras, dec = c2s(ltecm(epoch)'*s2c(lon, lat))
-    (RA = anp(ras), Dec = anpm(dec))
+    @inline ra, dec = c2s(ltecm(epoch)'*s2c(lon, lat))
+    (ra = anp(ra), dec = anpm(dec))
 end
 
 """
@@ -282,12 +282,13 @@ function ltecm(epoch::AbstractFloat)
     @inline equ, ecl = ltpequ(epoch), ltpecl(epoch)
     
     #  Create matrix
-    eqx = vec2mat(equ)*ecl/norm(vec2mat(equ)*ecl)
+    w = vec2mat(equ)*ecl
+    eqx = w/norm(w)
     vcat(eqx', (vec2mat(ecl)*eqx)', ecl')*(I + deg2rad(1/3600)*vec2mat(bias))
 end
 
 """
-    lteqec(epoch::AbstractFloat, ras::AbstractFloat, dec::AbstractFloat)
+    lteqec(epoch::AbstractFloat, ra::AbstractFloat, dec::AbstractFloat)
 
 Transformation from ICRS equatorial coordinates to ecliptic
 coordinates (mean equinox and ecliptic of date) using a long-term
@@ -296,7 +297,7 @@ precession model.
 # Input
 
  - `epoch` -- Julian epoch (TT)
- - `ras`   -- ICRS right ascension (radians)
+ - `ra`   -- ICRS right ascension (radians)
  - `dec`   -- ICRS declination (radians)
 
 # Output
@@ -331,7 +332,7 @@ Vondrak, J., Capitaine, N. and Wallace, P., 2012, New precession
 expressions, valid for long time intervals (Corrigendum),
 Astron.Astrophys. 541, C1
 """
-function lteqec(epoch::AbstractFloat, ras::AbstractFloat, dec::AbstractFloat)
-    @inline lon, lat = c2s(ltecm(epoch)*s2c(ras, dec))
+function lteqec(epoch::AbstractFloat, ra::AbstractFloat, dec::AbstractFloat)
+    @inline lon, lat = c2s(ltecm(epoch)*s2c(ra, dec))
     (lon = anp(lon), lat = anpm(lat))
 end

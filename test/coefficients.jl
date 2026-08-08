@@ -27,3 +27,12 @@
 @test abs(SOFA.faur03(0.8) - 5.180636450180413523) <= 1e-12
 
 @test abs(SOFA.fave03(0.8) - 3.424900460533758000) <= 1e-12
+
+####    Regression tests (v2.0.0 pre-release review)    ####
+
+#   fapa03: no 2pi reduction (accumulated general precession), so
+#   pre-J2000 dates give negative values
+@test abs(SOFA.fapa03(-1.0) + 0.02437636309) <= 1e-12
+
+#   planetary longitudes use fmod semantics (sign preserved for t < 0)
+@test SOFA.fae03(-10.0) < 0.0

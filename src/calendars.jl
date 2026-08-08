@@ -3,6 +3,8 @@
 """
 	cal2jd(year::Integer, month::Integer, day::Integer)
 
+Gregorian Calendar to Julian Date.
+
 # Input
 
  - `year`  -- year in Gregorian calendar (Note 1)
@@ -26,7 +28,7 @@ julia> cal2jd(2003, 6, 1)
 1) The algorithm used is valid from -4800 March 1, but this
    implementation rejects dates before -4799 January 1.
 
-2) The Julian Date is returned in two pieces, in the usual ERFA
+2) The Julian Date is returned in two pieces, in the usual SOFA
    manner, which is designed to preserve time resolution.  The Julian
    Date is available as a single number by adding MJD0 and MJD.
 
@@ -67,7 +69,7 @@ julia> epb(2415019.8135, 30103.18648)
 
 # Note
 
-The Julian Date is supplied in two pieces, in the usual ERFA manner,
+The Julian Date is supplied in two pieces, in the usual SOFA manner,
 which is designed to preserve time resolution.  The Julian Date is
 available as a single number by adding day1 and day2.  The maximum
 resolution is achieved if day1 is 2451545.0 (J2000.0).
@@ -96,7 +98,7 @@ Besselian Epoch to Julian Date.
 
 # Note
 
-The Julian Date is returned in two pieces, in the usual ERFA manner,
+The Julian Date is returned in two pieces, in the usual SOFA manner,
 which is designed to preserve time resolution.  The Julian Date is
 available as a single number by adding MJD0 and MJD.
 
@@ -124,7 +126,7 @@ Julian Date to Julian Epoch.
 
 # Note
 
-The Julian Date is supplied in two pieces, in the usual ERFA manner,
+The Julian Date is supplied in two pieces, in the usual SOFA manner,
 which is designed to preserve time resolution.  The Julian Date is
 available as a single number by adding day1 and day2.  The maximum
 resolution is achieved if day1 is 2451545.0 (J2000.0).
@@ -160,7 +162,7 @@ julia> epj2jd(1996.8)
 
 # Note
 
-The Julian Date is returned in two pieces, in the usual ERFA manner,
+The Julian Date is returned in two pieces, in the usual SOFA manner,
 which is designed to preserve time resolution.  The Julian Date is
 available as a single number by adding MJD0 and MJD.
 
@@ -263,13 +265,13 @@ function jd2cal(day1::Real, day2::Real)
 	end
 
 	# Correct for fraction that is >= 1.0 when rounded to float
-	if frac - 1.0 >= -typemin(typeof(frac))/4.0
+    if frac - 1.0 >= -eps(typeof(frac))/4.0
 		# Compensated summation: assume that |s| <= 1.0
 		t = s - 1.0
 		cs += (s - t) - 1.0
 		s = t
 		frac = s + cs
-		if -typemin(typeof(frac))/2.0 < frac
+        if -eps(typeof(frac))/2.0 < frac
 			day += 1
 			frac = maximum((frac, 0.0))
 		end
@@ -334,11 +336,11 @@ formatting messages: rounded to a specified precision.
 function jdcalf(ndp::Integer, day1::Real, day2::Real)
 
 	# Denominator of fraction (e.g., 100 for 2 decimal places)
-	jj::Integer, denom::Float64 = 0 <= ndp <= 9 ? (0, 10.0^ndp) : (1, 1.0)
+    denom::Float64 = 0 <= ndp <= 9 ? 10.0^ndp : 1.0
 
 	d1, d2 = abs(day1) >= abs(day2) ? (day1, day2) : (day2, day1)
 
-	# Re-align the midnight (without roundng error)
+    # Re-align the midnight (without rounding error)
 	d1 -= 0.5
 
 	# Separate day and fraction (as precisely as possible)
@@ -352,14 +354,14 @@ function jdcalf(ndp::Integer, day1::Real, day2::Real)
 	djd += dd
 
 	# Round the total fraction to the specified number of places
-	rf = round(ff*denom)/denom
+    rf = round(ff*denom, RoundNearestTiesAway)/denom
 
 	# Re-align to noon
 	djd += 0.5
 
 	# Convert to Gregorian calendar
 	year::Integer, month::Integer, day::Integer, fraction::Float64 = jd2cal(djd, rf)
-	# fraction = round(ff * denom)::Integer
 
-	(year = year, month = month, day = day, fraction = convert(Integer, round(ff * denom)))
+    (year = year, month = month, day = day,
+     fraction = convert(Integer, round(fraction*denom, RoundNearestTiesAway)))
 end

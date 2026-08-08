@@ -7,7 +7,7 @@ Decompose radians into degrees, arcminutes, arcseconds, and fraction.
 
 # Input
 
- - `npd`   --number of useful digits
+ - `ndp`   -- number of useful digits
  - `angle` -- angle in radians
 
 # Output
@@ -18,7 +18,7 @@ Decompose radians into degrees, arcminutes, arcseconds, and fraction.
 
 ```jldoctest
 julia> a2af(4, 2.345)
-('+', 134, 21, 30, 9706)
+(sign = '+', degree = 134, minute = 21, second = 30, fraction = 9706)
 ```
 
 # Note
@@ -49,12 +49,12 @@ julia> a2af(4, 2.345)
 
 3) The absolute value of angle may exceed 2pi.  In cases where it does
    not, it is up to the caller to test for and handle the case where
-   days is very nearly 2pi and rounds up to 2pi and rounds up to 360
-   degree, by testing for dms[0]=360 and setting dms[0-3] to zero.
+   angle is very nearly 2pi and rounds up to 360 degrees, by testing
+   for dms[0]=360 and setting dms[0-3] to zero.
 """
 function a2af(ndp::Integer, angle::Real)
-    NamedTuple{(:sign, :degree, :minute, :second, :fraction)}
-    (values(d2tf(ndp, angle*15/2/pi)))
+    NamedTuple{(:sign, :degree, :minute, :second, :fraction)}(
+        values(d2tf(ndp, angle*15/2/pi)))
 end
 
 """
@@ -64,7 +64,7 @@ Decompose radians into hours, minutes, seconds, and fraction.
 
 # Input
 
- - `npd`   -- number of useful digits
+ - `ndp`   -- number of useful digits
  - `angle` -- angle in radians
 
 # Output
@@ -98,8 +98,8 @@ Decompose radians into hours, minutes, seconds, and fraction.
 
 3) The absolute value of angle may exceed 2pi.  In cases where it does
    not, it is up to the caller to test for and handle the case where
-   days is very nearly 2pi and rounds up to 2pi and rounds up to 24
-   hours, by testing for ihmsf[0]=24 and setting ihmsf[0-3] to zero.
+   angle is very nearly 2pi and rounds up to 24 hours, by testing for
+   ihmsf[0]=24 and setting ihmsf[0-3] to zero.
 """
 function a2tf(ndp::Integer, angle::Real)
     NamedTuple{(:sign, :hour, :minute, :second, :fraction)}(d2tf(ndp, angle/2/pi))
@@ -130,13 +130,9 @@ julia> af2a('-', 45, 13, 27.2)
 
 # Note
 
-1) The result is computed even if any of the range checks fail.
-
-2) Negative ideg, iamin and/or asec produce a warning status, but the
-   absolute value is used in the conversion.
-
-3) If there are multiple errors, the status value reflects only the
-   first, the smallest taking precedence.
+1) Unlike the SOFA C function, which computes a result even when the
+   range checks fail (flagging a warning status), this function throws
+   an AssertionError if any argument is out of range.
 """
 function af2a(sign::Char, degree::Integer, minute::Integer, second::Real)
     @assert 0   <= degree < 360   "degree out of range [0-359]."
@@ -151,7 +147,7 @@ end
 """
     anp(angle::Real)
 
-Normalize angle into the range 0 <= a < 2p.
+Normalize angle into the range 0 <= a < 2pi.
 
 # Input
 
@@ -187,7 +183,8 @@ Normalize angle into the range -pi <= a < +pi
  - `angle` -- angle in radians in range +/-pi
 """
 function anpm(angle::Real)
-    rem2pi(angle, RoundNearest)
+    w = rem(angle, 2π)
+    abs(w) >= float(π) ? w - copysign(2π, angle) : w
 end
 
 """
@@ -197,7 +194,7 @@ Decompose days to sign, hours, minutes, seconds, fraction.
 
 # Input
 
- - `npd`   -- number of usefule digits
+ - `ndp`   -- number of useful digits
  - `day`   -- interval in days
 
 # Output
@@ -240,7 +237,7 @@ function d2tf(ndp::Integer, day::Real)
     a = SECPERDAY * abs(day)
     if ndp < 0
         rs = prod(n == 2 || n == 4 ? 6 : 10 for n=1:-ndp)
-        a = rs * round(a/rs)
+        a = rs * round(a/rs, RoundNearestTiesAway)
     else
         rs = 10^ndp
     end
@@ -248,7 +245,7 @@ function d2tf(ndp::Integer, day::Real)
     rh, rm = 3600.0 * rs, 60.0 * rs
 
     sn = day >= 0.0 ? '+' : '-'
-    a  = round(rs * a)
+    a  = round(rs * a, RoundNearestTiesAway)
     ah = convert(Integer, trunc(a/rh))
     a -= ah*rh
     am = convert(Integer, trunc(a/rm))
@@ -277,13 +274,9 @@ Convert hours, minutes, seconds to radians.
 
 # Note
 
-1) The result is computed even if any of the range checks fail.
-
-2) Negative ihour, imin and/or sec produce a warning status, but the
-   absolute value is used in the conversion.
-
-3) If there are multiple errors, the status value reflects only the
-   first, the smallest taking precedence.
+1) Unlike the SOFA C function, which computes a result even when the
+   range checks fail (flagging a warning status), this function throws
+   an AssertionError if any argument is out of range.
 """
 function tf2a(sign::Char, hour::Integer, minute::Integer, second::Real)
     @assert 0   <= hour   <   24  "hour out of range [0-23]."
@@ -312,13 +305,9 @@ Convert hours, minutes, seconds to days.
 
 # Note
 
-1) The result is computed even if any of the range checks fail.
-
-2) Negative ihour, imin and/or sec produce a warning status, but the
-   absolute value is used in the conversion.
-
-3) If there are multiple errors, the status value reflects only the
-   first, the smallest taking precedence.
+1) Unlike the SOFA C function, which computes a result even when the
+   range checks fail (flagging a warning status), this function throws
+   an AssertionError if any argument is out of range.
 """
 function tf2d(sign::Char, hour::Integer, minute::Integer, second::Real)
     @assert 0   <= hour   <   24  "hour out of range [0-23]."
@@ -595,6 +584,11 @@ Transpose an r-matrix.
 # Note
 
 1) It is permissible for r and rt to be the same array.
+
+2) The name `tr` follows the SOFA C library (iauTr) but collides with
+   `LinearAlgebra.tr` (the matrix trace).  When both `SOFA` and
+   `LinearAlgebra` are loaded, an unqualified `tr` is ambiguous and
+   must be written as `SOFA.tr` or `LinearAlgebra.tr`.
 """
 tr(r::AbstractMatrix{<:Real}) = r'
 
@@ -713,7 +707,7 @@ Express an r-matrix as an r-vector.
    some arbitrary axis called the Euler axis.  The "rotation vector"
    returned by this function has the same direction as the Euler axis,
    and its magnitude is the angle in radians.  (The magnitude and
-   direction can be separated by means of the function eraPn.)
+   direction can be separated by means of the function pn.)
 
 2) If r is null, so is the result.  If r is not a rotation matrix the
    result is undefined; r must be proper (i.e. have a positive
@@ -746,7 +740,7 @@ Form the r-matrix corresponding to a given r-vector.
 
 1) A rotation matrix describes a rotation through some angle about
    some arbitrary axis called the Euler axis.  The "rotation vector"
-   supplied to This function has the same direction as the Euler axis,
+   supplied to this function has the same direction as the Euler axis,
    and its magnitude is the angle in radians.
 
 2) If w is null, the identity matrix is returned.
@@ -927,7 +921,7 @@ P-vector to spherical coordinates.
 
 ```jldoctest
 julia> c2s([100.0, -50.0, 25.0])
-(-0.4636476090008061, 0.21998797739545944)
+(θ = -0.4636476090008061, ϕ = 0.21998797739545944)
 ```
 
 # Note
@@ -940,9 +934,9 @@ julia> c2s([100.0, -50.0, 25.0])
 """
 function c2s(pos::AbstractVector{<:Real})
     zerot = zero(eltype(pos))
-    NamedTuple{(:θ, :ϕ)}
+    NamedTuple{(:θ, :ϕ)}(
     ((pos[1]^2 + pos[2]^2) == zerot ? zerot : atan(pos[2], pos[1]),
-      pos[3] == zerot ? zerot : atan(pos[3], sqrt(pos[1]^2 + pos[2]^2)))
+         pos[3] == zerot ? zerot : atan(pos[3], sqrt(pos[1]^2 + pos[2]^2))))
 end
 
 """
@@ -1170,8 +1164,8 @@ Convert a p-vector into modulus and unit vector.
 """
 function pn(p::AbstractVector{<:Real})
     zerot = zero(eltype(p))
-    NamedTuple{(:modulus, :unit)}
-    (norm(p) == 0 ? (zerot, SVector{3}(zerot, zerot, zerot)) :
+    NamedTuple{(:modulus, :unit)}(
+        norm(p) == 0 ? (zerot, SVector{3}(zerot, zerot, zerot)) :
         (norm(p), p./norm(p)))
 end
 

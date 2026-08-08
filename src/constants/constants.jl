@@ -33,7 +33,7 @@ const DAYPERYEAR = 365.25 # day
 const TT_MINUS_TAI = 32.184 # second
 
 #   L_G = 1 - d(TT)/d(TCG)
-const ELG    = 6.969290134e-10 # second
+const ELG    = 6.969290134e-10 # dimensionless
 
 #   TDB at TAI 1977/01/01
 const TDB0   = -6.55e-5 # second
@@ -41,7 +41,7 @@ const TDB0   = -6.55e-5 # second
 #   L_B = 1 - d(TDB)/d(TCB)
 const ELB    = 1.550519768e-8
 
-#   Gravitational constant
+#   Gaussian gravitational constant (radians/day)
 const GK = 0.017202098950
 
 #   Schwarzschild radius of the Sun

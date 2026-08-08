@@ -1,6 +1,6 @@
 ####   Test Calendar functions   ####
 
-#   Calender to Julian Date
+#   Calendar to Julian Date
 @test all(abs.(values(SOFA.cal2jd(2003, 06, 01)) .- (2400000.5, 52791.0)) .<= (0., 0.))
 
 #   Julian Date to Besselian Epoch
@@ -20,3 +20,19 @@
 
 #   Julian Date to Gregorian calendar
 @test all(abs.(values(SOFA.jdcalf(4, 2400000.5, 50123.9999)) .- (1996, 2, 10, 9999)) .== (0, 0, 0, 0))
+
+####    Regression tests (v2.0.0 pre-release review)    ####
+
+#   cal2jd: century term was (year + month + 4900)/100, one day off for
+#   January/February dates
+@test SOFA.cal2jd(1900, 1, 1)[:mjd] == 15020
+@test SOFA.cal2jd(2098, 3, 1)[:mjd] == 87398
+
+#   jd2cal: the fraction-rounds-to-1.0 guards were dead code (typemin
+#   instead of eps); the day must roll over and the fraction become 0
+@test all(values(SOFA.jd2cal(2451545.0, 0.49999999999999994)) .==
+          (2000, 1, 2, 0.0))
+
+#   jdcalf: the returned fraction must come from jd2cal after any day
+#   rollover (used to return fraction = denominator)
+@test all(values(SOFA.jdcalf(2, 2400000.5, 50123.9999)) .== (1996, 2, 11, 0))

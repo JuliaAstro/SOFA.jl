@@ -1,4 +1,4 @@
-const IYV = 2023  # release year of the original eraDat function from the SOFA library
+const IYV = 2023  # release year of the original dat function from the SOFA library
 
 """
     Drift second parameters

@@ -15,7 +15,6 @@ const F_2000B = (335779.526232, 1739527262.8478)
 # Mean longitude of the ascending node of the Moon in 0.1 μas
 const Ω_2000B = (450160.398036, -6962890.5431)
 
-# Possibly iau_2000B_lunisolar_nutation_series = iau_2000a_lunisolar_nutation_series[1:77]
 const iau_2000B_nutation_lunisolar_series = [
     #  1-10
     PeriodicTerms([ 0, 0, 0, 0,1],[-172064161.0, -174666.0, 33386.0, 92052331.0, 9086.0, 15377.0]),

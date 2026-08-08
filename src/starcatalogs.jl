@@ -1,7 +1,7 @@
 #### Astronomy / Star Catalogs
 
 """
-    fk425(ra::AbstractFloat, ded::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat, plx::AbstractFloat,
+    fk425(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat, plx::AbstractFloat,
           rv::AbstractFloat)
 
 Convert B1950.0 FK4 star catalog data to J2000.0 FK5.
@@ -13,7 +13,7 @@ This function converts a star's catalog data from the old FK4
 
  - `ra`     -- B1950.0 RA (rad)
  - `dec`    -- B1950.0 Dec (rad)
- - `δra`    -- B1950.0 RA proper moation (rad/trop-year)
+ - `δra`    -- B1950.0 RA proper motion (rad/trop-year)
  - `δdec`   -- B1950.0 Dec proper motions (rad/trop-year)
  - `plx`    -- parallax (arcsec)
  - `rv`     -- radial velocity (km/s, +ve = moving away)
@@ -71,7 +71,7 @@ This function converts a star's catalog data from the old FK4
    the likelihood that the differential E-terms effect was not taken
    into account when allowing for proper motion in past astrometry,
    and the undesirability of a discontinuity in the algorithm, the
-   decision has been made in this ERFA algorithm to include the
+   decision has been made in this SOFA algorithm to include the
    effects of differential E-terms on the proper motions for all
    stars, whether polar or not.  At epoch J2000.0, and measuring "on
    the sky" rather than in terms of RA change, the errors resulting
@@ -101,35 +101,24 @@ FK4 B1950.0 to FK5 J2000.0 using matrices in 6-space".  Astron.J. 97,
 function fk425(ra::F, dec::F, δra::F, δdec::F, plx::F, rv::F) where
       F<:AbstractFloat
     ####  Canonical constants (Seidelmann 1992)
-    #  km/s to AU/trop-century
+    #  Radians per year to arcsec per trop-century, km/s to AU/trop-century,
+    #  and a small number to avoid arithmetic problems
     PMF, VF, TINY = 3.6e5*rad2deg(1.), 21.095, 1e-30
     #  FK4 data (units radians and arcsec per tropical century)
     #  Express as a pv-vector
-    # r0 = vcat(s2pv(ra, dec, 1.0, PMF*δra, PMF*δdec, VF*plx*rv)...)
-    r0_ = s2pv(ra, dec, 1.0, PMF*δra, PMF*δdec, VF*plx*rv)
-    # println(r0)
-    # println(r0_)
+    r0 = s2pv(ra, dec, 1.0, PMF*δra, PMF*δdec, VF*plx*rv)
     #  Allow for E-terms (cf. Seidelmann eq. 3.591-2) and convert pv-vector to
     #  Fricke system (cf., Seidelmann eq. 3.591-3).
-    # r01 = vcat(r0[1:3], r0[1:3])
-    # println(r01)
-    # r1  = r0 .- A_fk4_fk5 .+ (r01'*A_fk4_fk5)*r01
-    # println(r1)
-    r1_ = SVector(r0_[1] .- A_fk4_fk5[1:3] .+ dot(r0_[1], A_fk4_fk5[1:3])*r0_[1],
-           r0_[2] .- A_fk4_fk5[4:6] .+ dot(r0_[1], A_fk4_fk5[4:6])*r0_[1])
-    # println(r1_)
-    # pv = M_fk4_fk5*(r0 .- A_fk4_fk5 .+ (r01'*A_fk4_fk5)*r01)
-    pv_ = SVector((SVector((dot(Mfk4fk5[i][j][1], r1_[1]) +
-         dot(Mfk4fk5[i][j][2], r1_[2]) for j=1:3)...) for i=1:2)...)
-    # println(pv)
-    # println(pv_)
+    r1 = SVector(r0[1] .- A_fk4_fk5[1:3] .+ dot(r0[1], A_fk4_fk5[1:3])*r0[1],
+          r0[2] .- A_fk4_fk5[4:6] .+ dot(r0[1], A_fk4_fk5[4:6])*r0[1])
+    pv = SVector((SVector((dot(Mfk4fk5[i][j][1], r1[1]) +
+         dot(Mfk4fk5[i][j][2], r1[2]) for j=1:3)...) for i=1:2)...)
     #  Revert to catalog form
-    # cat = pv2s([pv[1:3], pv[4:6]])
-    cat = pv2s(pv_)
+    cat = pv2s(pv)
     if plx > TINY
         plx, rv = plx/cat[3], cat[6]/(VF*plx)
     end
-    (RA = mod2pi(cat[1]), Dec = cat[2], δRA = cat[4]/PMF, δDec = cat[5]/PMF, plx = plx, rv = rv)
+    (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4]/PMF, δdec = cat[5]/PMF, plx = plx, rv = rv)
 end
 
 """
@@ -165,17 +154,17 @@ was determined.
 
 ```jldoctest
 julia> fk45z(0.01602284975382961, -0.11643479290999060, 1954.677617625256806)
-(RA = 0.02719295911606862, Dec = -0.1115766001565927)
+(ra = 0.02719295911606862, dec = -0.1115766001565927)
 ```
 
 # Note
 
-1) The epoch bepoch is strictly speaking Besselian, but if a Julian
+1) The epoch is strictly speaking Besselian, but if a Julian
    epoch is supplied the result will be affected only to a negligible
    extent.
 
 2) The method is from Appendix 2 of Aoki et al. (1983), but using the
-   constants of Seidelmann (1992).  See the function iauFk425 for a
+   constants of Seidelmann (1992).  See the function fk425 for a
    general introduction to the FK4 to FK5 conversion.
 
 3) Conversion from equinox B1950.0 FK4 to equinox J2000.0 FK5 only is
@@ -222,7 +211,7 @@ function fk45z(ra::AbstractFloat, dec::AbstractFloat, epoch::AbstractFloat)
     pv = pvu((epj(epb2jd(epoch)...) - 2000.0)/PMF, pv)
     #  Revert to spherical coordinates
     ra, dec = c2s(pv[1])
-    (RA = mod2pi(ra), Dec = dec)
+    (ra = mod2pi(ra), dec = dec)
 end
 
 """
@@ -324,7 +313,8 @@ FK4 B1950.0 to FK5 J2000.0 using matrices in 6-space".  Astron.J. 97,
 function fk524(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat, plx::AbstractFloat,
                rv::AbstractFloat)
     ####  Canonical constants (Seidelmann 1992)
-    #  km/s to AU/trop-century
+    #  Radians per year to arcsec per trop-century, km/s to AU/trop-century,
+    #  and a small number to avoid arithmetic problems
     PMF, VF, TINY = 3.6e5*rad2deg(1.), 21.095, 1e-30
     #  Express as a pv-vector
     r0 = s2pv(ra, dec, 1.0, PMF*δra, PMF*δdec, VF*plx*rv)
@@ -334,15 +324,16 @@ function fk524(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec
     #  Apply E-terms (equivalent to Seidelmann 3.592-3, one iteration)
     #  Direction
     p1 = r1[1] .+ norm(r1[1])*A_fk4_fk5[1:3] .- dot(r1[1], A_fk4_fk5[1:3])*r1[1]
-    #  Direction
+    #  Direction, using recomputed length
     pv1 = r1[1] .+ norm(p1)*A_fk4_fk5[1:3] .- dot(r1[1], A_fk4_fk5[1:3])*r1[1]
+    #  Derivative
     pv2 = r1[2] .+ norm(p1)*A_fk4_fk5[4:6] .- dot(r1[1], A_fk4_fk5[4:6])*pv1
     #  Revert to catalog form
-    cat = pv2s([pv1, pv2])
+    cat = pv2s(SVector(pv1, pv2))
     if plx > TINY
         plx, rv = plx/cat[3], cat[6]/(plx*VF)
     end
-    (RA = mod2pi(cat[1]), Dec = cat[2], δRA = cat[4]/PMF, δDec = cat[5]/PMF, plx = plx, rv = rv)
+    (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4]/PMF, δdec = cat[5]/PMF, plx = plx, rv = rv)
 end
 """
     fk52h(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat, plx::AbstractFloat,
@@ -357,21 +348,21 @@ Status:  support function.
 
 # Input
 
- - `r5`    -- J2000.0 RA (radians)
- - `d5`    -- J2000.0 Dec (radians)
- - `dr5`   -- J2000.0 proper motion in RA (dRA/dt, rad/Jyear)
- - `dd5`   -- J2000.0 proper motion in Dec (dDec/dt, rad/Jyear)
- - `px5`   -- parallax (arcsec)
- - `rv5`   -- radial velocity (km/s, positive = receding)
+ - `ra`    -- J2000.0 FK5 RA (radians)
+ - `dec`   -- J2000.0 FK5 Dec (radians)
+ - `δra`   -- J2000.0 FK5 proper motion in RA (dRA/dt, rad/Jyear)
+ - `δdec`  -- J2000.0 FK5 proper motion in Dec (dDec/dt, rad/Jyear)
+ - `plx`   -- parallax (arcsec)
+ - `rv`    -- radial velocity (km/s, positive = receding)
 
-Returned (all Hipparcos, epoch J2000.0):
+# Output (all Hipparcos, epoch J2000.0)
 
- - `rh`    -- J2000.0 RA (Hipparcos; radians)
- - `dh`    -- J2000.0 Dec (Hipparcos; radians)
- - `drh`   -- J2000.0 proper motion in RA (dRA/dt, rad/Jyear)
- - `ddh`   -- J2000.0 proper motion in Dec (dDec/dt, rad/Jyear)
- - `pxh`   -- parallax (arcsec)
- - `rvh`   -- radial velocity (km/s, positive = receding)
+ - `ra`   -- RA (radians)
+ - `dec`   -- Dec (radians)
+ - `pmras` -- proper motion in RA (dRA/dt, rad/Jyear)
+ - `pmdec` -- proper motion in Dec (dDec/dt, rad/Jyear)
+ - `plx`   -- parallax (arcsec)
+ - `rvel`  -- radial velocity (km/s, positive = receding)
 
 # Note
 
@@ -385,9 +376,9 @@ Returned (all Hipparcos, epoch J2000.0):
    and spin; zonal errors in the FK5 catalog are not taken into
    account.
 
-4) See also iauH2fk5, iauFk5hz, iauHfk5z.
+4) See also h2fk5, fk5hz, hfk5z.
 
-Reference:
+# References
 
 F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 """
@@ -423,14 +414,14 @@ Status:  support function.
 
 # Output
 
- - `ra`    -- B1950.0 FK4 RA (rad) at epoch BEPOCH
- - `dec`   -- B1950.0 FK4 Dec (rad) at epoch BEPOCH
+ - `ra`    -- B1950.0 FK4 RA (rad) at the given epoch
+ - `dec`   -- B1950.0 FK4 Dec (rad) at the given epoch
  - `δra`   -- B1950.0 FK4 proper motions in RA (rad/trop.yr)
  - `δdec`  -- B1950.0 FK4 proper motions in Dec (rad/trop.yr)
 
 # Note
 
-1) In contrast to the iauFk524 function, here the FK5 proper motions,
+1) In contrast to the fk524 function, here the FK5 proper motions,
    the parallax and the radial velocity are presumed zero.
 
 2) This function converts a star position from the IAU 1976 FK5
@@ -446,8 +437,8 @@ Status:  support function.
    treatment for precession.
 
 4) The position returned by this function is in the B1950.0 FK4
-   reference system but at Besselian epoch bepoch.  For comparison
-   with catalogs the bepoch argument will frequently be 1950.0. (In
+   reference system but at the given Besselian epoch.  For comparison
+   with catalogs the epoch argument will frequently be 1950.0. (In
    this context the distinction between Besselian and Julian epoch is
    insignificant.)
 
@@ -466,7 +457,7 @@ function fk54z(ra::AbstractFloat, dec::AbstractFloat, epoch::AbstractFloat)
          cos(cat[2])))
     #  Cartesian to spherical
     ra, dec = c2s(p1)
-    (RA = mod2pi(ra), Dec = dec, δRA = cat[3], δDec = cat[4])
+    (ra = mod2pi(ra), dec = dec, δra = cat[3], δdec = cat[4])
 end
 
 """
@@ -481,7 +472,7 @@ Status:  support function.
 
 # Output
 
- - `rmat`  -- FK5 rotation matrix wrt Hipparcos (Note 2)
+ - `pos`   -- FK5 rotation matrix wrt Hipparcos (Note 2)
  - `rot`   -- FK5 spin vector wrt Hipparcos (Note 3)
 
 # Note
@@ -536,7 +527,7 @@ Status:  support function.
 
 ```jldoctest
 julia> fk5hz(1.76779433, -0.2917517103, 2400000.5, 54479.0)
-(RA = 1.7677941914644242, Dec = -0.2917516001679885)
+(ra = 1.7677941914644242, dec = -0.2917516001679885)
 ```
 
 # Note
@@ -573,7 +564,7 @@ julia> fk5hz(1.76779433, -0.2917517103, 2400000.5, 54479.0)
 4) The position returned by this function is in the Hipparcos
    reference system but at date date1+date2.
 
-5) See also iauFk52h, iauH2fk5, iauHfk5z.
+5) See also fk52h, h2fk5, hfk5z.
 
 # References
 
@@ -588,7 +579,7 @@ function fk5hz(ra::AbstractFloat, dec::AbstractFloat, day1::AbstractFloat, day2:
     #  the interval, de-rotate the vector's FK5 axes back to the date, rotate
     #  the vector into the Hipparcos system, and convert to spherical
     ra, dec = c2s(ϵ*rv2m(Δt.*ω)'*s2c(ra, dec))
-    (RA = mod2pi(ra), Dec = dec)
+    (ra = mod2pi(ra), dec = dec)
 end
 
 """
@@ -608,7 +599,7 @@ Status:  support function.
  - `dec`   -- J2000.0 Dec (Hipparcos; radians)
  - `δra`   -- J2000.0 proper motion in RA (dRA/dt, rad/Jyear)
  - `δdec`  -- J2000.0 proper motion in Dec (dDec/dt, rad/Jyear)
- - `plz`   -- parallax (arcsec)
+ - `plx`   -- parallax (arcsec)
  - `rv`    -- radial velocity (km/s, positive = receding)
 
 # Output
@@ -632,7 +623,7 @@ Status:  support function.
    and spin; zonal errors in the FK5 catalog are not taken into
    account.
 
-4) See also iauFk52h, iauFk5hz, iauHfk5z.
+4) See also fk52h, fk5hz, hfk5z.
 
 # References
 
@@ -712,7 +703,7 @@ Returned (all FK5, equinox J2000.0, date date1+date2):
 5) The position returned by this function is in the FK5 J2000.0
    reference system but at date date1+date2.
 
-6) See also iauFk52h, iauH2fk5, iauFk5hz.
+6) See also fk52h, h2fk5, fk5hz.
 
 # References
 
@@ -721,20 +712,21 @@ F.Mignard & M.Froeschle, 2000, Astron.Astrophys. 354, 732-739.
 function hfk5z(ra::AbstractFloat, dec::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
     #  Time interval from fundamental epoch J2000.0 to given date (Julian year)
     Δt = ((day1 - JD2000) + day2)/DAYPERYEAR
-    #  FK5 to Hipparcos orientiation matrix and rotation vector
+    #  FK5 to Hipparcos orientation matrix and rotation vector
     ϵ, ω = fk5hip()
-    #  FK5 pv-vector to spherical
+    #  Hipparcos barycentric position vector (normalized)
     p  = s2c(ra, dec)
     #  Accumulate Hipparcos wrt to FK5 spin over interval, de-orient & de-spin
     #  the Hipparcos position into FK5 J2000.0, rotate the spin to the
     #  Hipparcos system, apply spin to the position giving the space motion,
-    #  and de-orient and de-spin the Hipparcos space motion into the Fk5 J2000.0
-    cat = pv2s(SVector((ϵ*rv2m(Δt*ω))'*p, (ϵ*rv2m(Δt*ω))'*(vec2mat(ϵ*ω)*p)))
-    (RA = mod2pi(cat[1]), Dec = cat[2], δRA = cat[4], δDec = cat[5])
+    #  and de-orient and de-spin the Hipparcos space motion into the FK5 J2000.0
+    r2f = (ϵ*rv2m(Δt*ω))'
+    cat = pv2s(SVector(r2f*p, r2f*(vec2mat(ϵ*ω)*p)))
+    (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4], δdec = cat[5])
 end
 
 """
-    starpm(ras::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmdec::AbstractFloat,
+    starpm(ra::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmdec::AbstractFloat,
            plx::AbstractFloat, rvel::AbstractFloat, epoch1a::AbstractFloat, epoch1b::AbstractFloat,
            epoch2a::AbstractFloat, epoch2b::AbstractFloat)
 
@@ -761,13 +753,6 @@ Star proper motion:  update star catalog data for space motion.
  - `pmd2`  -- Dec proper motion (radians/year), after
  - `px2`   -- parallax (arcseconds), after
  - `rv2`   -- radial velocity (km/s, +ve = receding), after
-
-   -1 = system error (should not occur)
-    0 = no warnings or errors
-    1 = distance overridden (Note 6)
-    2 = excessive velocity (Note 7)
-    4 = solution didn't converge (Note 8)
-    else = binary logical OR of the above warnings
 
 # Note
 
@@ -815,34 +800,32 @@ Star proper motion:  update star catalog data for space motion.
 
 6) An extremely small (or zero or negative) parallax is interpreted to
    mean that the object is on the "celestial sphere", the radius of
-   which is an arbitrary (large) value (see the eraStarpv function for
-   the value used).  When the distance is overridden in this way, the
-   status, initially zero, has 1 added to it.
+   which is an arbitrary (large) value (see the starpv function for
+   the value used).
 
 7) If the space velocity is a significant fraction of c (see the
-   constant VMAX in the function eraStarpv), it is arbitrarily set to
-   zero.  When this action occurs, 2 is added to the status.
+   constant VMAX in the function starpv), it is arbitrarily set to
+   zero.
 
-8) The relativistic adjustment carried out in the eraStarpv function
-   involves an iterative calculation.  If the process fails to
-   converge within a set number of iterations, 4 is added to the
-   status.
+8) The relativistic adjustment carried out in the starpv function
+   involves an iterative calculation.
 """
-function starpm(ras::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmdec::AbstractFloat,
+function starpm(ra::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmdec::AbstractFloat,
                 plx::AbstractFloat, rvel::AbstractFloat, epoch1a::AbstractFloat, epoch1b::AbstractFloat,
                 epoch2a::AbstractFloat, epoch2b::AbstractFloat)
-    DC = 173.1446333113497
+    #  Days of light travel time per astronomical unit
+    DC = SECPERDAY/(ASTRUNIT/LIGHTSPEED)
     #  Position-velocity vector
-    pv1 = starpv(ras, dec, pmras, pmdec, plx, rvel)
+    pv1 = starpv(ra, dec, pmras, pmdec, plx, rvel)
     #  Light time when observed (days)
-    tl1 = pm(pv1[1])/DC # (SECPERDAY*LIGHTSPEED/ASTRUNIT)
+    tl1 = pm(pv1[1])/DC
     #  Time interval
     Δt = (epoch2a - epoch1a) + (epoch2b - epoch1b)
     #  Move star along track from the "before" observed position to the
     #  "after" geometric position.
     pv = pvu(Δt + tl1, pv1)
     #  From this geometric position, deduce the observed light time (days)
-    #  at the "after" epoch (with theoretically unnecesary error check).
+    #  at the "after" epoch (with theoretically unnecessary error check).
     r2, rdv, v2 = dot(pv[1], pv[1]), dot(pv[1], pv[2]), dot(pv[2], pv[2])
     c2mv2 = DC^2 - v2 # (SECPERDAY*LIGHTSPEED/ASTRUNIT)^2 - v2
     @assert c2mv2 > 0

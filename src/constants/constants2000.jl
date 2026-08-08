@@ -31,17 +31,17 @@ const gmst_2000 = (0.014506, 4612.15739966, 1.39667721, -0.00009344, 0.00001882)
 #   TIO locator s'
 const tio_2000 = -4.7e-5
 
-#   Precession model constants in mas (Lieske et al. 1977)
+#   Precession model constants in arcsec (Lieske et al. 1977)
 const ψ_1977 = (    0.0, 5038.7784, -1.07259, -0.001147)
 const ω_1977 = (ϵ0_2000,    0.0,     0.05127, -0.007726)
 const χ_1977 = (    0.0,   10.5526, -2.38064, -0.001125)
 
-#   Frame bias model constants in mas
+#   Frame bias model constants in arcsec
 const icrs_ra_2000 = -0.0146
 const ψ_bias_2000  = -0.041775
 const ϵ_bias_2000  = -0.0068192
 
-#   Precession model correction constants in mas
+#   Precession model correction constants in arcsec
 const ψ_corr_2000 = -0.29965
 const ϵ_corr_2000 = -0.02524
 
@@ -104,8 +104,6 @@ const r0 = 385000560.0
 
 #   Coefficients for (dimensionless) E factor
 const efac = (1., -0.002516, -0.0000074)
-
-#   Coefficients for 
 
 #   Coefficients for Moon longitude and distance series
 const lr_1998 = [
@@ -240,9 +238,9 @@ const b_1998 = [
 
 # The e-factor (e) is a small correction term that accounts for the eccentricity
 # of Earth's orbit around the Sun. Its influence on the Moon's position depends
-# on whether the Sun's mean annomaly (ls, the second column of the n-matrices)
+# on whether the Sun's mean anomaly (ls, the second column of the n-matrices)
 # appears in each term of the summation.
-# Teh following emasks encode which of those three cases applies to each of the rows.
+# The following emasks encode which of those three cases applies to each of the rows.
 # These masks are mainly used in the moon98 routine to dramatically reduce allocations.
 const lr_emask = map(m -> abs(m) == 2 ? 2 : (abs(m) == 1 ? 1 : 0), lr_1998_n[:, 2])
 const b_emask = map(m -> abs(m) == 2 ? 2 : (abs(m) == 1 ? 1 : 0), b_1998_n[:, 2])

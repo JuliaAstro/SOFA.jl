@@ -32,13 +32,6 @@ function leapday(year::Integer, month::Integer)
     month == 2 && year%4 == 0 && (year%100 != 0 || year%400 == 0)
 end
 
-function radec2rad(coord::Tuple{String, String})
-    ra  = match(r"(\d?\d)[ h] *(\d\d)[ m] *(\d\d\.?\d*)s?", coord[1])
-    dec = match(r"([+-]?\d?\d)[ d°] *(\d\d)[ m'] *(\d\d.?\d*)[s\"]?", coord[2])
-    (15*deg2rad(sum([1, 1/60, 1/3600].*[parse(Int, v) for v in ra[1]])),
-     deg2rad(Integer(dec[1]) + Integer(dec[2])/60 + Integer(dec[3])/3600))
-end
-
 function calendar2MJD(year::Integer, month::Integer, day::Integer)
     
     @assert -4799 <= year "Year less than -4799."
@@ -48,7 +41,7 @@ function calendar2MJD(year::Integer, month::Integer, day::Integer)
 
     ((Int64(1461)*(year + (month - 14)÷12 + 4800))÷4 +
      (Int64(367) *(month - 2 - 12*((month - 14)÷12)))÷12 -
-     (Int64(3)   *((year + month + 4900)÷100))÷4 +
+     (Int64(3)   *((year + (month - 14)÷12 + 4900)÷100))÷4 +
      day - 2432076)
 end
 
@@ -60,14 +53,14 @@ corrections.
 
 # Arguments
 - `object::Vector{AbstractFloat}`: RA and Dec of object (in radians)
-- `propermo::Vector{AbstractFloat}`: RA and Dec proper motion of object (in radians/year)
+- `pmotion::Vector{AbstractFloat}`: RA and Dec proper motion of object (in radians/year)
 - `parallax::AbstractFloat`: parallax of object (in arcseconds)
-- `rvelocity::AbsractFloat`: radial velocity of object (in km/sec; positive is receding)
-- `propertim::AbstactFloat`: proper motion time interval (in Julian years; at barycenter)
+- `rvelocity::AbstractFloat`: radial velocity of object (in km/sec; positive is receding)
+- `pmt::AbstractFloat`: proper motion time interval (in Julian years; at barycenter)
 - `observer::Vector{AbstractFloat}`: position of observer (in AU; from barycenter)
 
 # Returns
-- `object::Vector{AbstractFloat}`: corrected RA and Dec of object
+- `object::Vector{AbstractFloat}`: corrected barycentric unit direction vector of object
 """
 function proper_motion(object, pmotion, parallax, rvelocity, pmt, observer)
 
@@ -84,7 +77,8 @@ function proper_motion(object, pmotion, parallax, rvelocity, pmt, observer)
     obj .+= (pmt .+ AULIGHT*sum(obj.*observer)).*pmo .-
         deg2rad(1/3600)*parallax.*observer
 
-    norm2(obj) == zero(obj) ? zeros(obj, 3) : obj./norm2(obj)
+    modulus = norm2(obj)
+    modulus == 0.0 ? zero(obj) : obj./modulus
 end
 
 """
@@ -96,7 +90,7 @@ proper_motion(object, pmotion, parallax, rvelocity) =
 """
    @const_smatrix_from_series name series field
 
-Defines a global constant SMatrix instances with a given `name` from
+Defines a global constant SMatrix instance with a given `name` from
 a `series` and using its `field` name.
 """
 macro const_smatrix_from_series(name, series, field)

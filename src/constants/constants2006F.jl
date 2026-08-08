@@ -1,6 +1,6 @@
 #   IAU 2006 Fukushima Precession-Nutation Model
 
-# Fukashima-Williams angles
+# Fukushima-Williams angles
 const γB_2006 = (-0.052928, 10.556378, 0.4932044, -0.00031238, -0.000002788, 0.0000000260)
 const ϕB_2006 = (84381.412819, -46.811016, 0.0511268, 0.00053289, -0.000000440, -0.0000000176)
 const ψB_2006 = (-0.041775, 5038.481484, 1.5584175,  -0.00018522, -0.000026452, -0.0000000148)
@@ -12,12 +12,12 @@ const bj2_2006 =  0.4697e-6
 #   Rate for secular variation of J2
 const fj2_2006 = -2.7774e-6
 
-#   CIO pole locator (?)
+#   CIO locator s polynomial coefficients (arcsec)
 const cio_s_2006 = (94.00e-6, 3808.65e-6, -122.68e-6, -72574.11e-6, 27.98e-6, 15.62e-6)
 
-#   Complementary equinox model constants
+#   CIO locator s + XY/2 series (s06)
 #   Table of coefficients of l, l', F, D, Ω, LVe, LE, pA, longitude
-iau_2006_equinox_0_series = [
+const iau_2006_equinox_0_series = [
     #  1-10
     PeriodicTerms([ 0,  0,  0,  0,  1,  0,  0,  0], [-2640.73e-6,   0.39e-6 ]),
     PeriodicTerms([ 0,  0,  0,  0,  2,  0,  0,  0], [  -63.53e-6,   0.02e-6 ]),
@@ -56,13 +56,13 @@ iau_2006_equinox_0_series = [
     PeriodicTerms([ 1,  0, -2,  0, -3,  0,  0,  0], [   -0.11e-6,   0.00e-6 ]),
     PeriodicTerms([ 1,  0, -2,  0, -1,  0,  0,  0], [   -0.11e-6,   0.00e-6 ])]
 
-iau_2006_equinox_1_series = [
+const iau_2006_equinox_1_series = [
     #  1 - 3
     PeriodicTerms([ 0,  0,  0,  0,  2,  0,  0,  0], [   -0.07e-6,   3.57e-6 ]),
     PeriodicTerms([ 0,  0,  0,  0,  1,  0,  0,  0], [    1.73e-6,  -0.03e-6 ]),
     PeriodicTerms([ 0,  0,  2, -2,  3,  0,  0,  0], [    0.00e-6,   0.48e-6 ])]
 
-iau_2006_equinox_2_series = [
+const iau_2006_equinox_2_series = [
     #  1-10
     PeriodicTerms([ 0,  0,  0,  0,  1,  0,  0,  0], [  743.52e-6,  -0.17e-6 ]),
     PeriodicTerms([ 0,  0,  2, -2,  2,  0,  0,  0], [   56.91e-6,   0.06e-6 ]),
@@ -92,14 +92,14 @@ iau_2006_equinox_2_series = [
     PeriodicTerms([ 1,  0,  2, -2,  2,  0,  0,  0], [   -0.12e-6,   0.00e-6 ]),
     PeriodicTerms([ 0,  0,  2,  0,  0,  0,  0,  0], [   -0.11e-6,   0.00e-6 ])]
 
-iau_2006_equinox_3_series = [
+const iau_2006_equinox_3_series = [
     #  1- 4
     PeriodicTerms([ 0,  0,  0,  0,  1,  0,  0,  0], [    0.30e-6, -23.42e-6 ]),
     PeriodicTerms([ 0,  0,  2, -2,  2,  0,  0,  0], [   -0.03e-6,  -1.46e-6 ]),
     PeriodicTerms([ 0,  0,  2,  0,  2,  0,  0,  0], [   -0.01e-6,  -0.25e-6 ]),
     PeriodicTerms([ 0,  0,  0,  0,  2,  0,  0,  0], [    0.00e-6,   0.23e-6 ])]
 
-iau_2006_equinox_4_series = [
+const iau_2006_equinox_4_series = [
     #  1- 1
     PeriodicTerms([ 0,  0,  0,  0,  1,  0,  0,  0], [   -0.26e-6,  -0.01e-6 ])]
 

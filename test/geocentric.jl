@@ -29,3 +29,15 @@
 
 @test all(abs.(SOFA.gd2gce(6378136.0, 0.0033528, 3.1, -0.5, 2500.0) .-
                [-5598999.6665116328, 233011.6351463057189, -3040909.0517314132]) .<= 1e-7)
+
+####    Regression tests (v2.0.0 pre-release review)    ####
+
+#   gc2gde: southern latitudes lost their sign, and positions on the
+#   polar axis threw an UndefVarError
+let g = SOFA.gc2gd(:WGS84, [2e6, 3e6, -5.244e6])
+    @test abs(g.ϵ - 0.9827937232473290680) <= 1e-13
+    @test abs(g.ϕ + 0.97160184819075459) <= 1e-13
+    @test abs(g.r - 331.4172461426059892) <= 1e-7
+end
+@test SOFA.gc2gd(:WGS84, [0.0, 0.0, 6.4e6]).ϕ ≈ pi/2
+@test SOFA.gc2gd(:WGS84, [0.0, 0.0, -6.4e6]).ϕ ≈ -pi/2

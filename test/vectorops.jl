@@ -199,3 +199,17 @@
 @test all(abs.(SOFA.sxpv(2.0, [[0.3, 1.2, -2.5], [0.5, 3.2, -0.7]])[1] .- [0.6, 2.4, -5.0]) .<= 1e-12)
 
 @test all(abs.(SOFA.sxpv(2.0, [[0.3, 1.2, -2.5], [0.5, 3.2, -0.7]])[2] .- [1.0, 6.4, -1.4]) .<= 1e-12)
+
+####    Regression tests (v2.0.0 pre-release review)    ####
+
+#   d2tf: exact ties round away from zero, as the C dnint does
+@test SOFA.d2tf(0, 0.5/86400).second == 1
+
+#   anpm: the +/-pi boundary follows the C convention
+@test SOFA.anpm(Float64(pi)) == -Float64(pi)
+@test SOFA.anpm(-Float64(pi)) == Float64(pi)
+
+#   a2af, c2s, pn: named fields (the NamedTuple wrappers were dead code)
+@test SOFA.a2af(4, 2.345).degree == 134
+@test SOFA.c2s([100.0, -50.0, 25.0]).θ ≈ -0.4636476090008061
+@test abs(SOFA.pn([0.3, 1.2, -2.5]).modulus - 2.789265136196270604) <= 1e-12

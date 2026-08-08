@@ -185,5 +185,5 @@ edition (Green, 1977), p49.
 function hd2pa(HA::AbstractFloat, Dec::AbstractFloat, latitude::AbstractFloat)
     sqsz = cos(latitude)*sin(HA)
     cqsz = sin(latitude)*cos(Dec) - cos(latitude)*sin(Dec)*cos(HA)
-    sqsz != 0.0 || cqsz || 0.0 ? atan(sqsz, cqsz) : 0.0
+    sqsz != 0.0 || cqsz != 0.0 ? atan(sqsz, cqsz) : 0.0
 end

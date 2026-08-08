@@ -25,7 +25,7 @@ const ϵ_1980   = (ϵ0_1980, -46.8150, -0.00059, 0.001813)
 #   Mean longitude of the Sun minus mean longitude of Sun's perigee (from SOFA)
 const l1_1980t = 99.0
 const l1_1980  = (1287099.804, 1292581.224, -0.577, -0.012)
-#   Mean elogation of the Moon from the Sun (from SOFA)
+#   Mean elongation of the Moon from the Sun (from SOFA)
 const D_1980t  = 1236.0
 const D_1980   = (1072261.307, 1105601.328, -6.891, 0.019)
 #   Mean longitude of the Moon minus mean longitude of Moon's perigee (from SOFA)

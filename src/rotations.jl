@@ -10,8 +10,8 @@ given the nutation in longitude and the mean obliquity.
 
  - `day1`  -- TT as Julian Date (Note 1)
  - `day2`  -- ... as Julian Date
- - `epsa`  -- mean obliquity (Note 2)
- - `dpsi`  -- nutation in longitude (Note 3)
+ - `ϵA`    -- mean obliquity (Note 2)
+ - `ψ`     -- nutation in longitude (Note 3)
 
 # Output
 
@@ -326,8 +326,9 @@ function eect00(day1::F, day2::F) where F<:AbstractFloat
     a0 = a0_2000_equinox
     a1 = a1_2000_equinox
 
+    #  Sum the series, smallest terms first, as in the C library.
     sum0 = sum1 = zero(eltype(a0))
-    @inbounds for i in axes(a0, 1)
+    @inbounds for i in reverse(axes(a0, 1))
         angle = zero(eltype(ϕ0_2000_equinox))
         for j in axes(ϕ0_2000_equinox, 2)
             angle += ϕ0_2000_equinox[i,j] * ϕ[j]
@@ -335,7 +336,7 @@ function eect00(day1::F, day2::F) where F<:AbstractFloat
         sum0 += a0[i,1] * sin(angle) + a0[i,2] * cos(angle)
     end
 
-    @inbounds for i in axes(a1, 1)
+    @inbounds for i in reverse(axes(a1, 1))
         angle = zero(eltype(ϕ1_2000_equinox))
         for j in axes(ϕ1_2000_equinox, 2)
             angle += ϕ1_2000_equinox[i,j] * ϕ[j]
@@ -466,7 +467,7 @@ function era00(day1::AbstractFloat, day2::AbstractFloat)
         fr = rem(day1, 1.0) + rem(day2, 1.0)
     else
         Δt = day2 + (day1 - JD2000)
-        fr = rem(day2, 1.0) + mod(day1, 1.0)
+        fr = rem(day2, 1.0) + rem(day1, 1.0)
     end
     mod2pi(2π*(fr + Polynomial(era_2000...)(Δt)))
 end
@@ -479,10 +480,10 @@ resolutions).
 
 # Input
 
- - `uta`   -- UT1 as Julian Date (Notes 1,2)
- - `utb`   -- ... as Julian Date
- - `tta`   -- TT as Julian Date (Notes 1,2)
- - `ttb`   -- ... as Julian Date
+ - `ut1`   -- UT1 as Julian Date (Notes 1,2)
+ - `ut2`   -- ... as Julian Date
+ - `tt1`   -- TT as Julian Date (Notes 1,2)
+ - `tt2`   -- ... as Julian Date
 
 # Output
 
@@ -490,7 +491,7 @@ resolutions).
 
 # Note
 
-1) The UT1 and TT dates uta+utb and tta+ttb respectively, are both
+1) The UT1 and TT dates ut1+ut2 and tt1+tt2 respectively, are both
    Julian Dates, apportioned in any convenient way between the
    argument pairs.  For example, JD(UT1)=2450123.7 could be expressed
    in any of these ways, among others:
@@ -509,8 +510,8 @@ resolutions).
    between resolution and convenience.  For UT, the date & time method
    is best matched to the algorithm that is used by the Earth Rotation
    Angle function, called internally: maximum precision is delivered
-   when the uta argument is for 0hrs UT1 on the day in question and
-   the utb argument lies in the range 0 to 1, or vice versa.
+   when the ut1 argument is for 0hrs UT1 on the day in question and
+   the ut2 argument lies in the range 0 to 1, or vice versa.
 
 2) Both UT1 and TT are required, UT1 to predict the Earth rotation and
    TT to predict the effects of precession.  If UT1 is used for both
@@ -547,10 +548,10 @@ Greenwich mean sidereal time (consistent with IAU 2006 precession).
 
 # Input
 
- - `uta`   -- UT1 as Julian Date (Notes 1,2)
- - `utb`   -- ... as Julian Date
- - `tta`   -- TT as Julian Date (Notes 1,2)
- - `ttb`   -- ... as Julian Date
+ - `ut1`   -- UT1 as Julian Date (Notes 1,2)
+ - `ut2`   -- ... as Julian Date
+ - `tt1`   -- TT as Julian Date (Notes 1,2)
+ - `tt2`   -- ... as Julian Date
 
 # Output
 
@@ -565,7 +566,7 @@ julia> gmst06(2400000.5, 53736.0, 2400000.5, 53736.0)
 
 # Note
 
-1) The UT1 and TT dates uta+utb and tta+ttb respectively, are both
+1) The UT1 and TT dates ut1+ut2 and tt1+tt2 respectively, are both
    Julian Dates, apportioned in any convenient way between the
    argument pairs.  For example, JD=2450123.7 could be expressed in
    any of these ways, among others:
@@ -584,8 +585,8 @@ julia> gmst06(2400000.5, 53736.0, 2400000.5, 53736.0)
    between resolution and convenience.  For UT, the date & time method
    is best matched to the algorithm that is used by the Earth rotation
    angle function, called internally: maximum precision is delivered
-   when the uta argument is for 0hrs UT1 on the day in question and
-   the utb argument lies in the range 0 to 1, or vice versa.
+   when the ut1 argument is for 0hrs UT1 on the day in question and
+   the ut2 argument lies in the range 0 to 1, or vice versa.
 
 2) Both UT1 and TT are required, UT1 to predict the Earth rotation and
    TT to predict the effects of precession.  If UT1 is used for both
@@ -605,8 +606,7 @@ function gmst06(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2:
     #  TT Julian centuries since J2000.0
     Δt = ((tt1 - JD2000) + tt2)/(100*DAYPERYEAR)
     #  Greenwich mean sidereal time, IAU 2006
-    rem2pi(era00(ut1, ut2) + deg2rad(Polynomial(gmst_2006...)(Δt)/3600),
-           RoundNearest)
+    mod2pi(era00(ut1, ut2) + deg2rad(Polynomial(gmst_2006...)(Δt)/3600))
 end
 
 """
@@ -682,10 +682,10 @@ resolutions).
 
 # Input
 
- - `uta`   -- UT1 as Julian Date (Notes 1,2)
- - `utb`   -- ... as Julian Date
- - `tta`   -- TT as Julian Date (Notes 1,2)
- - `ttb`   -- ... as Julian Date
+ - `ut1`   -- UT1 as Julian Date (Notes 1,2)
+ - `ut2`   -- ... as Julian Date
+ - `tt1`   -- TT as Julian Date (Notes 1,2)
+ - `tt2`   -- ... as Julian Date
 
 # Output
 
@@ -693,12 +693,12 @@ resolutions).
 
 # Note
 
-1) The UT1 and TT dates uta+utb and tta+ttb respectively, are both
+1) The UT1 and TT dates ut1+ut2 and tt1+tt2 respectively, are both
    Julian Dates, apportioned in any convenient way between the
    argument pairs.  For example, JD(UT1)=2450123.7 could be expressed
    in any of these ways, among others:
 
-           uta            utb
+           ut1            ut2
 
        2450123.7           0.0       (JD method)
        2451545.0       -1421.3       (J2000 method)
@@ -712,8 +712,8 @@ resolutions).
    between resolution and convenience.  For UT, the date & time method
    is best matched to the algorithm that is used by the Earth Rotation
    Angle function, called internally: maximum precision is delivered
-   when the uta argument is for 0hrs UT1 on the day in question and
-   the utb argument lies in the range 0 to 1, or vice versa.
+   when the ut1 argument is for 0hrs UT1 on the day in question and
+   the ut2 argument lies in the range 0 to 1, or vice versa.
 
 2) Both UT1 and TT are required, UT1 to predict the Earth rotation and
    TT to predict the effects of precession-nutation.  If UT1 is used
@@ -749,8 +749,8 @@ but using the truncated nutation model IAU 2000B).
 
 # Input
 
- - `uta`   -- UT1 as Julian Date (Notes 1,2)
- - `utb`   -- ... as Julian Date
+ - `ut1`   -- UT1 as Julian Date (Notes 1,2)
+ - `ut2`   -- ... as Julian Date
 
 # Output
 
@@ -758,12 +758,12 @@ but using the truncated nutation model IAU 2000B).
 
 # Note
 
-1) The UT1 date uta+utb is a Julian Date, apportioned in any
+1) The UT1 date ut1+ut2 is a Julian Date, apportioned in any
    convenient way between the argument pair.  For example,
    JD(UT1)=2450123.7 could be expressed in any of these ways, among
    others:
 
-           uta            utb
+           ut1            ut2
 
        2450123.7           0.0       (JD method)
        2451545.0       -1421.3       (J2000 method)
@@ -776,7 +776,7 @@ but using the truncated nutation model IAU 2000B).
    resolution and convenience.  For UT, the date & time method is best
    matched to the algorithm that is used by the Earth Rotation Angle
    function, called internally: maximum precision is delivered when
-   the uta argument is for 0hrs UT1 on the day in question and the utb
+   the ut1 argument is for 0hrs UT1 on the day in question and the ut2
    argument lies in the range 0 to 1, or vice versa.
 
 2) The result is compatible with the IAU 2000 resolutions, except that
@@ -817,18 +817,18 @@ function gst00b(ut1::AbstractFloat, ut2::AbstractFloat)
 end
 
 """
-    gst06(ut1a::AbstractFloat, ut1b::AbstractFloat, tta::AbstractFloat, ttb::AbstractFloat,
+    gst06(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat,
           r::AbstractMatrix{<:AbstractFloat})
 
 Greenwich apparent sidereal time, IAU 2006, given the NPB matrix.
 
 # Input
 
- - `uta`   -- UT1 as Julian Date (Notes 1,2)
- - `utb`   -- ... as Julian Date
- - `tta`   -- TT as Julian Date (Notes 1,2)
- - `ttb`   -- ... as Julian Date
- - `rnpb`  -- nutation x precession x bias matrix
+ - `ut1`   -- UT1 as Julian Date (Notes 1,2)
+ - `ut2`   -- ... as Julian Date
+ - `tt1`   -- TT as Julian Date (Notes 1,2)
+ - `tt2`   -- ... as Julian Date
+ - `r`     -- nutation x precession x bias matrix
 
 # Output
 
@@ -836,12 +836,12 @@ Greenwich apparent sidereal time, IAU 2006, given the NPB matrix.
 
 # Note
 
-1) The UT1 and TT dates uta+utb and tta+ttb respectively, are both
+1) The UT1 and TT dates ut1+ut2 and tt1+tt2 respectively, are both
    Julian Dates, apportioned in any convenient way between the
    argument pairs.  For example, JD(UT1)=2450123.7 could be expressed
    in any of these ways, among others:
 
-           uta            utb
+           ut1            ut2
 
        2450123.7           0.0       (JD method)
        2451545.0       -1421.3       (J2000 method)
@@ -855,8 +855,8 @@ Greenwich apparent sidereal time, IAU 2006, given the NPB matrix.
    between resolution and convenience.  For UT, the date & time method
    is best matched to the algorithm that is used by the Earth rotation
    angle function, called internally: maximum precision is delivered
-   when the uta argument is for 0hrs UT1 on the day in question and
-   the utb argument lies in the range 0 to 1, or vice versa.
+   when the ut1 argument is for 0hrs UT1 on the day in question and
+   the ut2 argument lies in the range 0 to 1, or vice versa.
 
 2) Both UT1 and TT are required, UT1 to predict the Earth rotation and
    TT to predict the effects of precession-nutation.  If UT1 is used
@@ -872,9 +872,9 @@ Greenwich apparent sidereal time, IAU 2006, given the NPB matrix.
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function gst06(ut1a::F, ut1b::F, tta::F, ttb::F, r::M) where
+function gst06(ut1::F, ut2::F, tt1::F, tt2::F, r::M) where
    {F<:AbstractFloat, M<:AbstractMatrix{<:AbstractFloat}}
-    @inline mod2pi(era00(ut1a, ut1b) - eors(r, s06(tta, ttb, bpn2xy(r)...)))
+    @inline mod2pi(era00(ut1, ut2) - eors(r, s06(tt1, tt2, bpn2xy(r)...)))
 end
 
 """
@@ -885,10 +885,10 @@ resolutions).
 
 # Input
 
- - `uta`   -- UT1 as Julian Date (Notes 1,2)
- - `utb`   -- ... as Julian Date
- - `tta`   -- TT as Julian Date (Notes 1,2)
- - `ttb`   -- ... as Julian Date
+ - `ut1`   -- UT1 as Julian Date (Notes 1,2)
+ - `ut2`   -- ... as Julian Date
+ - `tt1`   -- TT as Julian Date (Notes 1,2)
+ - `tt2`   -- ... as Julian Date
 
 # Output
 
@@ -896,12 +896,12 @@ resolutions).
 
 # Note
 
-1) The UT1 and TT dates uta+utb and tta+ttb respectively, are both
+1) The UT1 and TT dates ut1+ut2 and tt1+tt2 respectively, are both
    Julian Dates, apportioned in any convenient way between the
    argument pairs.  For example, JD(UT1)=2450123.7 could be expressed
    in any of these ways, among others:
 
-           uta            utb
+           ut1            ut2
 
        2450123.7           0.0       (JD method)
        2451545.0       -1421.3       (J2000 method)
@@ -915,8 +915,8 @@ resolutions).
    between resolution and convenience.  For UT, the date & time method
    is best matched to the algorithm that is used by the Earth rotation
    angle function, called internally: maximum precision is delivered
-   when the uta argument is for 0hrs UT1 on the day in question and
-   the utb argument lies in the range 0 to 1, or vice versa.
+   when the ut1 argument is for 0hrs UT1 on the day in question and
+   the ut2 argument lies in the range 0 to 1, or vice versa.
 
 2) Both UT1 and TT are required, UT1 to predict the Earth rotation and
    TT to predict the effects of precession-nutation.  If UT1 is used
@@ -946,8 +946,8 @@ resolutions).
 
 # Input
 
- - `uta`   -- UT1 as Julian Date (Notes 1,2)
- - `utb`   -- ... as Julian Date
+ - `ut1`   -- UT1 as Julian Date (Notes 1,2)
+ - `ut2`   -- ... as Julian Date
 
 # Output
 
@@ -955,12 +955,12 @@ resolutions).
 
 # Note
 
-1) The UT1 date uta+utb is a Julian Date, apportioned in any
+1) The UT1 date ut1+ut2 is a Julian Date, apportioned in any
    convenient way between the argument pair.  For example,
    JD(UT1)=2450123.7 could be expressed in any of these ways, among
    others:
 
-           uta            utb
+           ut1            ut2
 
        2450123.7           0.0       (JD method)
        2451545.0       -1421.3       (J2000 method)
@@ -973,7 +973,7 @@ resolutions).
    resolution and convenience.  For UT, the date & time method is best
    matched to the algorithm that is used by the Earth Rotation Angle
    function, called internally: maximum precision is delivered when
-   the uta argument is for 0hrs UT1 on the day in question and the utb
+   the ut1 argument is for 0hrs UT1 on the day in question and the ut2
    argument lies in the range 0 to 1, or vice versa.
 
 2) The result is compatible with the IAU 1982 and 1994 resolutions,

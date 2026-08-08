@@ -90,7 +90,10 @@ respect to the Barycentric Celestial Reference System.
 """
 function epv00(day1::AbstractFloat, day2::AbstractFloat)
     Δt = ((day1 - JD2000) + day2)/DAYPERYEAR
-    @assert abs(Δt) <= 100.0 "Julian day is not between 1990 and 2100."
+    #  Warn (only) if the date is outside 1900-2100; the result is still
+    #  computed, with degraded accuracy, as in the SOFA C library.
+    abs(Δt) <= 100.0 ||
+        @warn "Julian day is not between 1900 and 2100: accuracy is degraded."
 
     # Sun to Earth ecliptic vector
     p_heli = iau_2000_bcrs * SVector(
@@ -218,6 +221,9 @@ function moon98(day1::AbstractFloat, day2::AbstractFloat)
     dfm = deg2rad(Polynomial(SVector(1., 2., 3., 4.).*fmoon_1998[2:5]...)(Δt))
 
     #  Meeus further arguments.
+    #  NB: for da1 the SOFA C library (as of release 2023-10-11) uses the
+    #  amplitude 0.003958 instead of the rate of A1; here the rate is used,
+    #  matching the treatment of da2 and da3.
     a1, da1 = deg2rad.(SVector(Polynomial(a_1...)(Δt), a_1[2]))
     a2, da2 = deg2rad.(SVector(Polynomial(a_2...)(Δt), a_2[2]))
     a3, da3 = deg2rad.(SVector(Polynomial(a_3...)(Δt), a_3[2]))
@@ -226,7 +232,7 @@ function moon98(day1::AbstractFloat, day2::AbstractFloat)
     e  = Polynomial(efac...)(Δt)
     de = Polynomial(SVector(1., 2.).*efac[2:3]...)(Δt)
 
-    #  Arange matrices for vector operations.
+    #  Arrange matrices for vector operations.
     lre  = map(m -> m == 2 ? e*e    : (m == 1 ? e  : 1.0), lr_emask)
     dlre = map(m -> m == 2 ? 2*e*de : (m == 1 ? de : 0.0), lr_emask)
     bne  = map(m -> m == 2 ? e*e    : (m == 1 ? e  : 1.0), b_emask)
@@ -254,7 +260,7 @@ function moon98(day1::AbstractFloat, day2::AbstractFloat)
     r  = (r0 + sum(la[:,2].*lre.*cos.(ϕ)))/ASTRUNIT
     dr = sum(la[:,2].*(dlre.*cos.(ϕ) .- lre.*dϕ.*sin.(ϕ)))/(ASTRUNIT*100*DAYPERYEAR)
 
-    #  IAU 2006 Fukashima-Williams bias+precession angles
+    #  IAU 2006 Fukushima-Williams bias+precession angles
     γB, ϕB, ψB, ϵA = pfw06(day1, day2)
     #  Rotate the Moon position and velocity into GCRS (Note 6).
     R, pv = Rz(-γB)*Rx(-ϕB)*Rz(ψB), s2pv(λ, b, r, dλ, db, dr)
@@ -320,7 +326,7 @@ julia> plan94(2400000.5, 43999.9, 1)
 
 3) For np=3 the result is for the Earth-Moon Barycenter.  To obtain
    the heliocentric position and velocity of the Earth, use instead
-   the ERFA function eraEpv00.
+   the SOFA function epv00.
 
 4) On successful return, the array pv contains the following:
 
@@ -384,7 +390,7 @@ julia> plan94(2400000.5, 43999.9, 1)
       Uranus        86            7         661000      27.4
       Neptune       11            2         248000      21.4
 
-6) The present ERFA re-implementation of the original Simon et al.
+6) The present SOFA re-implementation of the original Simon et al.
    Fortran code differs from the original in the following respects:
 
      *  C instead of Fortran.
@@ -422,9 +428,12 @@ Simon, J.L, Bretagnon, P., Chapront, J., Chapront-Touze, M., Francou,
 G., and Laskar, J., Astron.Astrophys., 282, 663 (1994).
 """
 function plan94(day1::AbstractFloat, day2::AbstractFloat, planet::Integer)
-    @assert 1 <= planet <= 9 "Invalid planet: valid range is [1-9]"
+    @assert 1 <= planet <= 8 "Invalid planet: valid range is [1-8]"
     Δt = ((day1 - JD2000) + day2)/(1000*DAYPERYEAR)
-    @assert abs(Δt) <= 1.0 "Invalid date: valid range is +/-1000 years"
+    #  Warn (only) if the year is outside 1000-3000; the result is still
+    #  computed, with degraded accuracy, as in the SOFA C library.
+    abs(Δt) <= 1.0 ||
+        @warn "Julian day is not between years 1000 and 3000: accuracy is degraded."
 
     #  Compute the mean elements.
     μ = 0.35953620*Δt

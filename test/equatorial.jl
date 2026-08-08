@@ -7,3 +7,9 @@
                (5.916889243730066194, 0.4472186304990486228)) .<= 1e-13)
 
 @test abs.(SOFA.hd2pa(1.1, 1.2, 0.3) .- 1.906227428001995580) .<= 1e-13
+
+####    Regression tests (v2.0.0 pre-release review)    ####
+
+#   hd2pa: hour angle zero (sqsz == 0) threw a TypeError
+@test SOFA.hd2pa(0.0, 0.3, 0.5) == 0.0
+@test abs(SOFA.hd2pa(0.0, 0.5, 0.3) - pi) <= 1e-13

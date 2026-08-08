@@ -11,7 +11,7 @@ Star independent astrometry parameters
 | `em`       | distance from Sun to observer (AU)               |
 | `v`        | barycentric observer velocity (vector, c)        |
 | `bm1`      | inverse Lorenz factor, i.e., sqrt(1-v^2)         |
-| `bpn`      | bias-precesson-nutation matrix                   |
+| `bpn`      | bias-precession-nutation matrix                   |
 | `along`    | longitude + s' + dERA(DUT) (radians)             |
 | `phi`      | geodetic latitude (radians)                      |
 | `xpl`      | polar motion xp wrt local meridian (radians)     |
@@ -30,7 +30,7 @@ struct Astrom
     em::AbstractFloat                   # distance from Sun to observer (AU)
     v::AbstractVector{<:Real}           # barycentric observer velocity (vector, c)
     bm1::AbstractFloat                  # inverse Lorenz factor, i.e., sqrt(1-v^2) 
-    bpn::AbstractMatrix{<:Real}         # bias-precesson-nutation matrix
+    bpn::AbstractMatrix{<:Real}         # bias-precession-nutation matrix
     along::AbstractFloat                # longitude + s' + dERA(DUT) (radians)
     phi::AbstractFloat                  # geodetic latitude (radians)
     xpl::AbstractFloat                  # polar motion xp wrt local meridian (radians)
@@ -66,7 +66,7 @@ Body parameters for light deflection
 struct Ldbody
     bm::AbstractFloat                   #  mass of the body (solar masses)
     dl::AbstractFloat                   #  deflection limiter (radians^2/2)
-    pv::AbstractVector{AbstractVector{Real}}  #  barycentric PV of the body (AU, AU/day)
+    pv::AbstractVector{<:AbstractVector{<:Real}}  #  barycentric PV of the body (AU, AU/day)
 end
 
 #   Ephemeris series evaluation (originally Astrometry.jl src/model2000.jl)

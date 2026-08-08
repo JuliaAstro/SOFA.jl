@@ -37,7 +37,7 @@ The full function reference is organized into topical pages mirroring the struct
 
 ## Package version ⟷ SOFA release correspondence
 
-Package versions correspond to the following releases of the SOFA C library. As of v2.0 the package is a pure Julia implementation; the v1.x series wrapped the compiled SOFA C library and is maintained on the [`release-1.x` branches](https://github.com/JuliaAstro/SOFA.jl/releases).
+Package versions correspond to the following releases of the SOFA C library. As of v2.0 the package is a pure Julia implementation; the v1.x series wrapped the compiled SOFA C library and is maintained on the [`release-1.x` branches](https://github.com/JuliaAstro/SOFA.jl/branches).
 
 | Package version | SOFA release | Build      |
 |:----------------|:-------------|:-----------|

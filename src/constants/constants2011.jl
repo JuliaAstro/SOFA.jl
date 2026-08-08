@@ -1,9 +1,9 @@
 #   Vondrak et al. 2011 precession model
 
 #   Frame bias in arcseconds (IERS Conventions 2010, Eqs. 5.21 and 5.33)
-ϵ0_2010::Float64  = -0.0166170
-η0_2010::Float64  = -0.0068192
-dα0_2010::Float64 = -0.01460
+const ϵ0_2010  = -0.0166170
+const η0_2010  = -0.0068192
+const dα0_2010 = -0.01460
 
 #   Long term precession coefficients of the ecliptic
 

@@ -15,7 +15,13 @@ quasi-JD form that includes special provision for leap seconds).
 
 # Output
 
- - `date`  -- year, month, day in Gregorian calendar (Note 1, 5)
+ - `year`  -- year in Gregorian calendar (Notes 1, 5)
+ - `month` -- month in Gregorian calendar
+ - `day`   -- day in Gregorian calendar
+ - `hour`  -- hour
+ - `minute` -- minute
+ - `second` -- second
+ - `fraction` -- fraction of second
 
 # Note
 
@@ -46,16 +52,16 @@ quasi-JD form that includes special provision for leap seconds).
    note.
 
 4) JD cannot unambiguously represent UTC during a leap second unless
-   special measures are taken.  The ERFA internal convention is that
+   special measures are taken.  The SOFA internal convention is that
    the quasi-JD day represents UTC days whether the length is 86399,
    86400 or 86401 SI seconds.  In the 1960-1972 era there were smaller
    jumps (in either direction) each time the linear UTC(TAI)
    expression was changed, and these "mini-leaps" are also included in
-   the ERFA convention.
+   the SOFA convention.
 
 5) The warning status "dubious year" flags UTCs that predate the
    introduction of the time scale or that are too far in the future to
-   be trusted.  See eraDat for further details.
+   be trusted.  See dat for further details.
 
 6) For calendar conventions and limitations, see cal2jd.
 """
@@ -94,9 +100,10 @@ function d2dtf(scale::AbstractString, ndp::Int, day1::AbstractFloat, day2::Abstr
             date = second > 0 ?
                 # Use next day but allow for the leap second
                 (values(jd2cal(day1+1.5, day2-subday))[1:3]..., 0, 0, 0, subsec) :
-                # Use 23 50 60 for the time.
+                # Use 23 59 60 for the time.
                 (year, month, day, 23, 59, 60, subsec)
-            if ndp < 0 && second == 60
+            # If rounding to 10s or coarser, always go up to the new day.
+            if ndp < 0 && date[6] == 60
                 date = (values(jd2cal(day1+1.5, day2-subday))[1:3]..., 0, 0, 0, subsec)
             end
         else
@@ -119,7 +126,7 @@ For a given UTC date, calculate Δ(AT) = TAI-UTC.
  - `year`  -- year (Notes 1 and 2) (in UTC)
  - `month` -- month (Note 2)
  - `day`   -- day (Notes 2 and 3)
- - `fraction` -- fraction of day (Note 4)
+ - `subday` -- fraction of day (Note 4)
 
 # Output
 
@@ -135,19 +142,15 @@ julia> dat(2017, 9, 1, 0.0)
 # Note
 
 1) UTC began at 1960 January 1.0 (JD 2436934.5) and it is improper to
-   call the function with an earlier date.  If this is attempted, zero
-   is returned together with a warning status.
+   call the function with an earlier date.  If this is attempted, an
+   AssertionError is thrown.
 
    Because leap seconds cannot, in principle, be predicted in advance,
    a reliable check for dates beyond the valid range is impossible.
    To guard against gross errors, a year five or more after the
    release year of the present function (see the constant IYV) is
-   considered dubious.  In this case a warning status is returned but
-   the result is computed in the normal way.
-
-   For both too-early and too-late years, the warning status is +1.
-   This is distinct from the error status -1, which signifies a year
-   so early that JD could not be computed.
+   considered dubious.  In this case a warning is issued but the
+   result is computed in the normal way.
 
 2) If the specified date is for a day which ends with a leap second,
    the TAI-UTC value returned is for the period leading up to the leap
@@ -163,17 +166,9 @@ julia> dat(2017, 9, 1, 0.0)
 4) The fraction of day is used only for dates before the introduction
    of leap seconds, the first of which occurred at the end of 1971.
    It is tested for validity (0 to 1 is the valid range) even if not
-   used; if invalid, zero is used and status -4 is returned.  For many
-   applications, setting fd to zero is acceptable; the resulting error
-   is always less than 3 ms (and occurs only pre-1972).
-
-5) The status value returned in the case where there are multiple
-   errors refers to the first error detected.  For example, if the
-   month and day are 13 and 32 respectively, status -2 (bad month)
-   will be returned.  The "internal error" status refers to a case
-   that is impossible but causes some compilers to issue a warning.
-
-6) In cases where a valid result is not available, zero is returned.
+   used; if invalid, an AssertionError is thrown.  For many
+   applications, setting subday to zero is acceptable; the resulting
+   error is always less than 3 ms (and occurs only pre-1972).
 
 # References
 
@@ -189,13 +184,15 @@ function dat(year::Integer, month::Integer, day::Integer, subday::AbstractFloat)
     @assert year >= DRIFTSECOND[1].year "UTC date is out of range [$(DRIFTSECOND[1].year)-present]."
     if (year > IYV + 5) @warn "UTC date $year-$month-$day is suspect." end
 
+    # Validate the calendar date (month and day ranges).
+    mjd = cal2jd(year, month, day)[:mjd]
+
     Δt = typeof(subday)(0.0)
     if year < 1972
         # Find drift offset
         for drift in reverse(DRIFTSECOND)
             if (12*year + month) >= (12*drift.year + drift.month)
-                Δt = drift.offset +
-                    (cal2jd(year, month, day)[:mjd] - drift.mjd + subday)*drift.rate
+                Δt = drift.offset + (mjd - drift.mjd + subday)*drift.rate
                 break
             end
         end                     
@@ -232,7 +229,7 @@ related to each other:
            :
           TCG             <-  time scale for GCRS
            :
-    "periodic" terms      <-  eraDtdb  is an implementation
+    "periodic" terms      <-  dtdb  is an implementation
            :
   rate adjustment (L_C)   <-  function of solar-system ephemeris
            :
@@ -242,20 +239,20 @@ related to each other:
            :
           TDB             <-  TCB scaled to track TT
            :
-    "periodic" terms      <-  -eraDtdb is an approximation
+    "periodic" terms      <-  -dtdb is an approximation
            :
           TT              <-  terrestrial time
-````
+```
 
 Adopted values for the various constants can be found in the IERS
 Conventions (McCarthy & Petit 2003).
 
 # Input
 
- - `day1`  -- TBD as part 1 of date (Notes 1-3)
+ - `day1`  -- TDB as part 1 of date (Notes 1-3)
  - `day2`  -- TDB as part 2 of date
- - `ut`    -- universal time (UT1, fraction of one day)
- - `elong` -- longitude (east positive, radians)
+ - `ut1`   -- universal time (UT1, fraction of one day)
+ - `eastlon` -- longitude (east positive, radians)
  - `u`     -- distance from Earth spin axis (km)
  - `v`     -- distance north of equatorial plane (km)
 
@@ -322,7 +319,7 @@ Conventions (McCarthy & Petit 2003).
 
 6) The geocentric TDB-TT model used in the present function is that of
    Fairhead & Bretagnon (1990), in its full form.  It was originally
-   supplied by Fairhead (private communications with P.T.Wallace, 1960)
+   supplied by Fairhead (private communications with P.T.Wallace, 1990)
    as a Fortran subroutine.  The present C function contains an
    adaptation of the Fairhead code.  The numerical results are
    essentially unaffected by the changes, the differences with respect
@@ -369,7 +366,7 @@ G. & Laskar, J., Astron.Astrophys., 282, 663-683 (1994).
 """
 function dtdb(day1::AbstractFloat, day2::AbstractFloat, ut1::AbstractFloat, eastlon::AbstractFloat,
               u::AbstractFloat, v::AbstractFloat)
-    #  Time since J2000.0 in Julian millenia.
+    #  Time since J2000.0 in Julian millennia.
     Δt = ((day1 - JD2000) + day2)/(1000*DAYPERYEAR)
 
     #  Topocentric terms
@@ -444,11 +441,7 @@ UTC a quasi-JD form that includes special provision for leap seconds).
    case) is significant, and enables handling of leap seconds (see
    Note 4).
 
-2) For calendar conventions and limitations, see eraCal2jd.
-
-3) The sum of the results, d1+d2, is Julian Date, where normally d1 is
-   the Julian Day Number and d2 is the fraction of a day.  In the case
-   of UTC, where the use of JD is problematical, special
+2) For calendar conventions and limitations, see cal2jd.
 
 3) The sum of the results, d1+d2, is Julian Date, where normally d1 is
    the Julian Day Number and d2 is the fraction of a day.  In the case
@@ -456,12 +449,12 @@ UTC a quasi-JD form that includes special provision for leap seconds).
    apply: see the next note.
 
 4) JD cannot unambiguously represent UTC during a leap second unless
-   special measures are taken.  The ERFA internal convention is that
+   special measures are taken.  The SOFA internal convention is that
    the quasi-JD day represents UTC days whether the length is 86399,
    86400 or 86401 SI seconds.  In the 1960-1972 era there were smaller
    jumps (in either direction) each time the linear UTC(TAI)
    expression was changed, and these "mini-leaps" are also included in
-   the ERFA convention.
+   the SOFA convention.
 
 5) The warning status "time is after end of day" usually means that
    the sec argument is greater than 60.0.  However, in a day ending in
@@ -470,7 +463,7 @@ UTC a quasi-JD form that includes special provision for leap seconds).
 
 6) The warning status "dubious year" flags UTCs that predate the
    introduction of the time scale or that are too far in the future to
-   be trusted.  See eraDat for further details.
+   be trusted.  See dat for further details.
 
 7) Only in the case of continuous and regular time scales (TAI, TT,
    TCG, TCB and TDB) is the result d1+d2 a Julian Date, strictly
@@ -482,6 +475,9 @@ function dtf2d(scale::AbstractString, year::Int, month::Int, day::Int, hour::Int
                minute::Int, second::AbstractFloat)
     # Today's Julian Day number
     julday = sum(cal2jd(year, month, day))
+
+    # Day-length change and final minute length in seconds (provisional).
+    Δt, seclim = 0.0, 60.0
 
     if scale == "UTC"
         # TAI-UTC at 00h today
@@ -496,14 +492,18 @@ function dtf2d(scale::AbstractString, year::Int, month::Int, day::Int, hour::Int
         # Any sudden change in TAI-UTC between today and tomorrow
         Δt = Δt24 - (2*Δt12 - Δt00)
 
-        # if leap second day, correct the day an final minute lengths
-        seclim = hour == 23 && minute == 59 ? 60.0 + Δt : 60.0
+        # if leap second day, correct the day and final minute lengths
+        if hour == 23 && minute == 59
+            seclim += Δt
+        end
     end
 
     # Validate the time
     @assert 0 <= hour <= 23 "Hour is out of range [0-23]"
     @assert 0 <= minute <= 59 "Minute is out of range [0-59]"
-    @assert 0 <= second <= seclim "Second is out of range [0-$seclim]"
+    @assert 0 <= second "Second is negative"
+    second < seclim ||
+        @warn "Time is after end of day."
 
     # The time in days
     subday = ((60.0*(60*hour + minute)) + second)/(SECPERDAY + Δt)
@@ -567,7 +567,7 @@ Universal Time, UT1.
 
  - `day1`  -- TAI as part 1 of Julian Date
  - `day2`  -- TAI as part 2 of Julian Date
- - `dta`   -- UT1-TAI in seconds
+ - `Δt`    -- UT1-TAI in seconds
 
 # Output
 
@@ -581,7 +581,7 @@ Universal Time, UT1.
    and tai2 is the fraction of a day.  The returned (day1,day2) follow
    suit.
 
-2) The argument dta, i.e. UT1-TAI, is an observed quantity, and is
+2) The argument Δt, i.e. UT1-TAI, is an observed quantity, and is
    available from IERS tabulations.
 
 # References
@@ -625,15 +625,15 @@ Coordinated Universal Time, UTC.
    86400 or 86401 SI seconds.  In the 1960-1972 era there were smaller
    jumps (in either direction) each time the linear UTC(TAI)
    expression was changed, and these "mini-leaps" are also included in
-   the ERFA convention.
+   the SOFA convention.
 
-3) The function eraD2dtf can be used to transform the UTC quasi-JD
+3) The function d2dtf can be used to transform the UTC quasi-JD
    into calendar date and clock time, including UTC leap second
    handling.
 
 4) The warning status "dubious year" flags UTCs that predate the
    introduction of the time scale or that are too far in the future to
-   be trusted.  See eraDat for further details.
+   be trusted.  See dat for further details.
 
 # References
 
@@ -703,7 +703,7 @@ function tcbtdb(day1::AbstractFloat, day2::AbstractFloat)
         (day = day1, fraction = day2 + TDB0/SECPERDAY -
          ELB*((day1 - MJD0 - MJD77) + (day2 - TT_MINUS_TAI/SECPERDAY))) :
          (day = day1 + TDB0/SECPERDAY -
-          ELB*((day1 - MJD0 - MJD77) + (day1 - TT_MINUS_TAI/SECPERDAY)),
+          ELB*((day2 - MJD0 - MJD77) + (day1 - TT_MINUS_TAI/SECPERDAY)),
           fraction = day2)
 end
 
@@ -722,7 +722,7 @@ Terrestrial Time, TT.
 # Output
 
  - `tt1`   -- TT as part 1 of Julian Date
- - `tt1`   -- TT as part 2 of Julian Date
+ - `tt2`   -- TT as part 2 of Julian Date
 
 # Note
 
@@ -833,8 +833,8 @@ Terrestrial Time, TT.
    transformation between TT and TCB.  It is dependent upon the
    adopted solar-system ephemeris, and can be obtained by numerical
    integration, by interrogating a precomputed time ephemeris or by
-   evaluating a model such as that implemented in the ERFA function
-   eraDtdb.  The quantity is dominated by an annual term of 1.7 ms
+   evaluating a model such as that implemented in the SOFA function
+   dtdb.  The quantity is dominated by an annual term of 1.7 ms
    amplitude.
 
 3) TDB is essentially the same as Teph, the time argument for the JPL
@@ -962,8 +962,8 @@ Dynamical Time, TDB.
    transformation between TT and TCB.  It is dependent upon the
    adopted solar-system ephemeris, and can be obtained by numerical
    integration, by interrogating a precomputed time ephemeris or by
-   evaluating a model such as that implemented in the ERFA function
-   eraDtdb.  The quantity is dominated by an annual term of 1.7 ms
+   evaluating a model such as that implemented in the SOFA function
+   dtdb.  The quantity is dominated by an annual term of 1.7 ms
    amplitude.
 
 3) TDB is essentially the same as Teph, the time argument for the JPL
@@ -1022,9 +1022,9 @@ function ttut1(day1::AbstractFloat, day2::AbstractFloat, dt::AbstractFloat)
 end
 
 """
-    ut1tai(day1[, day2], dta) -> NamedTuple{(:day, :fraction)}
-    ut1tai(df::NamedTuple{(:day, :fraction)}, dta) -> NamedTuple{(:day, :fraction)}
-    ut1tai(dta) -> d->(ut1tai, dta)
+    ut1tai(day1[, day2], Δt) -> NamedTuple{(:day, :fraction)}
+    ut1tai(df::NamedTuple{(:day, :fraction)}, Δt) -> NamedTuple{(:day, :fraction)}
+    ut1tai(Δt) -> d->(ut1tai, Δt)
 
 Time scale transformation: Universal Time, UT1, to International
 Atomic Time, TAI.
@@ -1033,7 +1033,7 @@ Atomic Time, TAI.
 
  - `day1`  -- UT1 as part 1 of Julian Date
  - `day2`  -- UT1 as part 2 of Julian Date
- - `dta`   -- UT1-TAI in seconds
+ - `Δt`    -- UT1-TAI in seconds
 
 # Output
 
@@ -1047,7 +1047,7 @@ Atomic Time, TAI.
    and day2 is the fraction of a day.  The returned tai1,tai2 follow
    suit.
 
-2) The argument dta, i.e. UT1-TAI, is an observed quantity, and is
+2) The argument Δt, i.e. UT1-TAI, is an observed quantity, and is
    available from IERS tabulations.
 
 # References
@@ -1055,10 +1055,10 @@ Atomic Time, TAI.
 Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
-function ut1tai(day1::AbstractFloat, day2::AbstractFloat, dta::AbstractFloat)
+function ut1tai(day1::AbstractFloat, day2::AbstractFloat, Δt::AbstractFloat)
     abs(day1) > abs(day2) ?
-        (day = day1, fraction = day2 - dta/SECPERDAY) :
-        (day = day1 - dta/SECPERDAY, fraction = day2)
+        (day = day1, fraction = day2 - Δt/SECPERDAY) :
+        (day = day1 - Δt/SECPERDAY, fraction = day2)
 end
 
 """
@@ -1138,13 +1138,13 @@ Universal Time, UTC.
    is that the returned quasi-JD UTC1+UTC2 represents UTC days whether
    the length is 86399, 86400 or 86401 SI seconds.
 
-4) The function eraD2dtf can be used to transform the UTC quasi-JD
+4) The function d2dtf can be used to transform the UTC quasi-JD
    into calendar date and clock time, including UTC leap second
    handling.
 
 5) The warning status "dubious year" flags UTCs that predate the
    introduction of the time scale or that are too far in the future to
-   be trusted.  See eraDat for further details.
+   be trusted.  See dat for further details.
 
 # References
 
@@ -1155,12 +1155,14 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
 function ut1utc(day1::AbstractFloat, day2::AbstractFloat, duts::AbstractFloat)
-    #  See if the UT1 can possibly be in a leap-second day
-    utc1, utc2 = abs(day1) >= abs(day2) ? (day1, day2) : (day2, day1)
-    day1, dats1 = utc1, 0.0
+    #  Put the two parts of the UT1 into big-first order.
+    big1 = abs(day1) >= abs(day2)
+    utc1, utc2 = big1 ? (day1, day2) : (day2, day1)
+    dats1 = 0.0
 
+    #  See if the UT1 can possibly be in a leap-second day.
     for i=-1:3
-        year, month, day, frac = jd2cal(day1, day2+i)
+        year, month, day, frac = jd2cal(utc1, utc2 + i)
         dats2 = dat(year, month, day, 0.0)
         if i == -1 dats1 = dats2 end
         ddats = dats2 - dats1
@@ -1169,14 +1171,14 @@ function ut1utc(day1::AbstractFloat, day2::AbstractFloat, duts::AbstractFloat)
             if ddats * duts >= 0 duts -= ddats end
 
             #  UT1 for the start of the UTC day that ends in a leap.
-            #  Is th UT! after this time?
+            #  Is the UT1 after this time?
             du = sum((utc1, utc2 + 1.0 - duts/SECPERDAY) .- cal2jd(year, month, day))
 
             if du > 0
-                #  Yes. fraction of hte current UTC day that has elapsed.
+                #  Yes. fraction of the current UTC day that has elapsed.
                 frac = du*SECPERDAY/(SECPERDAY + ddats)
 
-                #  Ramp UT1-UTC to bring about ERFA's JD(UTC) convention.
+                #  Ramp UT1-UTC to bring about SOFA's JD(UTC) convention.
                 duts += ddats * (frac <= 1.0 ? frac : 1.0)
             end
             break
@@ -1185,9 +1187,10 @@ function ut1utc(day1::AbstractFloat, day2::AbstractFloat, duts::AbstractFloat)
     end
 
     #  Subtract the (possibly adjusted) UT1-UTC from UT1 to give UTC.
-    abs(day1) > abs(day2) ?
-        (day = utc1, fraction = utc2 - duts/SECPERDAY) :
-        (day = utc1 - duts/SECPERDAY, fraction = utc2)
+    utc2 -= duts/SECPERDAY
+
+    #  Return the result, safeguarding precision.
+    big1 ? (day = utc1, fraction = utc2) : (day = utc2, fraction = utc1)
 end
 
 """
@@ -1226,13 +1229,13 @@ julia> utctai(2453750.5, 0.892100694)
    86400 or 86401 SI seconds.  In the 1960-1972 era there were smaller
    jumps (in either direction) each time the linear UTC(TAI)
    expression was changed, and these "mini-leaps" are also included in
-   the ERFA convention.
+   the SOFA convention.
 
 3) The warning status "dubious year" flags UTCs that predate the
    introduction of the time scale or that are too far in the future to
-   be trusted.  See eraDat for further details.
+   be trusted.  See dat for further details.
 
-4) The function eraDtf2d converts from calendar date and time of day
+4) The function dtf2d converts from calendar date and time of day
    into 2-part Julian Date, and in the case of UTC implements the
    leap-second-ambiguity convention described above.
 
@@ -1249,7 +1252,8 @@ Seidelmann (ed), University Science Books (1992)
 """
 function utctai(day1::AbstractFloat, day2::AbstractFloat)
 
-    utc1, utc2 = abs(day1) >= abs(day2) ? (day1, day2) : (day2, day1)
+    big1 = abs(day1) >= abs(day2)
+    utc1, utc2 = big1 ? (day1, day2) : (day2, day1)
     year, month, day, frac = jd2cal(utc1, utc2)
     #  Get TAI-UTC at 0 hours today
     dat00 = dat(year, month, day, 0.0)
@@ -1261,7 +1265,7 @@ function utctai(day1::AbstractFloat, day2::AbstractFloat)
     y1, m1, d1, _f1 = jd2cal(utc1 + 1.5, utc2 - frac)
     dat24 = dat(y1, m1, d1, 0.0)
 
-    #  Separate TAI-UTC change into per-day (DKOD) and any jump (DLEAP).
+    #  Separate TAI-UTC change into per-day (DLOD) and any jump (DLEAP).
     dlod = 2*(dat12 - dat00)
     dleap = dat24 - (dat00 + dlod)
 
@@ -1274,7 +1278,7 @@ function utctai(day1::AbstractFloat, day2::AbstractFloat)
     #  Today's calendar date to JD
     today1, today2 = cal2jd(year, month, day)
     
-    abs(day1) > abs(day2) ?
+    big1 ?
         (day = utc1, fraction = today1 - utc1 + today2 + frac + dat00/SECPERDAY) :
         (day = today1 - utc1 + today2 + frac + dat00/SECPERDAY, fraction = utc1)
 end
@@ -1311,9 +1315,9 @@ Universal Time, UT1.
 
 3) The warning status "dubious year" flags UTCs that predate the
    introduction of the time scale or that are too far in the future to
-   be trusted.  See eraDat for further details.
+   be trusted.  See dat for further details.
 
-4) The function eraDtf2d converts from calendar date and time of day
+4) The function dtf2d converts from calendar date and time of day
    into 2-part Julian Date, and in the case of UTC implements the
    leap-second-ambiguity convention described above.
 
@@ -1335,7 +1339,7 @@ Seidelmann (ed), University Science Books (1992)
 """
 function utcut1(day1::AbstractFloat, day2::AbstractFloat, dut1::AbstractFloat)
     
-    #  Loop up TAI-UTC.
+    #  Look up TAI-UTC.
     year, month, day, frac = jd2cal(day1, day2)
 
     #  Form UT1-TAI and UTC to TAI to UT1.

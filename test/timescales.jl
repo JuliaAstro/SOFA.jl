@@ -73,3 +73,40 @@
 
 @test all(isapprox.(values(SOFA.utctai(2_451_555)|>SOFA.taiutc),
                     (2_451_555.0, 0.0); atol=1e-12))
+
+####    Regression tests (v2.0.0 pre-release review)    ####
+
+#   dtf2d: seclim and the day-length change were undefined for any
+#   non-UTC scale
+@test all(isapprox.(values(SOFA.dtf2d("TAI", 1994, 6, 30, 12, 5, 2.0)),
+                    (2449533.5, 0.5034953703703704); atol=1e-12))
+
+#   dtf2d: time past the end of day is a warning, not an error
+@test_logs (:warn, r"after end of day") SOFA.dtf2d("TAI", 1994, 6, 30, 23, 59, 60.5)
+
+#   tcbtdb: the low-order branch used day1 where the C uses day2
+@test abs(sum(SOFA.tcbtdb(0.893019599, 2453750.5)) -
+          (2453750.5 + 0.8928551362746343397)) <= 1e-9
+
+#   ut1utc: the leap-second scan and the result assembly used the wrong
+#   part when the small part comes first; order must be preserved
+let u = SOFA.ut1utc(0.892104561, 2453750.5, 0.3341)
+    @test u.fraction == 2453750.5
+    @test abs(u.day - 0.8921006941018518935) <= 1e-12
+end
+
+#   dat: month/day are validated for post-1972 dates too
+@test_throws AssertionError SOFA.dat(2000, 13, 1, 0.0)
+@test_throws AssertionError SOFA.dat(2000, 4, 31, 0.0)
+
+#   dat: hand-derived drift-formula check (1.4228180 + 1 day of 0.001296
+#   s/day drift); no valid dat date can reach the cal2jd century-term bug,
+#   whose windows only precede century years not divisible by 400
+@test abs(SOFA.dat(1961, 1, 2, 0.0) - 1.424114) <= 1e-9
+
+#   d2dtf: rounding to 10s or coarser on a leap-second day goes up to
+#   the next day
+let d = SOFA.dtf2d("UTC", 2016, 12, 31, 23, 59, 57.0)
+    @test all(values(SOFA.d2dtf("UTC", -1, d...)) .== (2017, 1, 1, 0, 0, 0, 0))
+    @test all(values(SOFA.d2dtf("UTC", 0, d...)) .== (2016, 12, 31, 23, 59, 57, 0))
+end
