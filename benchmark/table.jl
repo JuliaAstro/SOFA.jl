@@ -2,23 +2,10 @@
 # uncommitted changes) and print AirspeedVelocity's markdown results tables
 # (median ± IQR times, then memory), plus a summary of the pyerfa comparison
 # CSVs when they exist.
-#
-# Requires AirspeedVelocity in the global environment:
-#     julia -e 'using Pkg; Pkg.add("AirspeedVelocity")'
-# Run with the benchmark project stacked on top of it:
-#     JULIA_LOAD_PATH="benchmark:@v#.#:@stdlib" julia benchmark/table.jl
-#
-# Results are cached in benchmark/results/ (gitignored); delete the JSON
-# there to force a fresh run.
 
 using AirspeedVelocity
 using BenchmarkTools: prettytime
 using PrettyTables
-
-# The stacked JULIA_LOAD_PATH above (no "@" entry) would leak into the
-# benchmark runner benchpkg spawns and shadow its isolated --project
-# environment; our own imports are done, so drop it for child processes.
-delete!(ENV, "JULIA_LOAD_PATH")
 
 const PKG = "SOFA"
 const REV = "dirty"

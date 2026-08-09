@@ -45,9 +45,12 @@ including uncommitted changes, followed by a summary of the committed pyerfa
 comparison CSVs (when present):
 
 ```sh
-julia -e 'using Pkg; Pkg.add("AirspeedVelocity")'
-JULIA_LOAD_PATH="benchmark:@v#.#:@stdlib" julia benchmark/table.jl
+julia -e 'using Pkg; Pkg.add("AirspeedVelocity")'   # once, into the global env
+julia --project=benchmark benchmark/table.jl
 ```
+
+(AirspeedVelocity is found through Julia's default environment stack, which
+falls back from the benchmark project to the global environment.)
 
 Results are cached in `benchmark/results/` (gitignored); delete the JSON there
 to force a re-run. To compare two revisions locally, use the `benchpkg` CLI
