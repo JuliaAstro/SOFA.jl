@@ -38,7 +38,7 @@ jobs:
       # The action above leaves the PR head checked out and Julia on PATH;
       # reuse both for a fresh pyerfa comparison run on this PR.
       - name: Cache CondaPkg environment
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: benchmark/pyerfa/.CondaPkg
           key: ${{ runner.os }}-condapkg-${{ hashFiles('benchmark/pyerfa/CondaPkg.toml') }}
