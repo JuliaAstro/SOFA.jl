@@ -36,3 +36,19 @@
 #   jdcalf: the returned fraction must come from jd2cal after any day
 #   rollover (used to return fraction = denominator)
 @test all(values(SOFA.jdcalf(2, 2400000.5, 50123.9999)) .== (1996, 2, 11, 0))
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   jd2cal: Float64-typed locals demoted BigFloat inputs and rejected
+#   Integer ones
+let frac2 = big"0.9999" + big"1.2345e-30"
+    fraction = SOFA.jd2cal(big"2400000.5", 50123 + frac2).fraction
+    @test fraction isa BigFloat
+    @test abs(fraction - frac2) < big"1e-45"
+end
+@test SOFA.jd2cal(2451545, 0) == (year = 2000, month = 1, day = 1, fraction = 0.5)
+
+#   jdcalf: accepts Integer and BigFloat date parts
+@test SOFA.jdcalf(4, 2400000, 50124) == (year = 1996, month = 2, day = 10, fraction = 5000)
+@test SOFA.jdcalf(4, big"2400000.5", big"50123.9999") ==
+      (year = 1996, month = 2, day = 10, fraction = 9999)
