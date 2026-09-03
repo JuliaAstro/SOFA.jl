@@ -1,0 +1,11 @@
+# pyerfa comes from pip, not conda-forge: the pip wheel bundles its own
+# liberfa, so the single pyerfa pin fixes the entire C stack
+# (pyerfa 2.0.1.5 -> liberfa 2.0.1 -> SOFA release 20231011, the release
+# SOFA.jl v2 targets). The conda-forge package links a separate liberfa
+# package that would need its own pin.
+[deps]
+python = "=3.12"
+numpy = "=2.2"
+
+[pip.deps]
+pyerfa = "==2.0.1.5"
