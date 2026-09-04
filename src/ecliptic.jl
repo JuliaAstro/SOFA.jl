@@ -56,8 +56,8 @@ julia> eceq06(2456165.5, 0.401182685, 5.1, -0.9)
    than 25 mas) to disturb this classical picture.
 """
 function eceq06(day1::AbstractFloat, day2::AbstractFloat, lon::AbstractFloat, lat::AbstractFloat)
-    @inline ra, dec = c2s(ecm06(day1, day2)'*s2c(lon, lat))
-    (ra = anp(ra), dec = anpm(dec))
+    @inline ra, dec = c2s(ecm06(day1, day2)' * s2c(lon, lat))
+    return (ra = anp(ra), dec = anpm(dec))
 end
 
 """
@@ -113,7 +113,7 @@ ICRS equatorial to ecliptic rotation matrix, IAU 2006.
    mas) to disturb this classical picture.
 """
 function ecm06(day1::AbstractFloat, day2::AbstractFloat)
-    @inline Rx(obl06(day1, day2))*pmat06(day1, day2)
+    return @inline Rx(obl06(day1, day2)) * pmat06(day1, day2)
 end
 
 """
@@ -173,8 +173,8 @@ julia> eqec06(1234.5, 2440000.5, 1.234, 0.987)
    than 25 mas) to disturb this classical picture.
 """
 function eqec06(day1::AbstractFloat, day2::AbstractFloat, ra::AbstractFloat, dec::AbstractFloat)
-    @inline lon, lat = c2s(ecm06(day1, day2)*s2c(ra, dec))
-    (lon = anp(lon), lat = anpm(lat))
+    @inline lon, lat = c2s(ecm06(day1, day2) * s2c(ra, dec))
+    return (lon = anp(lon), lat = anpm(lat))
 end
 
 """
@@ -222,8 +222,8 @@ expressions, valid for long time intervals (Corrigendum),
 Astron.Astrophys. 541, C1
 """
 function lteceq(epoch::AbstractFloat, lon::AbstractFloat, lat::AbstractFloat)
-    @inline ra, dec = c2s(ltecm(epoch)'*s2c(lon, lat))
-    (ra = anp(ra), dec = anpm(dec))
+    @inline ra, dec = c2s(ltecm(epoch)' * s2c(lon, lat))
+    return (ra = anp(ra), dec = anpm(dec))
 end
 
 """
@@ -280,11 +280,11 @@ function ltecm(epoch::AbstractFloat)
 
     #  Equatorial and ecliptic poles
     @inline equ, ecl = ltpequ(epoch), ltpecl(epoch)
-    
+
     #  Create matrix
-    w = vec2mat(equ)*ecl
-    eqx = w/norm(w)
-    vcat(eqx', (vec2mat(ecl)*eqx)', ecl')*(I + deg2rad(1/3600)*vec2mat(bias))
+    w = vec2mat(equ) * ecl
+    eqx = w / norm(w)
+    return vcat(eqx', (vec2mat(ecl) * eqx)', ecl') * (I + deg2rad(1 / 3600) * vec2mat(bias))
 end
 
 """
@@ -333,6 +333,6 @@ expressions, valid for long time intervals (Corrigendum),
 Astron.Astrophys. 541, C1
 """
 function lteqec(epoch::AbstractFloat, ra::AbstractFloat, dec::AbstractFloat)
-    @inline lon, lat = c2s(ltecm(epoch)*s2c(ra, dec))
-    (lon = anp(lon), lat = anpm(lat))
+    @inline lon, lat = c2s(ltecm(epoch) * s2c(ra, dec))
+    return (lon = anp(lon), lat = anpm(lat))
 end

@@ -80,18 +80,20 @@ function d2dtf(scale::AbstractString, ndp::Int, day1::AbstractFloat, day2::Abstr
         Δt12h = dat(year, month, day, 0.5)
 
         # TAI-UTC at  0h on next date (to detect jumps)
-        Δt24h = dat(values(jd2cal(day1+1.5, day2-subday))[1:3]..., 0.0)
+        Δt24h = dat(values(jd2cal(day1 + 1.5, day2 - subday))[1:3]..., 0.0)
 
         # Check for sudden change in TAI-UTC (seconds)
-        Δt = Δt24h - (2*Δt12h - Δt00h)
-        
+        Δt = Δt24h - (2 * Δt12h - Δt00h)
+
         # if leap second day, scale the fraction of a day into SI.
         leap = abs(Δt) > 0.5
-        if leap subday += subday*Δt/SECPERDAY end
+        if leap
+            subday += subday * Δt / SECPERDAY
+        end
     end
 
     sign, hour, minute, second, subsec = d2tf(ndp, subday)
-    
+
     # Check for rounded time >24 hours
     if hour > 23
         # Check for leap second day
@@ -99,21 +101,21 @@ function d2dtf(scale::AbstractString, ndp::Int, day1::AbstractFloat, day2::Abstr
             # Check that leap second has passed.
             date = second > 0 ?
                 # Use next day but allow for the leap second
-                (values(jd2cal(day1+1.5, day2-subday))[1:3]..., 0, 0, 0, subsec) :
+                (values(jd2cal(day1 + 1.5, day2 - subday))[1:3]..., 0, 0, 0, subsec) :
                 # Use 23 59 60 for the time.
                 (year, month, day, 23, 59, 60, subsec)
             # If rounding to 10s or coarser, always go up to the new day.
             if ndp < 0 && date[6] == 60
-                date = (values(jd2cal(day1+1.5, day2-subday))[1:3]..., 0, 0, 0, subsec)
+                date = (values(jd2cal(day1 + 1.5, day2 - subday))[1:3]..., 0, 0, 0, subsec)
             end
         else
             # Use 0h next day
-            date = (values(jd2cal(day1+1.5, day2-subday))[1:3]..., 0, 0, 0, subsec)
+            date = (values(jd2cal(day1 + 1.5, day2 - subday))[1:3]..., 0, 0, 0, subsec)
         end
     else
         date = (year, month, day, hour, minute, second, subsec)
     end
-    NamedTuple{(:year, :month, :day, :hour, :minute, :second, :fraction)}(date)
+    return NamedTuple{(:year, :month, :day, :hour, :minute, :second, :fraction)}(date)
 end
 
 """
@@ -182,7 +184,9 @@ function dat(year::Integer, month::Integer, day::Integer, subday::AbstractFloat)
 
     @assert 0.0 <= subday <= 1.0 "Fractional day out of range [0-1]."
     @assert year >= DRIFTSECOND[1].year "UTC date is out of range [$(DRIFTSECOND[1].year)-present]."
-    if (year > IYV + 5) @warn "UTC date $year-$month-$day is suspect." end
+    if (year > IYV + 5)
+        @warn "UTC date $year-$month-$day is suspect."
+    end
 
     # Validate the calendar date (month and day ranges).
     mjd = cal2jd(year, month, day)[:mjd]
@@ -191,21 +195,21 @@ function dat(year::Integer, month::Integer, day::Integer, subday::AbstractFloat)
     if year < 1972
         # Find drift offset
         for drift in reverse(DRIFTSECOND)
-            if (12*year + month) >= (12*drift.year + drift.month)
-                Δt = drift.offset + (mjd - drift.mjd + subday)*drift.rate
+            if (12 * year + month) >= (12 * drift.year + drift.month)
+                Δt = drift.offset + (mjd - drift.mjd + subday) * drift.rate
                 break
             end
-        end                     
+        end
     else
         # Find leap second
         for leap in reverse(LEAPSECOND)
-            if (12*year + month) >= (12*leap.year + leap.month)
+            if (12 * year + month) >= (12 * leap.year + leap.month)
                 Δt = leap.second
                 break
             end
         end
     end
-    Δt
+    return Δt
 end
 
 """
@@ -364,53 +368,73 @@ Almanac, Chapter 2, University Science Books (1992).
 Simon, J.L., Bretagnon, P., Chapront, J., Chapront-Touze, M., Francou,
 G. & Laskar, J., Astron.Astrophys., 282, 663-683 (1994).
 """
-function dtdb(day1::AbstractFloat, day2::AbstractFloat, ut1::AbstractFloat, eastlon::AbstractFloat,
-              u::AbstractFloat, v::AbstractFloat)
+function dtdb(
+        day1::AbstractFloat, day2::AbstractFloat, ut1::AbstractFloat, eastlon::AbstractFloat,
+        u::AbstractFloat, v::AbstractFloat
+    )
     #  Time since J2000.0 in Julian millennia.
-    Δt = ((day1 - JD2000) + day2)/(1000*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (1000 * DAYPERYEAR)
 
     #  Topocentric terms
-    tsol = 2pi*rem(ut1, 1) + eastlon
+    tsol = 2pi * rem(ut1, 1) + eastlon
 
     #  Fundamental arguments (Simon et al. 1994)
-    ϵsun  = deg2rad(rem(Polynomial(ϵsun_1994...)(Δt/3600), 360))
-    ϵmsun = deg2rad(rem(Polynomial(ϵmsun_1994...)(Δt/3600), 360))
-    D     = deg2rad(rem(Polynomial(D_1994...)(Δt/3600), 360))
-    ϵju   = deg2rad(rem(Polynomial(ϵju_1994...)(Δt/3600), 360))
-    ϵsa   = deg2rad(rem(Polynomial(ϵsa_1994...)(Δt/3600), 360))
+    ϵsun = deg2rad(rem(Polynomial(ϵsun_1994...)(Δt / 3600), 360))
+    ϵmsun = deg2rad(rem(Polynomial(ϵmsun_1994...)(Δt / 3600), 360))
+    D = deg2rad(rem(Polynomial(D_1994...)(Δt / 3600), 360))
+    ϵju = deg2rad(rem(Polynomial(ϵju_1994...)(Δt / 3600), 360))
+    ϵsa = deg2rad(rem(Polynomial(ϵsa_1994...)(Δt / 3600), 360))
 
     #  Topocentric terms: Moyer 1981 and Murray 1983
-    wt = sum(topo_1994 .* SVector(
-        u * sin(tsol + ϵsun - ϵsa),
-        u * sin(tsol - 2*ϵmsun),
-        u * sin(tsol - D),
-        u * sin(tsol + ϵsun - ϵju),
-        u * sin(tsol + 2*ϵsun + ϵmsun),
-        v * cos(ϵsun + ϵmsun),
-        u * sin(tsol - ϵmsun),
-        u * sin(tsol + 2*ϵsun),
-        v * cos(ϵsun),
-        u * sin(tsol)))
+    wt = sum(
+        topo_1994 .* SVector(
+            u * sin(tsol + ϵsun - ϵsa),
+            u * sin(tsol - 2 * ϵmsun),
+            u * sin(tsol - D),
+            u * sin(tsol + ϵsun - ϵju),
+            u * sin(tsol + 2 * ϵsun + ϵmsun),
+            v * cos(ϵsun + ϵmsun),
+            u * sin(tsol - ϵmsun),
+            u * sin(tsol + 2 * ϵsun),
+            v * cos(ϵsun),
+            u * sin(tsol)
+        )
+    )
 
     #  Fairhead et al. model
-    
-    wf = Polynomial(SVector(
-        sum(tdb_tt_2003_0[1,:] .*
-            sin.(tdb_tt_2003_0[3,:] .+ tdb_tt_2003_0[2,:].*Δt)),
-        sum(tdb_tt_2003_1[1,:] .*
-            sin.(tdb_tt_2003_1[3,:] .+ tdb_tt_2003_1[2,:].*Δt)),
-        sum(tdb_tt_2003_2[1,:] .*
-            sin.(tdb_tt_2003_2[3,:] .+ tdb_tt_2003_2[2,:].*Δt)),
-        sum(tdb_tt_2003_3[1,:] .*
-            sin.(tdb_tt_2003_3[3,:] .+ tdb_tt_2003_3[2,:].*Δt)),
-        sum(tdb_tt_2003_4[1,:] .*
-            sin.(tdb_tt_2003_4[3,:] .+ tdb_tt_2003_4[2,:].*Δt)))...)(Δt)
-    
-    wj = sum(mass_plan_1994_0[1,:] .*
-             sin.(mass_plan_1994_0[3,:] .+ mass_plan_1994_0[2,:].*Δt)) +
-             mass_plan_1994_2 * Δt^2
 
-    wt + wf + wj
+    wf = Polynomial(
+        SVector(
+            sum(
+                tdb_tt_2003_0[1, :] .*
+                    sin.(tdb_tt_2003_0[3, :] .+ tdb_tt_2003_0[2, :] .* Δt)
+            ),
+            sum(
+                tdb_tt_2003_1[1, :] .*
+                    sin.(tdb_tt_2003_1[3, :] .+ tdb_tt_2003_1[2, :] .* Δt)
+            ),
+            sum(
+                tdb_tt_2003_2[1, :] .*
+                    sin.(tdb_tt_2003_2[3, :] .+ tdb_tt_2003_2[2, :] .* Δt)
+            ),
+            sum(
+                tdb_tt_2003_3[1, :] .*
+                    sin.(tdb_tt_2003_3[3, :] .+ tdb_tt_2003_3[2, :] .* Δt)
+            ),
+            sum(
+                tdb_tt_2003_4[1, :] .*
+                    sin.(tdb_tt_2003_4[3, :] .+ tdb_tt_2003_4[2, :] .* Δt)
+            )
+        )...
+    )(Δt)
+
+    wj = sum(
+        mass_plan_1994_0[1, :] .*
+            sin.(mass_plan_1994_0[3, :] .+ mass_plan_1994_0[2, :] .* Δt)
+    ) +
+        mass_plan_1994_2 * Δt^2
+
+    return wt + wf + wj
 end
 
 """
@@ -471,8 +495,10 @@ UTC a quasi-JD form that includes special provision for leap seconds).
    with circumspection; in particular the difference between two such
    results cannot be interpreted as a precise time interval.
 """
-function dtf2d(scale::AbstractString, year::Int, month::Int, day::Int, hour::Int,
-               minute::Int, second::AbstractFloat)
+function dtf2d(
+        scale::AbstractString, year::Int, month::Int, day::Int, hour::Int,
+        minute::Int, second::AbstractFloat
+    )
     # Today's Julian Day number
     julday = sum(cal2jd(year, month, day))
 
@@ -490,7 +516,7 @@ function dtf2d(scale::AbstractString, year::Int, month::Int, day::Int, hour::Int
         Δt24 = dat(values(jd2cal(julday, 1.5))[1:3]..., 0.0)
 
         # Any sudden change in TAI-UTC between today and tomorrow
-        Δt = Δt24 - (2*Δt12 - Δt00)
+        Δt = Δt24 - (2 * Δt12 - Δt00)
 
         # if leap second day, correct the day and final minute lengths
         if hour == 23 && minute == 59
@@ -506,9 +532,9 @@ function dtf2d(scale::AbstractString, year::Int, month::Int, day::Int, hour::Int
         @warn "Time is after end of day."
 
     # The time in days
-    subday = ((60.0*(60*hour + minute)) + second)/(SECPERDAY + Δt)
-    
-    (day = julday, fraction = subday)
+    subday = ((60.0 * (60 * hour + minute)) + second) / (SECPERDAY + Δt)
+
+    return (day = julday, fraction = subday)
 end
 
 """
@@ -551,8 +577,8 @@ julia> taitt(2453750.5, 0.892482639)
    Seidelmann (ed), University Science Books (1992)
 """
 function taitt(day1::AbstractFloat, day2::AbstractFloat)
-    abs(day1) > abs(day2) ? (day = day1, fraction = day2 + TT_MINUS_TAI/SECPERDAY) :
-        (day = day1 + TT_MINUS_TAI/SECPERDAY, fraction = day2)
+    return abs(day1) > abs(day2) ? (day = day1, fraction = day2 + TT_MINUS_TAI / SECPERDAY) :
+        (day = day1 + TT_MINUS_TAI / SECPERDAY, fraction = day2)
 end
 
 """
@@ -590,8 +616,8 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
 function taiut1(day1::AbstractFloat, day2::AbstractFloat, Δt::AbstractFloat)
-    abs(day1) > abs(day2) ? (day = day1, fraction = day2 + Δt/SECPERDAY) :
-        (day = day1 + Δt/SECPERDAY, fraction = day2)
+    return abs(day1) > abs(day2) ? (day = day1, fraction = day2 + Δt / SECPERDAY) :
+        (day = day1 + Δt / SECPERDAY, fraction = day2)
 end
 
 """
@@ -646,11 +672,11 @@ Seidelmann (ed), University Science Books (1992)
 function taiutc(day1::AbstractFloat, day2::AbstractFloat)
     utc1, utc2 = tai1, tai2 = abs(day1) >= abs(day2) ? (day1, day2) : (day2, day1)
 
-    for j=1:3
+    for j in 1:3
         #  Guess UTC to TAI and adjust guessed UTC
         utc2 += sum((tai1, tai2) .- values(utctai(utc1, utc2)))
     end
-    abs(day1) >= abs(day2) ? (day = utc1, fraction = utc2) : (day = utc2, fraction = utc1)
+    return abs(day1) >= abs(day2) ? (day = utc1, fraction = utc2) : (day = utc2, fraction = utc1)
 end
 
 """
@@ -699,12 +725,16 @@ Barycentric Dynamical Time, TDB.
 IAU 2006 Resolution B3
 """
 function tcbtdb(day1::AbstractFloat, day2::AbstractFloat)
-    abs(day1) > abs(day2) ?
-        (day = day1, fraction = day2 + TDB0/SECPERDAY -
-         ELB*((day1 - MJD0 - MJD77) + (day2 - TT_MINUS_TAI/SECPERDAY))) :
-         (day = day1 + TDB0/SECPERDAY -
-          ELB*((day2 - MJD0 - MJD77) + (day1 - TT_MINUS_TAI/SECPERDAY)),
-          fraction = day2)
+    return abs(day1) > abs(day2) ?
+        (
+            day = day1, fraction = day2 + TDB0 / SECPERDAY -
+            ELB * ((day1 - MJD0 - MJD77) + (day2 - TT_MINUS_TAI / SECPERDAY)),
+        ) :
+        (
+            day = day1 + TDB0 / SECPERDAY -
+            ELB * ((day2 - MJD0 - MJD77) + (day1 - TT_MINUS_TAI / SECPERDAY)),
+            fraction = day2,
+        )
 end
 
 """
@@ -739,12 +769,16 @@ Technical Note No. 32, BKG (2004)
 IAU 2000 Resolution B1.9
 """
 function tcgtt(day1::AbstractFloat, day2::AbstractFloat)
-    abs(day1) > abs(day2) ?
-        (day = day1, fraction = day2 -
-        ELG*((day1 - MJD0) + (day2 - MJD77 - TT_MINUS_TAI/SECPERDAY))) :
-        (day = day1 -
-        ELG*((day2 - MJD0) + (day1 - MJD77 - TT_MINUS_TAI/SECPERDAY)),
-    fraction = day2)
+    return abs(day1) > abs(day2) ?
+        (
+            day = day1, fraction = day2 -
+            ELG * ((day1 - MJD0) + (day2 - MJD77 - TT_MINUS_TAI / SECPERDAY)),
+        ) :
+        (
+            day = day1 -
+            ELG * ((day2 - MJD0) + (day1 - MJD77 - TT_MINUS_TAI / SECPERDAY)),
+            fraction = day2,
+        )
 end
 
 """
@@ -793,14 +827,22 @@ Barycentric Coordinate Time, TCB.
 IAU 2006 Resolution B3
 """
 function tdbtcb(day1::AbstractFloat, day2::AbstractFloat)
-    abs(day1) > abs(day2) ?
-        (day = day1, fraction = day2 - TDB0/SECPERDAY -
-        ELB/(1.0 - ELB)*((MJD0 + MJD77 - day1) -
-                         (day2 - (TDB0 + TT_MINUS_TAI)/SECPERDAY))) :
-        (day = day1 - TDB0/SECPERDAY -
-        ELB/(1.0 - ELB)*((MJD0 + MJD77 - day2) -
-                         (day1 - (TDB0 + TT_MINUS_TAI)/SECPERDAY)),
-    fraction = day2)
+    return abs(day1) > abs(day2) ?
+        (
+            day = day1, fraction = day2 - TDB0 / SECPERDAY -
+            ELB / (1.0 - ELB) * (
+                (MJD0 + MJD77 - day1) -
+                (day2 - (TDB0 + TT_MINUS_TAI) / SECPERDAY)
+            ),
+        ) :
+        (
+            day = day1 - TDB0 / SECPERDAY -
+            ELB / (1.0 - ELB) * (
+                (MJD0 + MJD77 - day2) -
+                (day1 - (TDB0 + TT_MINUS_TAI) / SECPERDAY)
+            ),
+            fraction = day2,
+        )
 end
 
 """
@@ -848,8 +890,8 @@ Technical Note No. 32, BKG (2004)
 IAU 2006 Resolution 3
 """
 function tdbtt(day1::AbstractFloat, day2::AbstractFloat, dtr::AbstractFloat)
-    abs(day1) > abs(day2) ? (day = day1, fraction = day2 - dtr/SECPERDAY) :
-        (day = day1 - dtr/SECPERDAY, fraction = day2)
+    return abs(day1) > abs(day2) ? (day = day1, fraction = day2 - dtr / SECPERDAY) :
+        (day = day1 - dtr / SECPERDAY, fraction = day2)
 end
 
 """
@@ -885,9 +927,9 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
 function tttai(day1::AbstractFloat, day2::AbstractFloat)
-    abs(day1) > abs(day2) ?
-        (day = day1, fraction = day2 - TT_MINUS_TAI/SECPERDAY) :
-        (day = day1 - TT_MINUS_TAI/SECPERDAY, fraction = day2)
+    return abs(day1) > abs(day2) ?
+        (day = day1, fraction = day2 - TT_MINUS_TAI / SECPERDAY) :
+        (day = day1 - TT_MINUS_TAI / SECPERDAY, fraction = day2)
 end
 
 """
@@ -922,14 +964,22 @@ Technical Note No. 32, BKG (2004)
 IAU 2000 Resolution B1.9
 """
 function tttcg(day1::AbstractFloat, day2::AbstractFloat)
-    abs(day1) > abs(day2) ?
-        (day = day1, fraction = day2 +
-        ELG/(1.0 - ELG)*((day1 - MJD0) +
-                         (day2 - MJD77 - TT_MINUS_TAI/SECPERDAY))) :
-        (day = day1 +
-        ELG/(1.0 - ELG)*((day2 - MJD0) +
-                         (day1 - MJD77 - TT_MINUS_TAI/SECPERDAY)),
-    fraction = day2)
+    return abs(day1) > abs(day2) ?
+        (
+            day = day1, fraction = day2 +
+            ELG / (1.0 - ELG) * (
+                (day1 - MJD0) +
+                (day2 - MJD77 - TT_MINUS_TAI / SECPERDAY)
+            ),
+        ) :
+        (
+            day = day1 +
+            ELG / (1.0 - ELG) * (
+                (day2 - MJD0) +
+                (day1 - MJD77 - TT_MINUS_TAI / SECPERDAY)
+            ),
+            fraction = day2,
+        )
 end
 
 """
@@ -977,9 +1027,9 @@ Technical Note No. 32, BKG (2004)
 IAU 2006 Resolution 3
 """
 function tttdb(day1::AbstractFloat, day2::AbstractFloat, dtr::AbstractFloat)
-    abs(day1) > abs(day2) ?
-        (day = day1, fraction = day2 + dtr/SECPERDAY) :
-        (day = day1 + dtr/SECPERDAY, fraction = day2)
+    return abs(day1) > abs(day2) ?
+        (day = day1, fraction = day2 + dtr / SECPERDAY) :
+        (day = day1 + dtr / SECPERDAY, fraction = day2)
 end
 
 """
@@ -1016,9 +1066,9 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
 function ttut1(day1::AbstractFloat, day2::AbstractFloat, dt::AbstractFloat)
-    abs(day1) > abs(day2) ?
-        (day = day1, fraction = day2 - dt/SECPERDAY) :
-        (day = day1 - dt/SECPERDAY, fraction = day2)
+    return abs(day1) > abs(day2) ?
+        (day = day1, fraction = day2 - dt / SECPERDAY) :
+        (day = day1 - dt / SECPERDAY, fraction = day2)
 end
 
 """
@@ -1056,9 +1106,9 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
 function ut1tai(day1::AbstractFloat, day2::AbstractFloat, Δt::AbstractFloat)
-    abs(day1) > abs(day2) ?
-        (day = day1, fraction = day2 - Δt/SECPERDAY) :
-        (day = day1 - Δt/SECPERDAY, fraction = day2)
+    return abs(day1) > abs(day2) ?
+        (day = day1, fraction = day2 - Δt / SECPERDAY) :
+        (day = day1 - Δt / SECPERDAY, fraction = day2)
 end
 
 """
@@ -1095,9 +1145,9 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
 function ut1tt(day1::AbstractFloat, day2::AbstractFloat, dt::AbstractFloat)
-    abs(day1) > abs(day2) ?
-        (day = day1, fraction = day2 + dt/SECPERDAY) :
-        (day = day1 + dt/SECPERDAY, fraction = day2)
+    return abs(day1) > abs(day2) ?
+        (day = day1, fraction = day2 + dt / SECPERDAY) :
+        (day = day1 + dt / SECPERDAY, fraction = day2)
 end
 
 """
@@ -1161,22 +1211,26 @@ function ut1utc(day1::AbstractFloat, day2::AbstractFloat, duts::AbstractFloat)
     dats1 = 0.0
 
     #  See if the UT1 can possibly be in a leap-second day.
-    for i=-1:3
+    for i in -1:3
         year, month, day, frac = jd2cal(utc1, utc2 + i)
         dats2 = dat(year, month, day, 0.0)
-        if i == -1 dats1 = dats2 end
+        if i == -1
+            dats1 = dats2
+        end
         ddats = dats2 - dats1
         if abs(ddats) >= 0.5
             #  Yes. Leap second nearby: ensure UT1-UTC is 'before' value.
-            if ddats * duts >= 0 duts -= ddats end
+            if ddats * duts >= 0
+                duts -= ddats
+            end
 
             #  UT1 for the start of the UTC day that ends in a leap.
             #  Is the UT1 after this time?
-            du = sum((utc1, utc2 + 1.0 - duts/SECPERDAY) .- cal2jd(year, month, day))
+            du = sum((utc1, utc2 + 1.0 - duts / SECPERDAY) .- cal2jd(year, month, day))
 
             if du > 0
                 #  Yes. fraction of the current UTC day that has elapsed.
-                frac = du*SECPERDAY/(SECPERDAY + ddats)
+                frac = du * SECPERDAY / (SECPERDAY + ddats)
 
                 #  Ramp UT1-UTC to bring about SOFA's JD(UTC) convention.
                 duts += ddats * (frac <= 1.0 ? frac : 1.0)
@@ -1187,10 +1241,10 @@ function ut1utc(day1::AbstractFloat, day2::AbstractFloat, duts::AbstractFloat)
     end
 
     #  Subtract the (possibly adjusted) UT1-UTC from UT1 to give UTC.
-    utc2 -= duts/SECPERDAY
+    utc2 -= duts / SECPERDAY
 
     #  Return the result, safeguarding precision.
-    big1 ? (day = utc1, fraction = utc2) : (day = utc2, fraction = utc1)
+    return big1 ? (day = utc1, fraction = utc2) : (day = utc2, fraction = utc1)
 end
 
 """
@@ -1266,21 +1320,21 @@ function utctai(day1::AbstractFloat, day2::AbstractFloat)
     dat24 = dat(y1, m1, d1, 0.0)
 
     #  Separate TAI-UTC change into per-day (DLOD) and any jump (DLEAP).
-    dlod = 2*(dat12 - dat00)
+    dlod = 2 * (dat12 - dat00)
     dleap = dat24 - (dat00 + dlod)
 
     #  Remove any scaling applied to spread leap into preceding day.
-    frac *= 1.0 + dleap/SECPERDAY
+    frac *= 1.0 + dleap / SECPERDAY
 
     #  Scale from (pre-1972) UTC second to SI seconds.
-    frac *= 1.0 + dlod/SECPERDAY
-    
+    frac *= 1.0 + dlod / SECPERDAY
+
     #  Today's calendar date to JD
     today1, today2 = cal2jd(year, month, day)
-    
-    big1 ?
-        (day = utc1, fraction = today1 - utc1 + today2 + frac + dat00/SECPERDAY) :
-        (day = today1 - utc1 + today2 + frac + dat00/SECPERDAY, fraction = utc1)
+
+    return big1 ?
+        (day = utc1, fraction = today1 - utc1 + today2 + frac + dat00 / SECPERDAY) :
+        (day = today1 - utc1 + today2 + frac + dat00 / SECPERDAY, fraction = utc1)
 end
 
 """
@@ -1338,13 +1392,14 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
 function utcut1(day1::AbstractFloat, day2::AbstractFloat, dut1::AbstractFloat)
-    
+
     #  Look up TAI-UTC.
     year, month, day, frac = jd2cal(day1, day2)
 
     #  Form UT1-TAI and UTC to TAI to UT1.
-    NamedTuple{(:day, :fraction)}(
-    taiut1(utctai(day1, day2)..., dut1 - dat(year, month, day, 0.0)))
+    return NamedTuple{(:day, :fraction)}(
+        taiut1(utctai(day1, day2)..., dut1 - dat(year, month, day, 0.0))
+    )
 end
 
 for f in (:taitt, :taiutc, :tcbtdb, :tcgtt, :tdbtcb, :tttai, :tttcg, :utctai)

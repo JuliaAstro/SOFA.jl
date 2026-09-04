@@ -53,8 +53,9 @@ julia> a2af(4, 2.345)
    for dms[0]=360 and setting dms[0-3] to zero.
 """
 function a2af(ndp::Integer, angle::Real)
-    NamedTuple{(:sign, :degree, :minute, :second, :fraction)}(
-        values(d2tf(ndp, angle*15/2/pi)))
+    return NamedTuple{(:sign, :degree, :minute, :second, :fraction)}(
+        values(d2tf(ndp, angle * 15 / 2 / pi))
+    )
 end
 
 """
@@ -102,7 +103,7 @@ Decompose radians into hours, minutes, seconds, and fraction.
    ihmsf[0]=24 and setting ihmsf[0-3] to zero.
 """
 function a2tf(ndp::Integer, angle::Real)
-    NamedTuple{(:sign, :hour, :minute, :second, :fraction)}(d2tf(ndp, angle/2/pi))
+    return NamedTuple{(:sign, :hour, :minute, :second, :fraction)}(d2tf(ndp, angle / 2 / pi))
 end
 
 """
@@ -135,13 +136,13 @@ julia> af2a('-', 45, 13, 27.2)
    an AssertionError if any argument is out of range.
 """
 function af2a(sign::Char, degree::Integer, minute::Integer, second::Real)
-    @assert 0   <= degree < 360   "degree out of range [0-359]."
-    @assert 0   <= minute <  60   "minute out of range [0-59]."
-    @assert 0.0 <= second <  60.0 "second out of range [0-60]."
-    
+    @assert 0 <= degree < 360   "degree out of range [0-359]."
+    @assert 0 <= minute < 60   "minute out of range [0-59]."
+    @assert 0.0 <= second < 60.0 "second out of range [0-60]."
+
     onet = one(typeof(second))
-    deg2rad(1/3600) * (sign == '-' ? -onet : onet) *
-       (60*onet * (60*onet * abs(degree) + abs(minute)) + abs(second))
+    return deg2rad(1 / 3600) * (sign == '-' ? -onet : onet) *
+        (60 * onet * (60 * onet * abs(degree) + abs(minute)) + abs(second))
 end
 
 """
@@ -166,7 +167,7 @@ julia> anp(-0.1)
 
 """
 function anp(angle::Real)
-    mod2pi(angle)
+    return mod2pi(angle)
 end
 
 """
@@ -184,7 +185,7 @@ Normalize angle into the range -pi <= a < +pi
 """
 function anpm(angle::Real)
     w = rem(angle, 2π)
-    abs(w) >= float(π) ? w - copysign(2π, angle) : w
+    return abs(w) >= float(π) ? w - copysign(2π, angle) : w
 end
 
 """
@@ -236,8 +237,8 @@ function d2tf(ndp::Integer, day::Real)
 
     a = SECPERDAY * abs(day)
     if ndp < 0
-        rs = prod(n == 2 || n == 4 ? 6 : 10 for n=1:-ndp)
-        a = rs * round(a/rs, RoundNearestTiesAway)
+        rs = prod(n == 2 || n == 4 ? 6 : 10 for n in 1:-ndp)
+        a = rs * round(a / rs, RoundNearestTiesAway)
     else
         rs = 10^ndp
     end
@@ -245,15 +246,15 @@ function d2tf(ndp::Integer, day::Real)
     rh, rm = 3600.0 * rs, 60.0 * rs
 
     sn = day >= 0.0 ? '+' : '-'
-    a  = round(rs * a, RoundNearestTiesAway)
-    ah = convert(Integer, trunc(a/rh))
-    a -= ah*rh
-    am = convert(Integer, trunc(a/rm))
-    a -= am*rm
-    as = convert(Integer, trunc(a/rs))
-    af = convert(Integer, a - as*rs)
+    a = round(rs * a, RoundNearestTiesAway)
+    ah = convert(Integer, trunc(a / rh))
+    a -= ah * rh
+    am = convert(Integer, trunc(a / rm))
+    a -= am * rm
+    as = convert(Integer, trunc(a / rs))
+    af = convert(Integer, a - as * rs)
 
-    NamedTuple{(:sign, :hour, :minute, :second, :fraction)}((sn, ah, am, as, af))
+    return NamedTuple{(:sign, :hour, :minute, :second, :fraction)}((sn, ah, am, as, af))
 end
 
 """
@@ -279,11 +280,11 @@ Convert hours, minutes, seconds to radians.
    an AssertionError if any argument is out of range.
 """
 function tf2a(sign::Char, hour::Integer, minute::Integer, second::Real)
-    @assert 0   <= hour   <   24  "hour out of range [0-23]."
-    @assert 0   <= minute <   60  "minute out of range [0-59]."
+    @assert 0 <= hour < 24  "hour out of range [0-23]."
+    @assert 0 <= minute < 60  "minute out of range [0-59]."
     @assert 0.0 <= second < 60.0 "second out of range [0-60]."
-    
-    15*deg2rad(1/3600) * (sign == '-' ? -1.0 : 1.0) *
+
+    return 15 * deg2rad(1 / 3600) * (sign == '-' ? -1.0 : 1.0) *
         (60.0 * (60.0 * abs(hour) + abs(minute)) + abs(second))
 end
 
@@ -310,11 +311,11 @@ Convert hours, minutes, seconds to days.
    an AssertionError if any argument is out of range.
 """
 function tf2d(sign::Char, hour::Integer, minute::Integer, second::Real)
-    @assert 0   <= hour   <   24  "hour out of range [0-23]."
-    @assert 0   <= minute <   60  "minute out of range [0-59]."
+    @assert 0 <= hour < 24  "hour out of range [0-23]."
+    @assert 0 <= minute < 60  "minute out of range [0-59]."
     @assert 0.0 <= second < 60.0 "second out of range [0-60]."
-    
-    (sign == '-' ? -1.0 : 1.0) *
+
+    return (sign == '-' ? -1.0 : 1.0) *
         (60.0 * (60.0 * abs(hour) + abs(minute)) + abs(second)) / SECPERDAY
 end
 
@@ -351,7 +352,7 @@ Rotate an r-matrix about the x-axis.
 """
 function rx(ϕ::Real, r::AbstractMatrix{<:Real})
     #  Matrix multiplication performs two allocations
-    Rx(ϕ)*r
+    return Rx(ϕ) * r
 end
 
 """
@@ -384,7 +385,7 @@ Rotate an r-matrix about the y-axis.
 """
 function ry(θ::Real, r::AbstractMatrix{<:Real})
     #  Matrix multiplication performs two allocations
-    Ry(θ)*r
+    return Ry(θ) * r
 end
 
 """
@@ -418,7 +419,7 @@ Rotate an r-matrix about the z-axis.
 """
 function rz(ψ::Real, r::AbstractMatrix{<:Real})
     #  Matrix multiplication performs two allocations
-    Rz(ψ)*r
+    return Rz(ψ) * r
 end
 
 #### Vector - Matrix / Copy, Extend, Extract
@@ -483,7 +484,7 @@ Extend a p-vector to a pv-vector by appending a zero velocity.
 """
 function p2pv(p::AbstractVector{<:Real})
     zerot = zero(eltype(p))
-    SVector(p, SVector(zerot, zerot, zerot))
+    return SVector(p, SVector(zerot, zerot, zerot))
 end
 
 """
@@ -512,7 +513,7 @@ Initialize an r-matrix to the identity matrix.
 
  - `r`     -- r-matrix
 """
-ir() = SMatrix{3, 3}(1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0)
+ir() = SMatrix{3, 3}(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
 
 """
     zp()
@@ -543,7 +544,7 @@ Initialize an r-matrix to the null matrix.
 # Output
  - `r`     -- r-matrix
 """
-zr() = SMatrix{3, 3}(0.0, 0.0, 0.0,  0.0, 0.0, 0.0,  0.0, 0.0, 0.0)
+zr() = SMatrix{3, 3}(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
 #### Vector - Matrix / Matrix Operations
 
@@ -566,7 +567,7 @@ Multiply two r-matrices.
 1) It is permissible to re-use the same array for any of the
    arguments.
 """
-rxr(a::V, b::V) where V<:AbstractMatrix{<:Real} = a*b
+rxr(a::V, b::V) where {V <: AbstractMatrix{<:Real}} = a * b
 
 """
     tr(r::AbstractMatrix{<:Real})
@@ -612,7 +613,7 @@ Multiply a p-vector by an r-matrix.
 
 1) It is permissible for p and rp to be the same array.
 """
-rxp(r::AbstractMatrix{<:Real}, p::AbstractVector{<:Real}) = r*p
+rxp(r::AbstractMatrix{<:Real}, p::AbstractVector{<:Real}) = r * p
 
 """
     rxpv(r::AbstractMatrix{<:Real}, pv::AbstractVector{<:AbstractVector{<:Real}})
@@ -637,8 +638,10 @@ Multiply a pv-vector by an r-matrix.
 
 2) It is permissible for pv and rpv to be the same array.
 """
-rxpv(r::AbstractMatrix{<:Real},
-    pv::AbstractVector{<:AbstractVector{<:Real}}) = SVector{2}(r*pv[1], r*pv[2])
+rxpv(
+    r::AbstractMatrix{<:Real},
+    pv::AbstractVector{<:AbstractVector{<:Real}}
+) = SVector{2}(r * pv[1], r * pv[2])
 
 """
     trxp(r::AbstractMatrix{<:Real}, p::AbstractVector{<:Real})
@@ -658,7 +661,7 @@ Multiply a p-vector by the transpose of an r-matrix.
 
 1) It is permissible for p and trp to be the same array.
 """
-trxp(r::AbstractMatrix{<:Real}, p::AbstractVector{<:Real}) = r'*p
+trxp(r::AbstractMatrix{<:Real}, p::AbstractVector{<:Real}) = r' * p
 
 """
     trxpv(r::AbstractMatrix{<:Real}, pv::AbstractVector{<:AbstractVector{<:Real}})
@@ -683,8 +686,10 @@ Multiply a pv-vector by the transpose of an r-matrix.
 
 2) It is permissible for pv and rpv to be the same array.
 """
-trxpv(r::AbstractMatrix{<:Real},
-    pv::AbstractVector{<:AbstractVector{<:Real}}) = SVector{2}(r'*pv[1], r'*pv[2])
+trxpv(
+    r::AbstractMatrix{<:Real},
+    pv::AbstractVector{<:AbstractVector{<:Real}}
+) = SVector{2}(r' * pv[1], r' * pv[2])
 
 #### Vector - Matrix / Rotation Vectors
 
@@ -717,10 +722,10 @@ Express an r-matrix as an r-vector.
    rotation vector from the origin.
 """
 function rm2v(r::AbstractMatrix{<:Real})
-    x, y, z = r[2,3] - r[3,2], r[3,1] - r[1,3], r[1,2] - r[2,1]
-    s2, c2 = norm((x, y, z)), r[1,1] + r[2,2] + r[3,3] - 1
+    x, y, z = r[2, 3] - r[3, 2], r[3, 1] - r[1, 3], r[1, 2] - r[2, 1]
+    s2, c2 = norm((x, y, z)), r[1, 1] + r[2, 2] + r[3, 3] - 1
     zerot = zero(eltype(r))
-    s2 > 0 ? SVector{3}(x, y, z)*atan(s2, c2)/s2 : SVector{3}(zerot, zerot, zerot)
+    return s2 > 0 ? SVector{3}(x, y, z) * atan(s2, c2) / s2 : SVector{3}(zerot, zerot, zerot)
 end
 
 """
@@ -752,8 +757,8 @@ function rv2m(w::AbstractVector{<:Real})
     #  Euler angle (magnitude of rotation vector)
     ϕ = norm(w)
     #  Euler axis (direction of rotation vector), perhaps null
-    k = -(ϕ > 0 ? w/ϕ : w)
-    I + sin(ϕ)*vec2mat(k) + (1-cos(ϕ))*vec2mat(k)*vec2mat(k)
+    k = -(ϕ > 0 ? w / ϕ : w)
+    return I + sin(ϕ) * vec2mat(k) + (1 - cos(ϕ)) * vec2mat(k) * vec2mat(k)
 end
 
 #### Vector - Matrix / Separation and Angle
@@ -787,19 +792,19 @@ Position-angle from two p-vectors.
 
 4) If vector a is at a pole, the result is ill-defined.
 """
-function pap(a::V, b::V) where V<:AbstractVector{<:Real}
+function pap(a::V, b::V) where {V <: AbstractVector{<:Real}}
     if norm(a) == 0 || norm(b) == 0
         θ = zero(eltype(a))
     else
         #  The north axis tangent from a (arbitrary length)
-        η = SVector{3}(-a[1]*a[3], -a[2]*a[3], sum(a[1:2].^2))
+        η = SVector{3}(-a[1] * a[3], -a[2] * a[3], sum(a[1:2] .^ 2))
         #  The east axis tanget from a (same length)
-        ξ = vec2mat(η)*a/norm(a)
+        ξ = vec2mat(η) * a / norm(a)
         # Resolve into components along the north and east axes
-        θ = (b.-a)'*ξ == 0 && (b.-a)'*η == 0 ? zero(eltype(a)) :
-            atan((b.-a)'*ξ, (b.-a)'*η)
+        θ = (b .- a)' * ξ == 0 && (b .- a)' * η == 0 ? zero(eltype(a)) :
+            atan((b .- a)' * ξ, (b .- a)' * η)
     end
-    θ
+    return θ
 end
 
 """
@@ -827,10 +832,10 @@ Position-angle from spherical coordinates.
 
 2) Zero is returned if the two points are coincident.
 """
-function pas(λa::F, ϕa::F, λb::F, ϕb::F) where F<:Real
-    x = sin(ϕb)*cos(ϕa) - cos(ϕb)*sin(ϕa)*cos(λb - λa)
-    y = sin(λb - λa)*cos(ϕb)
-    x != 0 || y != 0 ? atan(y, x) : 0.0
+function pas(λa::F, ϕa::F, λb::F, ϕb::F) where {F <: Real}
+    x = sin(ϕb) * cos(ϕa) - cos(ϕb) * sin(ϕa) * cos(λb - λa)
+    y = sin(λb - λa) * cos(ϕb)
+    return x != 0 || y != 0 ? atan(y, x) : 0.0
 end
 
 """
@@ -856,11 +861,11 @@ Angular separation between two p-vectors.
    and pi.  The present algorithm uses both cross product and dot
    product, to deliver full accuracy whatever the size of the angle.
 """
-function sepp(a::V, b::V) where V<:AbstractVector{<:Real}
+function sepp(a::V, b::V) where {V <: AbstractVector{<:Real}}
     #  Sine of angle between the vectors, multiplied by the two moduli
     #  Cosine of the angle, multiplied by the two moduli
-    cosθ, sinθ = sum(a.*b), norm(vec2mat(a)*b)
-    sinθ != 0 || cosθ != 0 ? atan(sinθ, cosθ) : 0.0
+    cosθ, sinθ = sum(a .* b), norm(vec2mat(a) * b)
+    return sinθ != 0 || cosθ != 0 ? atan(sinθ, cosθ) : 0.0
 end
 
 """
@@ -887,7 +892,7 @@ julia> seps(1.0, 0.1, 0.2, -3.0)
 ```
 
 """
-function seps(λa::F, ϕa::F, λb::F, ϕb::F) where F<:Real
+function seps(λa::F, ϕa::F, λb::F, ϕb::F) where {F <: Real}
     #=
     #  Spherical to Cartesian
     a = [cos(λa)*cos(ϕa), sin(λa)*cos(ϕa), sin(ϕa)]
@@ -898,7 +903,7 @@ function seps(λa::F, ϕa::F, λb::F, ϕb::F) where F<:Real
     cosθ = sum(a.*b)
     sinθ != 0 || cosθ != 0 ? atan(sinθ, cosθ) : 0.0
     =#
-    @inline sepp(s2c(λa, ϕa), s2c(λb, ϕb))
+    return @inline sepp(s2c(λa, ϕa), s2c(λb, ϕb))
 end
 
 #### Vector - Matrix / Spherical-Cartesian
@@ -934,9 +939,12 @@ julia> c2s([100.0, -50.0, 25.0])
 """
 function c2s(pos::AbstractVector{<:Real})
     zerot = zero(eltype(pos))
-    NamedTuple{(:θ, :ϕ)}(
-    ((pos[1]^2 + pos[2]^2) == zerot ? zerot : atan(pos[2], pos[1]),
-         pos[3] == zerot ? zerot : atan(pos[3], sqrt(pos[1]^2 + pos[2]^2))))
+    return NamedTuple{(:θ, :ϕ)}(
+        (
+            (pos[1]^2 + pos[2]^2) == zerot ? zerot : atan(pos[2], pos[1]),
+            pos[3] == zerot ? zerot : atan(pos[3], sqrt(pos[1]^2 + pos[2]^2)),
+        )
+    )
 end
 
 """
@@ -961,7 +969,7 @@ P-vector to spherical polar coordinates.
 2) At either pole, zero θ is returned.
 """
 function p2s(pos::AbstractVector{<:Real})
-    @inline NamedTuple{(:θ, :ϕ, :r)}((c2s(pos)..., norm(pos)))
+    return @inline NamedTuple{(:θ, :ϕ, :r)}((c2s(pos)..., norm(pos)))
 end
 
 """
@@ -994,24 +1002,24 @@ Convert position/velocity from Cartesian to spherical coordinates.
 2) If the position is a pole, theta, td and pd are indeterminate.  In
    such cases zeroes are returned for all three.
 """
-function pv2s(pv::V) where V<:AbstractVector{<:AbstractVector{<:Real}}
-    
+function pv2s(pv::V) where {V <: AbstractVector{<:AbstractVector{<:Real}}}
+
     zerot = zero(eltype(pv[1]))
-    x,  y,  z  = pv[norm(pv[1]) == zerot ? 2 : 1]
+    x, y, z = pv[norm(pv[1]) == zerot ? 2 : 1]
     dx, dy, dz = pv[2]
 
     if norm((x, y)) != zerot
-        θ  = atan(y, x)
-        ϕ  = atan(z, norm((x, y)))
-        dθ = (x*dy - y*dx) / (x*x+y*y)
-        dϕ = (dz*(x*x+y*y) - z*(x*dx+y*dy)) / (sum((x, y, z).^2)*norm((x, y)))
+        θ = atan(y, x)
+        ϕ = atan(z, norm((x, y)))
+        dθ = (x * dy - y * dx) / (x * x + y * y)
+        dϕ = (dz * (x * x + y * y) - z * (x * dx + y * dy)) / (sum((x, y, z) .^ 2) * norm((x, y)))
     else
-        θ,  ϕ  = zerot, (z != zerot) ? atan(z, norm((x, y))) : zerot
+        θ, ϕ = zerot, (z != zerot) ? atan(z, norm((x, y))) : zerot
         dθ, dϕ = zerot, zerot
     end
-    r  = norm(pv[1])
-    dr = norm((x, y, z)) != zerot ? (x*dx+y*dy+z*dz)/norm((x, y, z)) : zerot
-    (; θ = θ, ϕ = ϕ, r = r, δθ = dθ, δϕ = dϕ, δr = dr)
+    r = norm(pv[1])
+    dr = norm((x, y, z)) != zerot ? (x * dx + y * dy + z * dz) / norm((x, y, z)) : zerot
+    return (; θ = θ, ϕ = ϕ, r = r, δθ = dθ, δϕ = dϕ, δr = dr)
 end
 
 """
@@ -1039,8 +1047,8 @@ julia> s2c(3.0123, -0.999)
 ```
 
 """
-function s2c(θ::F, ϕ::F) where F<:Real
-    MVector(cos(θ)*cos(ϕ), sin(θ)*cos(ϕ), sin(ϕ))
+function s2c(θ::F, ϕ::F) where {F <: Real}
+    return MVector(cos(θ) * cos(ϕ), sin(θ) * cos(ϕ), sin(ϕ))
 end
 
 """
@@ -1058,7 +1066,7 @@ Convert spherical polar coordinates to p-vector.
 
  - `p`     -- Cartesian coordinates
 """
-s2p(θ::F, ϕ::F, r::F) where F<:Real = r*s2c(θ, ϕ)
+s2p(θ::F, ϕ::F, r::F) where {F <: Real} = r * s2c(θ, ϕ)
 
 """
     s2pv(θ::Real, ϕ::Real, r::Real, dθ::Real, dϕ::Real,
@@ -1079,11 +1087,15 @@ Convert position/velocity from spherical to Cartesian coordinates.
 
  - `pv`    -- pv-vector
 """
-function s2pv(θ::F, ϕ::F, r::F, dθ::F, dϕ::F, dr::F) where F<:Real
-    MVector(MVector(r*cos(θ)*cos(ϕ), r*sin(θ)*cos(ϕ), r*sin(ϕ)),
-     MVector(-r*dθ*sin(θ)*cos(ϕ) - cos(θ)*(r*dϕ*sin(ϕ) - dr*cos(ϕ)),
-      r*dθ*cos(θ)*cos(ϕ) - sin(θ)*(r*dϕ*sin(ϕ) - dr*cos(ϕ)),
-      r*dϕ*cos(ϕ) + dr*sin(ϕ)))
+function s2pv(θ::F, ϕ::F, r::F, dθ::F, dϕ::F, dr::F) where {F <: Real}
+    return MVector(
+        MVector(r * cos(θ) * cos(ϕ), r * sin(θ) * cos(ϕ), r * sin(ϕ)),
+        MVector(
+            -r * dθ * sin(θ) * cos(ϕ) - cos(θ) * (r * dϕ * sin(ϕ) - dr * cos(ϕ)),
+            r * dθ * cos(θ) * cos(ϕ) - sin(θ) * (r * dϕ * sin(ϕ) - dr * cos(ϕ)),
+            r * dϕ * cos(ϕ) + dr * sin(ϕ)
+        )
+    )
 end
 
 #### Vector - Matrix / Vector Operations
@@ -1110,7 +1122,7 @@ julia> pdp([2.0, 2.0, 3.0], [1.0, 3.0, 4.0])
 ```
 
 """
-pdp(a::V, b::V) where V<:AbstractVector{<:Real} = sum(a.*b)
+pdp(a::V, b::V) where {V <: AbstractVector{<:Real}} = sum(a .* b)
 
 """
     pm(p::AbstractVector{<:Real}) = norm(p)
@@ -1141,7 +1153,7 @@ P-vector subtraction.
 
  - `amb`   -- a - b
 """
-pmp(a::V, b::V) where V<:AbstractVector{<:Real} = a .- b
+pmp(a::V, b::V) where {V <: AbstractVector{<:Real}} = a .- b
 
 """
     pn(p::AbstractVector{<:Real})
@@ -1164,9 +1176,10 @@ Convert a p-vector into modulus and unit vector.
 """
 function pn(p::AbstractVector{<:Real})
     zerot = zero(eltype(p))
-    NamedTuple{(:modulus, :unit)}(
+    return NamedTuple{(:modulus, :unit)}(
         norm(p) == 0 ? (zerot, SVector{3}(zerot, zerot, zerot)) :
-        (norm(p), p./norm(p)))
+            (norm(p), p ./ norm(p))
+    )
 end
 
 """
@@ -1183,7 +1196,7 @@ P-vector addition.
 
  - `apb`   -- a + b
 """
-ppp(a::V, b::V) where V<:AbstractVector{<:Real} = a.+b
+ppp(a::V, b::V) where {V <: AbstractVector{<:Real}} = a .+ b
 
 """
     ppsp(a::AbstractVector{<:Real}, s::Real, b::AbstractVector{<:Real})
@@ -1200,7 +1213,7 @@ P-vector plus scaled p-vector.
 
  - `apsb`  -- a + s*b
 """
-ppsp(a::V, s::Real, b::V) where V<:AbstractVector{<:Real} = a + s*b
+ppsp(a::V, s::Real, b::V) where {V <: AbstractVector{<:Real}} = a + s * b
 
 """
     pvdpv(a::AbstractVector{<:AbstractVector{<:Real}}, b::AbstractVector{<:AbstractVector{<:Real}})
@@ -1224,8 +1237,8 @@ Inner (=scalar=dot) product of two pv-vectors.
    dot-product of the two p-vectors and its derivative.
 """
 function pvdpv(a::V, b::V) where
-    V<:AbstractVector{<:AbstractVector{<:Real}}
-   SVector{2}(sum(a[1].*b[1]), sum(a[1].*b[2] .+ a[2].*b[1]))
+    {V <: AbstractVector{<:AbstractVector{<:Real}}}
+    return SVector{2}(sum(a[1] .* b[1]), sum(a[1] .* b[2] .+ a[2] .* b[1]))
 end
 
 """
@@ -1243,8 +1256,8 @@ Modulus of pv-vector.
  - `s`     -- modulus of velocity component
 """
 function pvm(pv::V) where
-    V<:AbstractVector{<:AbstractVector{<:Real}}
-    sqrt.(sum.(SVector{2}(pv[1].^2, pv[2].^2)))
+    {V <: AbstractVector{<:AbstractVector{<:Real}}}
+    return sqrt.(sum.(SVector{2}(pv[1] .^ 2, pv[2] .^ 2)))
 end
 
 """
@@ -1262,8 +1275,8 @@ Subtract one pv-vector from another.
  - `amb`   -- a - b
 """
 function pvmpv(a::V, b::V) where
-    V<:AbstractVector{<:AbstractVector{<:Real}}
-    SVector{2}(a[1] .- b[1], a[2] .- b[2])
+    {V <: AbstractVector{<:AbstractVector{<:Real}}}
+    return SVector{2}(a[1] .- b[1], a[2] .- b[2])
 end
 
 """
@@ -1281,8 +1294,8 @@ Add one pv-vector to another.
  - `apb`   -- a + b
 """
 function pvppv(a::V, b::V) where
-    V<:AbstractVector{<:AbstractVector{<:Real}}
-    SVector{2}(a[1] .+ b[1], a[2] .+ b[2])
+    {V <: AbstractVector{<:AbstractVector{<:Real}}}
+    return SVector{2}(a[1] .+ b[1], a[2] .+ b[2])
 end
 
 """
@@ -1307,8 +1320,8 @@ Update a pv-vector.
 2) The time units of dt must match those of the velocity.
 """
 function pvu(dt::Real, pv::V) where
-    V<:AbstractVector{<:AbstractVector{<:Real}}
-    SVector{2}(pv[1] .+ dt.*pv[2], pv[2])
+    {V <: AbstractVector{<:AbstractVector{<:Real}}}
+    return SVector{2}(pv[1] .+ dt .* pv[2], pv[2])
 end
 
 """
@@ -1333,8 +1346,8 @@ Update a pv-vector, discarding the velocity component.
 2) The time units of dt must match those of the velocity.
 """
 function pvup(dt::Real, pv::V) where
-    V<:AbstractVector{<:AbstractVector{<:Real}}
-    pv[1] .+ dt*pv[2]
+    {V <: AbstractVector{<:AbstractVector{<:Real}}}
+    return pv[1] .+ dt * pv[2]
 end
 
 """
@@ -1359,8 +1372,8 @@ Outer (=vector=cross) product of two pv-vectors.
    cross-product of the two p-vectors and its derivative.
 """
 function pvxpv(a::V, b::V) where
-    V<:AbstractVector{<:AbstractVector{<:Real}}
-    SVector{2}(vec2mat(a[1])*b[1], vec2mat(a[1])*b[2] .+ vec2mat(a[2])*b[1])
+    {V <: AbstractVector{<:AbstractVector{<:Real}}}
+    return SVector{2}(vec2mat(a[1]) * b[1], vec2mat(a[1]) * b[2] .+ vec2mat(a[2]) * b[1])
 end
 
 """
@@ -1377,9 +1390,11 @@ P-vector outer (=vector=cross) product.
 
  - `axb`   -- a x b
 """
-function pxp(a::A, b::B) where {A<:AbstractVector{<:Real},
-    B<:AbstractVector{<:Real}}
-    vec2mat(a)*b
+function pxp(a::A, b::B) where {
+        A <: AbstractVector{<:Real},
+        B <: AbstractVector{<:Real},
+    }
+    return vec2mat(a) * b
 end
 
 """
@@ -1398,8 +1413,8 @@ Multiply a pv-vector by two scalars.
  - `spv`   -- pv-vector: p scaled by s1, v scaled by s2
 """
 function s2xpv(s1::F, s2::F, pv::V) where
-    {F<:Real, V<:AbstractVector{<:AbstractVector{<:Real}}}
-    SVector{2}(s1*pv[1], s2*pv[2])
+    {F <: Real, V <: AbstractVector{<:AbstractVector{<:Real}}}
+    return SVector{2}(s1 * pv[1], s2 * pv[2])
 end
 
 """
@@ -1416,7 +1431,7 @@ Multiply a p-vector by a scalar.
 
  - `sp`    -- s * p
 """
-sxp(s::Real, p::AbstractVector{<:Real}) = s*p
+sxp(s::Real, p::AbstractVector{<:Real}) = s * p
 
 """
     sxpv(s::Real, pv::AbstractVector{<:AbstractVector{<:Real}})
@@ -1433,6 +1448,6 @@ Multiply a pv-vector by a scalar.
  - `spv`   -- s * pv
 """
 function sxpv(s::F, pv::V) where
-    {F<:Real, V<:AbstractVector{<:AbstractVector{<:Real}}}
-    SVector{2}(s*pv[1], s*pv[2])
+    {F <: Real, V <: AbstractVector{<:AbstractVector{<:Real}}}
+    return SVector{2}(s * pv[1], s * pv[2])
 end

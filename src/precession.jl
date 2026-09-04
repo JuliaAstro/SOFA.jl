@@ -42,8 +42,9 @@ ftp://maia.usno.navy.mil/conv2000/chapter5/IAU2000A.
 function bi00()
     #  The frame bias corrections in longitude and obliquity, and the ICRS
     #  RA of the J2000.0 equinox (Chapront et al. 2002).
-    NamedTuple{(:ψ, :ϵ, :RA)}(
-        (deg2rad.(SVector(ψ_bias_2000, ϵ_bias_2000, icrs_ra_2000))/3600.0))
+    return NamedTuple{(:ψ, :ϵ, :RA)}(
+        (deg2rad.(SVector(ψ_bias_2000, ϵ_bias_2000, icrs_ra_2000)) / 3600.0)
+    )
 end
 
 """
@@ -107,20 +108,24 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 """
 function bp00(day1::AbstractFloat, day2::AbstractFloat)
     #  Interval between fundamental epoch J2000.0 and current date (JC).
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
     #  Frame bias
     δψ, δϵ, δra = bi00()
     #  Precession angles (Lieske et al. 1977)
-    χA = deg2rad(Polynomial(χ_1977...)(Δt)/3600)
+    χA = deg2rad(Polynomial(χ_1977...)(Δt) / 3600)
     #  Apply IAU 2000 precession corrections.
-    ψA, ωA = deg2rad.((Polynomial(ψ_1977...)(Δt),
-                       Polynomial(ω_1977...)(Δt))./3600) .+
-                           values(pr00(day1, day2))
+    ψA, ωA = deg2rad.(
+        (
+            Polynomial(ψ_1977...)(Δt),
+            Polynomial(ω_1977...)(Δt),
+        ) ./ 3600
+    ) .+
+        values(pr00(day1, day2))
     #  Frame bias matrix: GCRS to J2000.0.
-    rb = Rx(-δϵ)Ry(δψ*sin(deg2rad(ϵ0_2000/3600)))Rz(δra)
-    rp = Rz(χA)Rx(-ωA)Rz(-ψA)Rx(deg2rad(ϵ0_2000/3600))
+    rb = Rx(-δϵ)Ry(δψ * sin(deg2rad(ϵ0_2000 / 3600)))Rz(δra)
+    rp = Rz(χA)Rx(-ωA)Rz(-ψA)Rx(deg2rad(ϵ0_2000 / 3600))
     #  Bias-precession matrix: GCRS to mean of date.
-    (rb = rb, rp = rp, rbp = rp*rb)
+    return (rb = rb, rp = rp, rbp = rp * rb)
 end
 
 """
@@ -189,7 +194,7 @@ function bp06(day1::AbstractFloat, day2::AbstractFloat)
     #  PxB matrix
     rbp = pmat06(day1, day2)
     #  P matrix
-    (rb = rb, rp = rbp*rb', rbp = rbp)
+    return (rb = rb, rp = rbp * rb', rbp = rbp)
 end
 
 """
@@ -224,7 +229,7 @@ model", Astron.Astrophys. 400, 1145-1154 (2003)
 n.b. The celestial ephemeris origin (CEO) was renamed "celestial
      intermediate origin" (CIO) by IAU 2006 Resolution 2.
 """
-bpn2xy(r::AbstractMatrix{<:AbstractFloat}) = r[3,1:2]
+bpn2xy(r::AbstractMatrix{<:AbstractFloat}) = r[3, 1:2]
 
 """
     c2i00a(day1::AbstractFloat, day2::AbstractFloat)
@@ -289,10 +294,10 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2i00a(day1::F, day2::F) where F<:AbstractFloat
+function c2i00a(day1::F, day2::F) where {F <: AbstractFloat}
     #  Obtain the celestial-to-true matrix (IAU 2000A) and form the
     #  celestial-to-intermediate matrix
-    c2ibpn(day1, day2, pnm00a(day1, day2))
+    return c2ibpn(day1, day2, pnm00a(day1, day2))
 end
 
 """
@@ -358,10 +363,10 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2i00b(day1::F, day2::F) where F<:AbstractFloat
+function c2i00b(day1::F, day2::F) where {F <: AbstractFloat}
     #  Obtain the celestial-to-true matrix (IAU 2000B) and form the
     #  celestial-to-intermediate matrix
-    c2ibpn(day1, day2, pnm00b(day1, day2))
+    return c2ibpn(day1, day2, pnm00b(day1, day2))
 end
 
 """
@@ -417,12 +422,12 @@ IAU 2006 precession and IAU 2000A nutation models.
 McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function c2i06a(day1::F, day2::F) where F<:AbstractFloat
+function c2i06a(day1::F, day2::F) where {F <: AbstractFloat}
     #  Obtain the celestial-to-true matrix (IAU 2006/2000A), extract
     #  x, y coordinates.
     x, y = bpn2xy(pnm06a(day1, day2))
     #  Obtain the CIO locator, and form the celestial-to-intermediate matrix
-    c2ixys(x, y, s06(day1, day2, x, y))
+    return c2ixys(x, y, s06(day1, day2, x, y))
 end
 
 """
@@ -493,8 +498,8 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function c2ibpn(day1::F, day2::F, r::M) where
-   {F<:AbstractFloat, M<:AbstractMatrix{<:AbstractFloat}}
-    c2ixy(day1, day2, bpn2xy(r)...)
+    {F <: AbstractFloat, M <: AbstractMatrix{<:AbstractFloat}}
+    return c2ixy(day1, day2, bpn2xy(r)...)
 end
 
 """
@@ -557,8 +562,8 @@ date when the CIP X,Y coordinates are known.  IAU 2000.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2ixy(day1::F, day2::F, x::F, y::F) where F<:AbstractFloat
-    c2ixys(x, y, s00(day1, day2, x, y))
+function c2ixy(day1::F, day2::F, x::F, y::F) where {F <: AbstractFloat}
+    return c2ixys(x, y, s00(day1, day2, x, y))
 end
 
 """
@@ -601,10 +606,10 @@ X,Y and the CIO locator s.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2ixys(x::F, y::F, s::F) where F<:AbstractFloat
-    r = x*x + y*y
+function c2ixys(x::F, y::F, s::F) where {F <: AbstractFloat}
+    r = x * x + y * y
     e = r > 0.0 ? atan(y, x) : 0.0
-    Rz(-(e+s))Ry(atan(sqrt(r/(1.0 - r))))Rz(e)
+    return Rz(-(e + s))Ry(atan(sqrt(r / (1.0 - r))))Rz(e)
 end
 
 """
@@ -673,12 +678,12 @@ the polar motion, using the IAU 2000A precession-nutation model.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2t00a(tt1::F, tt2::F, ut1::F, ut2::F, x::F, y::F) where F<:AbstractFloat
+function c2t00a(tt1::F, tt2::F, ut1::F, ut2::F, x::F, y::F) where {F <: AbstractFloat}
     #  Form the celestial-to-intermediate matrix for this TT (IAU 2000A),
     #  predict the Earth rotation angle for this UT1, estimate s', form the
     #  polar motion matrix, and combine to form the celestial-to-terrestrial
     #  matrix.
-    c2tcio(c2i00a(tt1, tt2), era00(ut1, ut2), pom00(x, y, sp00(tt1, tt2)))
+    return c2tcio(c2i00a(tt1, tt2), era00(ut1, ut2), pom00(x, y, sp00(tt1, tt2)))
 end
 
 """
@@ -747,12 +752,12 @@ the polar motion, using the IAU 2000B precession-nutation model.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2t00b(tt1::F, tt2::F, ut1::F, ut2::F, x::F, y::F) where F<:AbstractFloat
+function c2t00b(tt1::F, tt2::F, ut1::F, ut2::F, x::F, y::F) where {F <: AbstractFloat}
     #  Form the celestial-to-intermediate matrix for this TT (IAU 2000B),
     #  predict the Earth rotation angle for this UT1, form the polar motion
     #  matrix (neglecting s'), and combine to form the
     #  celestial-to-terrestrial matrix.
-    c2tcio(c2i00b(tt1, tt2), era00(ut1, ut2), pom00(x, y, 0.0))
+    return c2tcio(c2i00b(tt1, tt2), era00(ut1, ut2), pom00(x, y, 0.0))
 end
 
 """
@@ -818,12 +823,12 @@ the polar motion, using the IAU 2006/2000A precession-nutation model.
 McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function c2t06a(tt1::F, tt2::F, ut1::F, ut2::F, x::F, y::F) where F<:AbstractFloat
+function c2t06a(tt1::F, tt2::F, ut1::F, ut2::F, x::F, y::F) where {F <: AbstractFloat}
     #  Form the celestial-to-intermediate matrix for this TT (IAU 2006/2000A),
     #  predict the Earth rotation angle for this UT1, estimate s', form the
     #  polar motion matrix, and combine to form the celestial-to-terrestrial
     #  matrix.
-    c2tcio(c2i06a(tt1, tt2), era00(ut1, ut2), pom00(x, y, sp00(tt1, tt2)))
+    return c2tcio(c2i06a(tt1, tt2), era00(ut1, ut2), pom00(x, y, sp00(tt1, tt2)))
 end
 
 """
@@ -872,8 +877,8 @@ McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
 function c2tcio(c2i::M, era::F, pm::M) where
-   {M<:AbstractMatrix{<:AbstractFloat}, F<:AbstractFloat}
-   pm*Rz(era)*c2i
+    {M <: AbstractMatrix{<:AbstractFloat}, F <: AbstractFloat}
+    return pm * Rz(era) * c2i
 end
 
 """
@@ -922,8 +927,8 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function c2teqx(bpn::M, gst::F, pm::M) where
-   {M<:AbstractMatrix{<:AbstractFloat}, F<:AbstractFloat}
-   pm*Rz(gst)*bpn
+    {M <: AbstractMatrix{<:AbstractFloat}, F <: AbstractFloat}
+    return pm * Rz(gst) * bpn
 end
 
 """
@@ -1000,15 +1005,17 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function c2tpe(tt1::F, tt2::F, ut1::F, ut2::F, ψ::F, ϵ::F, xp::F, yp::F) where
-      F<:AbstractFloat
+    {F <: AbstractFloat}
     #  Form the celestial-to-intermediate matrix for this TT
     ϵA, rb, rp, rbp, rn, rbpn = values(pn00(tt1, tt2, ψ, ϵ))
     #  Predict the Greenwich Mean Sidereal Time for this UT1 and TT, predict
     #  the equation of the equinoxes for this TT and nutation, estimate s',
     #  form the polar motion matrix, and combine to form the
     #  celestial-to-terrestrial matrix.
-    c2teqx(rbpn, gmst00(ut1, ut2, tt1, tt2) + ee00(tt1, tt2, ϵA, ψ),
-           pom00(xp, yp, sp00(tt1, tt2)))
+    return c2teqx(
+        rbpn, gmst00(ut1, ut2, tt1, tt2) + ee00(tt1, tt2, ϵA, ψ),
+        pom00(xp, yp, sp00(tt1, tt2))
+    )
 end
 
 """
@@ -1079,11 +1086,11 @@ CIP coordinates and the polar motion.  IAU 2000.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2txy(tt1::F, tt2::F, ut1::F, ut2::F, x, y, xp, yp) where F<:AbstractFloat
+function c2txy(tt1::F, tt2::F, ut1::F, ut2::F, x, y, xp, yp) where {F <: AbstractFloat}
     #  Form the celestial-to-intermediate matrix for this TT, predict the Earth
     #  rotation angle for this UT1, estimate s', form the polar motion matrix, and
     #  combine to form the celestial-to-terrestrial matrix.
-    c2tcio(c2ixy(tt1, tt2, x, y), era00(ut1, ut2), pom00(xp, yp, sp00(tt1, tt2)))
+    return c2tcio(c2ixy(tt1, tt2, x, y), era00(ut1, ut2), pom00(xp, yp, sp00(tt1, tt2)))
 end
 
 """
@@ -1134,12 +1141,12 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function eo06a(day1::F, day2::F) where F<:AbstractFloat
+function eo06a(day1::F, day2::F) where {F <: AbstractFloat}
     #  Classical nutation-precession-bias matrix.
     bpn = pnm06a(day1, day2)
     #  Extract CIP coordinates, the CIO locator (s), and solve for
     #  the equation of the origins.
-    eors(bpn, s06(day1, day2, bpn2xy(bpn)...))
+    return eors(bpn, s06(day1, day2, bpn2xy(bpn)...))
 end
 
 """
@@ -1175,11 +1182,13 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 Wallace, P. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
 function eors(r::M, s::F) where
-   {M<:AbstractMatrix{<:AbstractFloat}, F<:AbstractFloat}
+    {M <: AbstractMatrix{<:AbstractFloat}, F <: AbstractFloat}
     #  Evaluate Wallace & Capitaine (2006) expression (16).
-    v = r*SVector(1.0 - r[3,1]^2/(1.0 + r[3,3]),
-      -r[3,2]*r[3,1]/(1.0 + r[3,3]), -r[3,1])
-    v[1] != 0 || v[2] != 0 ? s - atan(v[2], v[1]) : s
+    v = r * SVector(
+        1.0 - r[3, 1]^2 / (1.0 + r[3, 3]),
+        -r[3, 2] * r[3, 1] / (1.0 + r[3, 3]), -r[3, 1]
+    )
+    return v[1] != 0 || v[2] != 0 ? s - atan(v[2], v[1]) : s
 end
 
 """
@@ -1243,8 +1252,8 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
-function fw2m(γ::F, ϕ::F, ψ::F, ϵ::F)  where F<:AbstractFloat
-   Rx(-ϵ)Rz(-ψ)Rx(ϕ)Rz(γ)
+function fw2m(γ::F, ϕ::F, ψ::F, ϵ::F) where {F <: AbstractFloat}
+    return Rx(-ϵ)Rz(-ψ)Rx(ϕ)Rz(γ)
 end
 
 """
@@ -1292,7 +1301,7 @@ CIP X,Y given Fukushima-Williams bias-precession-nutation angles.
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
 function fw2xy(γ::AbstractFloat, ϕ::AbstractFloat, ψ::AbstractFloat, ϵ::AbstractFloat)
-    (Rx(-ϵ)Rz(-ψ)Rx(ϕ)Rz(γ))[3,1:2]
+    return (Rx(-ϵ)Rz(-ψ)Rx(ϕ)Rz(γ))[3, 1:2]
 end
 
 """
@@ -1339,8 +1348,8 @@ function ltp(epoch::AbstractFloat)
     @inline equ, ecl = ltpequ(epoch), ltpecl(epoch)
 
     #  Create matrix
-    eqx = vec2mat(equ)*ecl/norm(vec2mat(equ)*ecl)
-    vcat(eqx', (vec2mat(equ)*eqx)', equ')
+    eqx = vec2mat(equ) * ecl / norm(vec2mat(equ) * ecl)
+    return vcat(eqx', (vec2mat(equ) * eqx)', equ')
 end
 
 """
@@ -1388,10 +1397,13 @@ Astron.Astrophys. 541, C1
 """
 function ltpb(epoch::AbstractFloat)
     #  Apply frame bias
-    @inline ltp(epoch)*(
-        SMatrix{3,3}(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0) .+ deg2rad(1/3600)*
-        SMatrix{3,3}(0.0, -dα0_2010, ϵ0_2010, dα0_2010, 0.0, η0_2010,
-         -ϵ0_2010, -η0_2010, 0.0))
+    return @inline ltp(epoch) * (
+        SMatrix{3, 3}(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0) .+ deg2rad(1 / 3600) *
+            SMatrix{3, 3}(
+            0.0, -dα0_2010, ϵ0_2010, dα0_2010, 0.0, η0_2010,
+            -ϵ0_2010, -η0_2010, 0.0
+        )
+    )
 end
 
 """
@@ -1430,15 +1442,16 @@ Astron.Astrophys. 541, C1
 """
 function ltpecl(epoch::AbstractFloat)
     #  Centuries since J2000
-    Δt = (epoch - 2000.0)/100.0
-    ϕ  = 2π*Δt./ecl_ϕ_2011
-    p, q = deg2rad(1/3600)*SVector(
+    Δt = (epoch - 2000.0) / 100.0
+    ϕ = 2π * Δt ./ ecl_ϕ_2011
+    p, q = deg2rad(1 / 3600) * SVector(
         Polynomial(ecl_pA_0_2011...)(Δt) +
-        sum(cos.(ϕ).*ecl_pA_c_2011 .+ sin.(ϕ).*ecl_pA_s_2011),
+            sum(cos.(ϕ) .* ecl_pA_c_2011 .+ sin.(ϕ) .* ecl_pA_s_2011),
         Polynomial(ecl_qA_0_2011...)(Δt) +
-        sum(cos.(ϕ).*ecl_qA_c_2011 .+ sin.(ϕ).*ecl_qA_s_2011))
-    one_pp_qq = 1 - p*p - q*q
-    w, ϵ0 = one_pp_qq < 0.0 ? 0.0 : sqrt(one_pp_qq), deg2rad(1/3600)*ϵ0_2006
+            sum(cos.(ϕ) .* ecl_qA_c_2011 .+ sin.(ϕ) .* ecl_qA_s_2011)
+    )
+    one_pp_qq = 1 - p * p - q * q
+    w, ϵ0 = one_pp_qq < 0.0 ? 0.0 : sqrt(one_pp_qq), deg2rad(1 / 3600) * ϵ0_2006
     s, c = sincos(ϵ0)
     return SVector(p, -(q * c + w * s), -(q * s - w * c))
 end
@@ -1479,14 +1492,15 @@ Astron.Astrophys. 541, C1
 """
 function ltpequ(epoch::AbstractFloat)
     #  Centuries since J2000
-    Δt = (epoch - 2000.0)/100.0
-    ϕ  = 2π*Δt./equ_ϕ_2011
-    x, y = deg2rad(1/3600)*SVector(
+    Δt = (epoch - 2000.0) / 100.0
+    ϕ = 2π * Δt ./ equ_ϕ_2011
+    x, y = deg2rad(1 / 3600) * SVector(
         Polynomial(equ_xA_0_2011...)(Δt) +
-        sum(cos.(ϕ).*equ_xA_c_2011 .+ sin.(ϕ).*equ_xA_s_2011),
+            sum(cos.(ϕ) .* equ_xA_c_2011 .+ sin.(ϕ) .* equ_xA_s_2011),
         Polynomial(equ_yA_0_2011...)(Δt) +
-        sum(cos.(ϕ).*equ_yA_c_2011 .+ sin.(ϕ).*equ_yA_s_2011))
-    SVector(x, y, (1 - x*x - y*y) < 0.0 ? 0.0 : sqrt(1 - x*x - y*y))
+            sum(cos.(ϕ) .* equ_yA_c_2011 .+ sin.(ϕ) .* equ_yA_s_2011)
+    )
+    return SVector(x, y, (1 - x * x - y * y) < 0.0 ? 0.0 : sqrt(1 - x * x - y * y))
 end
 
 """
@@ -1633,7 +1647,7 @@ Form the matrix of nutation for a given date, IAU 2006/2000A model.
 """
 function num06a(day1::AbstractFloat, day2::AbstractFloat)
     #  Mean obliquity, nutation components, and nutation matrix
-    numat(obl06(day1, day2), nut06a(day1, day2)...)
+    return numat(obl06(day1, day2), nut06a(day1, day2)...)
 end
 
 """
@@ -1671,7 +1685,7 @@ Seidelmann (ed), University Science Books (1992), Section 3.222-3
 (p114).
 """
 function numat(ϵA::AbstractFloat, δψ::AbstractFloat, δϵ::AbstractFloat)
-    Rx(-(ϵA + δϵ))Rz(-δψ)Rx(ϵA)
+    return Rx(-(ϵA + δϵ))Rz(-δψ)Rx(ϵA)
 end
 
 """
@@ -1810,7 +1824,7 @@ in IERS Workshop 5.1 (2002)
 """
 function nut00a(day1::AbstractFloat, day2::AbstractFloat)
     #   Interval between fundamental date J2000.0 and given date (JC.)
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     FACTOR_MICROARCSEC = 1 / 3.6e10
 
@@ -1843,7 +1857,7 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
     end
     ϕl = Vector{Float64}(undef, size(ln, 1))
     @inbounds for i in axes(ln, 1)
-        angle = ln[i,1] * arg1 + ln[i,2] * arg2 + ln[i,3] * arg3 + ln[i,4] * arg4 + ln[i,5] * arg5
+        angle = ln[i, 1] * arg1 + ln[i, 2] * arg2 + ln[i, 3] * arg3 + ln[i, 4] * arg4 + ln[i, 5] * arg5
         ϕl[i] = mod2pi(angle)
     end
 
@@ -1851,8 +1865,8 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
     sum1 = sum2 = zero(eltype(la))
     @inbounds for i in reverse(axes(la, 1))
         s, c = sincos(ϕl[i])
-        sum1 += (la[i,1] + la[i,2] * Δt) * s + la[i,3] * c
-        sum2 += (la[i,4] + la[i,5] * Δt) * c + la[i,6] * s
+        sum1 += (la[i, 1] + la[i, 2] * Δt) * s + la[i, 3] * c
+        sum2 += (la[i, 4] + la[i, 5] * Δt) * c + la[i, 6] * s
     end
     δψl = deg2rad(sum1 * FACTOR_MICROARCSEC)
     δϵl = deg2rad(sum2 * FACTOR_MICROARCSEC)
@@ -1886,7 +1900,7 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
     fne = mod2pi(Polynomial(lne_2003mhb...)(Δt))
     #  General accumulated precession in longitude (IERS 2003).
     fpa = Polynomial(lge_2003...)(Δt)
-    
+
     pn = pn_2000A_nutation
     pa = pa_2000A_nutation
 
@@ -1895,7 +1909,7 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
     @inbounds for i in axes(pn, 1)
         angle = zero(eltype(planet_args))
         for j in 1:length(planet_args)
-            angle += pn[i,j] * planet_args[j]
+            angle += pn[i, j] * planet_args[j]
         end
         ϕp[i] = mod2pi(angle)
     end
@@ -1905,13 +1919,13 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
     sum1 = sum2 = zero(eltype(pa))
     @inbounds for i in reverse(axes(pa, 1))
         s, c = sincos(ϕp[i])
-        sum1 += pa[i,1] * s + pa[i,2] * c
-        sum2 += pa[i,3] * s + pa[i,4] * c
+        sum1 += pa[i, 1] * s + pa[i, 2] * c
+        sum2 += pa[i, 3] * s + pa[i, 4] * c
     end
     δψp = deg2rad(sum1 * FACTOR_MICROARCSEC)
     δϵp = deg2rad(sum2 * FACTOR_MICROARCSEC)
 
-    (ψ = δψl + δψp, ϵ = δϵl + δϵp)
+    return (ψ = δψl + δψp, ϵ = δϵl + δϵp)
 end
 
 """
@@ -2030,7 +2044,7 @@ Francou, G., Laskar, J., Astron.Astrophys. 282, 663-683 (1994)
 """
 function nut00b(day1::AbstractFloat, day2::AbstractFloat)
     #  Interval between fundamental date J2000.0 and given date (JC).
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     ####    Luni-Solar Nutation
     #
@@ -2062,11 +2076,11 @@ function nut00b(day1::AbstractFloat, day2::AbstractFloat)
     #  Sum the series, smallest terms first, as in the C library.
     sum1 = sum2 = zero(eltype(la))
     @inbounds for i in reverse(axes(ln, 1))
-        angle = ln[i,1] * arg1 + ln[i,2] * arg2 + ln[i,3] * arg3 + ln[i,4] * arg4 + ln[i,5] * arg5
+        angle = ln[i, 1] * arg1 + ln[i, 2] * arg2 + ln[i, 3] * arg3 + ln[i, 4] * arg4 + ln[i, 5] * arg5
         angle = mod2pi(angle)
         s, c = sincos(angle)
-        sum1 += (la[i,1] + la[i,2] * Δt) * s + la[i,3] * c
-        sum2 += (la[i,4] + la[i,5] * Δt) * c + la[i,6] * s
+        sum1 += (la[i, 1] + la[i, 2] * Δt) * s + la[i, 3] * c
+        sum2 += (la[i, 4] + la[i, 5] * Δt) * c + la[i, 6] * s
     end
 
     #  Convert from 0.1 μas to radians
@@ -2081,7 +2095,7 @@ function nut00b(day1::AbstractFloat, day2::AbstractFloat)
     δψp = ψ_2000B_planet * DEG2RAD_PLANET_FACTOR
     δϵp = ϵ_2000B_planet * DEG2RAD_PLANET_FACTOR
 
-    (ψ = δψl + δψp, ϵ = δϵl + δϵp)
+    return (ψ = δψl + δψp, ϵ = δϵl + δϵp)
 end
 
 """
@@ -2156,12 +2170,12 @@ in IERS Workshop 5.1 (2002)
 """
 function nut06a(day1::AbstractFloat, day2::AbstractFloat)
     #  Interval between fundamental date J2000.0 and given date (JC).
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
     #  Obtain IAU 2000A nutation
     #  Factor correcting for secular variation of J2.
     #  Apply P03 adjustments (Wallace & Capitaine, 2006, Eqs. 5)
-    ψ, ϵ = values(nut00a(day1, day2)) .* ((1.0 + j2_corr_2000*Δt) .+ (p03_2000, 0.0))
-    (ψ = ψ, ϵ = ϵ)
+    ψ, ϵ = values(nut00a(day1, day2)) .* ((1.0 + j2_corr_2000 * Δt) .+ (p03_2000, 0.0))
+    return (ψ = ψ, ϵ = ϵ)
 end
 
 """
@@ -2210,25 +2224,25 @@ Seidelmann (ed), University Science Books (1992), Section 3.222
 """
 function nut80(day1::AbstractFloat, day2::AbstractFloat)
     #  Interval between fundamental date J2000.0 and given date (JC).
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     ####    Fundamental arguments
     #
-    #  
+    #
     #  The mean longitude of the Moon minus the mean longitude of
     #  the Moon's perigee.
-    l = deg2rad(Polynomial(l0_1980...)(Δt)/3600.0) + 2π*rem(l0_1980t*Δt, 1.0)
+    l = deg2rad(Polynomial(l0_1980...)(Δt) / 3600.0) + 2π * rem(l0_1980t * Δt, 1.0)
     #  The mean longitude of the Sun minus the mean longitude of
     #  the Sun's perigee.
-    lp = deg2rad(Polynomial(l1_1980...)(Δt)/3600.0) + 2π*rem(l1_1980t*Δt, 1.0)
+    lp = deg2rad(Polynomial(l1_1980...)(Δt) / 3600.0) + 2π * rem(l1_1980t * Δt, 1.0)
     #  The mean longitude of the Moon minus the mean longitude of
     #  the Moon's node.
-    f = deg2rad(Polynomial(F_1980...)(Δt)/3600.0) + 2π*rem(F_1980t*Δt, 1.0)
+    f = deg2rad(Polynomial(F_1980...)(Δt) / 3600.0) + 2π * rem(F_1980t * Δt, 1.0)
     #  The mean elongation of the Moon from the Sun.
-    d = deg2rad(Polynomial(D_1980...)(Δt)/3600.0) + 2π*rem(D_1980t*Δt, 1.0)
+    d = deg2rad(Polynomial(D_1980...)(Δt) / 3600.0) + 2π * rem(D_1980t * Δt, 1.0)
     #  The mean longitude of the ascending node of the lunar orbit on
     #  the ecliptic, measured from the mean equinox of date.
-    ω = deg2rad(Polynomial(Ω_1980...)(Δt)/3600.0) + 2π*rem(Ω_1980t*Δt, 1.0)
+    ω = deg2rad(Polynomial(Ω_1980...)(Δt) / 3600.0) + 2π * rem(Ω_1980t * Δt, 1.0)
 
     #  Summation of luni-solar nutation series.
     ln = n_1980_nutation
@@ -2245,10 +2259,10 @@ function nut80(day1::AbstractFloat, day2::AbstractFloat)
     #  Sum the series, smallest terms first, as in the C library.
     sum1 = sum2 = zero(eltype(la))
     @inbounds for i in reverse(axes(ln, 1))
-        angle = ln[i,1] * arg1 + ln[i,2] * arg2 + ln[i,3] * arg3 + ln[i,4] * arg4 + ln[i,5] * arg5
+        angle = ln[i, 1] * arg1 + ln[i, 2] * arg2 + ln[i, 3] * arg3 + ln[i, 4] * arg4 + ln[i, 5] * arg5
         s, c = sincos(angle)
-        sum1 += (la[i,1] + la[i,2] * Δt) * s
-        sum2 += (la[i,3] + la[i,4] * Δt) * c
+        sum1 += (la[i, 1] + la[i, 2] * Δt) * s
+        sum2 += (la[i, 3] + la[i, 4] * Δt) * c
     end
 
     # Convert from 0.1 mas to radians
@@ -2256,7 +2270,7 @@ function nut80(day1::AbstractFloat, day2::AbstractFloat)
     δψl = sum1 * DEG2RAD_FACTOR
     δϵl = sum2 * DEG2RAD_FACTOR
 
-    (ψ = δψl, ϵ = δϵl)
+    return (ψ = δψl, ϵ = δϵl)
 end
 
 """
@@ -2300,7 +2314,7 @@ Form the matrix of nutation for a given date, IAU 1980 model.
 """
 function nutm80(day1::AbstractFloat, day2::AbstractFloat)
     #  Nutation components and mean obliquity, and rotation matrix
-    numat(obl80(day1, day2), values(nut80(day1, day2))...)
+    return numat(obl80(day1, day2), values(nut80(day1, day2))...)
 end
 
 
@@ -2354,7 +2368,7 @@ julia> obl06(2400000.5, 54388.0)
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
 function obl06(day1::AbstractFloat, day2::AbstractFloat)
-    deg2rad(Polynomial(ϵB_2006...)(((day1-JD2000) + day2)/(100*DAYPERYEAR))/3600.0)
+    return deg2rad(Polynomial(ϵB_2006...)(((day1 - JD2000) + day2) / (100 * DAYPERYEAR)) / 3600.0)
 end
 
 """
@@ -2403,7 +2417,7 @@ Seidelmann (ed), University Science Books (1992), Expression 3.222-1
 
 """
 function obl80(day1::AbstractFloat, day2::AbstractFloat)
-    deg2rad(Polynomial(ϵ_1980...)(((day1-JD2000) + day2)/(100*DAYPERYEAR))/3600.0)
+    return deg2rad(Polynomial(ϵ_1980...)(((day1 - JD2000) + day2) / (100 * DAYPERYEAR)) / 3600.0)
 end
 
 """
@@ -2502,7 +2516,7 @@ Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
 function p06e(day1::AbstractFloat, day2::AbstractFloat)
     #  Interval between fundamental date J2000.0 and given date (Julian centuries).
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     ####    Luni-solar precession
     #
@@ -2530,12 +2544,13 @@ function p06e(day1::AbstractFloat, day2::AbstractFloat)
     #  General precession
     pA = Polynomial(pA_2006...)(Δt)
     #  Fukushima-Williams angles for precession
-    γ  = Polynomial(γF_2006...)(Δt)
-    ϕ  = Polynomial(ϕF_2006...)(Δt)
-    ψ  = Polynomial(ψF_2006...)(Δt)
+    γ = Polynomial(γF_2006...)(Δt)
+    ϕ = Polynomial(ϕF_2006...)(Δt)
+    ψ = Polynomial(ψF_2006...)(Δt)
 
-    NamedTuple{(:ϵ0, :ψA, :ωA, :Pa, :Qa, :πA, :ΠA, :ϵA, :χA, :ζA, :θA, :zA, :pA, :γ, :ϕ, :ψ)}(
-        deg2rad.((ϵ0_2006, ψA, ωA, PA, QA, πA, ΠA, ϵA, χA, ζA, θA, zA, pA, γ, ϕ, ψ)./3600.0))
+    return NamedTuple{(:ϵ0, :ψA, :ωA, :Pa, :Qa, :πA, :ΠA, :ϵA, :χA, :ζA, :θA, :zA, :pA, :γ, :ϕ, :ψ)}(
+        deg2rad.((ϵ0_2006, ψA, ωA, PA, QA, πA, ΠA, ϵA, χA, ζA, θA, zA, pA, γ, ϕ, ψ) ./ 3600.0)
+    )
 end
 
 """
@@ -2599,13 +2614,13 @@ function pb06(day1::AbstractFloat, day2::AbstractFloat)
     #  Precession matrix via Fukushima-Williams angles
     r = pmat06(day1, day2)
     #  Solve for z, choosing the ±π alternative.
-    x, y = -r[1,3] < 0.0 ? (r[1,3], -r[2,3]) : (-r[1,3], r[2,3])
+    x, y = -r[1, 3] < 0.0 ? (r[1, 3], -r[2, 3]) : (-r[1, 3], r[2, 3])
     z = (x != 0.0 || y != 0.0) ? -atan(y, x) : 0.0
     #  De-rotate z out of the matrix
-    r = Rz(z)*r
-    ζ = r[2,2] != 0.0 || -r[2,1] != 0.0 ? -atan(-r[2,1], r[2,2]) : 0.0
-    θ = r[3,3] != 0.0 || r[1,3] != 0.0 ? -atan(r[1,3], r[3,3]) : 0.0
-    (ζ = ζ, θ = θ, z = z)
+    r = Rz(z) * r
+    ζ = r[2, 2] != 0.0 || -r[2, 1] != 0.0 ? -atan(-r[2, 1], r[2, 2]) : 0.0
+    θ = r[3, 3] != 0.0 || r[1, 3] != 0.0 ? -atan(r[1, 3], r[3, 3]) : 0.0
+    return (ζ = ζ, θ = θ, z = z)
 end
 
 """
@@ -2678,11 +2693,16 @@ Precession angles, IAU 2006 (Fukushima-Williams 4-angle formulation).
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
 function pfw06(day1::AbstractFloat, day2::AbstractFloat)
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
-    NamedTuple{(:γ, :ϕ, :ψ, :ϵ)}(deg2rad.(
-        (Polynomial(γB_2006...)(Δt), Polynomial(ϕB_2006...)(Δt),
-         Polynomial(ψB_2006...)(Δt), Polynomial(ϵB_2006...)(Δt))./3600))
+    return NamedTuple{(:γ, :ϕ, :ψ, :ϵ)}(
+        deg2rad.(
+            (
+                Polynomial(γB_2006...)(Δt), Polynomial(ϕB_2006...)(Δt),
+                Polynomial(ψB_2006...)(Δt), Polynomial(ϵB_2006...)(Δt),
+            ) ./ 3600
+        )
+    )
 end
 
 """
@@ -2733,7 +2753,7 @@ General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.  (2000)
 """
 function pmat00(day1::AbstractFloat, day2::AbstractFloat)
     #  Obtain the required matrix (discarding others).
-    bp00(day1, day2)[:rbp]
+    return bp00(day1, day2)[:rbp]
 end
 
 """
@@ -2787,11 +2807,15 @@ General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.  (2000)
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
 function pmat06(day1::AbstractFloat, day2::AbstractFloat)
-    Δt = ((day1-JD2000) + day2)/(100*DAYPERYEAR)
-    fw2m(deg2rad(1/3600).*(Polynomial(γB_2006...)(Δt),
-                           Polynomial(ϕB_2006...)(Δt),
-                           Polynomial(ψB_2006...)(Δt),
-                           Polynomial(ϵB_2006...)(Δt))...)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
+    return fw2m(
+        deg2rad(1 / 3600) .* (
+            Polynomial(γB_2006...)(Δt),
+            Polynomial(ϕB_2006...)(Δt),
+            Polynomial(ψB_2006...)(Δt),
+            Polynomial(ϵB_2006...)(Δt),
+        )...
+    )
 end
 
 """
@@ -2855,7 +2879,7 @@ Kaplan,G.H., 1981. USNO circular no. 163, pA2.
 function pmat76(day1::AbstractFloat, day2::AbstractFloat)
     #  Precession Euler angles, J2000.0 to specified date.
     ζ, z, θ = prec76(JD2000, 0.0, day1, day2)
-    Rz(-z)Ry(θ)Rz(-ζ)
+    return Rz(-z)Ry(θ)Rz(-ζ)
 end
 
 """
@@ -2951,7 +2975,7 @@ function pn00(day1::AbstractFloat, day2::AbstractFloat, ψ::AbstractFloat, ϵ::A
     #  Nutation matrix
     rn = numat(ϵA, ψ, ϵ)
     #  Bias-precession-nutation matrix (classical)
-    (ϵA = ϵA, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rn*rbp)
+    return (ϵA = ϵA, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rn * rbp)
 end
 
 """
@@ -3043,7 +3067,7 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 function pn00a(day1::AbstractFloat, day2::AbstractFloat)
     ψ, ϵ = nut00a(day1, day2)
     ϵA, rb, rp, rbp, rn, rbpn = pn00(day1, day2, ψ, ϵ)
-    (ψ = ψ, ϵ = ϵ, ϵA = ϵA, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
+    return (ψ = ψ, ϵ = ϵ, ϵA = ϵA, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
 end
 
 """
@@ -3135,7 +3159,7 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 function pn00b(day1::AbstractFloat, day2::AbstractFloat)
     ψ, ϵ = nut00b(day1, day2)
     ϵA, rb, rp, rbp, rn, rbpn = pn00(day1, day2, ψ, ϵ)
-    (ψ = ψ, ϵ = ϵ, ϵA = ϵA, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
+    return (ψ = ψ, ϵ = ϵ, ϵA = ϵA, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
 end
 
 """
@@ -3229,12 +3253,12 @@ function pn06(day1::AbstractFloat, day2::AbstractFloat, δψ::AbstractFloat, δ�
     γb, ϕb, ψb, ϵb = pfw06(day1, day2)
     rbp = fw2m(γb, ϕb, ψb, ϵb)
     #  Solve for precession matrix
-    rp = rbp*rb'
+    rp = rbp * rb'
     #  Equinox-based bias-precession-nutation matrix
     rbpn = fw2m(γb, ϕb, ψb + δψ, ϵb + δϵ)
     #  Solve for nutation matrix
-    rn = rbpn*rbp'
-    (ϵA = ϵb, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
+    rn = rbpn * rbp'
+    return (ϵA = ϵb, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
 end
 
 """
@@ -3318,7 +3342,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 function pn06a(day1::AbstractFloat, day2::AbstractFloat)
     ψ, ϵ = nut06a(day1, day2)
     ϵA, rb, rp, rbp, rn, rbpn = pn06(day1, day2, ψ, ϵ)
-    (ψ = ψ, ϵ = ϵ, ϵA = ϵA, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
+    return (ψ = ψ, ϵ = ϵ, ϵA = ϵA, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
 end
 
 """
@@ -3372,7 +3396,7 @@ General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.  (2000)
 
 """
 function pnm00a(day1::AbstractFloat, day2::AbstractFloat)
-    pn00a(day1, day2)[:rbpn]
+    return pn00a(day1, day2)[:rbpn]
 end
 
 """
@@ -3425,7 +3449,7 @@ IAU: Trans. International Astronomical Union, Vol. XXIVB; Proc.  24th
 General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.  (2000)
 """
 function pnm00b(day1::AbstractFloat, day2::AbstractFloat)
-    pn00b(day1, day2)[:rbpn]
+    return pn00b(day1, day2)[:rbpn]
 end
 
 """
@@ -3480,7 +3504,7 @@ function pnm06a(day1::AbstractFloat, day2::AbstractFloat)
     #  Nutation components
     δϕ, δϵ = nut06a(day1, day2)
     #  Equinox based nutation x precession x bias matrix
-    fw2m(γB, ϕB, ψB + δϕ, ϵA + δϵ)
+    return fw2m(γB, ϕB, ψB + δϕ, ϵA + δϵ)
 end
 
 """
@@ -3531,7 +3555,7 @@ Seidelmann (ed), University Science Books (1992), Section 3.3 (p145).
 """
 function pnm80(day1::AbstractFloat, day2::AbstractFloat)
     #  Precession and nutation matrices J2000.0 to date
-    nutm80(day1, day2)*pmat76(day1, day2)
+    return nutm80(day1, day2) * pmat76(day1, day2)
 end
 
 """
@@ -3641,11 +3665,11 @@ Wallace, P.T., "Software for Implementing the IAU 2000 Resolutions",
 in IERS Workshop 5.1 (2002).
 """
 function pr00(day1::AbstractFloat, day2::AbstractFloat)
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
     #  Precession and obliquity corrections (radians/century).
     #  Precession rate contributions with respect to IAU 1976/1980
-    ψ, ϵ = deg2rad.((ψ_corr_2000, ϵ_corr_2000).*Δt./3600)
-    (ψ = ψ, ϵ = ϵ)
+    ψ, ϵ = deg2rad.((ψ_corr_2000, ϵ_corr_2000) .* Δt ./ 3600)
+    return (ψ = ψ, ϵ = ϵ)
 end
 
 """
@@ -3714,16 +3738,16 @@ p283.
 """
 function prec76(day11::AbstractFloat, day12::AbstractFloat, day21::AbstractFloat, day22::AbstractFloat)
     #  Interval between fundamental epoch J2000.0 and start date (Julian centuries).
-    t0 = ((day11 - JD2000) + day12)/(100*DAYPERYEAR)
+    t0 = ((day11 - JD2000) + day12) / (100 * DAYPERYEAR)
     #  Interval over which precession required (Julian centuries).
-    Δt = ((day21 - day11) + (day22 - day12))/(100*DAYPERYEAR)
+    Δt = ((day21 - day11) + (day22 - day12)) / (100 * DAYPERYEAR)
     #  Euler angles.
     wt, θt = Polynomial(ζT_1976...)(t0), Polynomial(θT_1976...)(t0)
-    ζ = Polynomial(SVector(0., wt, Polynomial(ζA_1976[1:2]...)(t0), ζA_1976[3])...)(Δt)
-    z = Polynomial(SVector(0., wt, Polynomial(zA_1976[1:2]...)(t0), zA_1976[3])...)(Δt)
-    θ = Polynomial(SVector(0., θt, Polynomial(θA_1976[1:2]...)(t0), θA_1976[3])...)(Δt)
-    ζ, z, θ = deg2rad.((ζ, z, θ)./3600.0)
-    (ζ = ζ, z = z, θ = θ)
+    ζ = Polynomial(SVector(0.0, wt, Polynomial(ζA_1976[1:2]...)(t0), ζA_1976[3])...)(Δt)
+    z = Polynomial(SVector(0.0, wt, Polynomial(zA_1976[1:2]...)(t0), zA_1976[3])...)(Δt)
+    θ = Polynomial(SVector(0.0, θt, Polynomial(θA_1976[1:2]...)(t0), θA_1976[3])...)(Δt)
+    ζ, z, θ = deg2rad.((ζ, z, θ) ./ 3600.0)
+    return (ζ = ζ, z = z, θ = θ)
 end
 
 """
@@ -3791,7 +3815,7 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function s00(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::AbstractFloat)
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     #  Fundamental Arguments (IERS Conventions 2003)
     @inline ϕ = SVector(
@@ -3810,17 +3834,18 @@ function s00(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::Abst
         #  Mean longitude of Earth
         fae03(Δt),
         #  General precession in longitude
-        fapa03(Δt))
+        fapa03(Δt)
+    )
 
-    ϕ0 = ϕ0_2000As*ϕ
+    ϕ0 = ϕ0_2000As * ϕ
     a0 = a0_2000As
-    ϕ1 = ϕ1_2000As*ϕ
+    ϕ1 = ϕ1_2000As * ϕ
     a1 = a1_2000As
-    ϕ2 = ϕ2_2000As*ϕ
+    ϕ2 = ϕ2_2000As * ϕ
     a2 = a2_2000As
-    ϕ3 = ϕ3_2000As*ϕ
+    ϕ3 = ϕ3_2000As * ϕ
     a3 = a3_2000As
-    ϕ4 = ϕ4_2000As*ϕ
+    ϕ4 = ϕ4_2000As * ϕ
     a4 = a4_2000As
 
     #  Sum the series, smallest terms first, as in the C library.
@@ -3828,27 +3853,27 @@ function s00(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::Abst
 
     @inbounds for i in reverse(axes(a0, 1))
         s, c = sincos(ϕ0[i])
-        sum0 += a0[i,1] * s + a0[i,2] * c
+        sum0 += a0[i, 1] * s + a0[i, 2] * c
     end
     @inbounds for i in reverse(axes(a1, 1))
         s, c = sincos(ϕ1[i])
-        sum1 += a1[i,1] * s + a1[i,2] * c
+        sum1 += a1[i, 1] * s + a1[i, 2] * c
     end
     @inbounds for i in reverse(axes(a2, 1))
         s, c = sincos(ϕ2[i])
-        sum2 += a2[i,1] * s + a2[i,2] * c
+        sum2 += a2[i, 1] * s + a2[i, 2] * c
     end
     @inbounds for i in reverse(axes(a3, 1))
         s, c = sincos(ϕ3[i])
-        sum3 += a3[i,1] * s + a3[i,2] * c
+        sum3 += a3[i, 1] * s + a3[i, 2] * c
     end
     @inbounds for i in reverse(axes(a4, 1))
         s, c = sincos(ϕ4[i])
-        sum4 += a4[i,1] * s + a4[i,2] * c
+        sum4 += a4[i, 1] * s + a4[i, 2] * c
     end
 
     corrections = SVector(sum0, sum1, sum2, sum3, sum4, 0.0)
-    deg2rad(Polynomial((sp_2000A .+ corrections)...)(Δt) / 3600) - x*y/2.0
+    return deg2rad(Polynomial((sp_2000A .+ corrections)...)(Δt) / 3600) - x * y / 2.0
 end
 
 """
@@ -3918,7 +3943,7 @@ Technical Note No. 32, BKG (2004)
 function s00a(day1::AbstractFloat, day2::AbstractFloat)
     #  Bias-precession-nutation matrix (IAU 2000A), extract the CIP
     #  coordinates, and compute the CIO locator s.
-    s00(day1, day2, bpn2xy(pnm00a(day1, day2))...)
+    return s00(day1, day2, bpn2xy(pnm00a(day1, day2))...)
 end
 
 """
@@ -3988,7 +4013,7 @@ Technical Note No. 32, BKG (2004)
 function s00b(day1::AbstractFloat, day2::AbstractFloat)
     #  Bias-precession-nutation matrix (IAU 2000B), extract the CIP
     #  coordinates, and compute the CIO locator s.
-    s00(day1, day2, bpn2xy(pnm00b(day1, day2))...)
+    return s00(day1, day2, bpn2xy(pnm00b(day1, day2))...)
 end
 
 """
@@ -4060,7 +4085,7 @@ McCarthy, D.D., Petit, G. (eds.) 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
 function s06(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::AbstractFloat)
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     #  Fundamental Arguments (IERS Conventions 2003)
     @inline ϕ = SVector(
@@ -4079,18 +4104,19 @@ function s06(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::Abst
         #  Mean longitude of Earth
         fae03(Δt),
         #  General precession in longitude
-        fapa03(Δt))
+        fapa03(Δt)
+    )
 
     # a2_2006_equinox
-    ϕ0 = ϕ0_2006_equinox*ϕ
+    ϕ0 = ϕ0_2006_equinox * ϕ
     a0 = a0_2006_equinox
-    ϕ1 = ϕ1_2006_equinox*ϕ
+    ϕ1 = ϕ1_2006_equinox * ϕ
     a1 = a1_2006_equinox
-    ϕ2 = ϕ2_2006_equinox*ϕ
+    ϕ2 = ϕ2_2006_equinox * ϕ
     a2 = a2_2006_equinox
-    ϕ3 = ϕ3_2006_equinox*ϕ
+    ϕ3 = ϕ3_2006_equinox * ϕ
     a3 = a3_2006_equinox
-    ϕ4 = ϕ4_2006_equinox*ϕ
+    ϕ4 = ϕ4_2006_equinox * ϕ
     a4 = a4_2006_equinox
 
     #  Sum the series, smallest terms first, as in the C library.
@@ -4098,27 +4124,27 @@ function s06(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::Abst
 
     @inbounds for i in reverse(axes(a0, 1))
         s, c = sincos(ϕ0[i])
-        sum0 += a0[i,1] * s + a0[i,2] * c
+        sum0 += a0[i, 1] * s + a0[i, 2] * c
     end
     @inbounds for i in reverse(axes(a1, 1))
         s, c = sincos(ϕ1[i])
-        sum1 += a1[i,1] * s + a1[i,2] * c
+        sum1 += a1[i, 1] * s + a1[i, 2] * c
     end
     @inbounds for i in reverse(axes(a2, 1))
         s, c = sincos(ϕ2[i])
-        sum2 += a2[i,1] * s + a2[i,2] * c
+        sum2 += a2[i, 1] * s + a2[i, 2] * c
     end
     @inbounds for i in reverse(axes(a3, 1))
         s, c = sincos(ϕ3[i])
-        sum3 += a3[i,1] * s + a3[i,2] * c
+        sum3 += a3[i, 1] * s + a3[i, 2] * c
     end
     @inbounds for i in reverse(axes(a4, 1))
         s, c = sincos(ϕ4[i])
-        sum4 += a4[i,1] * s + a4[i,2] * c
+        sum4 += a4[i, 1] * s + a4[i, 2] * c
     end
 
     corrections = SVector(sum0, sum1, sum2, sum3, sum4, 0.0)
-    deg2rad(Polynomial((cio_s_2006 .+ corrections)...)(Δt) / 3600) - x*y/2.0
+    return deg2rad(Polynomial((cio_s_2006 .+ corrections)...)(Δt) / 3600) - x * y / 2.0
 end
 
 """
@@ -4190,7 +4216,7 @@ Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 function s06a(day1::AbstractFloat, day2::AbstractFloat)
     #  Bias-precession-nutation matrix (IAU 2006/2000A), extract the CIP
     #  coordinates, and compute the CIO locator s.
-    s06(day1, day2, bpn2xy(pnm06a(day1, day2))...)
+    return s06(day1, day2, bpn2xy(pnm06a(day1, day2))...)
 end
 
 """
@@ -4241,7 +4267,7 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function sp00(day1::AbstractFloat, day2::AbstractFloat)
-    deg2rad(tio_2000*((day1 - JD2000) + day2)/(100*DAYPERYEAR)/3600.0)
+    return deg2rad(tio_2000 * ((day1 - JD2000) + day2) / (100 * DAYPERYEAR) / 3600.0)
 end
 
 """
@@ -4313,29 +4339,39 @@ Astron.Astrophys.Supp.Ser. 135, 111
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
 function xy06(day1::AbstractFloat, day2::AbstractFloat)
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     #  Lunar, solar, and planetary longitudes
-    ϕ = deg2rad.(rem.([
-        Polynomial(l0_2003A...)(Δt),
-        Polynomial(l1_2003A...)(Δt),
-        Polynomial( F_2003A...)(Δt),
-        Polynomial( D_2003A...)(Δt),
-        Polynomial( Ω_2003A...)(Δt)], ARCSECPER2PI)/3600.0)
-    append!(ϕ, [
-        Polynomial( lme_2003...)(Δt),
-        Polynomial( lve_2003...)(Δt),
-        Polynomial( lea_2003...)(Δt),
-        Polynomial( lma_2003...)(Δt),
-        Polynomial( lju_2003...)(Δt),
-        Polynomial( lsa_2003...)(Δt),
-        Polynomial( lur_2003...)(Δt),
-        Polynomial( lne_2003...)(Δt),
-        Polynomial( lge_2003...)(Δt)])
-    
+    ϕ = deg2rad.(
+        rem.(
+            [
+                Polynomial(l0_2003A...)(Δt),
+                Polynomial(l1_2003A...)(Δt),
+                Polynomial(F_2003A...)(Δt),
+                Polynomial(D_2003A...)(Δt),
+                Polynomial(Ω_2003A...)(Δt),
+            ], ARCSECPER2PI
+        ) / 3600.0
+    )
+    append!(
+        ϕ, [
+            Polynomial(lme_2003...)(Δt),
+            Polynomial(lve_2003...)(Δt),
+            Polynomial(lea_2003...)(Δt),
+            Polynomial(lma_2003...)(Δt),
+            Polynomial(lju_2003...)(Δt),
+            Polynomial(lsa_2003...)(Δt),
+            Polynomial(lur_2003...)(Δt),
+            Polynomial(lne_2003...)(Δt),
+            Polynomial(lge_2003...)(Δt),
+        ]
+    )
+
     #  Polynomial part of precession-nutation
-    xypr = SVector(Polynomial(cip_x_2006...)(Δt),
-            Polynomial(cip_y_2006...)(Δt))
+    xypr = SVector(
+        Polynomial(cip_x_2006...)(Δt),
+        Polynomial(cip_y_2006...)(Δt)
+    )
 
     jaxy = SVector(0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1) .+ 1
     jasc = SVector(0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0) .+ 1
@@ -4344,28 +4380,28 @@ function xy06(day1::AbstractFloat, day2::AbstractFloat)
     #  Nutation periodic terms, planetary
     xypl = MVector(0.0, 0.0)
     ialast = length(cip_amplitude_2006)
-    for ifreq = length(cip_planetary_2006):-1:1
-        sc = sincos(sum(cip_planetary_2006[ifreq].*ϕ))
+    for ifreq in length(cip_planetary_2006):-1:1
+        sc = sincos(sum(cip_planetary_2006[ifreq] .* ϕ))
         ia = cip_pointer_2006[ifreq + length(cip_lunisolar_2006)]
-        for i = ialast:-1:ia
-            xypl[jaxy[i-ia+1]] += cip_amplitude_2006[i] * sc[jasc[i-ia+1]] * Δt^japt[i-ia+1]
+        for i in ialast:-1:ia
+            xypl[jaxy[i - ia + 1]] += cip_amplitude_2006[i] * sc[jasc[i - ia + 1]] * Δt^japt[i - ia + 1]
         end
-        ialast = ia-1
+        ialast = ia - 1
     end
 
     #  Nutation periodic terms, luni-solar
     xyls = MVector(0.0, 0.0)
-    for ifreq = length(cip_lunisolar_2006):-1:1
-        sc = sincos(sum(cip_lunisolar_2006[ifreq].*ϕ[1:5]))
+    for ifreq in length(cip_lunisolar_2006):-1:1
+        sc = sincos(sum(cip_lunisolar_2006[ifreq] .* ϕ[1:5]))
         ia = cip_pointer_2006[ifreq]
-        for i = ialast:-1:ia
-            xyls[jaxy[i-ia+1]] += cip_amplitude_2006[i] * sc[jasc[i-ia+1]] * Δt^japt[i-ia+1]
+        for i in ialast:-1:ia
+            xyls[jaxy[i - ia + 1]] += cip_amplitude_2006[i] * sc[jasc[i - ia + 1]] * Δt^japt[i - ia + 1]
         end
-        ialast = ia-1
+        ialast = ia - 1
     end
 
-    x, y = deg2rad.((xypr .+ (xyls .+ xypl)./1e6)/3600.0)
-    (x = x, y = y)
+    x, y = deg2rad.((xypr .+ (xyls .+ xypl) ./ 1.0e6) / 3600.0)
+    return (x = x, y = y)
 end
 
 """
@@ -4424,7 +4460,7 @@ function xys00a(day1::AbstractFloat, day2::AbstractFloat)
     #  Form bias-precession-nutation matrix (IAU 2000A) and extract x, y.
     x, y = bpn2xy(pnm00a(day1, day2))
     #  Obtain s
-    (x = x, y = y, s = s00(day1, day2, x, y))
+    return (x = x, y = y, s = s00(day1, day2, x, y))
 end
 
 """
@@ -4483,7 +4519,7 @@ function xys00b(day1::AbstractFloat, day2::AbstractFloat)
     #  Form bias-precession-nutation matrix (IAU 2000B) and extract x, y.
     x, y = bpn2xy(pnm00b(day1, day2))
     #  Obtain s
-    (x = x, y = y, s = s00(day1, day2, x, y))
+    return (x = x, y = y, s = s00(day1, day2, x, y))
 end
 
 """
@@ -4543,5 +4579,5 @@ function xys06a(day1::AbstractFloat, day2::AbstractFloat)
     #  Form bias-precession-nutation matrix (IAU 2006/2000A) and extract x, y.
     x, y = bpn2xy(pnm06a(day1, day2))
     #  Obtain s
-    (x = x, y = y, s = s06(day1, day2, x, y))
+    return (x = x, y = y, s = s06(day1, day2, x, y))
 end
