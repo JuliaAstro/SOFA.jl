@@ -42,11 +42,13 @@ Klioner, Sergei A., "A practical relativistic model for micro-
 arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 """
 function ab(pnat::V, v::W, s::F, bm1::F) where
-{V <: AbstractVector{<:AbstractFloat}, W <: AbstractVector{<:AbstractFloat},
-	F <: AbstractFloat}
-	p = bm1 .* pnat .+ (1.0 + sum(pnat .* v)/(1.0 + bm1)) .* v .+
-		SCHWARZRADIUS/s .* (v .- sum(pnat .* v) .* pnat)
-	p ./ norm(p)
+    {
+        V <: AbstractVector{<:AbstractFloat}, W <: AbstractVector{<:AbstractFloat},
+        F <: AbstractFloat,
+    }
+    p = bm1 .* pnat .+ (1.0 + sum(pnat .* v) / (1.0 + bm1)) .* v .+
+        SCHWARZRADIUS / s .* (v .- sum(pnat .* v) .* pnat)
+    return p ./ norm(p)
 end
 
 """
@@ -130,11 +132,13 @@ transformation chain.
    atciq* and aticq*.
 """
 function apcg(day1::F, day2::F, ebpv::W, ehp::V) where
-{F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
-	W <: AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}}}
+    {
+        F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
+        W <: AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}},
+    }
 
-	#  Compute the star-independent astrometry parameters.
-	apcs(day1, day2, SVector(SVector(0.0, 0.0, 0.0), SVector(0.0, 0.0, 0.0)), ebpv, ehp)
+    #  Compute the star-independent astrometry parameters.
+    return apcs(day1, day2, SVector(SVector(0.0, 0.0, 0.0), SVector(0.0, 0.0, 0.0)), ebpv, ehp)
 end
 
 """
@@ -221,10 +225,10 @@ transformation chain.
    atciq* and aticq*.
 """
 function apcg13(day1::AbstractFloat, day2::AbstractFloat)
-	#  Earth barycentric and heliocentric position and velocity (AU, AU/day).
-	ehpv, ebpv = epv00(day1, day2)
-	#  Compute the star-independent astrometry parameters.
-	apcg(day1, day2, ebpv, ehpv[1])
+    #  Earth barycentric and heliocentric position and velocity (AU, AU/day).
+    ehpv, ebpv = epv00(day1, day2)
+    #  Compute the star-independent astrometry parameters.
+    return apcg(day1, day2, ebpv, ehpv[1])
 end
 
 """
@@ -317,13 +321,15 @@ the astrometric transformation chain.
    atciq and aticq.
 """
 function apci(day1::F, day2::F, ebpv::W, ehp::V, x::F, y::F, s::F) where
-{F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
-	W <: AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}}}
+    {
+        F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
+        W <: AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}},
+    }
 
-	#  Star-independent astrometry parameters for geocenter and CIO based
-	#  bias-precession-nutation matrix.
-	p = apcg(day1, day2, ebpv, ehp)
-	Astrom(p.pmt, p.eb, p.eh, p.em, p.v, p.bm1, c2ixys(x, y, s))
+    #  Star-independent astrometry parameters for geocenter and CIO based
+    #  bias-precession-nutation matrix.
+    p = apcg(day1, day2, ebpv, ehp)
+    return Astrom(p.pmt, p.eb, p.eh, p.em, p.v, p.bm1, c2ixys(x, y, s))
 end
 
 """
@@ -410,18 +416,18 @@ the astrometric transformation chain.
    atciq and aticq.
 """
 function apci13(day1::AbstractFloat, day2::AbstractFloat)
-	#  Earth barycentric and heliocentric position and velocity (AU, AU/day).
-	ehpv, ebpv = epv00(day1, day2)
-	#  Form the equinox based bpn matrix, IAU 2006/2000A
-	bpn = pnm06a(day1, day2)
-	#  Extract the CIP x and y
-	x, y = bpn2xy(bpn)
-	#  Obtain the CIO locator
-	s = s06(day1, day2, x, y)
-	#  Compute the star-independent astrometry parameters.
-	astrom = apci(day1, day2, ebpv, ehpv[1], x, y, s)
+    #  Earth barycentric and heliocentric position and velocity (AU, AU/day).
+    ehpv, ebpv = epv00(day1, day2)
+    #  Form the equinox based bpn matrix, IAU 2006/2000A
+    bpn = pnm06a(day1, day2)
+    #  Extract the CIP x and y
+    x, y = bpn2xy(bpn)
+    #  Obtain the CIO locator
+    s = s06(day1, day2, x, y)
+    #  Compute the star-independent astrometry parameters.
+    astrom = apci(day1, day2, ebpv, ehpv[1], x, y, s)
     #  Return the star-independent parameters and equation of origins.
-    (astrom = astrom, eo = eors(bpn, s))
+    return (astrom = astrom, eo = eors(bpn, s))
 end
 
 """
@@ -549,31 +555,37 @@ coordinates.
 9) The context structure astrom produced by this function is used by
    atioq, atoiq, atciq* and aticq*.
 """
-function apco(day1::F, day2::F, ebpv::W, ehp::V, x::F, y::F, s::F, θ::F,
-	elong::F, ϕ::F, hm::F, xp::F, yp::F, sp::F, refa::F, refb::F) where
-	{F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
-	W <: AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}}}
+function apco(
+        day1::F, day2::F, ebpv::W, ehp::V, x::F, y::F, s::F, θ::F,
+        elong::F, ϕ::F, hm::F, xp::F, yp::F, sp::F, refa::F, refb::F
+    ) where
+    {
+        F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
+        W <: AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}},
+    }
 
-	#  Form the rotation matrix, CIRS to apparent (HA, Dec).
-	r = Rz(elong)Rx(-yp)Ry(-xp)Rz(θ+sp)
-	#  Solve for the local Earth rotation angle.
-	eral = r[1, 1] != 0.0 || r[1, 2] != 0.0 ? atan(r[1, 2], r[1, 1]) : 0.0
-	#  Solve for the polar motion (x, y) with respect to local meridian.
-	xpl = atan(r[1, 3], norm(r[1, 1:2]))
-	ypl = r[2, 3] != 0.0 || r[3, 3] != 0.0 ? -atan(r[2, 3], r[3, 3]) : 0.0
-	#  Adjusted longitude.
+    #  Form the rotation matrix, CIRS to apparent (HA, Dec).
+    r = Rz(elong)Rx(-yp)Ry(-xp)Rz(θ + sp)
+    #  Solve for the local Earth rotation angle.
+    eral = r[1, 1] != 0.0 || r[1, 2] != 0.0 ? atan(r[1, 2], r[1, 1]) : 0.0
+    #  Solve for the polar motion (x, y) with respect to local meridian.
+    xpl = atan(r[1, 3], norm(r[1, 1:2]))
+    ypl = r[2, 3] != 0.0 || r[3, 3] != 0.0 ? -atan(r[2, 3], r[3, 3]) : 0.0
+    #  Adjusted longitude.
     along = anpm(eral - θ)
-	#  Functions of latitude.
-	sphi, cphi = sincos(ϕ)
-	#  CIO based bpn matrix
-	r = c2ixys(x, y, s)
-	#  Observer's geocentric position and velocity (m, m/s, CIRS) and
-	#  rotate into GCRS.
-	pv = trxpv(r, pvtob(elong, ϕ, hm, xp, yp, sp, θ))
-	#  ICRS <-> GCRS parameters.
-	a = apcs(day1, day2, pv, ebpv, ehp)
-	Astrom(a.pmt, a.eb, a.eh, a.em, a.v, a.bm1, r, along, a.phi, xpl, ypl,
-		sphi, cphi, 0.0, eral, refa, refb)
+    #  Functions of latitude.
+    sphi, cphi = sincos(ϕ)
+    #  CIO based bpn matrix
+    r = c2ixys(x, y, s)
+    #  Observer's geocentric position and velocity (m, m/s, CIRS) and
+    #  rotate into GCRS.
+    pv = trxpv(r, pvtob(elong, ϕ, hm, xp, yp, sp, θ))
+    #  ICRS <-> GCRS parameters.
+    a = apcs(day1, day2, pv, ebpv, ehp)
+    return Astrom(
+        a.pmt, a.eb, a.eh, a.em, a.v, a.bm1, r, along, a.phi, xpl, ypl,
+        sphi, cphi, 0.0, eral, refa, refb
+    )
 end
 
 """
@@ -709,28 +721,32 @@ the ICRS/CIRS transformations.
 11) The context structure astrom produced by this function is used by
     atioq, atoiq, atciq* and aticq*.
 """
-function apco13(day1::AbstractFloat, day2::AbstractFloat, dut1::AbstractFloat,
-	elong::AbstractFloat, phi::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
-	yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat,
-	wl::AbstractFloat)
-	#  UTC to other time scales.
-	tt1, tt2 = taitt(utctai(day1, day2)...)
-	#  Earth barycentric and heliocentric position and velocity (AU, AU/day).
-	ehpv, ebpv = epv00(tt1, tt2)
-	#  Form the equinox based BPN matrix (IAU 2006/2000A).
-	r = pnm06a(tt1, tt2)
-	#  Extract CIP x, y
-	x, y = bpn2xy(r)
-	#  Obtain CIO locator s and the TIO locator s'.
-	s, sp = s06(tt1, tt2, x, y), sp00(tt1, tt2)
-	#  Earth rotation angle
-	θ = era00(utcut1(day1, day2, dut1)...)
-	#  Refraction constants A and B.
-	refa, refb = refco(phpa, tc, rh, wl)
+function apco13(
+        day1::AbstractFloat, day2::AbstractFloat, dut1::AbstractFloat,
+        elong::AbstractFloat, phi::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
+        yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat,
+        wl::AbstractFloat
+    )
+    #  UTC to other time scales.
+    tt1, tt2 = taitt(utctai(day1, day2)...)
+    #  Earth barycentric and heliocentric position and velocity (AU, AU/day).
+    ehpv, ebpv = epv00(tt1, tt2)
+    #  Form the equinox based BPN matrix (IAU 2006/2000A).
+    r = pnm06a(tt1, tt2)
+    #  Extract CIP x, y
+    x, y = bpn2xy(r)
+    #  Obtain CIO locator s and the TIO locator s'.
+    s, sp = s06(tt1, tt2, x, y), sp00(tt1, tt2)
+    #  Earth rotation angle
+    θ = era00(utcut1(day1, day2, dut1)...)
+    #  Refraction constants A and B.
+    refa, refb = refco(phpa, tc, rh, wl)
     #  Compute the star-independent astrometry parameters.
-	astrom = apco(tt1, tt2, ebpv, ehpv[1], x, y, s, θ, elong, phi, hm,
-		xp, yp, sp, refa, refb)
-    (astrom = astrom, eo = eors(r, s))
+    astrom = apco(
+        tt1, tt2, ebpv, ehpv[1], x, y, s, θ, elong, phi, hm,
+        xp, yp, sp, refa, refb
+    )
+    return (astrom = astrom, eo = eors(r, s))
 end
 
 """
@@ -831,21 +847,25 @@ astrometric transformation chain.
    Atciq and Aticq.
 """
 function apcs(day1::F, day2::F, pv::W, ebpv::X, ehp::V) where
-{F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
-	W <: AbstractVector{<:AbstractVector{<:AbstractFloat}},
-	X <: AbstractVector{<:AbstractVector{<:AbstractFloat}}}
-	# Time since reference epoch, years (for proper motion calculation).
-	pmt = ((day1 - JD2000) + day2)/DAYPERYEAR
-	# Barycentric position of observer (AU).
-	eb = ebpv[1] .+ pv[1] ./ ASTRUNIT
-	# Barycentric velocity (in speed of light).
-	ev = (ebpv[2] .+ pv[2] ./ (ASTRUNIT/SECPERDAY)) .* (ASTRUNIT/LIGHTSPEED/SECPERDAY)
-	# Heliocentric direction and distance (unit vector & AU).
-	em, eh = pn(ehp .+ pv[1] ./ ASTRUNIT)
+    {
+        F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
+        W <: AbstractVector{<:AbstractVector{<:AbstractFloat}},
+        X <: AbstractVector{<:AbstractVector{<:AbstractFloat}},
+    }
+    # Time since reference epoch, years (for proper motion calculation).
+    pmt = ((day1 - JD2000) + day2) / DAYPERYEAR
+    # Barycentric position of observer (AU).
+    eb = ebpv[1] .+ pv[1] ./ ASTRUNIT
+    # Barycentric velocity (in speed of light).
+    ev = (ebpv[2] .+ pv[2] ./ (ASTRUNIT / SECPERDAY)) .* (ASTRUNIT / LIGHTSPEED / SECPERDAY)
+    # Heliocentric direction and distance (unit vector & AU).
+    em, eh = pn(ehp .+ pv[1] ./ ASTRUNIT)
     #  Reciprocal of Lorentz factor
-	bm1 = sqrt(1.0 - sum(ev .* ev))
-	Astrom(pmt, eb, eh, em, ev, bm1,
-		SMatrix{3, 3}(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0))
+    bm1 = sqrt(1.0 - sum(ev .* ev))
+    return Astrom(
+        pmt, eb, eh, em, ev, bm1,
+        SMatrix{3, 3}(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+    )
 end
 
 """
@@ -935,12 +955,14 @@ astrometric transformation chain.
 6) The context structure astrom produced by this function is used by
    atciq* and aticq*.
 """
-function apcs13(day1::AbstractFloat, day2::AbstractFloat,
-	pv::AbstractVector{<:AbstractVector{<:AbstractFloat}})
-	#  Earth barycentric and heliocentric position & velocity (AU, AU/day).
-	ehpv, ebpv = epv00(day1, day2)
-	#  Compute the star-independent astrometry parameters.
-	apcs(day1, day2, pv, ebpv, ehpv[1])
+function apcs13(
+        day1::AbstractFloat, day2::AbstractFloat,
+        pv::AbstractVector{<:AbstractVector{<:AbstractFloat}}
+    )
+    #  Earth barycentric and heliocentric position & velocity (AU, AU/day).
+    ehpv, ebpv = epv00(day1, day2)
+    #  Compute the star-independent astrometry parameters.
+    return apcs(day1, day2, pv, ebpv, ehpv[1])
 end
 
 """
@@ -1000,8 +1022,10 @@ rotation angle, supplied by the caller explicitly.
 
 """
 function aper(θ::AbstractFloat, a::Astrom)
-	Astrom(a.pmt, a.eb, a.eh, a.em, a.v, a.bm1, a.bpn, a.along, a.phi,
-		a.xpl, a.ypl, a.sphi, a.cphi, a.diurab, θ+a.along, a.refa, a.refb)
+    return Astrom(
+        a.pmt, a.eb, a.eh, a.em, a.v, a.bm1, a.bpn, a.along, a.phi,
+        a.xpl, a.ypl, a.sphi, a.cphi, a.diurab, θ + a.along, a.refa, a.refb
+    )
 end
 
 """
@@ -1076,7 +1100,7 @@ Earth rotation angle.  The caller provides UT1, (n.b. not UTC).
 
 """
 function aper13(day1::AbstractFloat, day2::AbstractFloat, a::Astrom)
-	aper(era00(day1, day2), a)
+    return aper(era00(day1, day2), a)
 end
 
 """
@@ -1168,25 +1192,29 @@ refraction constants as well as the site coordinates.
 8) The context structure astrom produced by this function is used by
    atioq and atoiq.
 """
-function apio(sp::AbstractFloat, θ::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat,
-	xp::AbstractFloat, yp::AbstractFloat, refa::AbstractFloat, refb::AbstractFloat, a::Astrom)
-	#  Form the rotation matrix, CIRS to apparent (HA, Dec).
-	r = Rz(elong)Rx(-yp)Ry(-xp)Rz(θ+sp)
-	#  Solve for local Earth rotation angle.
-	eral = r[1, 1] != 0.0 || r[1, 2] != 0.0 ? atan(r[1, 2], r[1, 1]) : 0.0
-	#  Solve for polar motion (x, y) with respect to local meridian.
-	xpl = atan(r[1, 3], norm(r[1, 1:2]))
-	ypl = r[2, 3] != 0.0 || r[3, 3] != 0.0 ? -atan(r[2, 3], r[3, 3]) : 0.0
-	#  Adjust longitude.
-	along = anpm(eral - θ)
-	#  Functions of latitude
-	sphi, cphi = sincos(ϕ)
-	#  Observer's geocentric position and velocity (m, m/s, CIRS).
-	pv = pvtob(elong, ϕ, hm, xp, yp, sp, θ)
-	#  Magnitude of diurnal aberration vector.
-	diurab = norm(pv[2][1:2])/LIGHTSPEED
-	Astrom(a.pmt, a.eb, a.eh, a.em, a.v, a.bm1, a.bpn, along, a.phi,
-		xpl, ypl, sphi, cphi, diurab, eral, refa, refb)
+function apio(
+        sp::AbstractFloat, θ::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat,
+        xp::AbstractFloat, yp::AbstractFloat, refa::AbstractFloat, refb::AbstractFloat, a::Astrom
+    )
+    #  Form the rotation matrix, CIRS to apparent (HA, Dec).
+    r = Rz(elong)Rx(-yp)Ry(-xp)Rz(θ + sp)
+    #  Solve for local Earth rotation angle.
+    eral = r[1, 1] != 0.0 || r[1, 2] != 0.0 ? atan(r[1, 2], r[1, 1]) : 0.0
+    #  Solve for polar motion (x, y) with respect to local meridian.
+    xpl = atan(r[1, 3], norm(r[1, 1:2]))
+    ypl = r[2, 3] != 0.0 || r[3, 3] != 0.0 ? -atan(r[2, 3], r[3, 3]) : 0.0
+    #  Adjust longitude.
+    along = anpm(eral - θ)
+    #  Functions of latitude
+    sphi, cphi = sincos(ϕ)
+    #  Observer's geocentric position and velocity (m, m/s, CIRS).
+    pv = pvtob(elong, ϕ, hm, xp, yp, sp, θ)
+    #  Magnitude of diurnal aberration vector.
+    diurab = norm(pv[2][1:2]) / LIGHTSPEED
+    return Astrom(
+        a.pmt, a.eb, a.eh, a.em, a.v, a.bm1, a.bpn, along, a.phi,
+        xpl, ypl, sphi, cphi, diurab, eral, refa, refb
+    )
 end
 
 """
@@ -1318,17 +1346,19 @@ observing wavelength.
     by atioq and atoiq.
 
 """
-function apio13(day1::AbstractFloat, day2::AbstractFloat, dut1::AbstractFloat, elong::AbstractFloat,
-	ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat, phpa::AbstractFloat,
-	tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat, a::Astrom)
-	#  TIO locator s'.
-	sp = sp00(taitt(utctai(day1, day2)...)...)
-	#  Earth rotation angle.
-	θ = era00(utcut1(day1, day2, dut1)...)
-	#  Refraction constants A and B.
-	refa, refb = refco(phpa, tc, rh, wl)
-	#  CIRS <-> observed astrometry parameters.
-	apio(sp, θ, elong, ϕ, hm, xp, yp, refa, refb, a)
+function apio13(
+        day1::AbstractFloat, day2::AbstractFloat, dut1::AbstractFloat, elong::AbstractFloat,
+        ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat, phpa::AbstractFloat,
+        tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat, a::Astrom
+    )
+    #  TIO locator s'.
+    sp = sp00(taitt(utctai(day1, day2)...)...)
+    #  Earth rotation angle.
+    θ = era00(utcut1(day1, day2, dut1)...)
+    #  Refraction constants A and B.
+    refa, refb = refco(phpa, tc, rh, wl)
+    #  CIRS <-> observed astrometry parameters.
+    return apio(sp, θ, elong, ϕ, hm, xp, yp, refa, refb, a)
 end
 
 """
@@ -1386,11 +1416,13 @@ astrometric place.
    accuracy.
 
 """
-function atcc13(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
-	px::AbstractFloat, rv::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
-	#  The transformation parameters and catalog ICRS (epoch j2000.0)
-	#  to astrometric.
-	atccq(rc, dc, pr, pd, px, rv, apci13(day1, day2)[1])
+function atcc13(
+        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
+        px::AbstractFloat, rv::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat
+    )
+    #  The transformation parameters and catalog ICRS (epoch j2000.0)
+    #  to astrometric.
+    return atccq(rc, dc, pr, pd, px, rv, apci13(day1, day2)[1])
 end
 
 """
@@ -1433,12 +1465,14 @@ effect.
 3) The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 
 """
-function atccq(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat, px::AbstractFloat,
-	rv::AbstractFloat, a::Astrom)
-	#  Proper motion and parallax, giving BCRS coordinate direction, and IRCS
-	#  astrometric RA, Dec.
-	ra, dec = c2s(pmpx(rc, dc, pr, pd, px, rv, a.pmt, a.eb))
-    (ra = mod2pi(ra), dec = dec)
+function atccq(
+        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat, px::AbstractFloat,
+        rv::AbstractFloat, a::Astrom
+    )
+    #  Proper motion and parallax, giving BCRS coordinate direction, and IRCS
+    #  astrometric RA, Dec.
+    ra, dec = c2s(pmpx(rc, dc, pr, pd, px, rv, a.pmt, a.eb))
+    return (ra = mod2pi(ra), dec = dec)
 end
 
 """
@@ -1518,13 +1552,15 @@ julia> atci13(2.71, 0.174, 1e-5, 5e-6, 0.1, 55.0, 2456165.5, 0.401182685)
    - EO. (The anp function can then be applied, as required, to
    keep the result in the conventional 0-2pi range.)
 """
-function atci13(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
-	px::AbstractFloat, rv::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
-	#  The transformation parameters.
-	a, eo = apci13(day1, day2)
-	#  ICRS (epoch J2000.0) to CIRS.
-	ra, dec = values(atciq(rc, dc, pr, pd, px, rv, a))
-	(ra = ra, dec = dec, eo = eo)
+function atci13(
+        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
+        px::AbstractFloat, rv::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat
+    )
+    #  The transformation parameters.
+    a, eo = apci13(day1, day2)
+    #  ICRS (epoch J2000.0) to CIRS.
+    ra, dec = values(atciq(rc, dc, pr, pd, px, rv, a))
+    return (ra = ra, dec = dec, eo = eo)
 end
 
 """
@@ -1564,15 +1600,23 @@ be used instead.
 2) The proper motion in RA is dRA/dt rather than cos(Dec)*dRA/dt.
 
 """
-function atciq(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
-	px::AbstractFloat, rv::AbstractFloat, a::Astrom)
-	#  Proper motion and parallax, giving BCRS coordinate direction.
-	#  Light deflection by the Sun, giving BCRS natural direction.
-	#  Aberration, giving GCRS proper direction.
-	#  Bias-precession-Nutation, giving CIRS proper direction.
-	ri, di = c2s(a.bpn*ab(ldsun(pmpx(rc, dc, pr, pd, px, rv, a.pmt, a.eb),
-			a.eh, a.em), a.v, a.em, a.bm1))
-	(ra = mod2pi(ri), dec = di)
+function atciq(
+        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
+        px::AbstractFloat, rv::AbstractFloat, a::Astrom
+    )
+    #  Proper motion and parallax, giving BCRS coordinate direction.
+    #  Light deflection by the Sun, giving BCRS natural direction.
+    #  Aberration, giving GCRS proper direction.
+    #  Bias-precession-Nutation, giving CIRS proper direction.
+    ri, di = c2s(
+        a.bpn * ab(
+            ldsun(
+                pmpx(rc, dc, pr, pd, px, rv, a.pmt, a.eb),
+                a.eh, a.em
+            ), a.v, a.em, a.bm1
+        )
+    )
+    return (ra = mod2pi(ri), dec = di)
 end
 
 """
@@ -1646,18 +1690,23 @@ used.
    position and velocity vectors must be right, and the deflection
    limiter greater than zero.
 """
-function atciqn(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
-	px::AbstractFloat, rv::AbstractFloat, a::Astrom, n::Int,
-	b::AbstractVector{Ldbody})
-	#  Proper motion and parallax, giving BCRS coordinate direction.
-	#  Light deflection, giving natural direction.
-	#  Aberration, giving GCRS proper direction.
-	#  Bias-precession-nutation, giving CIRS proper direction.
-	#  CIRS RA, Dec
-	ra, dec = c2s(a.bpn*ab(
-		ldn(n, b, a.eb, pmpx(rc, dc, pr, pd, px, rv, a.pmt, a.eb)),
-		a.v, a.em, a.bm1))
-	(ra = mod2pi(ra), dec = dec)
+function atciqn(
+        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
+        px::AbstractFloat, rv::AbstractFloat, a::Astrom, n::Int,
+        b::AbstractVector{Ldbody}
+    )
+    #  Proper motion and parallax, giving BCRS coordinate direction.
+    #  Light deflection, giving natural direction.
+    #  Aberration, giving GCRS proper direction.
+    #  Bias-precession-nutation, giving CIRS proper direction.
+    #  CIRS RA, Dec
+    ra, dec = c2s(
+        a.bpn * ab(
+            ldn(n, b, a.eb, pmpx(rc, dc, pr, pd, px, rv, a.pmt, a.eb)),
+            a.v, a.em, a.bm1
+        )
+    )
+    return (ra = mod2pi(ra), dec = dec)
 end
 
 """
@@ -1698,13 +1747,13 @@ arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 
 """
 function atciqz(rc::AbstractFloat, dc::AbstractFloat, a::Astrom)
-	#  BCRS coordinate direction (unit vector).
-	#  Light deflection by the Sun, giving BCRS natural direction.
-	#  Aberration, giving GCRS proper direction.
-	#  Bias-precession-nutation, giving CIRS proper direction.
-	#  CIRS to RA, Dec.
-	ra, dec = c2s(a.bpn*ab(ldsun(s2c(rc, dc), a.eh, a.em), a.v, a.em, a.bm1))
-	(ra = mod2pi(ra), dec = dec)
+    #  BCRS coordinate direction (unit vector).
+    #  Light deflection by the Sun, giving BCRS natural direction.
+    #  Aberration, giving GCRS proper direction.
+    #  Bias-precession-nutation, giving CIRS proper direction.
+    #  CIRS to RA, Dec.
+    ra, dec = c2s(a.bpn * ab(ldsun(s2c(rc, dc), a.eh, a.em), a.v, a.em, a.bm1))
+    return (ra = mod2pi(ra), dec = dec)
 end
 
 """
@@ -1842,16 +1891,18 @@ nutation, Earth orientation and refraction.
 	accordance with the models used.
 
 """
-function atco13(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
-	px::AbstractFloat, rv::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat,
-    dut1::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat,
-	xp::AbstractFloat, yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat,
-	rh::AbstractFloat, wl::AbstractFloat)
-	#  Star-independent astrometry parameters.
+function atco13(
+        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
+        px::AbstractFloat, rv::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat,
+        dut1::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat,
+        xp::AbstractFloat, yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat,
+        rh::AbstractFloat, wl::AbstractFloat
+    )
+    #  Star-independent astrometry parameters.
     a, eo = apco13(utc1, utc2, dut1, elong, ϕ, hm, xp, yp, phpa, tc, rh, wl)
-	#  Transform ICRS to CIRS and CIRS to observed.
-	azi, zen, ha, dec, ra = atioq(atciq(rc, dc, pr, pd, px, rv, a)..., a)
-	(azi = azi, zen = zen, ha = ha, dec = dec, ra = ra, eo = eo)
+    #  Transform ICRS to CIRS and CIRS to observed.
+    azi, zen, ha, dec, ra = atioq(atciq(rc, dc, pr, pd, px, rv, a)..., a)
+    return (azi = azi, zen = zen, ha = ha, dec = dec, ra = ra, eo = eo)
 end
 
 """
@@ -1920,9 +1971,9 @@ Transform star RA,Dec from geocentric CIRS to ICRS astrometric.
 
 """
 function atic13(ri::AbstractFloat, di::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
-	a, eo = apci13(day1, day2)
-	ra, dec = aticq(ri, di, a)
-    (ra = ra, dec = dec, eo = eo)
+    a, eo = apci13(day1, day2)
+    ra, dec = aticq(ri, di, a)
+    return (ra = ra, dec = dec, eo = eo)
 end
 
 """
@@ -1958,31 +2009,31 @@ of the functions apci[13], apcg[13], apco[13] or apcs[13].
 """
 function aticq(ri::AbstractFloat, di::AbstractFloat, a::Astrom)
     #  CIRS RA, Dec to cartesian.
-	#  Bias-precession-nutation, giving GCRS proper direction.
-	ppr = a.bpn'*s2c(ri, di)
-	#  Aberration, giving GCRS natural direction.
-	d, pnat, pco = zeros(Float64, 3), zeros(Float64, 3), zeros(Float64, 3)
-    for j ∈ 1:2
-		w = ppr .- d
-		bf = copy(w) ./ norm(w)
-		af = ab(bf, a.v, a.em, a.bm1)
-		d = af .- bf
-		w = ppr .- d
-		pnat .= copy(w) ./ norm(w)
-	end
-	#  Light deflection by the Sun, giving BCRS coordinate direction.
-	d = zeros(Float64, 3)
-    for j ∈ 1:5
-		w = pnat .- d
-		bf = copy(w) ./ norm(w)
-		af = ldsun(bf, a.eh, a.em)
-		d = af .- bf
-		w = pnat .- d
-		pco .= copy(w) ./ norm(w)
-	end
-	#  ICRS astrometric RA, Dec.
-	ra, dec = c2s(pco)
-	(ra = mod2pi(ra), dec = dec)
+    #  Bias-precession-nutation, giving GCRS proper direction.
+    ppr = a.bpn' * s2c(ri, di)
+    #  Aberration, giving GCRS natural direction.
+    d, pnat, pco = zeros(Float64, 3), zeros(Float64, 3), zeros(Float64, 3)
+    for j in 1:2
+        w = ppr .- d
+        bf = copy(w) ./ norm(w)
+        af = ab(bf, a.v, a.em, a.bm1)
+        d = af .- bf
+        w = ppr .- d
+        pnat .= copy(w) ./ norm(w)
+    end
+    #  Light deflection by the Sun, giving BCRS coordinate direction.
+    d = zeros(Float64, 3)
+    for j in 1:5
+        w = pnat .- d
+        bf = copy(w) ./ norm(w)
+        af = ldsun(bf, a.eh, a.em)
+        d = af .- bf
+        w = pnat .- d
+        pco .= copy(w) ./ norm(w)
+    end
+    #  ICRS astrometric RA, Dec.
+    ra, dec = c2s(pco)
+    return (ra = mod2pi(ra), dec = dec)
 end
 
 """
@@ -2051,29 +2102,31 @@ the aticq function can be used instead.
    position and velocity vectors must be right, and the deflection
    limiter greater than zero.
 """
-function aticqn(ri::AbstractFloat, di::AbstractFloat, a::Astrom, n::Int,
-      b::AbstractVector{Ldbody})
-	#  CIRS RA, Dec to cartesian.
-	#  Bias-precession-nutation, giving GCRS proper direction.
-	ppr = a.bpn'*s2c(ri, di)
-	#  Aberration, giving GCRS natural direction.
-	d, pnat, pco = zeros(Float64, 3), zeros(Float64, 3), zeros(Float64, 3)
-	for j ∈ 1:2
-		bf = (ppr .- d) ./ norm(ppr .- d)
-		af = ab(bf, a.v, a.em, a.bm1)
-		d .= af .- bf
-		pnat .= (ppr .- d) ./ norm(ppr .- d)
-	end
-	#  Light deflection, giving BCRS coordinate direction.
-	d = zeros(Float64, 3)
-	for j ∈ 1:5
-		bf = (pnat .- d) ./ norm(pnat .- d)
-		af = ldn(n, b, a.eb, bf)
-		d .= af .- bf
-		pco .= (pnat .- d) ./ norm(pnat .- d)
-	end
-	rc, dc = c2s(pco)
-	(ra = mod2pi(rc), dec = dc)
+function aticqn(
+        ri::AbstractFloat, di::AbstractFloat, a::Astrom, n::Int,
+        b::AbstractVector{Ldbody}
+    )
+    #  CIRS RA, Dec to cartesian.
+    #  Bias-precession-nutation, giving GCRS proper direction.
+    ppr = a.bpn' * s2c(ri, di)
+    #  Aberration, giving GCRS natural direction.
+    d, pnat, pco = zeros(Float64, 3), zeros(Float64, 3), zeros(Float64, 3)
+    for j in 1:2
+        bf = (ppr .- d) ./ norm(ppr .- d)
+        af = ab(bf, a.v, a.em, a.bm1)
+        d .= af .- bf
+        pnat .= (ppr .- d) ./ norm(ppr .- d)
+    end
+    #  Light deflection, giving BCRS coordinate direction.
+    d = zeros(Float64, 3)
+    for j in 1:5
+        bf = (pnat .- d) ./ norm(pnat .- d)
+        af = ldn(n, b, a.eb, bf)
+        d .= af .- bf
+        pco .= (pnat .- d) ./ norm(pnat .- d)
+    end
+    rc, dc = c2s(pco)
+    return (ra = mod2pi(rc), dec = dc)
 end
 
 """
@@ -2195,14 +2248,19 @@ coordinates, ambient air conditions and observing wavelength.
 	values of the input parameters are accepted and processed in
 	accordance with the models used.
 """
-function atio13(ri::AbstractFloat, di::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat, dut1::AbstractFloat,
-	elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat,
-	phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat)
-	#  Star-independent astrometry parameters for CIRS->observed.
-	#  Transform CIRS to observed.
-	aob, zob, hob, dob, rob = atioq(ri, di, apio13(
-		utc1, utc2, dut1, elong, ϕ, hm, xp, yp, phpa, tc, rh, wl, Astrom()))
-	(azi = aob, zen = zob, ha = hob, dec = dob, ra = rob)
+function atio13(
+        ri::AbstractFloat, di::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat, dut1::AbstractFloat,
+        elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat,
+        phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat
+    )
+    #  Star-independent astrometry parameters for CIRS->observed.
+    #  Transform CIRS to observed.
+    aob, zob, hob, dob, rob = atioq(
+        ri, di, apio13(
+            utc1, utc2, dut1, elong, ϕ, hm, xp, yp, phpa, tc, rh, wl, Astrom()
+        )
+    )
+    return (azi = aob, zen = zob, ha = hob, dec = dob, ra = rob)
 end
 
 """
@@ -2277,34 +2335,38 @@ apio[13] or apco[13].
    perform the requisite adjustment to the astrom structure.
 """
 function atioq(ri::AbstractFloat, di::AbstractFloat, a::Astrom)
-	#  Minimum cos(alt) and sin(alt) for refraction.
-	CELMIN, SELMIN = 1e-6, 0.05
-	#  CIRS Ra, Dec to cartesian and polar motion.
-	hd = SMatrix{3, 3}([             cos(a.xpl) 0.0 sin(a.xpl);
-		sin(a.xpl)*sin(a.ypl) cos(a.ypl) -cos(a.xpl)*sin(a.ypl);
-		-sin(a.xpl)*cos(a.ypl) sin(a.ypl) cos(a.xpl)*cos(a.ypl)])*s2c(ri - a.eral, di)
-	#  Diurnal aberration.
-	hdt = (1.0 - a.diurab*hd[2]) .* (hd .+ SVector(0.0, a.diurab, 0.0))
+    #  Minimum cos(alt) and sin(alt) for refraction.
+    CELMIN, SELMIN = 1.0e-6, 0.05
+    #  CIRS Ra, Dec to cartesian and polar motion.
+    hd = SMatrix{3, 3}(
+        [
+            cos(a.xpl) 0.0 sin(a.xpl);
+            sin(a.xpl) * sin(a.ypl) cos(a.ypl) -cos(a.xpl) * sin(a.ypl);
+            -sin(a.xpl) * cos(a.ypl) sin(a.ypl) cos(a.xpl) * cos(a.ypl)
+        ]
+    ) * s2c(ri - a.eral, di)
+    #  Diurnal aberration.
+    hdt = (1.0 - a.diurab * hd[2]) .* (hd .+ SVector(0.0, a.diurab, 0.0))
     #  Cartesian -HA, Dec to cartesian Az, El (S=0, E=90).
-	aet = SMatrix{3, 3}([a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi])*hdt
-	#  Azimuth (N=0, E=90)
-	azob = aet[1] != 0.0 || aet[2] != 0.0 ? atan(aet[2], -aet[1]) : 0.0
-	####    Refraction    ####
-	#  Cosine and sine of altitude, with precautions.
-	r, z = maximum([norm(aet[1:2]) CELMIN; aet[3] SELMIN], dims = 2)
-	#  A*tan(z) + B*tan^3(z) model, with Newton-Raphson correction.
-	w = a.refb*(r/z)^2
-	del = (a.refa + w)*(r/z)/(1.0 + (a.refa + 3*w)/z^2)
-	#  Apply the change, giving observed vector.
-	cosdel = 1.0 - del^2/2.0
-	aeo = SVector((cosdel - del*z/r), cosdel - del*z/r, cosdel) .* aet .+ SVector(0.0, 0.0, del*r)
-	#  Observed ZD.
-	zdob = atan(norm(aeo[1:2]), aeo[3])
-	#  Az/El vector to HA, Dec vector (both right-handed) and to spherical -HA, Dec.
-	hmob, dcob = c2s(SMatrix{3, 3}([a.sphi 0.0 a.cphi; 0.0 1.0 0.0; -a.cphi 0.0 a.sphi])*aeo)
-	#  Right ascension (with respect to CIO).
-	raob = a.eral + hmob
-	(azi = mod2pi(azob), zen = zdob, ha = -hmob, dec = dcob, ra = mod2pi(raob))
+    aet = SMatrix{3, 3}([a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi]) * hdt
+    #  Azimuth (N=0, E=90)
+    azob = aet[1] != 0.0 || aet[2] != 0.0 ? atan(aet[2], -aet[1]) : 0.0
+    ####    Refraction    ####
+    #  Cosine and sine of altitude, with precautions.
+    r, z = maximum([norm(aet[1:2]) CELMIN; aet[3] SELMIN], dims = 2)
+    #  A*tan(z) + B*tan^3(z) model, with Newton-Raphson correction.
+    w = a.refb * (r / z)^2
+    del = (a.refa + w) * (r / z) / (1.0 + (a.refa + 3 * w) / z^2)
+    #  Apply the change, giving observed vector.
+    cosdel = 1.0 - del^2 / 2.0
+    aeo = SVector((cosdel - del * z / r), cosdel - del * z / r, cosdel) .* aet .+ SVector(0.0, 0.0, del * r)
+    #  Observed ZD.
+    zdob = atan(norm(aeo[1:2]), aeo[3])
+    #  Az/El vector to HA, Dec vector (both right-handed) and to spherical -HA, Dec.
+    hmob, dcob = c2s(SMatrix{3, 3}([a.sphi 0.0 a.cphi; 0.0 1.0 0.0; -a.cphi 0.0 a.sphi]) * aeo)
+    #  Right ascension (with respect to CIO).
+    raob = a.eral + hmob
+    return (azi = mod2pi(azob), zen = zdob, ha = -hmob, dec = dcob, ra = mod2pi(raob))
 end
 
 """
@@ -2433,16 +2495,18 @@ observing wavelength.
 	values of the input parameters are accepted and processed in
 	accordance with the models used.
 """
-function atoc13(tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat,
-	dut1::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
-	yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat)
-	#  Star-independent astrometry parameters
-	a, eo = apco13(utc1, utc2, dut1, elong, ϕ, hm, xp, yp, phpa, tc, rh, wl)
-	#  Transform observed to CIRS
-	ri, di = atoiq(tp, ob1, ob2, a)
-	#  Transform CIRS to ICRS
-	ra, dec = values(aticq(ri, di, a))
-	(ra = ra, dec = dec)
+function atoc13(
+        tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat,
+        dut1::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
+        yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat
+    )
+    #  Star-independent astrometry parameters
+    a, eo = apco13(utc1, utc2, dut1, elong, ϕ, hm, xp, yp, phpa, tc, rh, wl)
+    #  Transform observed to CIRS
+    ri, di = atoiq(tp, ob1, ob2, a)
+    #  Transform CIRS to ICRS
+    ra, dec = values(aticq(ri, di, a))
+    return (ra = ra, dec = dec)
 end
 
 """
@@ -2571,14 +2635,20 @@ ambient air conditions and observing wavelength.
 	values of the input parameters are accepted and processed in
 	accordance with the models used.
 """
-function atoi13(tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat,
-	dut1::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
-	yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat)
-	#  Star-independent astrometry parameters for CIRS->observed.
-	#  Transform observed to CIRS.
-	ri, di = atoiq(tp, ob1, ob2, apio13(utc1, utc2, dut1, elong, ϕ,
-        hm, xp, yp, phpa, tc, rh, wl, Astrom()))
-	(ra = ri, dec = di)
+function atoi13(
+        tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat,
+        dut1::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
+        yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat
+    )
+    #  Star-independent astrometry parameters for CIRS->observed.
+    #  Transform observed to CIRS.
+    ri, di = atoiq(
+        tp, ob1, ob2, apio13(
+            utc1, utc2, dut1, elong, ϕ,
+            hm, xp, yp, phpa, tc, rh, wl, Astrom()
+        )
+    )
+    return (ra = ri, dec = di)
 end
 
 """
@@ -2646,44 +2716,49 @@ apio[13] or apco[13].
    accordance with the models used.
 """
 function atoiq(tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, a::Astrom)
-	#  Minimum sin(alt) for refraction.
-	SELMIN = 0.05
+    #  Minimum sin(alt) for refraction.
+    SELMIN = 0.05
     #  Standardize coordinate type: anything that is not 'R' or 'H'
     #  indicates Az, ZD.
     tp = uppercase(tp)
-	#  if Az, ZD, convert to cartesian (S=0, E=90).
-	aeo = MVector(0.0, 0.0, 0.0)
+    #  if Az, ZD, convert to cartesian (S=0, E=90).
+    aeo = MVector(0.0, 0.0, 0.0)
     if tp != 'R' && tp != 'H'
-		aeo .= SVector(-cos(ob1)*sin(ob2), sin(ob1)*sin(ob2), cos(ob2))
-	else
-		#  If Ra, Dec, convert to HA, Dec.
+        aeo .= SVector(-cos(ob1) * sin(ob2), sin(ob1) * sin(ob2), cos(ob2))
+    else
+        #  If Ra, Dec, convert to HA, Dec.
         if tp == 'R'
-			ob1 = a.eral - ob1
-		end
-		#  To cartesian -HA, Dec and then to cartesian Az, El (S=0, E=90).
-		aeo .= SMatrix{3, 3}([a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi])*s2c(-ob1, ob2)
-	end
-	#  Azimuth (S=0, E=90).
-	az = aeo[1] != 0.0 || aeo[2] != 0.0 ? atan(aeo[2], aeo[1]) : 0.0
-	#  Sine of observed ZD, and observed ZD.
-	zdo = atan(norm(aeo[1:2]), aeo[3])
+            ob1 = a.eral - ob1
+        end
+        #  To cartesian -HA, Dec and then to cartesian Az, El (S=0, E=90).
+        aeo .= SMatrix{3, 3}([a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi]) * s2c(-ob1, ob2)
+    end
+    #  Azimuth (S=0, E=90).
+    az = aeo[1] != 0.0 || aeo[2] != 0.0 ? atan(aeo[2], aeo[1]) : 0.0
+    #  Sine of observed ZD, and observed ZD.
+    zdo = atan(norm(aeo[1:2]), aeo[3])
 
-	####    Refraction    ####
-	#  Fast algorithm using two constant model.
-	tz = norm(aeo[1:2])/maximum((aeo[3], SELMIN))
-	zdt = zdo + a.refa*tz + a.refb*tz^3
-	#  To cartesian AZ, ZD.
-	aet = SVector(cos(az)*sin(zdt), sin(az)*sin(zdt), cos(zdt))
-	#  Cartesian Az, ZD to cartesian -HA, Dec.
-	mhda = SMatrix{3, 3}([a.sphi 0.0 a.cphi; 0.0 1.0 0.0; -a.cphi 0.0 a.sphi])*aet
-	#  Diurnal aberration.
-	hd = (1.0 + a.diurab*mhda[2]) .* (mhda .- SVector(0.0, a.diurab, 0.0))
-	#  Polar motion.
-	hma, dec = c2s(SMatrix{3, 3}(
-		[cos(a.xpl)  sin(a.xpl)*sin(a.ypl) -sin(a.xpl)*cos(a.ypl);
-			   0.0              cos(a.ypl)             sin(a.ypl);
-			sin(a.xpl) -cos(a.xpl)*sin(a.ypl)  cos(a.xpl)*cos(a.ypl)])*hd)
-	(ra = mod2pi(a.eral + hma), dec = dec)
+    ####    Refraction    ####
+    #  Fast algorithm using two constant model.
+    tz = norm(aeo[1:2]) / maximum((aeo[3], SELMIN))
+    zdt = zdo + a.refa * tz + a.refb * tz^3
+    #  To cartesian AZ, ZD.
+    aet = SVector(cos(az) * sin(zdt), sin(az) * sin(zdt), cos(zdt))
+    #  Cartesian Az, ZD to cartesian -HA, Dec.
+    mhda = SMatrix{3, 3}([a.sphi 0.0 a.cphi; 0.0 1.0 0.0; -a.cphi 0.0 a.sphi]) * aet
+    #  Diurnal aberration.
+    hd = (1.0 + a.diurab * mhda[2]) .* (mhda .- SVector(0.0, a.diurab, 0.0))
+    #  Polar motion.
+    hma, dec = c2s(
+        SMatrix{3, 3}(
+            [
+                cos(a.xpl)  sin(a.xpl) * sin(a.ypl) -sin(a.xpl) * cos(a.ypl);
+                0.0              cos(a.ypl)             sin(a.ypl);
+                sin(a.xpl) -cos(a.xpl) * sin(a.ypl)  cos(a.xpl) * cos(a.ypl)
+            ]
+        ) * hd
+    )
+    return (ra = mod2pi(a.eral + hma), dec = dec)
 end
 
 """
@@ -2748,11 +2823,13 @@ Klioner, Sergei A., "A practical relativistic model for micro-
 arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 """
 function ld(bm::F, p::V, q::W, e::X, em::F, dlim::F) where
-{F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
-	W <: AbstractVector{<:AbstractFloat}, X <: AbstractVector{<:AbstractFloat}}
-	#  2*G*bm/(em*c^2*(q*(q+e))).
-	#  Apply the deflection.
-	p .+ SCHWARZRADIUS*bm/em/maximum((dot(q, (q .+ e)), dlim)) .* pxp(p, pxp(e, q))
+    {
+        F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
+        W <: AbstractVector{<:AbstractFloat}, X <: AbstractVector{<:AbstractFloat},
+    }
+    #  2*G*bm/(em*c^2*(q*(q+e))).
+    #  Apply the deflection.
+    return p .+ SCHWARZRADIUS * bm / em / maximum((dot(q, (q .+ e)), dlim)) .* pxp(p, pxp(e, q))
 end
 
 """
@@ -2826,20 +2903,20 @@ Astronomical Almanac, 3rd ed., University Science Books (2013),
 Section 7.2.4.
 """
 function ldn(n::Int, b::AbstractVector{Ldbody}, ob::V, sc::W) where
-{V <: AbstractVector{<:AbstractFloat}, W <: AbstractVector{<:AbstractFloat}}
-	sn = sc[:]
+    {V <: AbstractVector{<:AbstractFloat}, W <: AbstractVector{<:AbstractFloat}}
+    sn = sc[:]
     for body in view(b, 1:n)
-		#  Body to observer vector at epoch of observation (AU).
-		v = ob .- body.pv[1]
-		#  Minus the time since the light passed the body (days).
-		Δt = minimum((ASTRUNIT/LIGHTSPEED/SECPERDAY*dot(sn, v), 0.0))
-		#  Backtrack the body to the time the light was passing the body.
-		#  Body to observer vector as magnitude and direction.
-		em, e = pn(v .- Δt .* body.pv[2])
-		#  Apply light deflection for this body.
-		sn .= ld(body.bm, sn, sn, e, em, body.dl)
-	end
-	sn
+        #  Body to observer vector at epoch of observation (AU).
+        v = ob .- body.pv[1]
+        #  Minus the time since the light passed the body (days).
+        Δt = minimum((ASTRUNIT / LIGHTSPEED / SECPERDAY * dot(sn, v), 0.0))
+        #  Backtrack the body to the time the light was passing the body.
+        #  Body to observer vector as magnitude and direction.
+        em, e = pn(v .- Δt .* body.pv[2])
+        #  Apply light deflection for this body.
+        sn .= ld(body.bm, sn, sn, e, em, body.dl)
+    end
+    return sn
 end
 
 """
@@ -2872,11 +2949,13 @@ Deflection of starlight by the Sun.
 3) The arguments p and p1 can be the same array.
 """
 function ldsun(p::V, e::W, em::F) where
-{F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
-	W <: AbstractVector{<:AbstractFloat}}
-	#  Deflection limiter (smaller for distant observers).
-	#  Apply the deflection.
-	ld(1.0, p, p, e, em, 1e-6/(em^2 > 1.0 ? em^2 : 1.0))
+    {
+        F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
+        W <: AbstractVector{<:AbstractFloat},
+    }
+    #  Deflection limiter (smaller for distant observers).
+    #  Apply the deflection.
+    return ld(1.0, p, p, e, em, 1.0e-6 / (em^2 > 1.0 ? em^2 : 1.0))
 end
 
 """
@@ -2919,20 +2998,24 @@ Urban, S. & Seidelmann, P. K. (eds), Explanatory Supplement to the
 Astronomical Almanac, 3rd ed., University Science Books (2013),
 Section 7.2.
 """
-function pmpx(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
-	px::AbstractFloat, rv::AbstractFloat, pmt::AbstractFloat,
-   pob::AbstractVector{<:AbstractFloat})
-	#  Spherical coordinates to unit vector (and useful functions.)
-	p = MVector(cos(rc)*cos(dc), sin(rc)*cos(dc), sin(dc))
-	#  Space motion (radian per year).
-	rvpx = SECPERDAY*(1000*DAYPERYEAR)/ASTRUNIT*rv*deg2rad(px/3600.0)
-	pm = SVector(rvpx*p[1] - pr*p[2] - pd*cos(rc)*p[3],
-		rvpx*p[2] + pr*p[1] - pd*sin(rc)*p[3],
-		rvpx*p[3] + pd*cos(dc))
-	#  Proper motion time interval (y) including Roemer effect.
-	#  Coordinate direction of star (unit vector, BCRS).
-	p .+= (pmt + AULIGHT*dot(p, pob)) .* pm - deg2rad(px/3600.0) .* pob
-	p ./ norm(p)
+function pmpx(
+        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
+        px::AbstractFloat, rv::AbstractFloat, pmt::AbstractFloat,
+        pob::AbstractVector{<:AbstractFloat}
+    )
+    #  Spherical coordinates to unit vector (and useful functions.)
+    p = MVector(cos(rc) * cos(dc), sin(rc) * cos(dc), sin(dc))
+    #  Space motion (radian per year).
+    rvpx = SECPERDAY * (1000 * DAYPERYEAR) / ASTRUNIT * rv * deg2rad(px / 3600.0)
+    pm = SVector(
+        rvpx * p[1] - pr * p[2] - pd * cos(rc) * p[3],
+        rvpx * p[2] + pr * p[1] - pd * sin(rc) * p[3],
+        rvpx * p[3] + pd * cos(dc)
+    )
+    #  Proper motion time interval (y) including Roemer effect.
+    #  Coordinate direction of star (unit vector, BCRS).
+    p .+= (pmt + AULIGHT * dot(p, pob)) .* pm - deg2rad(px / 3600.0) .* pob
+    return p ./ norm(p)
 end
 
 """
@@ -3024,23 +3107,25 @@ special handling to handle the zero parallax case.
    converge within a set number of iterations, 4 is added to the
    status.
 """
-function pmsafe(ra::AbstractFloat, dec::AbstractFloat, pmr::AbstractFloat, pmd::AbstractFloat,
-	plx::AbstractFloat, rv::AbstractFloat, ep1a::AbstractFloat, ep1b::AbstractFloat,
-	ep2a::AbstractFloat, ep2b::AbstractFloat)
-	#  Minimum allowed parallax and factor giving maximum allowed transverse
-	# speed of about 1% c.
-	PXMIN, F = 5e-7, 326.0
-	#  Proper motion in one year (radians)
-	pm = F*seps(ra, dec, ra+pmr, dec+pmd)
-	#  Override the parallax to reduce chances of a warning status.
-	if plx < pm
+function pmsafe(
+        ra::AbstractFloat, dec::AbstractFloat, pmr::AbstractFloat, pmd::AbstractFloat,
+        plx::AbstractFloat, rv::AbstractFloat, ep1a::AbstractFloat, ep1b::AbstractFloat,
+        ep2a::AbstractFloat, ep2b::AbstractFloat
+    )
+    #  Minimum allowed parallax and factor giving maximum allowed transverse
+    # speed of about 1% c.
+    PXMIN, F = 5.0e-7, 326.0
+    #  Proper motion in one year (radians)
+    pm = F * seps(ra, dec, ra + pmr, dec + pmd)
+    #  Override the parallax to reduce chances of a warning status.
+    if plx < pm
         plx = pm
     end
     if plx < PXMIN
         plx = PXMIN
-	end
-	#  Carry out the transformation using the modified parallax.
-	starpm(ra, dec, pmr, pmd, plx, rv, ep1a, ep1b, ep2a, ep2b)
+    end
+    #  Carry out the transformation using the modified parallax.
+    return starpm(ra, dec, pmr, pmd, plx, rv, ep1a, ep1b, ep2a, ep2b)
 end
 
 """
@@ -3097,16 +3182,20 @@ Urban, S. & Seidelmann, P. K. (eds), Explanatory Supplement to the
 Astronomical Almanac, 3rd ed., University Science Books (2013),
 Section 7.4.3.3.
 """
-function pvtob(elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
-	yp::AbstractFloat, sp::AbstractFloat, θ::AbstractFloat)
-	#  Earth rotation rate in radians per UT1 seconds.
-	Ω = 2π*Ω_Earth_2003/SECPERDAY
-	#  Geodetic to geocentric transformation (WGS84), polar motion and
-	#  TIO position.
-	x, y, z = trxp(pom00(xp, yp, sp), gd2gc(:WGS84, elong, ϕ, hm))
-	#  Functions of ERA, position and velocity.
-	pv = SVector(SVector(sum(sincos(θ) .* (-y, x)), sum(sincos(θ) .* (x, y)), z),
-		Ω .* SVector(sum(sincos(θ) .* (-x, -y)), sum(sincos(θ) .* (-y, x)), 0.0))
+function pvtob(
+        elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
+        yp::AbstractFloat, sp::AbstractFloat, θ::AbstractFloat
+    )
+    #  Earth rotation rate in radians per UT1 seconds.
+    Ω = 2π * Ω_Earth_2003 / SECPERDAY
+    #  Geodetic to geocentric transformation (WGS84), polar motion and
+    #  TIO position.
+    x, y, z = trxp(pom00(xp, yp, sp), gd2gc(:WGS84, elong, ϕ, hm))
+    #  Functions of ERA, position and velocity.
+    return pv = SVector(
+        SVector(sum(sincos(θ) .* (-y, x)), sum(sincos(θ) .* (x, y)), z),
+        Ω .* SVector(sum(sincos(θ) .* (-x, -y)), sum(sincos(θ) .* (-y, x)), 0.0)
+    )
 end
 
 """
@@ -3258,28 +3347,28 @@ South Wales, Sydney, Australia, 2002.
 Stone, Ronald C., P.A.S.P. 108, 1051-1058, 1996.
 """
 function refco(phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat)
-	#  Determine the spectral band, either optical/IR or radio, based on
-	#  the wavelength of > or < 100 microns.
-	optical = wl <= 100.0 ? true : false
-	#  Restrict parameters to safe values.
-	t = minimum((maximum((tc, -150.0)), 200.0))
-	p = minimum((maximum((phpa, 0.0)), 10000.0))
-	r = minimum((maximum((rh, 0.0)), 1.0))
-	w = minimum((maximum((wl, 0.1)), 1e6))
-	#  Water vapor pressure at the observer.
+    #  Determine the spectral band, either optical/IR or radio, based on
+    #  the wavelength of > or < 100 microns.
+    optical = wl <= 100.0 ? true : false
+    #  Restrict parameters to safe values.
+    t = minimum((maximum((tc, -150.0)), 200.0))
+    p = minimum((maximum((phpa, 0.0)), 10000.0))
+    r = minimum((maximum((rh, 0.0)), 1.0))
+    w = minimum((maximum((wl, 0.1)), 1.0e6))
+    #  Water vapor pressure at the observer.
     pw = p > 0.0 ? h2opres(p, t, r) : 0.0
-	#  Refractive index minus 1 at the observer.
-	if optical
-		wpco = (77.53484e-6, 4.39108e-7, 3.666e-9)
-		γ = (Polynomial(wpco...)(1/w^2)*p - 11.2684e-6*pw)/(273.15 + t)
-	else
-		γ = (77.6890e-6*p - (6.3938e-6 - 0.375463/(273.15 + t))*pw)/(273.15 + t)
-	end
-	#  Formula for β from Stone, with empirical adjustments.
-	β = 4.4474e-6*(273.15 + t)
-	β -= !optical ? 0.0074*pw*β : 0.0
-	#  Refraction constants from Green.
-	refa, refb = γ*(1.0 - β), -γ*(β - γ/2.0)
+    #  Refractive index minus 1 at the observer.
+    if optical
+        wpco = (77.53484e-6, 4.39108e-7, 3.666e-9)
+        γ = (Polynomial(wpco...)(1 / w^2) * p - 11.2684e-6 * pw) / (273.15 + t)
+    else
+        γ = (77.689e-6 * p - (6.3938e-6 - 0.375463 / (273.15 + t)) * pw) / (273.15 + t)
+    end
+    #  Formula for β from Stone, with empirical adjustments.
+    β = 4.4474e-6 * (273.15 + t)
+    β -= !optical ? 0.0074 * pw * β : 0.0
+    #  Refraction constants from Green.
+    return refa, refb = γ * (1.0 - β), -γ * (β - γ / 2.0)
 end
 
 """
@@ -3299,7 +3388,7 @@ Calculate the water vapor pressure given temperature and pressure.
 
 """
 function h2opres(p::AbstractFloat, t::AbstractFloat, r::AbstractFloat)
-	ps = (1.0 + p*(4.5e-6 + 6e-10*t^2)) *
-		 10.0^((0.7859 + 0.03477*t)/(1.0 + 0.00412*t))
-	r*ps/(1.0 - (1.0 - r)*ps/p)
+    ps = (1.0 + p * (4.5e-6 + 6.0e-10 * t^2)) *
+        10.0^((0.7859 + 0.03477 * t) / (1.0 + 0.00412 * t))
+    return r * ps / (1.0 - (1.0 - r) * ps / p)
 end

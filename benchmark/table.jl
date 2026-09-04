@@ -15,7 +15,8 @@ const RESULTS_FILE = joinpath(RESULTS_DIR, "results_$(PKG)@$(REV).json")
 if !isfile(RESULTS_FILE)
     @info "No results found at $RESULTS_FILE, running benchpkg"
     mkpath(RESULTS_DIR)   # the benchmark runner does not create it
-    benchpkg(PKG;
+    benchpkg(
+        PKG;
         rev = REV,
         path = dirname(@__DIR__),
         output_dir = RESULTS_DIR,
@@ -52,16 +53,27 @@ end
 if isfile(SCALAR_CSV)
     col, rows = read_csv(SCALAR_CSV)
     sort!(rows; by = r -> r[col["function_name"]])
-    data = permutedims(hcat([[r[col["function_name"]],
-                              fmt_ns(r[col["julia_ns"]]),
-                              fmt_ns(r[col["pyerfa_ns"]]),
-                              fmt_ns(r[col["pyerfa_ufunc_ns"]]),
-                              fmt_ratio(r[col["ratio_pyerfa"]]),
-                              fmt_ratio(r[col["ratio_ufunc"]])] for r in rows]...))
-    pretty_table(data;
+    data = permutedims(
+        hcat(
+            [
+                [
+                    r[col["function_name"]],
+                    fmt_ns(r[col["julia_ns"]]),
+                    fmt_ns(r[col["pyerfa_ns"]]),
+                    fmt_ns(r[col["pyerfa_ufunc_ns"]]),
+                    fmt_ratio(r[col["ratio_pyerfa"]]),
+                    fmt_ratio(r[col["ratio_ufunc"]]),
+                ] for r in rows
+            ]...
+        )
+    )
+    pretty_table(
+        data;
         title = "SOFA.jl vs pyerfa — scalar calls (ratio > 1: SOFA.jl faster)",
-        column_labels = ["function", "SOFA.jl", "erfa.<f>", "erfa.ufunc.<f>",
-                         "vs erfa", "vs ufunc"],
+        column_labels = [
+            "function", "SOFA.jl", "erfa.<f>", "erfa.ufunc.<f>",
+            "vs erfa", "vs ufunc",
+        ],
         alignment = [:l, :r, :r, :r, :r, :r],
         fit_table_in_display_vertically = false,
         fit_table_in_display_horizontally = false,
@@ -73,12 +85,21 @@ end
 if isfile(ARRAY_CSV)
     col, rows = read_csv(ARRAY_CSV)
     sort!(rows; by = r -> (r[col["function_name"]], parse(Int, r[col["n"]])))
-    data = permutedims(hcat([[r[col["function_name"]],
-                              r[col["n"]],
-                              fmt_ns(r[col["julia_ns_per_elem"]]),
-                              fmt_ns(r[col["pyerfa_ufunc_ns_per_elem"]]),
-                              fmt_ratio(r[col["ratio_per_elem"]])] for r in rows]...))
-    pretty_table(data;
+    data = permutedims(
+        hcat(
+            [
+                [
+                    r[col["function_name"]],
+                    r[col["n"]],
+                    fmt_ns(r[col["julia_ns_per_elem"]]),
+                    fmt_ns(r[col["pyerfa_ufunc_ns_per_elem"]]),
+                    fmt_ratio(r[col["ratio_per_elem"]]),
+                ] for r in rows
+            ]...
+        )
+    )
+    pretty_table(
+        data;
         title = "SOFA.jl broadcast vs erfa ufunc — per element",
         column_labels = ["function", "n", "SOFA.jl", "erfa.ufunc.<f>", "ratio"],
         alignment = [:l, :r, :r, :r, :r],

@@ -58,7 +58,7 @@ end
 
 # ── Cross-validation: both sides must agree before timing means anything ────
 
-let atol = 1e-9
+let atol = 1.0e-9
     j = utctai(2453750.5, 0.892100694)
     p = erfa.utctai(2453750.5, 0.892100694)
     @assert abs(j.day - pyconvert(Float64, p[0])) < atol
@@ -97,25 +97,29 @@ const SCALAR_CASES = [
     ("epv00", (2400000.5, 53411.52501161)),
     ("moon98", (2400000.5, 43999.9)),
     ("plan94", (2400000.5, 43999.9, 3)),
-    ("atci13", (2.71, 0.174, 1e-5, 5e-6, 0.1, 55.0, 2456165.5, 0.401182685)),
+    ("atci13", (2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0, 2456165.5, 0.401182685)),
     ("anp", (-0.1,)),
     ("c2s", ([100.0, -50.0, 25.0],)),
 ]
 
 @info "Benchmarking SOFA.jl scalar calls…"
-julia_scalar = DataFrame(map(enumerate(SCALAR_CASES)) do (i, (name, args))
-    f = getfield(SOFA, Symbol(name))
-    call = let f = f, a = args
-        () -> f(a...)
+julia_scalar = DataFrame(
+    map(enumerate(SCALAR_CASES)) do (i, (name, args))
+        f = getfield(SOFA, Symbol(name))
+        call = let f = f, a = args
+            () -> f(a...)
+        end
+        b = @be call() seconds = 0.25
+        (; order = i, function_name = name, julia_ns = 1.0e9 * median(b).time)
     end
-    b = @be call() seconds = 0.25
-    (; order = i, function_name = name, julia_ns = 1e9 * median(b).time)
-end)
+)
 
 const PY_SCALAR_CSV = joinpath(@__DIR__, "python_scalar.csv")
 
-py_cases = join(("(\"$name\", $(repr(args)))" for (name, args) in SCALAR_CASES),
-                ",\n    ")
+py_cases = join(
+    ("(\"$name\", $(repr(args)))" for (name, args) in SCALAR_CASES),
+    ",\n    "
+)
 py_scalar_script = """
 import csv
 import time
@@ -168,8 +172,10 @@ with open(r"$PY_SCALAR_CSV", "w", newline="") as f:
 @info "Benchmarking pyerfa scalar calls…"
 pyexec(py_scalar_script, Main)
 
-scalar = leftjoin(julia_scalar, CSV.read(PY_SCALAR_CSV, DataFrame);
-                  on = :function_name)
+scalar = leftjoin(
+    julia_scalar, CSV.read(PY_SCALAR_CSV, DataFrame);
+    on = :function_name
+)
 sort!(scalar, :order)
 select!(scalar, Not(:order))
 scalar.ratio_pyerfa = scalar.pyerfa_ns ./ scalar.julia_ns
@@ -183,36 +189,56 @@ CSV.write(joinpath(@__DIR__, "scalar_comparison.csv"), scalar)
 # Each case's f takes d1 as an argument so the epoch lives in exactly one
 # place (the d1 field, which the generated Python script also reads).
 const ARRAY_SWEEP = [
-    (name = "taitt", d1 = 2453750.5, lo = 0.0, hi = 0.4, nmax = 10^6,
-     f = (d1, d2) -> taitt.(d1, d2)),
-    (name = "utctai", d1 = 2453750.5, lo = 0.0, hi = 0.4, nmax = 10^6,
-     f = (d1, d2) -> utctai.(d1, d2)),
-    (name = "era00", d1 = 2453750.5, lo = 0.0, hi = 0.4, nmax = 10^6,
-     f = (d1, d2) -> era00.(d1, d2)),
-    (name = "nut06a", d1 = 2400000.5, lo = 53411.0, hi = 53776.0, nmax = 10^4,
-     f = (d1, d2) -> nut06a.(d1, d2)),
-    (name = "epv00", d1 = 2400000.5, lo = 53411.0, hi = 53776.0, nmax = 10^4,
-     f = (d1, d2) -> epv00.(d1, d2)),
-    (name = "atci13", d1 = 2456165.5, lo = 0.0, hi = 0.4, nmax = 10^3,
-     f = (d1, d2) -> atci13.(2.71, 0.174, 1e-5, 5e-6, 0.1, 55.0, d1, d2)),
+    (
+        name = "taitt", d1 = 2453750.5, lo = 0.0, hi = 0.4, nmax = 10^6,
+        f = (d1, d2) -> taitt.(d1, d2),
+    ),
+    (
+        name = "utctai", d1 = 2453750.5, lo = 0.0, hi = 0.4, nmax = 10^6,
+        f = (d1, d2) -> utctai.(d1, d2),
+    ),
+    (
+        name = "era00", d1 = 2453750.5, lo = 0.0, hi = 0.4, nmax = 10^6,
+        f = (d1, d2) -> era00.(d1, d2),
+    ),
+    (
+        name = "nut06a", d1 = 2400000.5, lo = 53411.0, hi = 53776.0, nmax = 10^4,
+        f = (d1, d2) -> nut06a.(d1, d2),
+    ),
+    (
+        name = "epv00", d1 = 2400000.5, lo = 53411.0, hi = 53776.0, nmax = 10^4,
+        f = (d1, d2) -> epv00.(d1, d2),
+    ),
+    (
+        name = "atci13", d1 = 2456165.5, lo = 0.0, hi = 0.4, nmax = 10^3,
+        f = (d1, d2) -> atci13.(2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0, d1, d2),
+    ),
 ]
 
 @info "Benchmarking SOFA.jl array broadcasts…"
-julia_array = DataFrame(mapreduce(vcat, ARRAY_SWEEP) do case
-    map(2:round(Int, log10(case.nmax))) do e
-        n = 10^e
-        d2 = collect(range(case.lo, case.hi; length = n))
-        b = @be case.f($(case.d1), $d2) seconds = 0.5
-        t = 1e9 * median(b).time
-        (; function_name = case.name, n, julia_ns_per_call = t,
-         julia_ns_per_elem = t / n)
+julia_array = DataFrame(
+    mapreduce(vcat, ARRAY_SWEEP) do case
+        map(2:round(Int, log10(case.nmax))) do e
+            n = 10^e
+            d2 = collect(range(case.lo, case.hi; length = n))
+            b = @be case.f($(case.d1), $d2) seconds = 0.5
+            t = 1.0e9 * median(b).time
+            (;
+                function_name = case.name, n, julia_ns_per_call = t,
+                julia_ns_per_elem = t / n,
+            )
+        end
     end
-end)
+)
 
 const PY_ARRAY_CSV = joinpath(@__DIR__, "python_array.csv")
 
-py_sweep = join(("(\"$(c.name)\", $(c.d1), $(c.lo), $(c.hi), $(c.nmax))"
-                 for c in ARRAY_SWEEP), ",\n    ")
+py_sweep = join(
+    (
+        "(\"$(c.name)\", $(c.d1), $(c.lo), $(c.hi), $(c.nmax))"
+            for c in ARRAY_SWEEP
+    ), ",\n    "
+)
 py_array_script = """
 import csv
 import time
@@ -266,8 +292,10 @@ with open(r"$PY_ARRAY_CSV", "w", newline="") as f:
 @info "Benchmarking pyerfa ufunc arrays…"
 pyexec(py_array_script, Main)
 
-array = leftjoin(julia_array, CSV.read(PY_ARRAY_CSV, DataFrame);
-                 on = [:function_name, :n])
+array = leftjoin(
+    julia_array, CSV.read(PY_ARRAY_CSV, DataFrame);
+    on = [:function_name, :n]
+)
 array.ratio_per_elem = array.pyerfa_ufunc_ns_per_elem ./ array.julia_ns_per_elem
 CSV.write(joinpath(@__DIR__, "array_comparison.csv"), array)
 

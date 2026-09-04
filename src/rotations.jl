@@ -59,7 +59,7 @@ Technical Note No. 32, BKG (2004)
 """
 function ee00(day1::AbstractFloat, day2::AbstractFloat, ϵA::AbstractFloat, ψ::AbstractFloat)
     #  Equation of the equinoxes
-    ψ*cos(ϵA) + eect00(day1, day2)
+    return ψ * cos(ϵA) + eect00(day1, day2)
 end
 
 """
@@ -118,8 +118,10 @@ function ee00a(day1::AbstractFloat, day2::AbstractFloat)
     #  IAU 2000 precession rate adjustment, mean obliquity, consistent with
     #  IAU 2000 precession-nutation, nutation in longitude, and solve for
     #  equation of the equinoxes.
-    ee00(day1, day2, obl80(day1, day2)+pr00(day1, day2)[:ϵ],
-         nut00a(day1, day2)[:ψ])
+    return ee00(
+        day1, day2, obl80(day1, day2) + pr00(day1, day2)[:ϵ],
+        nut00a(day1, day2)[:ψ]
+    )
 end
 
 """
@@ -184,8 +186,10 @@ function ee00b(day1::AbstractFloat, day2::AbstractFloat)
     #  IAU 2000 precession rate adjustment, mean obliquity, consistent with
     #  IAU 2000 precession-nutation, nutation in longitude, and solve for
     #  equation of the equinoxes.
-    ee00(day1, day2, obl80(day1, day2)+pr00(day1, day2)[:ϵ],
-         nut00b(day1, day2)[:ψ])
+    return ee00(
+        day1, day2, obl80(day1, day2) + pr00(day1, day2)[:ϵ],
+        nut00b(day1, day2)[:ψ]
+    )
 end
 
 """
@@ -233,8 +237,8 @@ IAU 2006/2000A precession-nutation.
 McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function ee06a(day1::F, day2::F) where F<:AbstractFloat
-    rem2pi(gst06a(0., 0., day1, day2) - gmst06(0., 0., day1, day2), RoundNearest)
+function ee06a(day1::F, day2::F) where {F <: AbstractFloat}
+    return rem2pi(gst06a(0.0, 0.0, day1, day2) - gmst06(0.0, 0.0, day1, day2), RoundNearest)
 end
 
 """
@@ -315,9 +319,9 @@ IAU Resolution C7, Recommendation 3 (1994)
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function eect00(day1::F, day2::F) where F<:AbstractFloat
+function eect00(day1::F, day2::F) where {F <: AbstractFloat}
     #  Interval between fundamental epoch J2000.0 and current date.
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     #  Fundamental arguments (from IERS Conventions 2003).
     ϕ = SVector(fal03(Δt), falp03(Δt), faf03(Δt), fad03(Δt), faom03(Δt), fave03(Δt), fae03(Δt), fapa03(Δt))
@@ -331,20 +335,20 @@ function eect00(day1::F, day2::F) where F<:AbstractFloat
     @inbounds for i in reverse(axes(a0, 1))
         angle = zero(eltype(ϕ0_2000_equinox))
         for j in axes(ϕ0_2000_equinox, 2)
-            angle += ϕ0_2000_equinox[i,j] * ϕ[j]
+            angle += ϕ0_2000_equinox[i, j] * ϕ[j]
         end
-        sum0 += a0[i,1] * sin(angle) + a0[i,2] * cos(angle)
+        sum0 += a0[i, 1] * sin(angle) + a0[i, 2] * cos(angle)
     end
 
     @inbounds for i in reverse(axes(a1, 1))
         angle = zero(eltype(ϕ1_2000_equinox))
         for j in axes(ϕ1_2000_equinox, 2)
-            angle += ϕ1_2000_equinox[i,j] * ϕ[j]
+            angle += ϕ1_2000_equinox[i, j] * ϕ[j]
         end
-        sum1 += a1[i,1] * sin(angle) + a1[i,2] * cos(angle)
+        sum1 += a1[i, 1] * sin(angle) + a1[i, 2] * cos(angle)
     end
 
-    deg2rad((sum0 + sum1 * Δt) / 3600.0)
+    return deg2rad((sum0 + sum1 * Δt) / 3600.0)
 end
 
 """
@@ -394,14 +398,16 @@ Capitaine, N. & Gontier, A.-M., 1993, Astron.Astrophys., 275, 645-650.
 function eqeq94(day1::AbstractFloat, day2::AbstractFloat)
     #  Interval between fundamental epoch J2000.0 and given date
     #  (Julian centuries).
-    Δt = ((day1 - JD2000) + day2)/(100*DAYPERYEAR)
+    Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
     #  Longitude of the mean ascending node of the lunar orbit on the
     #  ecliptic, measured from the mean equinox of date.
-    ω = rem2pi(deg2rad(Polynomial(l_1994...)(Δt)/3600) + 2π*rem(-5.0*Δt, 1.),
-               RoundNearest)
+    ω = rem2pi(
+        deg2rad(Polynomial(l_1994...)(Δt) / 3600) + 2π * rem(-5.0 * Δt, 1.0),
+        RoundNearest
+    )
     #  Nutation components, mean obliquity, and equation of the equinoxes
-    nut80(day1, day2)[:ψ]*cos(obl80(day1, day2)) +
-        deg2rad(sum(equinox_1994.*(sin(ω), sin(2ω)))/3600.0)
+    return nut80(day1, day2)[:ψ] * cos(obl80(day1, day2)) +
+        deg2rad(sum(equinox_1994 .* (sin(ω), sin(2ω))) / 3600.0)
 end
 
 """
@@ -469,7 +475,7 @@ function era00(day1::AbstractFloat, day2::AbstractFloat)
         Δt = day2 + (day1 - JD2000)
         fr = rem(day2, 1.0) + rem(day1, 1.0)
     end
-    mod2pi(2π*(fr + Polynomial(era_2000...)(Δt)))
+    return mod2pi(2π * (fr + Polynomial(era_2000...)(Δt)))
 end
 
 """
@@ -537,8 +543,13 @@ Technical Note No. 32, BKG (2004)
 """
 function gmst00(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat)
     #  TT Julian centuries since J2000.0.
-    mod2pi(era00(ut1, ut2) + deg2rad(Polynomial(gmst_2000...)(
-        ((tt1 - JD2000) + tt2)/(100*DAYPERYEAR))/3600.0))
+    return mod2pi(
+        era00(ut1, ut2) + deg2rad(
+            Polynomial(gmst_2000...)(
+                ((tt1 - JD2000) + tt2) / (100 * DAYPERYEAR)
+            ) / 3600.0
+        )
+    )
 end
 
 """
@@ -604,9 +615,9 @@ Astron.Astrophys. 432, 355
 """
 function gmst06(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat)
     #  TT Julian centuries since J2000.0
-    Δt = ((tt1 - JD2000) + tt2)/(100*DAYPERYEAR)
+    Δt = ((tt1 - JD2000) + tt2) / (100 * DAYPERYEAR)
     #  Greenwich mean sidereal time, IAU 2006
-    mod2pi(era00(ut1, ut2) + deg2rad(Polynomial(gmst_2006...)(Δt)/3600))
+    return mod2pi(era00(ut1, ut2) + deg2rad(Polynomial(gmst_2006...)(Δt) / 3600))
 end
 
 """
@@ -668,10 +679,16 @@ Aoki et al., Astron.Astrophys., 105, 359-361 (1982).
 """
 function gmst82(day1::AbstractFloat, day2::AbstractFloat)
     #  Julian centuries since fundamental epoch.
-    Δt = (day1 < day2 ? (day2-JD2000)+day1 : (day1-JD2000)+day2)/(100*DAYPERYEAR)
+    Δt = (day1 < day2 ? (day2 - JD2000) + day1 : (day1 - JD2000) + day2) / (100 * DAYPERYEAR)
     #  Fractional part of JD(UT1) (seconds) and GMST at this UT1.
-    mod2pi(deg2rad((Polynomial(gmst_1982...)(Δt) +
-                    SECPERDAY*(rem(day1, 1.0) + rem(day2, 1.0)))/240.0))
+    return mod2pi(
+        deg2rad(
+            (
+                Polynomial(gmst_1982...)(Δt) +
+                    SECPERDAY * (rem(day1, 1.0) + rem(day2, 1.0))
+            ) / 240.0
+        )
+    )
 end
 
 """
@@ -738,7 +755,7 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function gst00a(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat)
-    mod2pi(gmst00(ut1, ut2, tt1, tt2) + ee00a(tt1, tt2))
+    return mod2pi(gmst00(ut1, ut2, tt1, tt2) + ee00a(tt1, tt2))
 end
 
 """
@@ -813,7 +830,7 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function gst00b(ut1::AbstractFloat, ut2::AbstractFloat)
-    mod2pi(gmst00(ut1, ut2, ut1, ut2) + ee00b(ut1, ut2))
+    return mod2pi(gmst00(ut1, ut2, ut1, ut2) + ee00b(ut1, ut2))
 end
 
 """
@@ -873,8 +890,8 @@ Greenwich apparent sidereal time, IAU 2006, given the NPB matrix.
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
 function gst06(ut1::F, ut2::F, tt1::F, tt2::F, r::M) where
-   {F<:AbstractFloat, M<:AbstractMatrix{<:AbstractFloat}}
-    @inline mod2pi(era00(ut1, ut2) - eors(r, s06(tt1, tt2, bpn2xy(r)...)))
+    {F <: AbstractFloat, M <: AbstractMatrix{<:AbstractFloat}}
+    return @inline mod2pi(era00(ut1, ut2) - eors(r, s06(tt1, tt2, bpn2xy(r)...)))
 end
 
 """
@@ -935,7 +952,7 @@ Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 function gst06a(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat)
     #  Greenwich apparent sidereal time using classical
     #  nutation-precession-bias matrix (IAU 2000A)
-    gst06(ut1, ut2, tt1, tt2, pnm06a(tt1, tt2))
+    return gst06(ut1, ut2, tt1, tt2, pnm06a(tt1, tt2))
 end
 
 """

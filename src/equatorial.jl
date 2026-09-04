@@ -65,9 +65,9 @@ function ae2hd(azimuth::AbstractFloat, altitude::AbstractFloat, latitude::Abstra
     se, ce = sincos(altitude)
     sp, cp = sincos(latitude)
 
-    x, y, z = -ca*ce*sp + se*cp, -sa*ce, ca*ce*cp + se*sp
-    r = sqrt(x*x + y*y)
-    (r != 0.0 ? atan(y, x) : 0.0, atan(z, r))
+    x, y, z = -ca * ce * sp + se * cp, -sa * ce, ca * ce * cp + se * sp
+    r = sqrt(x * x + y * y)
+    return (r != 0.0 ? atan(y, x) : 0.0, atan(z, r))
 end
 
 """
@@ -127,9 +127,9 @@ function hd2ae(HA::AbstractFloat, Dec::AbstractFloat, ϕ::AbstractFloat)
     sd, cd = sincos(Dec)
     sp, cp = sincos(ϕ)
 
-    x, y, z = -ch*cd*sp + sd*cp, -sh*cd, ch*cd*cp + sd*sp
-    r = sqrt(x*x + y*y)
-    (azi = mod2pi(r != 0.0 ? atan(y, x) : 0.0), alt = atan(z, r))
+    x, y, z = -ch * cd * sp + sd * cp, -sh * cd, ch * cd * cp + sd * sp
+    r = sqrt(x * x + y * y)
+    return (azi = mod2pi(r != 0.0 ? atan(y, x) : 0.0), alt = atan(z, r))
 end
 
 """
@@ -183,7 +183,7 @@ Smart, W.M., "Spherical Astronomy", Cambridge University Press, 6th
 edition (Green, 1977), p49.
 """
 function hd2pa(HA::AbstractFloat, Dec::AbstractFloat, latitude::AbstractFloat)
-    sqsz = cos(latitude)*sin(HA)
-    cqsz = sin(latitude)*cos(Dec) - cos(latitude)*sin(Dec)*cos(HA)
-    sqsz != 0.0 || cqsz != 0.0 ? atan(sqsz, cqsz) : 0.0
+    sqsz = cos(latitude) * sin(HA)
+    cqsz = sin(latitude) * cos(Dec) - cos(latitude) * sin(Dec) * cos(HA)
+    return sqsz != 0.0 || cqsz != 0.0 ? atan(sqsz, cqsz) : 0.0
 end

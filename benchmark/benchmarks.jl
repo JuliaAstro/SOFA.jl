@@ -24,8 +24,10 @@ using BenchmarkTools
 BenchmarkTools.DEFAULT_PARAMETERS.seconds = 1.0
 
 const SUITE = BenchmarkGroup()
-for g in ("timescales", "calendars", "precession", "rotations",
-          "ephemerides", "astrometry", "vectorops", "coordinates")
+for g in (
+        "timescales", "calendars", "precession", "rotations",
+        "ephemerides", "astrometry", "vectorops", "coordinates",
+    )
     SUITE[g] = BenchmarkGroup()
 end
 
@@ -76,10 +78,12 @@ SUITE["ephemerides"]["plan94"] = @benchmarkable plan94($mjd_a[], 43999.9, 3)
 # Astrom struct fields (src/base.jl): concretizing them should show up here
 # as a large allocation/time win.
 SUITE["astrometry"]["apci13"] = @benchmarkable apci13(2456165.5, 0.401182685)
-SUITE["astrometry"]["atci13"] = @benchmarkable atci13(2.71, 0.174, 1e-5, 5e-6, 0.1, 55.0, 2456165.5, 0.401182685)
-const ATCO13_ARGS = (2.71, 0.174, 1e-5, 5e-6, 0.1, 55.0, 2456384.5, 0.969254051,
-                     0.1550675, -0.527800806, -1.2345856, 2738.0, 2.47230737e-7,
-                     1.82640464e-6, 731.0, 12.8, 0.59, 0.55)
+SUITE["astrometry"]["atci13"] = @benchmarkable atci13(2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0, 2456165.5, 0.401182685)
+const ATCO13_ARGS = (
+    2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0, 2456384.5, 0.969254051,
+    0.1550675, -0.527800806, -1.2345856, 2738.0, 2.47230737e-7,
+    1.82640464e-6, 731.0, 12.8, 0.59, 0.55,
+)
 SUITE["astrometry"]["atco13"] = @benchmarkable atco13($ATCO13_ARGS...)
 
 const ANP_X = Ref(-0.1)
@@ -93,7 +97,7 @@ SUITE["vectorops"]["c2s"] = @benchmarkable c2s($V3) evals = 1000
 SUITE["vectorops"]["pxp"] = @benchmarkable pxp($V3A, $V3B) evals = 1000
 SUITE["vectorops"]["rxp"] = @benchmarkable rxp($R33, $RV3) evals = 1000
 
-const XYZ = [2e6, 3e6, 5.244e6]
+const XYZ = [2.0e6, 3.0e6, 5.244e6]
 const GD_E = Ref(3.1)
 const GAL_L = Ref(5.5850536063818546)
 const GAL_B = Ref(-0.7853981633974483)
@@ -107,11 +111,21 @@ if get(ENV, "CI", "false") == "false"
 
     results = run(SUITE, verbose = true)
     rows = sort(BenchmarkTools.leaves(results), by = first)
-    data = permutedims(hcat([[join(path, "/"),
-                              BenchmarkTools.prettytime(median(t).time),
-                              BenchmarkTools.prettymemory(median(t).memory),
-                              median(t).allocs] for (path, t) in rows]...))
-    pretty_table(data;
+    data = permutedims(
+        hcat(
+            [
+                [
+                    join(path, "/"),
+                    BenchmarkTools.prettytime(median(t).time),
+                    BenchmarkTools.prettymemory(median(t).memory),
+                    median(t).allocs,
+                ] for (path, t) in rows
+            ]...
+        )
+    )
+    pretty_table(
+        data;
         column_labels = ["Benchmark", "Median Time", "Memory", "Allocs"],
-        alignment = [:l, :r, :r, :r])
+        alignment = [:l, :r, :r, :r]
+    )
 end

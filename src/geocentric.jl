@@ -63,7 +63,7 @@ function eform(model::Symbol)
     elseif model == :WGS72
         radius, oblate = wgs72_radius, wgs72_oblate
     end
-    (radius = radius, oblate = oblate)
+    return (radius = radius, oblate = oblate)
 end
 
 """
@@ -105,7 +105,7 @@ reference ellipsoid.
 4) The inverse transformation is performed in the function gd2gc.
 """
 function gc2gd(model::Symbol, pos::AbstractVector{<:AbstractFloat})
-    gc2gde(values(eform(model))..., pos)
+    return gc2gde(values(eform(model))..., pos)
 end
 
 """
@@ -158,36 +158,38 @@ accelerated by Halley's method", J.Geodesy (2006) 79: 689-693
 function gc2gde(radius::AbstractFloat, oblate::AbstractFloat, pos::AbstractVector{<:AbstractFloat})
     @assert 0.0 <= oblate < 1.0 "Oblateness out of range [0 - 1)."
     @assert radius > 0.0 "Radius is <= 0."
-    @assert (1.0 - (2.0 - oblate)*oblate) > 0.0 "Oblateness is too large."
+    @assert (1.0 - (2.0 - oblate) * oblate) > 0.0 "Oblateness is too large."
 
     #  Functions of the ellipsoid parameters.
-    e = (2.0 - oblate)*oblate
+    e = (2.0 - oblate) * oblate
     ec = sqrt(1.0 - e)
-    p2 = sum(pos[1:2].^2)
+    p2 = sum(pos[1:2] .^ 2)
 
     #  Compute longitude.
     ϵ = p2 > 0.0 ? atan(pos[2], pos[1]) : 0.0
 
-    if p2 > 1e-32*radius^2
+    if p2 > 1.0e-32 * radius^2
         #  Prepare Newton correction factors
-        s, pn = abs(pos[3])/radius, sqrt(p2)/radius
-        a0 = sqrt((ec*pn)^2 + s^2)
-        d0, f0 = ec*s*a0^3 + e*s^3, pn*a0^3 - e*(ec*pn)^3
+        s, pn = abs(pos[3]) / radius, sqrt(p2) / radius
+        a0 = sqrt((ec * pn)^2 + s^2)
+        d0, f0 = ec * s * a0^3 + e * s^3, pn * a0^3 - e * (ec * pn)^3
 
         #  Prepare Halley correction factors
-        b0 = 1.5*(e*s*ec*pn)^2*pn*(a0 - ec)
-        s1 = d0*f0 - b0*s
-        cc = ec*(f0*f0 - b0*ec*pn)
-        ϕ = atan(s1/cc)
-        r = (sqrt(p2)*cc + abs(pos[3])*s1 -
-             radius*sqrt((ec*s1)^2 + cc^2))/sqrt(s1^2 + cc^2)
+        b0 = 1.5 * (e * s * ec * pn)^2 * pn * (a0 - ec)
+        s1 = d0 * f0 - b0 * s
+        cc = ec * (f0 * f0 - b0 * ec * pn)
+        ϕ = atan(s1 / cc)
+        r = (
+            sqrt(p2) * cc + abs(pos[3]) * s1 -
+                radius * sqrt((ec * s1)^2 + cc^2)
+        ) / sqrt(s1^2 + cc^2)
     else
         #  Exception: on or near the polar axis.
-        ϕ, r = π/2, abs(pos[3]) - radius*ec
+        ϕ, r = π / 2, abs(pos[3]) - radius * ec
     end
 
     #  Restore the sign of the latitude.
-    (ϵ = ϵ, ϕ = pos[3] < 0.0 ? -ϕ : ϕ, r = r)
+    return (ϵ = ϵ, ϕ = pos[3] < 0.0 ? -ϕ : ϕ, r = r)
 end
 
 """
@@ -241,7 +243,7 @@ julia> gd2gc(:WGS84, 3.1, -0.5, 2500.0)
 4) The inverse transformation is performed in the function gc2gd.
 """
 function gd2gc(model::Symbol, ϵ::AbstractFloat, ϕ::AbstractFloat, r::AbstractFloat)
-    @inline gd2gce(values(eform(model))..., ϵ, ϕ, r)
+    return @inline gd2gce(values(eform(model))..., ϵ, ϕ, r)
 end
 
 """
@@ -293,8 +295,8 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992), Section 4.22, p202.
 """
 function gd2gce(radius::AbstractFloat, oblate::AbstractFloat, ϵ::AbstractFloat, ϕ::AbstractFloat, r::AbstractFloat)
-    @assert (cos(ϕ)^2 + ((1.0-oblate)*sin(ϕ))^2) > 0.0 "Illegal ellipsoid parameters."
-    d  = sqrt(cos(ϕ)^2 + ((1.0-oblate)*sin(ϕ))^2)
-    rr = radius/d + r
-    SVector(rr*cos(ϕ)*cos(ϵ), rr*cos(ϕ)*sin(ϵ), ((1.0-oblate)^2*radius/d + r)*sin(ϕ))
+    @assert (cos(ϕ)^2 + ((1.0 - oblate) * sin(ϕ))^2) > 0.0 "Illegal ellipsoid parameters."
+    d = sqrt(cos(ϕ)^2 + ((1.0 - oblate) * sin(ϕ))^2)
+    rr = radius / d + r
+    return SVector(rr * cos(ϕ) * cos(ϵ), rr * cos(ϕ) * sin(ϵ), ((1.0 - oblate)^2 * radius / d + r) * sin(ϕ))
 end

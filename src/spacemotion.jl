@@ -73,15 +73,15 @@ Convert star position & velocity vector to catalog coordinates.
 
 Stumpff, P., 1985, Astron.Astrophys. 144, 232-240.
 """
-function pvstar(pv::V) where V<:AbstractVector{<:AbstractVector{<:AbstractFloat}}
-    DC = SECPERDAY/(ASTRUNIT/LIGHTSPEED)
+function pvstar(pv::V) where {V <: AbstractVector{<:AbstractVector{<:AbstractFloat}}}
+    DC = SECPERDAY / (ASTRUNIT / LIGHTSPEED)
     #  Isolate the radial component of the velocity (AU/day, inertial).
-    @inline vr = pn(pv[1])[2]'*pv[2]
-    @inline ur = vr*pn(pv[1])[2]
+    @inline vr = pn(pv[1])[2]' * pv[2]
+    @inline ur = vr * pn(pv[1])[2]
     #  Isolate the transverse component of the velocity (AU/day, inertial).
     @inline vt = pm(pv[2] .- ur)
     #  Special relativity dimensionless parameters.
-    bett, betr = (vt, vr)./DC
+    bett, betr = (vt, vr) ./ DC
     #  The observed-to-inertial correction terms.
     d, w = 1.0 + betr, betr^2 + bett^2
     @assert d != 0.0 && w <= 1.0 "Superluminal speed."
@@ -89,15 +89,18 @@ function pvstar(pv::V) where V<:AbstractVector{<:AbstractVector{<:AbstractFloat}
     #  Add them to obtain velocity vector (AU/day) and convert from
     #  cartesian to spherical
     θ, ϕ, r, dθ, dϕ, dr = pv2s(
-        SVector(pv[1], (DC*(betr + w/(1.0+sqrt(1.0-w)))*pn(pv[1])[2] .+ pv[2] .- ur)./d))
+        SVector(pv[1], (DC * (betr + w / (1.0 + sqrt(1.0 - w))) * pn(pv[1])[2] .+ pv[2] .- ur) ./ d)
+    )
     @assert r != 0.0 "Null position vector."
-    (ra = anp(θ), dec = ϕ, pmras = DAYPERYEAR*dθ, pmdec = DAYPERYEAR*dϕ,
-     plx = rad2deg(3600.0)/r, rvel = 1e-3*ASTRUNIT/SECPERDAY*dr)
+    return (
+        ra = anp(θ), dec = ϕ, pmras = DAYPERYEAR * dθ, pmdec = DAYPERYEAR * dϕ,
+        plx = rad2deg(3600.0) / r, rvel = 1.0e-3 * ASTRUNIT / SECPERDAY * dr,
+    )
 end
 
-const PXMIN = 1e-7
-const VMAX  = 0.5
-const IMAX  = 100
+const PXMIN = 1.0e-7
+const VMAX = 0.5
+const IMAX = 100
 
 """
     starpv(ra::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmdec::AbstractFloat,
@@ -199,33 +202,33 @@ julia> starpv(0.01686756, -1.093989828, -1.78323516e-5, 2.336024047e-6, 0.74723,
 Stumpff, P., 1985, Astron.Astrophys. 144, 232-240.
 """
 function starpv(ra::F, dec::F, pmras::F, pmdec::F, plx::F, rvel::F) where
-      F<:AbstractFloat
-    DC = SECPERDAY/(ASTRUNIT/LIGHTSPEED)
+    {F <: AbstractFloat}
+    DC = SECPERDAY / (ASTRUNIT / LIGHTSPEED)
     #  Distance (AU).
-    r  = 3600*rad2deg(1)/(plx >= PXMIN ? plx : PXMIN)
+    r = 3600 * rad2deg(1) / (plx >= PXMIN ? plx : PXMIN)
     #  Radial velocity (AU/day).
-    dr = SECPERDAY*1e3/ASTRUNIT*rvel
+    dr = SECPERDAY * 1.0e3 / ASTRUNIT * rvel
     #  Proper motion (radian/day).
-    dras, ddec = (pmras, pmdec)./DAYPERYEAR
+    dras, ddec = (pmras, pmdec) ./ DAYPERYEAR
     #  Convert to PV-vector (AU, AU/DAY).
     @inline pv = s2pv(ra, dec, r, dras, ddec, dr)
     #  If excessive velocity, arbitrarily set to zero.
-    if pm(pv[2])/DC > VMAX
-        pv[2] .= MVector{3}(0., 0., 0.)
+    if pm(pv[2]) / DC > VMAX
+        pv[2] .= MVector{3}(0.0, 0.0, 0.0)
     end
     #  Isolate radial and transverse components of velocity (AU/day).
-    @inline vsr = pn(pv[1])[2]'*pv[2]
-    @inline usr = vsr*pn(pv[1])[2]
+    @inline vsr = pn(pv[1])[2]' * pv[2]
+    @inline usr = vsr * pn(pv[1])[2]
     ust = pv[2] .- usr
     #  Special relativity dimensionless parameters
-    betsr, betst = (vsr, pm(ust))./DC
+    betsr, betst = (vsr, pm(ust)) ./ DC
     #  Determine the observed-to-inertial corrections terms.
     bett, betr = betst, betsr
-    d, δ, od, oδ, odd, odδ = 0., 0., 0., 0., 0., 0.
-    for j=1:IMAX
+    d, δ, od, oδ, odd, odδ = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    for j in 1:IMAX
         d, w = 1 + betr, betr^2 + bett^2
-        δ = -w/(1 + sqrt(1-w))
-        betr, bett = d*betsr + δ, d*betst
+        δ = -w / (1 + sqrt(1 - w))
+        betr, bett = d * betsr + δ, d * betst
         if j > 1
             dd, dδ = abs(d - od), abs(δ - oδ)
             if j > 2 && dd >= odd && dδ >= odδ
@@ -237,6 +240,6 @@ function starpv(ra::F, dec::F, pmras::F, pmdec::F, plx::F, rvel::F) where
     end
     #  Scale observed tangential velocity vector into inertial (AU/day) and
     #  compute inertial radial velocity vector (AU/day).
-    pv[2] .= DC*(d*betsr + δ)*pn(pv[1])[2] .+ d*ust
-    pv
+    pv[2] .= DC * (d * betsr + δ) * pn(pv[1])[2] .+ d * ust
+    return pv
 end
