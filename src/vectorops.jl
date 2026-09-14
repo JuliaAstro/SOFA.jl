@@ -138,6 +138,7 @@ julia> af2a('-', 45, 13, 27.2)
 function af2a(sign::Char, degree::Integer, minute::Integer, second::Real)
     @assert 0 <= degree < 360   "degree out of range [0-359]."
     @assert 0 <= minute < 60   "minute out of range [0-59]."
+    @assert isfinite(second) "second is not a finite number (got $second)."
     @assert 0.0 <= second < 60.0 "second out of range [0-60]."
 
     onet = one(typeof(second))
@@ -282,6 +283,7 @@ Convert hours, minutes, seconds to radians.
 function tf2a(sign::Char, hour::Integer, minute::Integer, second::Real)
     @assert 0 <= hour < 24  "hour out of range [0-23]."
     @assert 0 <= minute < 60  "minute out of range [0-59]."
+    @assert isfinite(second) "second is not a finite number (got $second)."
     @assert 0.0 <= second < 60.0 "second out of range [0-60]."
 
     return 15 * deg2rad(1 / 3600) * (sign == '-' ? -1.0 : 1.0) *

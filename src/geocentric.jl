@@ -156,7 +156,9 @@ Fukushima, T., "Transformation from Cartesian to geodetic coordinates
 accelerated by Halley's method", J.Geodesy (2006) 79: 689-693
 """
 function gc2gde(radius::AbstractFloat, oblate::AbstractFloat, pos::AbstractVector{<:AbstractFloat})
+    @assert isfinite(oblate) "Oblateness is not a finite number (got $oblate)."
     @assert 0.0 <= oblate < 1.0 "Oblateness out of range [0 - 1)."
+    @assert isfinite(radius) "Radius is not a finite number (got $radius)."
     @assert radius > 0.0 "Radius is <= 0."
     @assert (1.0 - (2.0 - oblate) * oblate) > 0.0 "Oblateness is too large."
 

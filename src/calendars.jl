@@ -233,7 +233,9 @@ Computing, 76, 279-293 (2006), Section 3.
 """
 function jd2cal(day1::Real, day2::Real)
 
-    @assert JDMIN <= (day1 + day2) <= JDMAX "Day is out of range."
+    total = day1 + day2
+    @assert isfinite(total) "Julian Date is not a finite number (day1=$day1, day2=$day2)."
+    @assert JDMIN <= total <= JDMAX "Day is out of range."
 
     # Separate day and fraction where fraction in range [-0.5, 0.5].
     day::Integer = convert(Int, round(day1)) + convert(Int, round(day2))

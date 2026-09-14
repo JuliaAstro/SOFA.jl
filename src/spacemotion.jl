@@ -84,6 +84,7 @@ function pvstar(pv::V) where {V <: AbstractVector{<:AbstractVector{<:AbstractFlo
     bett, betr = (vt, vr) ./ DC
     #  The observed-to-inertial correction terms.
     d, w = 1.0 + betr, betr^2 + bett^2
+    @assert isfinite(d) && isfinite(w) "Velocity components are not finite numbers (d=$d, w=$w)."
     @assert d != 0.0 && w <= 1.0 "Superluminal speed."
     #  Scale inertial tangential velocity vector into observed (AU/day).
     #  Add them to obtain velocity vector (AU/day) and convert from
