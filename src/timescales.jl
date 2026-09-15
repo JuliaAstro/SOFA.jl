@@ -182,6 +182,7 @@ julia> dat(2017, 9, 1, 0.0)
 """
 function dat(year::Integer, month::Integer, day::Integer, subday::AbstractFloat)
 
+    @assert isfinite(subday) "Fractional day is not a finite number (got $subday)."
     @assert 0.0 <= subday <= 1.0 "Fractional day out of range [0-1]."
     @assert year >= DRIFTSECOND[1].year "UTC date is out of range [$(DRIFTSECOND[1].year)-present]."
     if (year > IYV + 5)
@@ -527,6 +528,7 @@ function dtf2d(
     # Validate the time
     @assert 0 <= hour <= 23 "Hour is out of range [0-23]"
     @assert 0 <= minute <= 59 "Minute is out of range [0-59]"
+    @assert isfinite(second) "Second is not a finite number (got $second)."
     @assert 0 <= second "Second is negative"
     second < seclim ||
         @warn "Time is after end of day."
