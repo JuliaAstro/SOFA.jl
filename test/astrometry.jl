@@ -1602,3 +1602,57 @@ let a = SOFA.apio13(
         @test big"0.9e-25" < abs(Δ) < big"1.1e-25"
     end
 end
+
+#   Astrom, Ldbody: abstractly typed fields made every field load in the
+#   consumers dynamic, and let one instance hold several precisions at once
+@test isbitstype(SOFA.Astrom{Float64}) && isbitstype(SOFA.Ldbody{Float64})
+
+let site = (
+        2456384.5, 0.969254051, 0.1550675, -0.527800806, -1.2345856,
+        2738.0, 2.47230737e-7, 1.82640464e-6, 731.0, 12.8, 0.59, 0.55,
+    ),
+        star = (2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0)
+    a = @inferred SOFA.apci13(2456165.5, 0.401182685)
+    aio = @inferred SOFA.apio13(site..., SOFA.Astrom())
+    @test a.astrom isa SOFA.Astrom{Float64} && aio isa SOFA.Astrom{Float64}
+    @test (@inferred SOFA.apco13(site...)).astrom isa SOFA.Astrom{Float64}
+    @test (@inferred SOFA.aper(5.678, aio)) isa SOFA.Astrom{Float64}
+
+    #   the transformations reading the parameters
+    @test (@inferred SOFA.atci13(star..., 2456165.5, 0.401182685)).ra isa Float64
+    @test (@inferred SOFA.atco13(star..., site...)).azi isa Float64
+    @test (@inferred SOFA.atciq(star..., a.astrom)).ra isa Float64
+    @test (@inferred SOFA.aticq(2.71, 0.174, a.astrom)).ra isa Float64
+    @test (@inferred SOFA.atioq(2.71, 0.174, aio)).azi isa Float64
+    @test (@inferred SOFA.atoiq('R', 2.71, 0.174, aio)).ra isa Float64
+
+    #   updating parameters with a wider type widens them rather than
+    #   truncating the new value to the old element type
+    ab = SOFA.aper(big"5.678", aio)
+    @test ab isa SOFA.Astrom{BigFloat}
+    @test ab.eral == big"5.678" + aio.along
+    @test ab.refa == aio.refa && ab.bpn == aio.bpn
+
+    #   apio fills the Float64 Astrom() handed to it from its own arguments
+    ab = SOFA.apio13(big.(site)..., SOFA.Astrom())
+    @test ab isa SOFA.Astrom{BigFloat}
+    @test abs(ab.along - aio.along) <= 1.0e-15 && abs(ab.refa - aio.refa) <= 1.0e-15
+end
+
+#   the constructors promote: any mix of scalar types, any array type
+let v = [1.0, 2.0, 3.0], m = [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
+    @test SOFA.Astrom(1.0, v, v, 1.0, v, 1.0, m) isa SOFA.Astrom{Float64}
+    @test SOFA.Astrom(1, [1, 2, 3], v, 1.0, v, 1.0, m) isa SOFA.Astrom{Float64}
+    @test SOFA.Astrom(big"1.0", v, v, 1.0, v, 1.0, m) isa SOFA.Astrom{BigFloat}
+    @test SOFA.Astrom(big"1.0", v, v, 1.0, v, 1.0, m).bpn == m
+    @test SOFA.Astrom{BigFloat}() isa SOFA.Astrom{BigFloat}
+
+    @test SOFA.Ldbody(1.0, 6.0e-6, [v, v]) isa SOFA.Ldbody{Float64}
+    @test SOFA.Ldbody(1, 6.0e-6, [[1, 2, 3], v]) isa SOFA.Ldbody{Float64}
+    @test SOFA.Ldbody(1.0, 6.0e-6, [big.(v), v]) isa SOFA.Ldbody{BigFloat}
+    @test SOFA.Ldbody(1.0, 6.0e-6, [v, 2v]).pv == [v, 2v]
+
+    #   a vector of bodies of different precisions is still a vector of Ldbody
+    bodies = [SOFA.Ldbody(1.0, 6.0e-6, [v, v]), SOFA.Ldbody(big"1.0", 6.0e-6, [v, v])]
+    @test eltype(SOFA.ldn(2, bodies, [-0.9, -0.2, -0.1], [-0.7, -0.6, -0.2])) == BigFloat
+end

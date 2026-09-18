@@ -567,10 +567,10 @@ function apco(
     #  Form the rotation matrix, CIRS to apparent (HA, Dec).
     r = Rz(elong)Rx(-yp)Ry(-xp)Rz(θ + sp)
     #  Solve for the local Earth rotation angle.
-    eral = r[1, 1] != 0.0 || r[1, 2] != 0.0 ? atan(r[1, 2], r[1, 1]) : 0.0
+    eral = r[1, 1] != 0.0 || r[1, 2] != 0.0 ? atan(r[1, 2], r[1, 1]) : zero(eltype(r))
     #  Solve for the polar motion (x, y) with respect to local meridian.
     xpl = atan(r[1, 3], norm(r[1, 1:2]))
-    ypl = r[2, 3] != 0.0 || r[3, 3] != 0.0 ? -atan(r[2, 3], r[3, 3]) : 0.0
+    ypl = r[2, 3] != 0.0 || r[3, 3] != 0.0 ? -atan(r[2, 3], r[3, 3]) : zero(eltype(r))
     #  Adjusted longitude.
     along = anpm(eral - θ)
     #  Functions of latitude.
@@ -1199,10 +1199,10 @@ function apio(
     #  Form the rotation matrix, CIRS to apparent (HA, Dec).
     r = Rz(elong)Rx(-yp)Ry(-xp)Rz(θ + sp)
     #  Solve for local Earth rotation angle.
-    eral = r[1, 1] != 0.0 || r[1, 2] != 0.0 ? atan(r[1, 2], r[1, 1]) : 0.0
+    eral = r[1, 1] != 0.0 || r[1, 2] != 0.0 ? atan(r[1, 2], r[1, 1]) : zero(eltype(r))
     #  Solve for polar motion (x, y) with respect to local meridian.
     xpl = atan(r[1, 3], norm(r[1, 1:2]))
-    ypl = r[2, 3] != 0.0 || r[3, 3] != 0.0 ? -atan(r[2, 3], r[3, 3]) : 0.0
+    ypl = r[2, 3] != 0.0 || r[3, 3] != 0.0 ? -atan(r[2, 3], r[3, 3]) : zero(eltype(r))
     #  Adjust longitude.
     along = anpm(eral - θ)
     #  Functions of latitude
@@ -1621,7 +1621,7 @@ end
 
 """
 	atciqn(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat, px::AbstractFloat,
-		   rv::AbstractFloat, a::Astrom, n::Int, b::AbstractVector{Ldbody})
+		   rv::AbstractFloat, a::Astrom, n::Int, b::AbstractVector{<:Ldbody})
 
 Quick ICRS, epoch J2000.0, to CIRS transformation, given precomputed
 star-independent astrometry parameters plus a list of light-
@@ -1693,7 +1693,7 @@ used.
 function atciqn(
         rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
         px::AbstractFloat, rv::AbstractFloat, a::Astrom, n::Int,
-        b::AbstractVector{Ldbody}
+        b::AbstractVector{<:Ldbody}
     )
     #  Proper motion and parallax, giving BCRS coordinate direction.
     #  Light deflection, giving natural direction.
@@ -2038,7 +2038,7 @@ function aticq(ri::AbstractFloat, di::AbstractFloat, a::Astrom)
 end
 
 """
-	aticqn(ri::AbstractFloat, di::AbstractFloat, a::Astrom, n::Int, b::AbstractVector{Ldbody})
+	aticqn(ri::AbstractFloat, di::AbstractFloat, a::Astrom, n::Int, b::AbstractVector{<:Ldbody})
 
 Quick CIRS to ICRS astrometric place transformation, given the star-
 independent astrometry parameters plus a list of light-deflecting
@@ -2105,7 +2105,7 @@ the aticq function can be used instead.
 """
 function aticqn(
         ri::AbstractFloat, di::AbstractFloat, a::Astrom, n::Int,
-        b::AbstractVector{Ldbody}
+        b::AbstractVector{<:Ldbody}
     )
     #  CIRS RA, Dec to cartesian.
     #  Bias-precession-nutation, giving GCRS proper direction.
@@ -2834,7 +2834,7 @@ function ld(
 end
 
 """
-	ldn(n::Int, b::AbstractVector{Ldbody}, ob::AbstractVector{<:AbstractFloat}, sc::AbstractVector{<:AbstractFloat})
+	ldn(n::Int, b::AbstractVector{<:Ldbody}, ob::AbstractVector{<:AbstractFloat}, sc::AbstractVector{<:AbstractFloat})
 
 For a star, apply light deflection by multiple solar-system bodies, as
 part of transforming coordinate direction into natural direction.
@@ -2904,7 +2904,7 @@ Astronomical Almanac, 3rd ed., University Science Books (2013),
 Section 7.2.4.
 """
 function ldn(
-        n::Int, b::AbstractVector{Ldbody}, ob::AbstractVector{<:AbstractFloat},
+        n::Int, b::AbstractVector{<:Ldbody}, ob::AbstractVector{<:AbstractFloat},
         sc::AbstractVector{<:AbstractFloat}
     )
     sn = SVector{3}(sc)

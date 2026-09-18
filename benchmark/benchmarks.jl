@@ -74,9 +74,10 @@ SUITE["ephemerides"]["epv00"] = @benchmarkable epv00($mjd_a[], 53411.52501161)
 SUITE["ephemerides"]["moon98"] = @benchmarkable moon98($mjd_a[], 43999.9)
 SUITE["ephemerides"]["plan94"] = @benchmarkable plan94($mjd_a[], 43999.9, 3)
 
-# The apci13/atci13/atco13 rows double as a canary for the abstract-typed
-# Astrom struct fields (src/base.jl): concretizing them should show up here
-# as a large allocation/time win.
+# The *13 drivers are dominated by the ephemeris and nutation series, so they
+# mostly reflect those; the type stability of the Astrom struct fields
+# (src/base.jl) shows up in their allocation counts and in the quick
+# transforms below.
 SUITE["astrometry"]["apci13"] = @benchmarkable apci13(2456165.5, 0.401182685)
 SUITE["astrometry"]["atci13"] = @benchmarkable atci13(2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0, 2456165.5, 0.401182685)
 const ATCO13_ARGS = (
@@ -87,8 +88,7 @@ const ATCO13_ARGS = (
 SUITE["astrometry"]["atco13"] = @benchmarkable atco13($ATCO13_ARGS...)
 SUITE["astrometry"]["apco13"] = @benchmarkable apco13($(ATCO13_ARGS[7:end])...)
 # The "quick" transforms take a prebuilt Astrom, so they time the struct field
-# loads themselves rather than the ephemeris and nutation series behind the
-# *13 drivers: aticq/aticqn read the vector and matrix fields, atoiq the
+# loads themselves: aticq/aticqn read the vector and matrix fields, atoiq the
 # scalar ones.
 const ASTROM_CI = apci13(2456165.5, 0.401182685)[1]
 const ASTROM_IO = apio13(ATCO13_ARGS[7:end]..., Astrom())
