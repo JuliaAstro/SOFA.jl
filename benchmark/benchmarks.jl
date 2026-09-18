@@ -85,6 +85,43 @@ const ATCO13_ARGS = (
     1.82640464e-6, 731.0, 12.8, 0.59, 0.55,
 )
 SUITE["astrometry"]["atco13"] = @benchmarkable atco13($ATCO13_ARGS...)
+SUITE["astrometry"]["apco13"] = @benchmarkable apco13($(ATCO13_ARGS[7:end])...)
+# The "quick" transforms take a prebuilt Astrom, so they time the struct field
+# loads themselves rather than the ephemeris and nutation series behind the
+# *13 drivers: aticq/aticqn read the vector and matrix fields, atoiq the
+# scalar ones.
+const ASTROM_CI = apci13(2456165.5, 0.401182685)[1]
+const ASTROM_IO = apio13(ATCO13_ARGS[7:end]..., Astrom())
+const LDBODIES = [
+    Ldbody(
+        0.00028574, 3.0e-10,
+        [
+            [-7.81014427, -5.60956681, -1.98079819],
+            [0.0030723249, -0.00406995477, -0.00181335842],
+        ]
+    ),
+    Ldbody(
+        0.00095435, 3.0e-9,
+        [
+            [0.738098796, 4.63658692, 1.9693136],
+            [-0.00755816922, 0.00126913722, 0.000727999001],
+        ]
+    ),
+    Ldbody(
+        1.0, 6.0e-6,
+        [
+            [-0.000712174377, -0.00230478303, -0.00105865966],
+            [6.29235213e-6, -3.30888387e-7, -2.96486623e-7],
+        ]
+    ),
+]
+const CIRS_RA = Ref(2.710121572969038991)
+const CIRS_DEC = Ref(0.1729371367218230438)
+const OBS_RA = Ref(2.710085107986886201)
+const OBS_DEC = Ref(0.1717653435758265198)
+SUITE["astrometry"]["aticq"] = @benchmarkable aticq($CIRS_RA[], $CIRS_DEC[], $ASTROM_CI) evals = 100
+SUITE["astrometry"]["aticqn"] = @benchmarkable aticqn($CIRS_RA[], $CIRS_DEC[], $ASTROM_CI, 3, $LDBODIES) evals = 100
+SUITE["astrometry"]["atoiq"] = @benchmarkable atoiq('R', $OBS_RA[], $OBS_DEC[], $ASTROM_IO) evals = 100
 
 const ANP_X = Ref(-0.1)
 const V3 = [100.0, -50.0, 25.0]
