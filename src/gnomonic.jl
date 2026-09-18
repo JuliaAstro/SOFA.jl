@@ -1,7 +1,7 @@
 #### Astronomy / Gnomonic
 
 """
-    tpors(ξ::AbstractFloat, η::AbstractFloat, a::AbstractFloat, b::AbstractFloat)
+    tpors(ξ::Real, η::Real, a::Real, b::Real)
 
 In the tangent plane projection, given the rectangular coordinates of
 a star and its spherical coordinates, determine the spherical
@@ -71,7 +71,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpors(ξ::AbstractFloat, η::AbstractFloat, a::AbstractFloat, b::AbstractFloat)
+function tpors(ξ::Real, η::Real, a::Real, b::Real)
     r = sqrt(1.0 + η * η + ξ * ξ)
     rsb, rcb = r * sin(b), r * cos(b)
     w2 = rcb * rcb - ξ * ξ
@@ -93,7 +93,7 @@ function tpors(ξ::AbstractFloat, η::AbstractFloat, a::AbstractFloat, b::Abstra
 end
 
 """
-    tporv(ξ::AbstractFloat, η::AbstractFloat, v::AbstractVector{<:AbstractFloat})
+    tporv(ξ::Real, η::Real, v::AbstractVector{<:Real})
 
 In the tangent plane projection, given the rectangular coordinates of
 a star and its direction cosines, determine the direction cosines of
@@ -160,7 +160,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tporv(ξ::AbstractFloat, η::AbstractFloat, v::AbstractVector{<:AbstractFloat})
+function tporv(ξ::Real, η::Real, v::AbstractVector{<:Real})
     r = sqrt(1.0 + η * η + ξ * ξ)
     w2 = r * r * sum(v[1:2] .^ 2) - ξ * ξ
     if w2 > 0.0
@@ -178,7 +178,7 @@ function tporv(ξ::AbstractFloat, η::AbstractFloat, v::AbstractVector{<:Abstrac
 end
 
 """
-    tpsts(ξ::AbstractFloat, η::AbstractFloat, a0::AbstractFloat, b0::AbstractFloat)
+    tpsts(ξ::Real, η::Real, a0::Real, b0::Real)
 
 In the tangent plane projection, given the star's rectangular
 coordinates and the spherical coordinates of the tangent point, solve
@@ -230,7 +230,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpsts(ξ::AbstractFloat, η::AbstractFloat, a0::AbstractFloat, b0::AbstractFloat)
+function tpsts(ξ::Real, η::Real, a0::Real, b0::Real)
     return (
         a = mod2pi(atan(ξ, cos(b0) - η * sin(b0)) + a0),
         b = atan(sin(b0) + η * cos(b0), sqrt(ξ * ξ + (cos(b0) - η * sin(b0))^2)),
@@ -238,7 +238,7 @@ function tpsts(ξ::AbstractFloat, η::AbstractFloat, a0::AbstractFloat, b0::Abst
 end
 
 """
-    tpstv(ξ::AbstractFloat, η::AbstractFloat, v0::AbstractVector{<:AbstractFloat})
+    tpstv(ξ::Real, η::Real, v0::AbstractVector{<:Real})
 
 In the tangent plane projection, given the star's rectangular
 coordinates and the direction cosines of the tangent point, solve for
@@ -295,7 +295,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpstv(ξ::AbstractFloat, η::AbstractFloat, v0::AbstractVector{<:AbstractFloat})
+function tpstv(ξ::Real, η::Real, v0::AbstractVector{<:Real})
     x, y, z = v0[1:3]
     if sqrt(sum(v0[1:2] .^ 2)) == 0.0
         r = x = 1.0e-20
@@ -309,7 +309,7 @@ end
 const TINY = 1.0e-6
 
 """
-    tpxes(a::AbstractFloat, b::AbstractFloat, a0::AbstractFloat, b0::AbstractFloat)
+    tpxes(a::Real, b::Real, a0::Real, b0::Real)
 
 In the tangent plane projection, given celestial spherical coordinates
 for a star and the tangent point, solve for the star's rectangular
@@ -361,7 +361,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpxes(a::AbstractFloat, b::AbstractFloat, a0::AbstractFloat, b0::AbstractFloat)
+function tpxes(a::Real, b::Real, a0::Real, b0::Real)
     d = (sin(b) * sin(b0) + cos(b) * cos(b0) * cos(a - a0))
     if d > TINY
         nothing
@@ -376,7 +376,7 @@ function tpxes(a::AbstractFloat, b::AbstractFloat, a0::AbstractFloat, b0::Abstra
 end
 
 """
-    tpxev(v::AbstractVector{<:AbstractFloat}, v0::AbstractVector{<:AbstractFloat})
+    tpxev(v::AbstractVector{<:Real}, v0::AbstractVector{<:Real})
 
 In the tangent plane projection, given celestial direction cosines for
 a star and the tangent point, solve for the star's rectangular
@@ -432,7 +432,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpxev(v::AbstractVector{<:AbstractFloat}, v0::AbstractVector{<:AbstractFloat})
+function tpxev(v::AbstractVector{<:Real}, v0::AbstractVector{<:Real})
     x, y, z = v[1:3]
     x0, y0, z0 = v0[1:3]
     if sqrt(sum(v0[1:2] .^ 2)) == 0.0

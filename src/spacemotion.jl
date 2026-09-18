@@ -1,7 +1,7 @@
 #### Astronomy / Space Motion
 
 """
-    pvstar(pv::AbstractVector{<:AbstractVector{<:AbstractFloat}})
+    pvstar(pv::AbstractVector{<:AbstractVector{<:Real}})
 
 Convert star position & velocity vector to catalog coordinates.
 
@@ -73,7 +73,7 @@ Convert star position & velocity vector to catalog coordinates.
 
 Stumpff, P., 1985, Astron.Astrophys. 144, 232-240.
 """
-function pvstar(pv::AbstractVector{<:AbstractVector{<:AbstractFloat}})
+function pvstar(pv::AbstractVector{<:AbstractVector{<:Real}})
     DC = SECPERDAY / (ASTRUNIT / LIGHTSPEED)
     #  Isolate the radial component of the velocity (AU/day, inertial).
     @inline vr = pn(pv[1])[2]' * pv[2]
@@ -104,8 +104,8 @@ const VMAX = 0.5
 const IMAX = 100
 
 """
-    starpv(ra::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmdec::AbstractFloat,
-           plx::AbstractFloat, rvel::AbstractFloat)
+    starpv(ra::Real, dec::Real, pmras::Real, pmdec::Real,
+           plx::Real, rvel::Real)
 
 Convert star catalog coordinates to position+velocity vector.
 
@@ -202,10 +202,7 @@ julia> starpv(0.01686756, -1.093989828, -1.78323516e-5, 2.336024047e-6, 0.74723,
 
 Stumpff, P., 1985, Astron.Astrophys. 144, 232-240.
 """
-function starpv(
-        ra::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmdec::AbstractFloat,
-        plx::AbstractFloat, rvel::AbstractFloat
-    )
+function starpv(ra::Real, dec::Real, pmras::Real, pmdec::Real, plx::Real, rvel::Real)
     DC = SECPERDAY / (ASTRUNIT / LIGHTSPEED)
     #  Distance (AU).
     r = 3600 * rad2deg(1) / (plx >= PXMIN ? plx : PXMIN)

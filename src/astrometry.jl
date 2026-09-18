@@ -1,7 +1,7 @@
 ####    Astronomy / Astrometry    ####
 
 """
-	ab(pnat::AbstractVector{<:AbstractFloat}, v::AbstractVector{<:AbstractFloat}, s::AbstractFloat, bm1::AbstractFloat)
+	ab(pnat::AbstractVector{<:Real}, v::AbstractVector{<:Real}, s::Real, bm1::Real)
 
 Apply aberration to transform natural direction into proper direction.
 
@@ -41,18 +41,15 @@ Astronomical Almanac, 3rd ed., University Science Books (2013).
 Klioner, Sergei A., "A practical relativistic model for micro-
 arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 """
-function ab(
-        pnat::AbstractVector{<:AbstractFloat}, v::AbstractVector{<:AbstractFloat},
-        s::AbstractFloat, bm1::AbstractFloat
-    )
+function ab(pnat::AbstractVector{<:Real}, v::AbstractVector{<:Real}, s::Real, bm1::Real)
     p = bm1 .* pnat .+ (1.0 + sum(pnat .* v) / (1.0 + bm1)) .* v .+
         SCHWARZRADIUS / s .* (v .- sum(pnat .* v) .* pnat)
     return p ./ norm(p)
 end
 
 """
-	apcg(day1::AbstractFloat, day2::AbstractFloat, ebpv::AbstractVector{<:AbstractVector{<:AbstractFloat}},
-		 ehp::AbstractVector{<:AbstractFloat})
+	apcg(day1::Real, day2::Real, ebpv::AbstractVector{<:AbstractVector{<:Real}},
+		 ehp::AbstractVector{<:Real})
 
 For a geocentric observer, prepare star-independent astrometry
 parameters for transformations between ICRS and GCRS coordinates. The
@@ -131,9 +128,8 @@ transformation chain.
    atciq* and aticq*.
 """
 function apcg(
-        day1::AbstractFloat, day2::AbstractFloat,
-        ebpv::AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}},
-        ehp::AbstractVector{<:AbstractFloat}
+        day1::Real, day2::Real, ebpv::AbstractVecOrMat{<:AbstractVector{<:Real}},
+        ehp::AbstractVector{<:Real}
     )
 
     #  Compute the star-independent astrometry parameters.
@@ -141,7 +137,7 @@ function apcg(
 end
 
 """
-	apcg13(day1::AbstractFloat, day2::AbstractFloat)
+	apcg13(day1::Real, day2::Real)
 
 For a geocentric observer, prepare star-independent astrometry
 parameters for transformations between ICRS and GCRS coordinates.  The
@@ -223,7 +219,7 @@ transformation chain.
 5) The context structure astrom produced by this function is used by
    atciq* and aticq*.
 """
-function apcg13(day1::AbstractFloat, day2::AbstractFloat)
+function apcg13(day1::Real, day2::Real)
     #  Earth barycentric and heliocentric position and velocity (AU, AU/day).
     ehpv, ebpv = epv00(day1, day2)
     #  Compute the star-independent astrometry parameters.
@@ -231,8 +227,8 @@ function apcg13(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-	apci(day1::AbstractFloat, day2::AbstractFloat, ebpv::AbstractVector{<:AbstractVector{<:AbstractFloat}},
-		 ehp::AbstractVector{<:AbstractFloat}, x::AbstractFloat, y::AbstractFloat, s::AbstractFloat)
+	apci(day1::Real, day2::Real, ebpv::AbstractVector{<:AbstractVector{<:Real}},
+		 ehp::AbstractVector{<:Real}, x::Real, y::Real, s::Real)
 
 For a terrestrial observer, prepare star-independent astrometry
 parameters for transformations between ICRS and geocentric CIRS
@@ -320,10 +316,8 @@ the astrometric transformation chain.
    atciq and aticq.
 """
 function apci(
-        day1::AbstractFloat, day2::AbstractFloat,
-        ebpv::AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}},
-        ehp::AbstractVector{<:AbstractFloat}, x::AbstractFloat, y::AbstractFloat,
-        s::AbstractFloat
+        day1::Real, day2::Real, ebpv::AbstractVecOrMat{<:AbstractVector{<:Real}},
+        ehp::AbstractVector{<:Real}, x::Real, y::Real, s::Real
     )
 
     #  Star-independent astrometry parameters for geocenter and CIO based
@@ -333,7 +327,7 @@ function apci(
 end
 
 """
-	apci13(day1::AbstractFloat, day2::AbstractFloat)
+	apci13(day1::Real, day2::Real)
 
 For a terrestrial observer, prepare star-independent astrometry
 parameters for transformations between ICRS and geocentric CIRS
@@ -415,7 +409,7 @@ the astrometric transformation chain.
 5) The context structure astrom produced by this function is used by
    atciq and aticq.
 """
-function apci13(day1::AbstractFloat, day2::AbstractFloat)
+function apci13(day1::Real, day2::Real)
     #  Earth barycentric and heliocentric position and velocity (AU, AU/day).
     ehpv, ebpv = epv00(day1, day2)
     #  Form the equinox based bpn matrix, IAU 2006/2000A
@@ -431,10 +425,10 @@ function apci13(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-	apco(day1::AbstractFloat, day2::AbstractFloat, ebpv::AbstractVector{<:AbstractVector{<:AbstractFloat}},
-		 ehp::AbstractVector{<:AbstractFloat}, x::AbstractFloat, y::AbstractFloat, s::AbstractFloat,
-		 θ::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat,
-		 xp::AbstractFloat, yp::AbstractFloat, sp::AbstractFloat, refa::AbstractFloat, refb::AbstractFloat)
+	apco(day1::Real, day2::Real, ebpv::AbstractVector{<:AbstractVector{<:Real}},
+		 ehp::AbstractVector{<:Real}, x::Real, y::Real, s::Real,
+		 θ::Real, elong::Real, ϕ::Real, hm::Real,
+		 xp::Real, yp::Real, sp::Real, refa::Real, refb::Real)
 
 For a terrestrial observer, prepare star-independent astrometry
 parameters for transformations between ICRS and observed coordinates.
@@ -556,12 +550,9 @@ coordinates.
    atioq, atoiq, atciq* and aticq*.
 """
 function apco(
-        day1::AbstractFloat, day2::AbstractFloat,
-        ebpv::AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}},
-        ehp::AbstractVector{<:AbstractFloat}, x::AbstractFloat, y::AbstractFloat,
-        s::AbstractFloat, θ::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat,
-        hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat, sp::AbstractFloat,
-        refa::AbstractFloat, refb::AbstractFloat
+        day1::Real, day2::Real, ebpv::AbstractVecOrMat{<:AbstractVector{<:Real}},
+        ehp::AbstractVector{<:Real}, x::Real, y::Real, s::Real, θ::Real, elong::Real,
+        ϕ::Real, hm::Real, xp::Real, yp::Real, sp::Real, refa::Real, refb::Real
     )
 
     #  Form the rotation matrix, CIRS to apparent (HA, Dec).
@@ -589,9 +580,9 @@ function apco(
 end
 
 """
-	apco13(day1::AbstractFloat, day2::AbstractFloat, dut1::AbstractFloat, elong::AbstractFloat,
-		   phi::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat,
-		   phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat)
+	apco13(day1::Real, day2::Real, dut1::Real, elong::Real,
+		   phi::Real, hm::Real, xp::Real, yp::Real,
+		   phpa::Real, tc::Real, rh::Real, wl::Real)
 
 For a terrestrial observer, prepare star-independent astrometry
 parameters for transformations between ICRS and observed coordinates.
@@ -722,10 +713,10 @@ the ICRS/CIRS transformations.
     atioq, atoiq, atciq* and aticq*.
 """
 function apco13(
-        day1::AbstractFloat, day2::AbstractFloat, dut1::AbstractFloat,
-        elong::AbstractFloat, phi::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
-        yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat,
-        wl::AbstractFloat
+        day1::Real, day2::Real, dut1::Real,
+        elong::Real, phi::Real, hm::Real, xp::Real,
+        yp::Real, phpa::Real, tc::Real, rh::Real,
+        wl::Real
     )
     #  UTC to other time scales.
     tt1, tt2 = taitt(utctai(day1, day2)...)
@@ -750,8 +741,8 @@ function apco13(
 end
 
 """
-	apcs(day1::AbstractFloat, day2::AbstractFloat, pv::AbstractVector{<:AbstractVector{<:AbstractFloat}},
-		 ebpv::AbstractVector{<:AbstractVector{<:AbstractFloat}}, ehp::AbstractVector{<:AbstractFloat})
+	apcs(day1::Real, day2::Real, pv::AbstractVector{<:AbstractVector{<:Real}},
+		 ebpv::AbstractVector{<:AbstractVector{<:Real}}, ehp::AbstractVector{<:Real})
 
 For an observer whose geocentric position and velocity are known,
 prepare star-independent astrometry parameters for transformations
@@ -847,10 +838,8 @@ astrometric transformation chain.
    Atciq and Aticq.
 """
 function apcs(
-        day1::AbstractFloat, day2::AbstractFloat,
-        pv::AbstractVector{<:AbstractVector{<:AbstractFloat}},
-        ebpv::AbstractVector{<:AbstractVector{<:AbstractFloat}},
-        ehp::AbstractVector{<:AbstractFloat}
+        day1::Real, day2::Real, pv::AbstractVector{<:AbstractVector{<:Real}},
+        ebpv::AbstractVector{<:AbstractVector{<:Real}}, ehp::AbstractVector{<:Real}
     )
     # Time since reference epoch, years (for proper motion calculation).
     pmt = ((day1 - JD2000) + day2) / DAYPERYEAR
@@ -869,7 +858,7 @@ function apcs(
 end
 
 """
-	apcs13(day1::AbstractFloat, day2::AbstractFloat, pv::AbstractVector{<:AbstractVector{<:AbstractFloat}})
+	apcs13(day1::Real, day2::Real, pv::AbstractVector{<:AbstractVector{<:Real}})
 
 For an observer whose geocentric position and velocity are known,
 prepare star-independent astrometry parameters for transformations
@@ -956,8 +945,8 @@ astrometric transformation chain.
    atciq* and aticq*.
 """
 function apcs13(
-        day1::AbstractFloat, day2::AbstractFloat,
-        pv::AbstractVector{<:AbstractVector{<:AbstractFloat}}
+        day1::Real, day2::Real,
+        pv::AbstractVector{<:AbstractVector{<:Real}}
     )
     #  Earth barycentric and heliocentric position & velocity (AU, AU/day).
     ehpv, ebpv = epv00(day1, day2)
@@ -966,7 +955,7 @@ function apcs13(
 end
 
 """
-	aper(θ::AbstractFloat, a::Astrom)
+	aper(θ::Real, a::Astrom)
 
 In the star-independent astrometry parameters, update only the Earth
 rotation angle, supplied by the caller explicitly.
@@ -1021,7 +1010,7 @@ rotation angle, supplied by the caller explicitly.
    and atmospheric refraction.
 
 """
-function aper(θ::AbstractFloat, a::Astrom)
+function aper(θ::Real, a::Astrom)
     return Astrom(
         a.pmt, a.eb, a.eh, a.em, a.v, a.bm1, a.bpn, a.along, a.phi,
         a.xpl, a.ypl, a.sphi, a.cphi, a.diurab, θ + a.along, a.refa, a.refb
@@ -1029,7 +1018,7 @@ function aper(θ::AbstractFloat, a::Astrom)
 end
 
 """
-	aper13(day1::AbstractFloat, day2::AbstractFloat, a::Astrom)
+	aper13(day1::Real, day2::Real, a::Astrom)
 
 In the star-independent astrometry parameters, update only the
 Earth rotation angle.  The caller provides UT1, (n.b. not UTC).
@@ -1099,13 +1088,13 @@ Earth rotation angle.  The caller provides UT1, (n.b. not UTC).
    and atmospheric refraction.
 
 """
-function aper13(day1::AbstractFloat, day2::AbstractFloat, a::Astrom)
+function aper13(day1::Real, day2::Real, a::Astrom)
     return aper(era00(day1, day2), a)
 end
 
 """
-	apio(sp::AbstractFloat, θ::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat,
-		 xp::AbstractFloat, yp::AbstractFloat, refa::AbstractFloat, refb::AbstractFloat, a::Astrom)
+	apio(sp::Real, θ::Real, elong::Real, ϕ::Real, hm::Real,
+		 xp::Real, yp::Real, refa::Real, refb::Real, a::Astrom)
 
 For a terrestrial observer, prepare star-independent astrometry
 parameters for transformations between CIRS and observed coordinates.
@@ -1193,8 +1182,8 @@ refraction constants as well as the site coordinates.
    atioq and atoiq.
 """
 function apio(
-        sp::AbstractFloat, θ::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat,
-        xp::AbstractFloat, yp::AbstractFloat, refa::AbstractFloat, refb::AbstractFloat, a::Astrom
+        sp::Real, θ::Real, elong::Real, ϕ::Real, hm::Real,
+        xp::Real, yp::Real, refa::Real, refb::Real, a::Astrom
     )
     #  Form the rotation matrix, CIRS to apparent (HA, Dec).
     r = Rz(elong)Rx(-yp)Ry(-xp)Rz(θ + sp)
@@ -1218,9 +1207,9 @@ function apio(
 end
 
 """
-	 apio13(day1::AbstractFloat, day2::AbstractFloat, dut1::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat,
-			hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat,
-			rh::AbstractFloat, wl::AbstractFloat, a::Astrom)
+	 apio13(day1::Real, day2::Real, dut1::Real, elong::Real, ϕ::Real,
+			hm::Real, xp::Real, yp::Real, phpa::Real, tc::Real,
+			rh::Real, wl::Real, a::Astrom)
 
 For a terrestrial observer, prepare star-independent astrometry
 parameters for transformations between CIRS and observed coordinates.
@@ -1347,9 +1336,9 @@ observing wavelength.
 
 """
 function apio13(
-        day1::AbstractFloat, day2::AbstractFloat, dut1::AbstractFloat, elong::AbstractFloat,
-        ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat, phpa::AbstractFloat,
-        tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat, a::Astrom
+        day1::Real, day2::Real, dut1::Real, elong::Real,
+        ϕ::Real, hm::Real, xp::Real, yp::Real, phpa::Real,
+        tc::Real, rh::Real, wl::Real, a::Astrom
     )
     #  TIO locator s'.
     sp = sp00(taitt(utctai(day1, day2)...)...)
@@ -1362,8 +1351,8 @@ function apio13(
 end
 
 """
-	atcc13(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat, px::AbstractFloat,
-		   rv::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
+	atcc13(rc::Real, dc::Real, pr::Real, pd::Real, px::Real,
+		   rv::Real, day1::Real, day2::Real)
 
 Transform a star's ICRS catalog entry (epoch J2000.0) into ICRS
 astrometric place.
@@ -1417,8 +1406,8 @@ astrometric place.
 
 """
 function atcc13(
-        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
-        px::AbstractFloat, rv::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat
+        rc::Real, dc::Real, pr::Real, pd::Real,
+        px::Real, rv::Real, day1::Real, day2::Real
     )
     #  The transformation parameters and catalog ICRS (epoch j2000.0)
     #  to astrometric.
@@ -1426,8 +1415,8 @@ function atcc13(
 end
 
 """
-	atccq(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat, px::AbstractFloat,
-		  rv::AbstractFloat, a::Astrom)
+	atccq(rc::Real, dc::Real, pr::Real, pd::Real, px::Real,
+		  rv::Real, a::Astrom)
 
 Quick transformation of a star's ICRS catalog entry (epoch J2000.0)
 into ICRS astrometric place, given precomputed star-independent
@@ -1466,8 +1455,8 @@ effect.
 
 """
 function atccq(
-        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat, px::AbstractFloat,
-        rv::AbstractFloat, a::Astrom
+        rc::Real, dc::Real, pr::Real, pd::Real, px::Real,
+        rv::Real, a::Astrom
     )
     #  Proper motion and parallax, giving BCRS coordinate direction, and IRCS
     #  astrometric RA, Dec.
@@ -1476,8 +1465,8 @@ function atccq(
 end
 
 """
-	atci13(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat, px::AbstractFloat,
-		   rv::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
+	atci13(rc::Real, dc::Real, pr::Real, pd::Real, px::Real,
+		   rv::Real, day1::Real, day2::Real)
 
 Transform ICRS star data, epoch J2000.0, to CIRS.
 
@@ -1553,8 +1542,8 @@ julia> atci13(2.71, 0.174, 1e-5, 5e-6, 0.1, 55.0, 2456165.5, 0.401182685)
    keep the result in the conventional 0-2pi range.)
 """
 function atci13(
-        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
-        px::AbstractFloat, rv::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat
+        rc::Real, dc::Real, pr::Real, pd::Real,
+        px::Real, rv::Real, day1::Real, day2::Real
     )
     #  The transformation parameters.
     a, eo = apci13(day1, day2)
@@ -1564,8 +1553,8 @@ function atci13(
 end
 
 """
-	atciq(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat, px::AbstractFloat,
-		  rv::AbstractFloat, a::Astrom)
+	atciq(rc::Real, dc::Real, pr::Real, pd::Real, px::Real,
+		  rv::Real, a::Astrom)
 
 Quick ICRS, epoch J2000.0, to CIRS transformation, given precomputed
 star-independent astrometry parameters.
@@ -1601,8 +1590,8 @@ be used instead.
 
 """
 function atciq(
-        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
-        px::AbstractFloat, rv::AbstractFloat, a::Astrom
+        rc::Real, dc::Real, pr::Real, pd::Real,
+        px::Real, rv::Real, a::Astrom
     )
     #  Proper motion and parallax, giving BCRS coordinate direction.
     #  Light deflection by the Sun, giving BCRS natural direction.
@@ -1620,8 +1609,8 @@ function atciq(
 end
 
 """
-	atciqn(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat, px::AbstractFloat,
-		   rv::AbstractFloat, a::Astrom, n::Int, b::AbstractVector{<:Ldbody})
+	atciqn(rc::Real, dc::Real, pr::Real, pd::Real, px::Real,
+		   rv::Real, a::Astrom, n::Integer, b::AbstractVector{<:Ldbody})
 
 Quick ICRS, epoch J2000.0, to CIRS transformation, given precomputed
 star-independent astrometry parameters plus a list of light-
@@ -1691,8 +1680,8 @@ used.
    limiter greater than zero.
 """
 function atciqn(
-        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
-        px::AbstractFloat, rv::AbstractFloat, a::Astrom, n::Int,
+        rc::Real, dc::Real, pr::Real, pd::Real,
+        px::Real, rv::Real, a::Astrom, n::Integer,
         b::AbstractVector{<:Ldbody}
     )
     #  Proper motion and parallax, giving BCRS coordinate direction.
@@ -1710,7 +1699,7 @@ function atciqn(
 end
 
 """
-	atciqz(rc::AbstractFloat, dc::AbstractFloat, a::Astrom)
+	atciqz(rc::Real, dc::Real, a::Astrom)
 
 Quick ICRS to CIRS transformation, given precomputed star- independent
 astrometry parameters, and assuming zero parallax and proper motion.
@@ -1746,7 +1735,7 @@ Klioner, Sergei A., "A practical relativistic model for micro-
 arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 
 """
-function atciqz(rc::AbstractFloat, dc::AbstractFloat, a::Astrom)
+function atciqz(rc::Real, dc::Real, a::Astrom)
     #  BCRS coordinate direction (unit vector).
     #  Light deflection by the Sun, giving BCRS natural direction.
     #  Aberration, giving GCRS proper direction.
@@ -1757,10 +1746,10 @@ function atciqz(rc::AbstractFloat, dc::AbstractFloat, a::Astrom)
 end
 
 """
-	atco13(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat, px::AbstractFloat,
-		   rv::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat, dut1::AbstractFloat,
-           elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat,
-		   phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat)
+	atco13(rc::Real, dc::Real, pr::Real, pd::Real, px::Real,
+		   rv::Real, utc1::Real, utc2::Real, dut1::Real,
+           elong::Real, ϕ::Real, hm::Real, xp::Real, yp::Real,
+		   phpa::Real, tc::Real, rh::Real, wl::Real)
 
 ICRS RA,Dec to observed place.  The caller supplies UTC, site
 coordinates, ambient air conditions and observing wavelength.
@@ -1892,11 +1881,11 @@ nutation, Earth orientation and refraction.
 
 """
 function atco13(
-        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
-        px::AbstractFloat, rv::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat,
-        dut1::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat,
-        xp::AbstractFloat, yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat,
-        rh::AbstractFloat, wl::AbstractFloat
+        rc::Real, dc::Real, pr::Real, pd::Real,
+        px::Real, rv::Real, utc1::Real, utc2::Real,
+        dut1::Real, elong::Real, ϕ::Real, hm::Real,
+        xp::Real, yp::Real, phpa::Real, tc::Real,
+        rh::Real, wl::Real
     )
     #  Star-independent astrometry parameters.
     a, eo = apco13(utc1, utc2, dut1, elong, ϕ, hm, xp, yp, phpa, tc, rh, wl)
@@ -1906,7 +1895,7 @@ function atco13(
 end
 
 """
-	atic13(ri::AbstractFloat, di::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
+	atic13(ri::Real, di::Real, day1::Real, day2::Real)
 
 Transform star RA,Dec from geocentric CIRS to ICRS astrometric.
 
@@ -1970,14 +1959,14 @@ Transform star RA,Dec from geocentric CIRS to ICRS astrometric.
    keep the result in the conventional 0-2pi range.)
 
 """
-function atic13(ri::AbstractFloat, di::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
+function atic13(ri::Real, di::Real, day1::Real, day2::Real)
     a, eo = apci13(day1, day2)
     ra, dec = aticq(ri, di, a)
     return (ra = ra, dec = dec, eo = eo)
 end
 
 """
-    aticq(ri::AbstractFloat, di::AbstractFloat, a::Astrom)
+    aticq(ri::Real, di::Real, a::Astrom)
 
 Quick CIRS RA,Dec to ICRS astrometric place, given the star-
 independent astrometry parameters.
@@ -2007,7 +1996,7 @@ of the functions apci[13], apcg[13], apco[13] or apcs[13].
    at the edge of the Sun's disk the discrepancy is only about 1
    nanoarcsecond.
 """
-function aticq(ri::AbstractFloat, di::AbstractFloat, a::Astrom)
+function aticq(ri::Real, di::Real, a::Astrom)
     #  CIRS RA, Dec to cartesian.
     #  Bias-precession-nutation, giving GCRS proper direction.
     ppr = a.bpn' * s2c(ri, di)
@@ -2038,7 +2027,7 @@ function aticq(ri::AbstractFloat, di::AbstractFloat, a::Astrom)
 end
 
 """
-	aticqn(ri::AbstractFloat, di::AbstractFloat, a::Astrom, n::Int, b::AbstractVector{<:Ldbody})
+	aticqn(ri::Real, di::Real, a::Astrom, n::Integer, b::AbstractVector{<:Ldbody})
 
 Quick CIRS to ICRS astrometric place transformation, given the star-
 independent astrometry parameters plus a list of light-deflecting
@@ -2104,7 +2093,7 @@ the aticq function can be used instead.
    limiter greater than zero.
 """
 function aticqn(
-        ri::AbstractFloat, di::AbstractFloat, a::Astrom, n::Int,
+        ri::Real, di::Real, a::Astrom, n::Integer,
         b::AbstractVector{<:Ldbody}
     )
     #  CIRS RA, Dec to cartesian.
@@ -2132,9 +2121,9 @@ function aticqn(
 end
 
 """
-	atio13(ri::AbstractFloat, di::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat, dut1::AbstractFloat,
-		   elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat,
-		   phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat)
+	atio13(ri::Real, di::Real, utc1::Real, utc2::Real, dut1::Real,
+		   elong::Real, ϕ::Real, hm::Real, xp::Real, yp::Real,
+		   phpa::Real, tc::Real, rh::Real, wl::Real)
 
 CIRS RA,Dec to observed place.  The caller supplies UTC, site
 coordinates, ambient air conditions and observing wavelength.
@@ -2251,9 +2240,9 @@ coordinates, ambient air conditions and observing wavelength.
 	accordance with the models used.
 """
 function atio13(
-        ri::AbstractFloat, di::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat, dut1::AbstractFloat,
-        elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat,
-        phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat
+        ri::Real, di::Real, utc1::Real, utc2::Real, dut1::Real,
+        elong::Real, ϕ::Real, hm::Real, xp::Real, yp::Real,
+        phpa::Real, tc::Real, rh::Real, wl::Real
     )
     #  Star-independent astrometry parameters for CIRS->observed.
     #  Transform CIRS to observed.
@@ -2266,7 +2255,7 @@ function atio13(
 end
 
 """
-	atioq(ri::AbstractFloat, di::AbstractFloat, a::Astrom)
+	atioq(ri::Real, di::Real, a::Astrom)
 
 Quick CIRS to observed place transformation.
 
@@ -2336,7 +2325,7 @@ apio[13] or apco[13].
    changed significantly except the time, aper[13] may be used to
    perform the requisite adjustment to the astrom structure.
 """
-function atioq(ri::AbstractFloat, di::AbstractFloat, a::Astrom)
+function atioq(ri::Real, di::Real, a::Astrom)
     #  Minimum cos(alt) and sin(alt) for refraction.
     CELMIN, SELMIN = 1.0e-6, 0.05
     #  CIRS Ra, Dec to cartesian and polar motion.
@@ -2372,9 +2361,9 @@ function atioq(ri::AbstractFloat, di::AbstractFloat, a::Astrom)
 end
 
 """
-   atoc13(tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat,
-		  dut1::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
-		  yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat)
+   atoc13(tp::Char, ob1::Real, ob2::Real, utc1::Real, utc2::Real,
+		  dut1::Real, elong::Real, ϕ::Real, hm::Real, xp::Real,
+		  yp::Real, phpa::Real, tc::Real, rh::Real, wl::Real)
 
 Observed place at a groundbased site to ICRS astrometric RA,Dec.
 The caller supplies UTC, site coordinates, ambient air conditions and
@@ -2498,9 +2487,9 @@ observing wavelength.
 	accordance with the models used.
 """
 function atoc13(
-        tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat,
-        dut1::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
-        yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat
+        tp::Char, ob1::Real, ob2::Real, utc1::Real, utc2::Real,
+        dut1::Real, elong::Real, ϕ::Real, hm::Real, xp::Real,
+        yp::Real, phpa::Real, tc::Real, rh::Real, wl::Real
     )
     #  Star-independent astrometry parameters
     a, eo = apco13(utc1, utc2, dut1, elong, ϕ, hm, xp, yp, phpa, tc, rh, wl)
@@ -2512,9 +2501,9 @@ function atoc13(
 end
 
 """
-	atoi13(tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat,
-		   dut1::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
-		   yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat)
+	atoi13(tp::Char, ob1::Real, ob2::Real, utc1::Real, utc2::Real,
+		   dut1::Real, elong::Real, ϕ::Real, hm::Real, xp::Real,
+		   yp::Real, phpa::Real, tc::Real, rh::Real, wl::Real)
 
 Observed place to CIRS.  The caller supplies UTC, site coordinates,
 ambient air conditions and observing wavelength.
@@ -2638,9 +2627,9 @@ ambient air conditions and observing wavelength.
 	accordance with the models used.
 """
 function atoi13(
-        tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, utc1::AbstractFloat, utc2::AbstractFloat,
-        dut1::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
-        yp::AbstractFloat, phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat
+        tp::Char, ob1::Real, ob2::Real, utc1::Real, utc2::Real,
+        dut1::Real, elong::Real, ϕ::Real, hm::Real, xp::Real,
+        yp::Real, phpa::Real, tc::Real, rh::Real, wl::Real
     )
     #  Star-independent astrometry parameters for CIRS->observed.
     #  Transform observed to CIRS.
@@ -2654,7 +2643,7 @@ function atoi13(
 end
 
 """
-	atoiq(tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, a::Astrom)
+	atoiq(tp::Char, ob1::Real, ob2::Real, a::Astrom)
 
 Quick observed place to CIRS, given the star-independent astrometry
 parameters.
@@ -2717,7 +2706,7 @@ apio[13] or apco[13].
    values of the input parameters are accepted and processed in
    accordance with the models used.
 """
-function atoiq(tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, a::Astrom)
+function atoiq(tp::Char, ob1::Real, ob2::Real, a::Astrom)
     #  Minimum sin(alt) for refraction.
     SELMIN = 0.05
     #  Standardize coordinate type: anything that is not 'R' or 'H'
@@ -2763,8 +2752,8 @@ function atoiq(tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, a::Astrom)
 end
 
 """
-	ld(bm::AbstractFloat, p::AbstractVector{<:AbstractFloat}, q::AbstractVector{<:AbstractFloat}, e::AbstractVector{<:AbstractFloat},
-	   em::AbstractFloat, dlim::AbstractFloat)
+	ld(bm::Real, p::AbstractVector{<:Real}, q::AbstractVector{<:Real}, e::AbstractVector{<:Real},
+	   em::Real, dlim::Real)
 
 Apply light deflection by a solar-system body, as part of transforming
 coordinate direction into natural direction.
@@ -2824,9 +2813,8 @@ Klioner, Sergei A., "A practical relativistic model for micro-
 arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 """
 function ld(
-        bm::AbstractFloat, p::AbstractVector{<:AbstractFloat},
-        q::AbstractVector{<:AbstractFloat}, e::AbstractVector{<:AbstractFloat},
-        em::AbstractFloat, dlim::AbstractFloat
+        bm::Real, p::AbstractVector{<:Real}, q::AbstractVector{<:Real},
+        e::AbstractVector{<:Real}, em::Real, dlim::Real
     )
     #  2*G*bm/(em*c^2*(q*(q+e))).
     #  Apply the deflection.
@@ -2834,7 +2822,7 @@ function ld(
 end
 
 """
-	ldn(n::Int, b::AbstractVector{<:Ldbody}, ob::AbstractVector{<:AbstractFloat}, sc::AbstractVector{<:AbstractFloat})
+	ldn(n::Integer, b::AbstractVector{<:Ldbody}, ob::AbstractVector{<:Real}, sc::AbstractVector{<:Real})
 
 For a star, apply light deflection by multiple solar-system bodies, as
 part of transforming coordinate direction into natural direction.
@@ -2904,8 +2892,8 @@ Astronomical Almanac, 3rd ed., University Science Books (2013),
 Section 7.2.4.
 """
 function ldn(
-        n::Int, b::AbstractVector{<:Ldbody}, ob::AbstractVector{<:AbstractFloat},
-        sc::AbstractVector{<:AbstractFloat}
+        n::Integer, b::AbstractVector{<:Ldbody}, ob::AbstractVector{<:Real},
+        sc::AbstractVector{<:Real}
     )
     sn = SVector{3}(sc)
     for body in view(b, 1:n)
@@ -2923,7 +2911,7 @@ function ldn(
 end
 
 """
-	ldsun(p::AbstractVector{<:AbstractFloat}, e::AbstractVector{<:AbstractFloat}, em::AbstractFloat)
+	ldsun(p::AbstractVector{<:Real}, e::AbstractVector{<:Real}, em::Real)
 
 Deflection of starlight by the Sun.
 
@@ -2951,18 +2939,15 @@ Deflection of starlight by the Sun.
 
 3) The arguments p and p1 can be the same array.
 """
-function ldsun(
-        p::AbstractVector{<:AbstractFloat}, e::AbstractVector{<:AbstractFloat},
-        em::AbstractFloat
-    )
+function ldsun(p::AbstractVector{<:Real}, e::AbstractVector{<:Real}, em::Real)
     #  Deflection limiter (smaller for distant observers).
     #  Apply the deflection.
     return ld(1.0, p, p, e, em, 1.0e-6 / (em^2 > 1.0 ? em^2 : 1.0))
 end
 
 """
-	pmpx(rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat, px::AbstractFloat,
-		 rv::AbstractFloat, pmt::AbstractFloat, pob::AbstractVector{<:AbstractFloat})
+	pmpx(rc::Real, dc::Real, pr::Real, pd::Real, px::Real,
+		 rv::Real, pmt::Real, pob::AbstractVector{<:Real})
 
 Proper motion and parallax.
 
@@ -3001,9 +2986,9 @@ Astronomical Almanac, 3rd ed., University Science Books (2013),
 Section 7.2.
 """
 function pmpx(
-        rc::AbstractFloat, dc::AbstractFloat, pr::AbstractFloat, pd::AbstractFloat,
-        px::AbstractFloat, rv::AbstractFloat, pmt::AbstractFloat,
-        pob::AbstractVector{<:AbstractFloat}
+        rc::Real, dc::Real, pr::Real, pd::Real,
+        px::Real, rv::Real, pmt::Real,
+        pob::AbstractVector{<:Real}
     )
     #  Spherical coordinates to unit vector (and useful functions.)
     p = SVector(cos(rc) * cos(dc), sin(rc) * cos(dc), sin(dc))
@@ -3021,9 +3006,9 @@ function pmpx(
 end
 
 """
-	pmsafe(ra::AbstractFloat, dec::AbstractFloat, pmr::AbstractFloat, pmd::AbstractFloat, px::AbstractFloat,
-		   rv::AbstractFloat, ep1a::AbstractFloat, ep1b::AbstractFloat, ep2a::AbstractFloat,
-		   ep2b::AbstractFloat)
+	pmsafe(ra::Real, dec::Real, pmr::Real, pmd::Real, px::Real,
+		   rv::Real, ep1a::Real, ep1b::Real, ep2a::Real,
+		   ep2b::Real)
 
 Star proper motion: update star catalog data for space motion, with
 special handling to handle the zero parallax case.
@@ -3110,9 +3095,9 @@ special handling to handle the zero parallax case.
    status.
 """
 function pmsafe(
-        ra::AbstractFloat, dec::AbstractFloat, pmr::AbstractFloat, pmd::AbstractFloat,
-        plx::AbstractFloat, rv::AbstractFloat, ep1a::AbstractFloat, ep1b::AbstractFloat,
-        ep2a::AbstractFloat, ep2b::AbstractFloat
+        ra::Real, dec::Real, pmr::Real, pmd::Real,
+        plx::Real, rv::Real, ep1a::Real, ep1b::Real,
+        ep2a::Real, ep2b::Real
     )
     #  Minimum allowed parallax and factor giving maximum allowed transverse
     # speed of about 1% c.
@@ -3131,8 +3116,8 @@ function pmsafe(
 end
 
 """
-	pvtob(elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat,
-		  sp::AbstractFloat, θ::AbstractFloat)
+	pvtob(elong::Real, ϕ::Real, hm::Real, xp::Real, yp::Real,
+		  sp::Real, θ::Real)
 
 Position and velocity of a terrestrial observing station.
 
@@ -3185,8 +3170,8 @@ Astronomical Almanac, 3rd ed., University Science Books (2013),
 Section 7.4.3.3.
 """
 function pvtob(
-        elong::AbstractFloat, ϕ::AbstractFloat, hm::AbstractFloat, xp::AbstractFloat,
-        yp::AbstractFloat, sp::AbstractFloat, θ::AbstractFloat
+        elong::Real, ϕ::Real, hm::Real, xp::Real,
+        yp::Real, sp::Real, θ::Real
     )
     #  Earth rotation rate in radians per UT1 seconds.
     Ω = 2π * Ω_Earth_2003 / SECPERDAY
@@ -3201,7 +3186,7 @@ function pvtob(
 end
 
 """
-	refco(phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat)
+	refco(phpa::Real, tc::Real, rh::Real, wl::Real)
 
 Determine the constants A and B in the atmospheric refraction model dZ
 = A tan Z + B tan^3 Z.
@@ -3348,7 +3333,7 @@ South Wales, Sydney, Australia, 2002.
 
 Stone, Ronald C., P.A.S.P. 108, 1051-1058, 1996.
 """
-function refco(phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::AbstractFloat)
+function refco(phpa::Real, tc::Real, rh::Real, wl::Real)
     #  Determine the spectral band, either optical/IR or radio, based on
     #  the wavelength of > or < 100 microns.
     optical = wl <= 100.0 ? true : false
@@ -3374,7 +3359,7 @@ function refco(phpa::AbstractFloat, tc::AbstractFloat, rh::AbstractFloat, wl::Ab
 end
 
 """
-    h2opres(p::AbstractFloat, t::AbstractFloat, r::AbstractFloat)
+    h2opres(p::Real, t::Real, r::Real)
 
 Calculate the water vapor pressure given temperature and pressure.
 
@@ -3389,7 +3374,7 @@ Calculate the water vapor pressure given temperature and pressure.
  - `wp` -- water vapor pressure
 
 """
-function h2opres(p::AbstractFloat, t::AbstractFloat, r::AbstractFloat)
+function h2opres(p::Real, t::Real, r::Real)
     ps = (1.0 + p * (4.5e-6 + 6.0e-10 * t^2)) *
         10.0^((0.7859 + 0.03477 * t) / (1.0 + 0.00412 * t))
     return r * ps / (1.0 - (1.0 - r) * ps / p)

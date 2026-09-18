@@ -6,11 +6,11 @@
 #     julia --project=benchmark benchmark/benchmarks.jl
 #
 # All inputs are canonical SOFA validation vectors taken from test/*.jl, as
-# Float64 literals: most kernels constrain every argument to a single
-# AbstractFloat type, and mixed Int/Float arguments would measure a conversion
-# wrapper instead of the kernel. Epochs are chosen inside each function's
-# warning-free range (epv00: 1900-2100, plan94: 1000-3000). A per-eval @warn
-# would dominate the timing.
+# Float64 literals: arguments may be any mix of Real types, but the Float64
+# path is the one whose performance matters, and mixed Int/Float arguments
+# would add promotion to the kernel being measured. Epochs are chosen inside
+# each function's warning-free range (epv00: 1900-2100, plan94: 1000-3000). A
+# per-eval @warn would dominate the timing.
 #
 # Kernels below ~200 ns read their arguments through Refs (blocks constant
 # propagation) and set an explicit evals so results do not depend on whether

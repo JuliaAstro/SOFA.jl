@@ -1,7 +1,7 @@
 #### Astronomy / Horizontal-Equatorial
 
 """
-    ae2hd(azimuth::AbstractFloat, altitude::AbstractFloat, latitude::AbstractFloat)
+    ae2hd(azimuth::Real, altitude::Real, latitude::Real)
 
 Horizon to equatorial coordinates. Transform azimuth and altitude to
 hour angle and declination
@@ -60,7 +60,7 @@ julia> ae2hd(5.5, 1.1, 0.7)
 
 8) Again for efficiency, no range checking of arguments is carried out.
 """
-function ae2hd(azimuth::AbstractFloat, altitude::AbstractFloat, latitude::AbstractFloat)
+function ae2hd(azimuth::Real, altitude::Real, latitude::Real)
     sa, ca = sincos(azimuth)
     se, ce = sincos(altitude)
     sp, cp = sincos(latitude)
@@ -71,7 +71,7 @@ function ae2hd(azimuth::AbstractFloat, altitude::AbstractFloat, latitude::Abstra
 end
 
 """
-    hd2ae(HA::AbstractFloat, Dec::AbstractFloat, ϕ::AbstractFloat)
+    hd2ae(HA::Real, Dec::Real, ϕ::Real)
 
 Equatorial to horizon coordinates: transform hour angle and
 declination to azimuth and altitude.
@@ -122,7 +122,7 @@ declination to azimuth and altitude.
 
 7) Again for efficiency, no range checking of arguments is carried out.
 """
-function hd2ae(HA::AbstractFloat, Dec::AbstractFloat, ϕ::AbstractFloat)
+function hd2ae(HA::Real, Dec::Real, ϕ::Real)
     sh, ch = sincos(HA)
     sd, cd = sincos(Dec)
     sp, cp = sincos(ϕ)
@@ -133,7 +133,7 @@ function hd2ae(HA::AbstractFloat, Dec::AbstractFloat, ϕ::AbstractFloat)
 end
 
 """
-    hd2pa(HA::AbstractFloat, Dec::AbstractFloat, latitude::AbstractFloat)
+    hd2pa(HA::Real, Dec::Real, latitude::Real)
 
 Parallactic angle for a given hour angle and declination.
 
@@ -182,7 +182,7 @@ julia> hd2pa(1.1, 1.2, 0.3)
 Smart, W.M., "Spherical Astronomy", Cambridge University Press, 6th
 edition (Green, 1977), p49.
 """
-function hd2pa(HA::AbstractFloat, Dec::AbstractFloat, latitude::AbstractFloat)
+function hd2pa(HA::Real, Dec::Real, latitude::Real)
     sqsz = cos(latitude) * sin(HA)
     cqsz = sin(latitude) * cos(Dec) - cos(latitude) * sin(Dec) * cos(HA)
     return sqsz != 0.0 || cqsz != 0.0 ? atan(sqsz, cqsz) : 0.0

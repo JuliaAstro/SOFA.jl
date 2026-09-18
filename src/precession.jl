@@ -48,7 +48,7 @@ function bi00()
 end
 
 """
-    bp00(day1::AbstractFloat, day2::AbstractFloat)
+    bp00(day1::Real, day2::Real)
 
 Frame bias and precession, IAU 2000.
 
@@ -106,7 +106,7 @@ model", Astron.Astrophys. 400, 1145-1154 (2003)
 n.b. The celestial ephemeris origin (CEO) was renamed "celestial
      intermediate origin" (CIO) by IAU 2006 Resolution 2.
 """
-function bp00(day1::AbstractFloat, day2::AbstractFloat)
+function bp00(day1::Real, day2::Real)
     #  Interval between fundamental epoch J2000.0 and current date (JC).
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
     #  Frame bias
@@ -129,7 +129,7 @@ function bp00(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    bp06(day1::AbstractFloat, day2::AbstractFloat)
+    bp06(day1::Real, day2::Real)
 
 Frame bias and precession, IAU 2006.
 
@@ -188,7 +188,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function bp06(day1::AbstractFloat, day2::AbstractFloat)
+function bp06(day1::Real, day2::Real)
     #  B matrix
     rb = fw2m(pfw06(MJD0, MJD00)...)
     #  PxB matrix
@@ -198,7 +198,7 @@ function bp06(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    bpn2xy(r::AbstractMatrix{<:AbstractFloat})
+    bpn2xy(r::AbstractMatrix{<:Real})
 
 Extract from the bias-precession-nutation matrix the X,Y coordinates
 of the Celestial Intermediate Pole.
@@ -229,10 +229,10 @@ model", Astron.Astrophys. 400, 1145-1154 (2003)
 n.b. The celestial ephemeris origin (CEO) was renamed "celestial
      intermediate origin" (CIO) by IAU 2006 Resolution 2.
 """
-bpn2xy(r::AbstractMatrix{<:AbstractFloat}) = r[3, 1:2]
+bpn2xy(r::AbstractMatrix{<:Real}) = r[3, 1:2]
 
 """
-    c2i00a(day1::AbstractFloat, day2::AbstractFloat)
+    c2i00a(day1::Real, day2::Real)
 
 Form the celestial-to-intermediate matrix for a given date using the
 IAU 2000A precession-nutation model.
@@ -294,14 +294,14 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2i00a(day1::AbstractFloat, day2::AbstractFloat)
+function c2i00a(day1::Real, day2::Real)
     #  Obtain the celestial-to-true matrix (IAU 2000A) and form the
     #  celestial-to-intermediate matrix
     return c2ibpn(day1, day2, pnm00a(day1, day2))
 end
 
 """
-    c2i00b(day1::AbstractFloat, day2::AbstractFloat)
+    c2i00b(day1::Real, day2::Real)
 
 Form the celestial-to-intermediate matrix for a given date using the
 IAU 2000B precession-nutation model.
@@ -363,14 +363,14 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2i00b(day1::AbstractFloat, day2::AbstractFloat)
+function c2i00b(day1::Real, day2::Real)
     #  Obtain the celestial-to-true matrix (IAU 2000B) and form the
     #  celestial-to-intermediate matrix
     return c2ibpn(day1, day2, pnm00b(day1, day2))
 end
 
 """
-    c2i06a(day1::AbstractFloat, day2::AbstractFloat)
+    c2i06a(day1::Real, day2::Real)
 
 Form the celestial-to-intermediate matrix for a given date using the
 IAU 2006 precession and IAU 2000A nutation models.
@@ -422,7 +422,7 @@ IAU 2006 precession and IAU 2000A nutation models.
 McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function c2i06a(day1::AbstractFloat, day2::AbstractFloat)
+function c2i06a(day1::Real, day2::Real)
     #  Obtain the celestial-to-true matrix (IAU 2006/2000A), extract
     #  x, y coordinates.
     x, y = bpn2xy(pnm06a(day1, day2))
@@ -431,7 +431,7 @@ function c2i06a(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    c2ibpn(day1::AbstractFloat, day2::AbstractFloat, r::AbstractMatrix{<:AbstractFloat})
+    c2ibpn(day1::Real, day2::Real, r::AbstractMatrix{<:Real})
 
 Form the celestial-to-intermediate matrix for a given date given the
 bias-precession-nutation matrix.  IAU 2000.
@@ -497,14 +497,12 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2ibpn(
-        day1::AbstractFloat, day2::AbstractFloat, r::AbstractMatrix{<:AbstractFloat}
-    )
+function c2ibpn(day1::Real, day2::Real, r::AbstractMatrix{<:Real})
     return c2ixy(day1, day2, bpn2xy(r)...)
 end
 
 """
-    c2ixy(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::AbstractFloat)
+    c2ixy(day1::Real, day2::Real, x::Real, y::Real)
 
 Form the celestial to intermediate-frame-of-date matrix for a given
 date when the CIP X,Y coordinates are known.  IAU 2000.
@@ -563,12 +561,12 @@ date when the CIP X,Y coordinates are known.  IAU 2000.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2ixy(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::AbstractFloat)
+function c2ixy(day1::Real, day2::Real, x::Real, y::Real)
     return c2ixys(x, y, s00(day1, day2, x, y))
 end
 
 """
-    c2ixys(x::AbstractFloat, y::AbstractFloat, s::AbstractFloat)
+    c2ixys(x::Real, y::Real, s::Real)
 
 Form the celestial to intermediate-frame-of-date matrix given the CIP
 X,Y and the CIO locator s.
@@ -607,15 +605,15 @@ X,Y and the CIO locator s.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2ixys(x::AbstractFloat, y::AbstractFloat, s::AbstractFloat)
+function c2ixys(x::Real, y::Real, s::Real)
     r = x * x + y * y
     e = r > 0.0 ? atan(y, x) : 0.0
     return Rz(-(e + s))Ry(atan(sqrt(r / (1.0 - r))))Rz(e)
 end
 
 """
-    c2t00a(tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat, x::AbstractFloat,
-           y::AbstractFloat)
+    c2t00a(tt1::Real, tt2::Real, ut1::Real, ut2::Real, x::Real,
+           y::Real)
 
 Form the celestial to terrestrial matrix given the date, the UT1 and
 the polar motion, using the IAU 2000A precession-nutation model.
@@ -679,10 +677,7 @@ the polar motion, using the IAU 2000A precession-nutation model.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2t00a(
-        tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat,
-        x::AbstractFloat, y::AbstractFloat
-    )
+function c2t00a(tt1::Real, tt2::Real, ut1::Real, ut2::Real, x::Real, y::Real)
     #  Form the celestial-to-intermediate matrix for this TT (IAU 2000A),
     #  predict the Earth rotation angle for this UT1, estimate s', form the
     #  polar motion matrix, and combine to form the celestial-to-terrestrial
@@ -691,8 +686,8 @@ function c2t00a(
 end
 
 """
-    c2t00b(tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat, x::AbstractFloat,
-           y::AbstractFloat)
+    c2t00b(tt1::Real, tt2::Real, ut1::Real, ut2::Real, x::Real,
+           y::Real)
 
 Form the celestial to terrestrial matrix given the date, the UT1 and
 the polar motion, using the IAU 2000B precession-nutation model.
@@ -756,10 +751,7 @@ the polar motion, using the IAU 2000B precession-nutation model.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2t00b(
-        tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat,
-        x::AbstractFloat, y::AbstractFloat
-    )
+function c2t00b(tt1::Real, tt2::Real, ut1::Real, ut2::Real, x::Real, y::Real)
     #  Form the celestial-to-intermediate matrix for this TT (IAU 2000B),
     #  predict the Earth rotation angle for this UT1, form the polar motion
     #  matrix (neglecting s'), and combine to form the
@@ -768,8 +760,8 @@ function c2t00b(
 end
 
 """
-    c2t06a(tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat, x::AbstractFloat,
-           y::AbstractFloat)
+    c2t06a(tt1::Real, tt2::Real, ut1::Real, ut2::Real, x::Real,
+           y::Real)
 
 Form the celestial to terrestrial matrix given the date, the UT1 and
 the polar motion, using the IAU 2006/2000A precession-nutation model.
@@ -830,10 +822,7 @@ the polar motion, using the IAU 2006/2000A precession-nutation model.
 McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function c2t06a(
-        tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat,
-        x::AbstractFloat, y::AbstractFloat
-    )
+function c2t06a(tt1::Real, tt2::Real, ut1::Real, ut2::Real, x::Real, y::Real)
     #  Form the celestial-to-intermediate matrix for this TT (IAU 2006/2000A),
     #  predict the Earth rotation angle for this UT1, estimate s', form the
     #  polar motion matrix, and combine to form the celestial-to-terrestrial
@@ -842,7 +831,7 @@ function c2t06a(
 end
 
 """
-    c2tcio(c2i::AbstractMatrix{<:AbstractFloat}, era::AbstractFloat, pm::AbstractMatrix{<:AbstractFloat})
+    c2tcio(c2i::AbstractMatrix{<:Real}, era::Real, pm::AbstractMatrix{<:Real})
 
 Assemble the celestial to terrestrial matrix from CIO-based components
 (the celestial-to-intermediate matrix, the Earth Rotation Angle and
@@ -886,15 +875,12 @@ the polar motion matrix).
 McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function c2tcio(
-        c2i::AbstractMatrix{<:AbstractFloat}, era::AbstractFloat,
-        pm::AbstractMatrix{<:AbstractFloat}
-    )
+function c2tcio(c2i::AbstractMatrix{<:Real}, era::Real, pm::AbstractMatrix{<:Real})
     return pm * Rz(era) * c2i
 end
 
 """
-    c2teqx(bpn::AbstractMatrix{<:AbstractFloat}, gst::AbstractFloat, pm::AbstractMatrix{<:AbstractFloat})
+    c2teqx(bpn::AbstractMatrix{<:Real}, gst::Real, pm::AbstractMatrix{<:Real})
 
 Assemble the celestial to terrestrial matrix from equinox-based
 components (the celestial-to-true matrix, the Greenwich Apparent
@@ -938,16 +924,13 @@ Sidereal Time and the polar motion matrix).
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2teqx(
-        bpn::AbstractMatrix{<:AbstractFloat}, gst::AbstractFloat,
-        pm::AbstractMatrix{<:AbstractFloat}
-    )
+function c2teqx(bpn::AbstractMatrix{<:Real}, gst::Real, pm::AbstractMatrix{<:Real})
     return pm * Rz(gst) * bpn
 end
 
 """
-    c2tpe(tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat, ψ::AbstractFloat,
-          ϵ::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat)
+    c2tpe(tt1::Real, tt2::Real, ut1::Real, ut2::Real, ψ::Real,
+          ϵ::Real, xp::Real, yp::Real)
 
 Form the celestial to terrestrial matrix given the date, the UT1, the
 nutation and the polar motion.  IAU 2000.
@@ -1019,8 +1002,7 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function c2tpe(
-        tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat,
-        ψ::AbstractFloat, ϵ::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat
+        tt1::Real, tt2::Real, ut1::Real, ut2::Real, ψ::Real, ϵ::Real, xp::Real, yp::Real
     )
     #  Form the celestial-to-intermediate matrix for this TT
     ϵA, rb, rp, rbp, rn, rbpn = values(pn00(tt1, tt2, ψ, ϵ))
@@ -1035,7 +1017,7 @@ function c2tpe(
 end
 
 """
-    c2txy(tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat, x::AbstractFloat, y::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat)
+    c2txy(tt1::Real, tt2::Real, ut1::Real, ut2::Real, x::Real, y::Real, xp::Real, yp::Real)
 
 Form the celestial to terrestrial matrix given the date, the UT1, the
 CIP coordinates and the polar motion.  IAU 2000.
@@ -1103,8 +1085,7 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function c2txy(
-        tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat,
-        x::AbstractFloat, y::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat
+        tt1::Real, tt2::Real, ut1::Real, ut2::Real, x::Real, y::Real, xp::Real, yp::Real
     )
     #  Form the celestial-to-intermediate matrix for this TT, predict the Earth
     #  rotation angle for this UT1, estimate s', form the polar motion matrix, and
@@ -1113,7 +1094,7 @@ function c2txy(
 end
 
 """
-    eo06a(day1::AbstractFloat, day2::AbstractFloat)
+    eo06a(day1::Real, day2::Real)
 
 Equation of the origins, IAU 2006 precession and IAU 2000A nutation.
 
@@ -1160,7 +1141,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function eo06a(day1::AbstractFloat, day2::AbstractFloat)
+function eo06a(day1::Real, day2::Real)
     #  Classical nutation-precession-bias matrix.
     bpn = pnm06a(day1, day2)
     #  Extract CIP coordinates, the CIO locator (s), and solve for
@@ -1169,7 +1150,7 @@ function eo06a(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    eors(r::AbstractMatrix{<:AbstractFloat}, s::AbstractFloat)
+    eors(r::AbstractMatrix{<:Real}, s::Real)
 
 Equation of the origins, given the classical NPB matrix and the
 quantity s.
@@ -1200,7 +1181,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
 Wallace, P. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function eors(r::AbstractMatrix{<:AbstractFloat}, s::AbstractFloat)
+function eors(r::AbstractMatrix{<:Real}, s::Real)
     #  Evaluate Wallace & Capitaine (2006) expression (16).
     v = r * SVector(
         1.0 - r[3, 1]^2 / (1.0 + r[3, 3]),
@@ -1210,7 +1191,7 @@ function eors(r::AbstractMatrix{<:AbstractFloat}, s::AbstractFloat)
 end
 
 """
-    fw2m(γ::AbstractFloat, ϕ::AbstractFloat, ψ::AbstractFloat, ϵ::AbstractFloat)
+    fw2m(γ::Real, ϕ::Real, ψ::Real, ϵ::Real)
 
 Form rotation matrix given the Fukushima-Williams angles.
 
@@ -1270,12 +1251,12 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
-function fw2m(γ::AbstractFloat, ϕ::AbstractFloat, ψ::AbstractFloat, ϵ::AbstractFloat)
+function fw2m(γ::Real, ϕ::Real, ψ::Real, ϵ::Real)
     return Rx(-ϵ)Rz(-ψ)Rx(ϕ)Rz(γ)
 end
 
 """
-    fw2xy(γ::AbstractFloat, ϕ::AbstractFloat, ψ::AbstractFloat, ϵ::AbstractFloat)
+    fw2xy(γ::Real, ϕ::Real, ψ::Real, ϵ::Real)
 
 CIP X,Y given Fukushima-Williams bias-precession-nutation angles.
 
@@ -1318,12 +1299,12 @@ CIP X,Y given Fukushima-Williams bias-precession-nutation angles.
 
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
-function fw2xy(γ::AbstractFloat, ϕ::AbstractFloat, ψ::AbstractFloat, ϵ::AbstractFloat)
+function fw2xy(γ::Real, ϕ::Real, ψ::Real, ϵ::Real)
     return (Rx(-ϵ)Rz(-ψ)Rx(ϕ)Rz(γ))[3, 1:2]
 end
 
 """
-    ltp(epoch::AbstractFloat)
+    ltp(epoch::Real)
 
 Long-term precession matrix.
 
@@ -1361,7 +1342,7 @@ Vondrak, J., Capitaine, N. and Wallace, P., 2012, New precession
 expressions, valid for long time intervals (Corrigendum),
 Astron.Astrophys. 541, C1
 """
-function ltp(epoch::AbstractFloat)
+function ltp(epoch::Real)
     #  Equatorial and ecliptic poles
     @inline equ, ecl = ltpequ(epoch), ltpecl(epoch)
 
@@ -1371,7 +1352,7 @@ function ltp(epoch::AbstractFloat)
 end
 
 """
-    ltpb(epoch::AbstractFloat)
+    ltpb(epoch::Real)
 
 Long-term precession matrix, including ICRS frame bias.
 
@@ -1413,7 +1394,7 @@ Vondrak, J., Capitaine, N. and Wallace, P., 2012, New precession
 expressions, valid for long time intervals (Corrigendum),
 Astron.Astrophys. 541, C1
 """
-function ltpb(epoch::AbstractFloat)
+function ltpb(epoch::Real)
     #  Apply frame bias
     return @inline ltp(epoch) * (
         SMatrix{3, 3}(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0) .+ deg2rad(1 / 3600) *
@@ -1425,7 +1406,7 @@ function ltpb(epoch::AbstractFloat)
 end
 
 """
-    ltpecl(epoch::AbstractFloat)
+    ltpecl(epoch::Real)
 
 Long-term precession of the ecliptic.
 
@@ -1458,7 +1439,7 @@ Vondrak, J., Capitaine, N. and Wallace, P., 2012, New precession
 expressions, valid for long time intervals (Corrigendum),
 Astron.Astrophys. 541, C1
 """
-function ltpecl(epoch::AbstractFloat)
+function ltpecl(epoch::Real)
     #  Centuries since J2000
     Δt = (epoch - 2000.0) / 100.0
     ϕ = 2π * Δt ./ ecl_ϕ_2011
@@ -1475,7 +1456,7 @@ function ltpecl(epoch::AbstractFloat)
 end
 
 """
-    ltpequ(epoch::AbstractFloat)
+    ltpequ(epoch::Real)
 
 Long-term precession of the equator.
 
@@ -1508,7 +1489,7 @@ Vondrak, J., Capitaine, N. and Wallace, P., 2012, New precession
 expressions, valid for long time intervals (Corrigendum),
 Astron.Astrophys. 541, C1
 """
-function ltpequ(epoch::AbstractFloat)
+function ltpequ(epoch::Real)
     #  Centuries since J2000
     Δt = (epoch - 2000.0) / 100.0
     ϕ = 2π * Δt ./ equ_ϕ_2011
@@ -1522,7 +1503,7 @@ function ltpequ(epoch::AbstractFloat)
 end
 
 """
-    num00a(day1::AbstractFloat, day2::AbstractFloat)
+    num00a(day1::Real, day2::Real)
 
 Form the matrix of nutation for a given date, IAU 2000A model.
 
@@ -1570,10 +1551,10 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992), Section 3.222-3
 (p114).
 """
-num00a(day1::AbstractFloat, day2::AbstractFloat) = pn00a(day1, day2)[:rn]
+num00a(day1::Real, day2::Real) = pn00a(day1, day2)[:rn]
 
 """
-    num00b(day1::AbstractFloat, day2::AbstractFloat)
+    num00b(day1::Real, day2::Real)
 
 Form the matrix of nutation for a given date, IAU 2000B model.
 
@@ -1621,10 +1602,10 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992), Section 3.222-3
 (p114).
 """
-num00b(day1::AbstractFloat, day2::AbstractFloat) = pn00b(day1, day2)[:rn]
+num00b(day1::Real, day2::Real) = pn00b(day1, day2)[:rn]
 
 """
-    num06a(day1::AbstractFloat, day2::AbstractFloat)
+    num06a(day1::Real, day2::Real)
 
 Form the matrix of nutation for a given date, IAU 2006/2000A model.
 
@@ -1663,13 +1644,13 @@ Form the matrix of nutation for a given date, IAU 2006/2000A model.
    of date and the p-vector V(mean) is with respect to the mean
    equatorial triad of date.
 """
-function num06a(day1::AbstractFloat, day2::AbstractFloat)
+function num06a(day1::Real, day2::Real)
     #  Mean obliquity, nutation components, and nutation matrix
     return numat(obl06(day1, day2), nut06a(day1, day2)...)
 end
 
 """
-    numat(ϵA::AbstractFloat, δψ::AbstractFloat, δϵ::AbstractFloat)
+    numat(ϵA::Real, δψ::Real, δϵ::Real)
 
 Form the matrix of nutation.
 
@@ -1702,12 +1683,12 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992), Section 3.222-3
 (p114).
 """
-function numat(ϵA::AbstractFloat, δψ::AbstractFloat, δϵ::AbstractFloat)
+function numat(ϵA::Real, δψ::Real, δϵ::Real)
     return Rx(-(ϵA + δϵ))Rz(-δψ)Rx(ϵA)
 end
 
 """
-    nut00a(day1::AbstractFloat, day2::AbstractFloat)
+    nut00a(day1::Real, day2::Real)
 
 Nutation, IAU 2000A model (MHB2000 luni-solar and planetary nutation
 with free core nutation omitted).
@@ -1840,7 +1821,7 @@ Astron.Astrophys.Supp.Ser. 135, 111
 Wallace, P.T., "Software for Implementing the IAU 2000 Resolutions",
 in IERS Workshop 5.1 (2002)
 """
-function nut00a(day1::AbstractFloat, day2::AbstractFloat)
+function nut00a(day1::Real, day2::Real)
     #   Interval between fundamental date J2000.0 and given date (JC.)
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
@@ -1947,7 +1928,7 @@ function nut00a(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    nut00b(day1::AbstractFloat, day2::AbstractFloat)
+    nut00b(day1::Real, day2::Real)
 
 Nutation, IAU 2000B model.
 
@@ -2060,7 +2041,7 @@ precession-nutation of the celestial pole", Cel.Mech.Dyn.Astron.  85,
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J., Astron.Astrophys. 282, 663-683 (1994)
 """
-function nut00b(day1::AbstractFloat, day2::AbstractFloat)
+function nut00b(day1::Real, day2::Real)
     #  Interval between fundamental date J2000.0 and given date (JC).
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
@@ -2117,7 +2098,7 @@ function nut00b(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    nut06a(day1::AbstractFloat, day2::AbstractFloat)
+    nut06a(day1::Real, day2::Real)
 
 IAU 2000A nutation with adjustments to match the IAU 2006 precession.
 
@@ -2186,7 +2167,7 @@ Astron.Astrophys.Supp.Ser. 135, 111
 Wallace, P.T., "Software for Implementing the IAU 2000 Resolutions",
 in IERS Workshop 5.1 (2002)
 """
-function nut06a(day1::AbstractFloat, day2::AbstractFloat)
+function nut06a(day1::Real, day2::Real)
     #  Interval between fundamental date J2000.0 and given date (JC).
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
     #  Obtain IAU 2000A nutation
@@ -2197,7 +2178,7 @@ function nut06a(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    nut80(day1::AbstractFloat, day2::AbstractFloat)
+    nut80(day1::Real, day2::Real)
 
 Nutation, IAU 1980 model.
 
@@ -2240,7 +2221,7 @@ Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992), Section 3.222
 (p111).
 """
-function nut80(day1::AbstractFloat, day2::AbstractFloat)
+function nut80(day1::Real, day2::Real)
     #  Interval between fundamental date J2000.0 and given date (JC).
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
@@ -2292,7 +2273,7 @@ function nut80(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    nutm80(day1::AbstractFloat, day2::AbstractFloat)
+    nutm80(day1::Real, day2::Real)
 
 Form the matrix of nutation for a given date, IAU 1980 model.
 
@@ -2330,14 +2311,14 @@ Form the matrix of nutation for a given date, IAU 1980 model.
    of date and the p-vector V(mean) is with respect to the mean
    equatorial triad of date.
 """
-function nutm80(day1::AbstractFloat, day2::AbstractFloat)
+function nutm80(day1::Real, day2::Real)
     #  Nutation components and mean obliquity, and rotation matrix
     return numat(obl80(day1, day2), values(nut80(day1, day2))...)
 end
 
 
 """
-    obl06(day1::AbstractFloat, day2::AbstractFloat)
+    obl06(day1::Real, day2::Real)
 
 Mean obliquity of the ecliptic, IAU 2006 precession model.
 
@@ -2385,12 +2366,12 @@ julia> obl06(2400000.5, 54388.0)
 
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
-function obl06(day1::AbstractFloat, day2::AbstractFloat)
+function obl06(day1::Real, day2::Real)
     return deg2rad(Polynomial(ϵB_2006...)(((day1 - JD2000) + day2) / (100 * DAYPERYEAR)) / 3600.0)
 end
 
 """
-    obl80(day1::AbstractFloat, day2::AbstractFloat)
+    obl80(day1::Real, day2::Real)
 
 Mean obliquity of the ecliptic, IAU 1980 model.
 
@@ -2434,12 +2415,12 @@ Seidelmann (ed), University Science Books (1992), Expression 3.222-1
 (p114).
 
 """
-function obl80(day1::AbstractFloat, day2::AbstractFloat)
+function obl80(day1::Real, day2::Real)
     return deg2rad(Polynomial(ϵ_1980...)(((day1 - JD2000) + day2) / (100 * DAYPERYEAR)) / 3600.0)
 end
 
 """
-    p06e(day1::AbstractFloat, day2::AbstractFloat)
+    p06e(day1::Real, day2::Real)
 
 Precession angles, IAU 2006, equinox based.
 
@@ -2532,7 +2513,7 @@ Capitaine, N., Wallace, P.T. & Chapront, J., 2003, Astron.Astrophys.,
 
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
-function p06e(day1::AbstractFloat, day2::AbstractFloat)
+function p06e(day1::Real, day2::Real)
     #  Interval between fundamental date J2000.0 and given date (Julian centuries).
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
@@ -2572,7 +2553,7 @@ function p06e(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    pb06(day1::AbstractFloat, day2::AbstractFloat)
+    pb06(day1::Real, day2::Real)
 
 This function forms three Euler angles which implement general
 precession from epoch J2000.0, using the IAU 2006 model.  Frame bias
@@ -2628,7 +2609,7 @@ precession from epoch J2000.0, using the IAU 2006 model.  Frame bias
    frame bias, they are available by calling the SOFA function
    p06e.
 """
-function pb06(day1::AbstractFloat, day2::AbstractFloat)
+function pb06(day1::Real, day2::Real)
     #  Precession matrix via Fukushima-Williams angles
     r = pmat06(day1, day2)
     #  Solve for z, choosing the ±π alternative.
@@ -2642,7 +2623,7 @@ function pb06(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    pfw06(day1::AbstractFloat, day2::AbstractFloat)
+    pfw06(day1::Real, day2::Real)
 
 Precession angles, IAU 2006 (Fukushima-Williams 4-angle formulation).
 
@@ -2710,7 +2691,7 @@ Precession angles, IAU 2006 (Fukushima-Williams 4-angle formulation).
 
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
-function pfw06(day1::AbstractFloat, day2::AbstractFloat)
+function pfw06(day1::Real, day2::Real)
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     return NamedTuple{(:γ, :ϕ, :ψ, :ϵ)}(
@@ -2724,7 +2705,7 @@ function pfw06(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    pmat00(day1::AbstractFloat, day2::AbstractFloat)
+    pmat00(day1::Real, day2::Real)
 
 Precession matrix (including frame bias) from GCRS to a specified
 date, IAU 2000 model.
@@ -2769,13 +2750,13 @@ date, IAU 2000 model.
 IAU: Trans. International Astronomical Union, Vol. XXIVB; Proc.  24th
 General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.  (2000)
 """
-function pmat00(day1::AbstractFloat, day2::AbstractFloat)
+function pmat00(day1::Real, day2::Real)
     #  Obtain the required matrix (discarding others).
     return bp00(day1, day2)[:rbp]
 end
 
 """
-    pmat06(day1::AbstractFloat, day2::AbstractFloat)
+    pmat06(day1::Real, day2::Real)
 
 Precession matrix (including frame bias) from GCRS to a specified
 date, IAU 2006 model.
@@ -2824,7 +2805,7 @@ General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.  (2000)
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function pmat06(day1::AbstractFloat, day2::AbstractFloat)
+function pmat06(day1::Real, day2::Real)
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
     return fw2m(
         deg2rad(1 / 3600) .* (
@@ -2837,7 +2818,7 @@ function pmat06(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    pmat76(day1::AbstractFloat, day2::AbstractFloat)
+    pmat76(day1::Real, day2::Real)
 
 Precession matrix from J2000.0 to a specified date, IAU 1976 model.
 
@@ -2894,14 +2875,14 @@ p283.
 
 Kaplan,G.H., 1981. USNO circular no. 163, pA2.
 """
-function pmat76(day1::AbstractFloat, day2::AbstractFloat)
+function pmat76(day1::Real, day2::Real)
     #  Precession Euler angles, J2000.0 to specified date.
     ζ, z, θ = prec76(JD2000, 0.0, day1, day2)
     return Rz(-z)Ry(θ)Rz(-ζ)
 end
 
 """
-    pn00(day1::AbstractFloat, day2::AbstractFloat, ψ::AbstractFloat, ϵ::AbstractFloat)
+    pn00(day1::Real, day2::Real, ψ::Real, ϵ::Real)
 
 Precession-nutation, IAU 2000 model: a multi-purpose function,
 supporting classical (equinox-based) use directly and CIO-based use
@@ -2983,7 +2964,7 @@ Astron.Astrophys. 400, 1145-1154 (2003)
 n.b. The celestial ephemeris origin (CEO) was renamed "celestial
      intermediate origin" (CIO) by IAU 2006 Resolution 2.
 """
-function pn00(day1::AbstractFloat, day2::AbstractFloat, ψ::AbstractFloat, ϵ::AbstractFloat)
+function pn00(day1::Real, day2::Real, ψ::Real, ϵ::Real)
     #  IAU 2000 precession-rate adjustments
     ψpr, ϵpr = pr00(day1, day2)
     #  Mean obliquity, consistent with IAU 2000 precession-nutation
@@ -2997,7 +2978,7 @@ function pn00(day1::AbstractFloat, day2::AbstractFloat, ψ::AbstractFloat, ϵ::A
 end
 
 """
-    pn00a(day1::AbstractFloat, day2::AbstractFloat)
+    pn00a(day1::Real, day2::Real)
 
 Precession-nutation, IAU 2000A model: a multi-purpose function,
 supporting classical (equinox-based) use directly and CIO-based use
@@ -3082,14 +3063,14 @@ Astron.Astrophys. 400, 1145-1154 (2003)
 n.b. The celestial ephemeris origin (CEO) was renamed "celestial
      intermediate origin" (CIO) by IAU 2006 Resolution 2.
 """
-function pn00a(day1::AbstractFloat, day2::AbstractFloat)
+function pn00a(day1::Real, day2::Real)
     ψ, ϵ = nut00a(day1, day2)
     ϵA, rb, rp, rbp, rn, rbpn = pn00(day1, day2, ψ, ϵ)
     return (ψ = ψ, ϵ = ϵ, ϵA = ϵA, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
 end
 
 """
-    pn00b(day1::AbstractFloat, day2::AbstractFloat)
+    pn00b(day1::Real, day2::Real)
 
 Precession-nutation, IAU 2000B model: a multi-purpose function,
 supporting classical (equinox-based) use directly and CIO-based use
@@ -3174,14 +3155,14 @@ Astron.Astrophys. 400, 1145-1154 (2003).
 n.b. The celestial ephemeris origin (CEO) was renamed "celestial
      intermediate origin" (CIO) by IAU 2006 Resolution 2.
 """
-function pn00b(day1::AbstractFloat, day2::AbstractFloat)
+function pn00b(day1::Real, day2::Real)
     ψ, ϵ = nut00b(day1, day2)
     ϵA, rb, rp, rbp, rn, rbpn = pn00(day1, day2, ψ, ϵ)
     return (ψ = ψ, ϵ = ϵ, ϵA = ϵA, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
 end
 
 """
-    pn06(day1::AbstractFloat, day2::AbstractFloat, δψ::AbstractFloat, δϵ::AbstractFloat)
+    pn06(day1::Real, day2::Real, δψ::Real, δϵ::Real)
 
 Precession-nutation, IAU 2006 model: a multi-purpose function,
 supporting classical (equinox-based) use directly and CIO-based use
@@ -3263,7 +3244,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function pn06(day1::AbstractFloat, day2::AbstractFloat, δψ::AbstractFloat, δϵ::AbstractFloat)
+function pn06(day1::Real, day2::Real, δψ::Real, δϵ::Real)
     #  Bias-precession Fukushima-Williams angle of J2000.0 = frame bias
     #  and matrix
     rb = fw2m(pfw06(MJD0, MJD00)...)
@@ -3280,7 +3261,7 @@ function pn06(day1::AbstractFloat, day2::AbstractFloat, δψ::AbstractFloat, δ�
 end
 
 """
-    pn06a(day1::AbstractFloat, day2::AbstractFloat)
+    pn06a(day1::Real, day2::Real)
 
 Precession-nutation, IAU 2006/2000A models: a multi-purpose function,
 supporting classical (equinox-based) use directly and CIO-based use
@@ -3357,14 +3338,14 @@ indirectly.
 
 Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 """
-function pn06a(day1::AbstractFloat, day2::AbstractFloat)
+function pn06a(day1::Real, day2::Real)
     ψ, ϵ = nut06a(day1, day2)
     ϵA, rb, rp, rbp, rn, rbpn = pn06(day1, day2, ψ, ϵ)
     return (ψ = ψ, ϵ = ϵ, ϵA = ϵA, rb = rb, rp = rp, rbp = rbp, rn = rn, rbpn = rbpn)
 end
 
 """
-    pnm00a(day1::AbstractFloat, day2::AbstractFloat)
+    pnm00a(day1::Real, day2::Real)
 
 Form the matrix of precession-nutation for a given date (including
 frame bias), equinox based, IAU 2000A model.
@@ -3413,12 +3394,12 @@ IAU: Trans. International Astronomical Union, Vol. XXIVB; Proc.  24th
 General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.  (2000)
 
 """
-function pnm00a(day1::AbstractFloat, day2::AbstractFloat)
+function pnm00a(day1::Real, day2::Real)
     return pn00a(day1, day2)[:rbpn]
 end
 
 """
-    pnm00b(day1::AbstractFloat, day2::AbstractFloat)
+    pnm00b(day1::Real, day2::Real)
 
 Form the matrix of precession-nutation for a given date (including
 frame bias), equinox-based, IAU 2000B model.
@@ -3466,12 +3447,12 @@ frame bias), equinox-based, IAU 2000B model.
 IAU: Trans. International Astronomical Union, Vol. XXIVB; Proc.  24th
 General Assembly, Manchester, UK.  Resolutions B1.3, B1.6.  (2000)
 """
-function pnm00b(day1::AbstractFloat, day2::AbstractFloat)
+function pnm00b(day1::Real, day2::Real)
     return pn00b(day1, day2)[:rbpn]
 end
 
 """
-    pnm06a(day1::AbstractFloat, day2::AbstractFloat)
+    pnm06a(day1::Real, day2::Real)
 
 Form the matrix of precession-nutation for a given date (including
 frame bias), equinox based, IAU 2006 precession and IAU 2000A nutation
@@ -3516,7 +3497,7 @@ models.
 
 Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855.
 """
-function pnm06a(day1::AbstractFloat, day2::AbstractFloat)
+function pnm06a(day1::Real, day2::Real)
     #  Fukushima-Williams angles for frame bias and precession
     γB, ϕB, ψB, ϵA = pfw06(day1, day2)
     #  Nutation components
@@ -3526,7 +3507,7 @@ function pnm06a(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    pnm80(day1::AbstractFloat, day2::AbstractFloat)
+    pnm80(day1::Real, day2::Real)
 
 Form the matrix of precession/nutation for a given date, IAU 1976
 precession model, IAU 1980 nutation model.
@@ -3571,13 +3552,13 @@ precession model, IAU 1980 nutation model.
 Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992), Section 3.3 (p145).
 """
-function pnm80(day1::AbstractFloat, day2::AbstractFloat)
+function pnm80(day1::Real, day2::Real)
     #  Precession and nutation matrices J2000.0 to date
     return nutm80(day1, day2) * pmat76(day1, day2)
 end
 
 """
-    pom00(x::AbstractFloat, y::AbstractFloat, s::AbstractFloat)
+    pom00(x::Real, y::Real, s::Real)
 
 Form the matrix of polar motion for a given date, IAU 2000.
 
@@ -3614,10 +3595,10 @@ Form the matrix of polar motion for a given date, IAU 2000.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-pom00(x::AbstractFloat, y::AbstractFloat, s::AbstractFloat) = Rx(-y)Ry(-x)Rz(s)
+pom00(x::Real, y::Real, s::Real) = Rx(-y)Ry(-x)Rz(s)
 
 """
-    pr00(day1::AbstractFloat, day2::AbstractFloat)
+    pr00(day1::Real, day2::Real)
 
 Precession-rate part of the IAU 2000 precession-nutation models (part
 of MHB2000).
@@ -3682,7 +3663,7 @@ ftp://maia.usno.navy.mil/conv2000/chapter5/IAU2000A.
 Wallace, P.T., "Software for Implementing the IAU 2000 Resolutions",
 in IERS Workshop 5.1 (2002).
 """
-function pr00(day1::AbstractFloat, day2::AbstractFloat)
+function pr00(day1::Real, day2::Real)
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
     #  Precession and obliquity corrections (radians/century).
     #  Precession rate contributions with respect to IAU 1976/1980
@@ -3691,7 +3672,7 @@ function pr00(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    prec76(day11::AbstractFloat, day12::AbstractFloat, day21::AbstractFloat, day22::AbstractFloat)
+    prec76(day11::Real, day12::Real, day21::Real, day22::Real)
 
 IAU 1976 precession model.
 
@@ -3754,7 +3735,7 @@ catalog).
 Lieske, J.H., 1979, Astron.Astrophys. 73, 282, equations (6) & (7),
 p283.
 """
-function prec76(day11::AbstractFloat, day12::AbstractFloat, day21::AbstractFloat, day22::AbstractFloat)
+function prec76(day11::Real, day12::Real, day21::Real, day22::Real)
     #  Interval between fundamental epoch J2000.0 and start date (Julian centuries).
     t0 = ((day11 - JD2000) + day12) / (100 * DAYPERYEAR)
     #  Interval over which precession required (Julian centuries).
@@ -3769,7 +3750,7 @@ function prec76(day11::AbstractFloat, day12::AbstractFloat, day21::AbstractFloat
 end
 
 """
-    s00(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::AbstractFloat)
+    s00(day1::Real, day2::Real, x::Real, y::Real)
 
 The CIO locator s, positioning the Celestial Intermediate Origin on
 the equator of the Celestial Intermediate Pole, given the CIP's X,Y
@@ -3832,7 +3813,7 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function s00(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::AbstractFloat)
+function s00(day1::Real, day2::Real, x::Real, y::Real)
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     #  Fundamental Arguments (IERS Conventions 2003)
@@ -3895,7 +3876,7 @@ function s00(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::Abst
 end
 
 """
-    s00a(day1::AbstractFloat, day2::AbstractFloat)
+    s00a(day1::Real, day2::Real)
 
 The CIO locator s, positioning the Celestial Intermediate Origin on
 the equator of the Celestial Intermediate Pole, using the IAU 2000A
@@ -3958,14 +3939,14 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function s00a(day1::AbstractFloat, day2::AbstractFloat)
+function s00a(day1::Real, day2::Real)
     #  Bias-precession-nutation matrix (IAU 2000A), extract the CIP
     #  coordinates, and compute the CIO locator s.
     return s00(day1, day2, bpn2xy(pnm00a(day1, day2))...)
 end
 
 """
-    s00b(day1::AbstractFloat, day2::AbstractFloat)
+    s00b(day1::Real, day2::Real)
 
 The CIO locator s, positioning the Celestial Intermediate Origin on
 the equator of the Celestial Intermediate Pole, using the IAU 2000B
@@ -4028,14 +4009,14 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function s00b(day1::AbstractFloat, day2::AbstractFloat)
+function s00b(day1::Real, day2::Real)
     #  Bias-precession-nutation matrix (IAU 2000B), extract the CIP
     #  coordinates, and compute the CIO locator s.
     return s00(day1, day2, bpn2xy(pnm00b(day1, day2))...)
 end
 
 """
-    s06(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::AbstractFloat)
+    s06(day1::Real, day2::Real, x::Real, y::Real)
 
 The CIO locator s, positioning the Celestial Intermediate Origin on
 the equator of the Celestial Intermediate Pole, given the CIP's X,Y
@@ -4102,7 +4083,7 @@ Astrophys. 432, 355
 McCarthy, D.D., Petit, G. (eds.) 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function s06(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::AbstractFloat)
+function s06(day1::Real, day2::Real, x::Real, y::Real)
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     #  Fundamental Arguments (IERS Conventions 2003)
@@ -4166,7 +4147,7 @@ function s06(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::Abst
 end
 
 """
-    s06a(day1::AbstractFloat, day2::AbstractFloat)
+    s06a(day1::Real, day2::Real)
 
 The CIO locator s, positioning the Celestial Intermediate Origin on
 the equator of the Celestial Intermediate Pole, using the IAU 2006
@@ -4231,14 +4212,14 @@ Technical Note No. 32, BKG
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function s06a(day1::AbstractFloat, day2::AbstractFloat)
+function s06a(day1::Real, day2::Real)
     #  Bias-precession-nutation matrix (IAU 2006/2000A), extract the CIP
     #  coordinates, and compute the CIO locator s.
     return s06(day1, day2, bpn2xy(pnm06a(day1, day2))...)
 end
 
 """
-    sp00(day1::AbstractFloat, day2::AbstractFloat)
+    sp00(day1::Real, day2::Real)
 
 The TIO locator s', positioning the Terrestrial Intermediate Origin on
 the equator of the Celestial Intermediate Pole.
@@ -4284,12 +4265,12 @@ the equator of the Celestial Intermediate Pole.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function sp00(day1::AbstractFloat, day2::AbstractFloat)
+function sp00(day1::Real, day2::Real)
     return deg2rad(tio_2000 * ((day1 - JD2000) + day2) / (100 * DAYPERYEAR) / 3600.0)
 end
 
 """
-    xy06(day1::AbstractFloat, day2::AbstractFloat)
+    xy06(day1::Real, day2::Real)
 
 X,Y coordinates of celestial intermediate pole from series based on
 IAU 2006 precession and IAU 2000A nutation.
@@ -4356,7 +4337,7 @@ Astron.Astrophys.Supp.Ser. 135, 111
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function xy06(day1::AbstractFloat, day2::AbstractFloat)
+function xy06(day1::Real, day2::Real)
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     #  Lunar, solar, and planetary longitudes
@@ -4423,7 +4404,7 @@ function xy06(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    xys00a(day1::AbstractFloat, day2::AbstractFloat)
+    xys00a(day1::Real, day2::Real)
 
 For a given TT date, compute the X,Y coordinates of the Celestial
 Intermediate Pole and the CIO locator s, using the IAU 2000A
@@ -4474,7 +4455,7 @@ precession-nutation model.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function xys00a(day1::AbstractFloat, day2::AbstractFloat)
+function xys00a(day1::Real, day2::Real)
     #  Form bias-precession-nutation matrix (IAU 2000A) and extract x, y.
     x, y = bpn2xy(pnm00a(day1, day2))
     #  Obtain s
@@ -4482,7 +4463,7 @@ function xys00a(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    xys00b(day1::AbstractFloat, day2::AbstractFloat)
+    xys00b(day1::Real, day2::Real)
 
 For a given TT date, compute the X,Y coordinates of the Celestial
 Intermediate Pole and the CIO locator s, using the IAU 2000B
@@ -4533,7 +4514,7 @@ precession-nutation model.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function xys00b(day1::AbstractFloat, day2::AbstractFloat)
+function xys00b(day1::Real, day2::Real)
     #  Form bias-precession-nutation matrix (IAU 2000B) and extract x, y.
     x, y = bpn2xy(pnm00b(day1, day2))
     #  Obtain s
@@ -4541,7 +4522,7 @@ function xys00b(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    xys06a(day1::AbstractFloat, day2::AbstractFloat)
+    xys06a(day1::Real, day2::Real)
 
 For a given TT date, compute the X,Y coordinates of the Celestial
 Intermediate Pole and the CIO locator s, using the IAU 2006 precession
@@ -4593,7 +4574,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function xys06a(day1::AbstractFloat, day2::AbstractFloat)
+function xys06a(day1::Real, day2::Real)
     #  Form bias-precession-nutation matrix (IAU 2006/2000A) and extract x, y.
     x, y = bpn2xy(pnm06a(day1, day2))
     #  Obtain s
