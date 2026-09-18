@@ -99,26 +99,36 @@ FK4 B1950.0 to FK5 J2000.0 using matrices in 6-space".  Astron.J. 97,
 274.
 """
 function fk425(ra::F, dec::F, δra::F, δdec::F, plx::F, rv::F) where
-      F<:AbstractFloat
+    {F <: AbstractFloat}
     ####  Canonical constants (Seidelmann 1992)
     #  Radians per year to arcsec per trop-century, km/s to AU/trop-century,
     #  and a small number to avoid arithmetic problems
-    PMF, VF, TINY = 3.6e5*rad2deg(1.), 21.095, 1e-30
+    PMF, VF, TINY = 3.6e5 * rad2deg(1.0), 21.095, 1.0e-30
     #  FK4 data (units radians and arcsec per tropical century)
     #  Express as a pv-vector
-    r0 = s2pv(ra, dec, 1.0, PMF*δra, PMF*δdec, VF*plx*rv)
+    r0 = s2pv(ra, dec, 1.0, PMF * δra, PMF * δdec, VF * plx * rv)
     #  Allow for E-terms (cf. Seidelmann eq. 3.591-2) and convert pv-vector to
     #  Fricke system (cf., Seidelmann eq. 3.591-3).
-    r1 = SVector(r0[1] .- A_fk4_fk5[1:3] .+ dot(r0[1], A_fk4_fk5[1:3])*r0[1],
-          r0[2] .- A_fk4_fk5[4:6] .+ dot(r0[1], A_fk4_fk5[4:6])*r0[1])
-    pv = SVector((SVector((dot(Mfk4fk5[i][j][1], r1[1]) +
-         dot(Mfk4fk5[i][j][2], r1[2]) for j=1:3)...) for i=1:2)...)
+    r1 = SVector(
+        r0[1] .- A_fk4_fk5[1:3] .+ dot(r0[1], A_fk4_fk5[1:3]) * r0[1],
+        r0[2] .- A_fk4_fk5[4:6] .+ dot(r0[1], A_fk4_fk5[4:6]) * r0[1]
+    )
+    pv = SVector(
+        (
+            SVector(
+                (
+                    dot(Mfk4fk5[i][j][1], r1[1]) +
+                        dot(Mfk4fk5[i][j][2], r1[2]) for j in 1:3
+                )...
+            ) for i in 1:2
+        )...
+    )
     #  Revert to catalog form
     cat = pv2s(pv)
     if plx > TINY
-        plx, rv = plx/cat[3], cat[6]/(VF*plx)
+        plx, rv = plx / cat[3], cat[6] / (VF * plx)
     end
-    (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4]/PMF, δdec = cat[5]/PMF, plx = plx, rv = rv)
+    return (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4] / PMF, δdec = cat[5] / PMF, plx = plx, rv = rv)
 end
 
 """
@@ -199,19 +209,19 @@ Seidelmann, P.K. (ed), 1992, "Explanatory Supplement to the
 Astronomical Almanac", ISBN 0-935702-68-7.
 """
 function fk45z(ra::AbstractFloat, dec::AbstractFloat, epoch::AbstractFloat)
-    PMF = 3.6e5*rad2deg(1.)
+    PMF = 3.6e5 * rad2deg(1.0)
     #  Spherical coordinates to p-vector, adjust p-vector to give zero proper
     #  motion in FK5.
-    r1, p = s2c(ra, dec),  A_fk4_fk5[1:3] .+ (epoch - 1950.0)/PMF.*A_fk4_fk5[4:6]
+    r1, p = s2c(ra, dec), A_fk4_fk5[1:3] .+ (epoch - 1950.0) / PMF .* A_fk4_fk5[4:6]
     #  Remove E-terms
-    p  = r1 .- (p .- dot(r1, p).*r1)
+    p = r1 .- (p .- dot(r1, p) .* r1)
     #  Convert to Fricke system pv-vector (cf. Seidelmann 3.591-3)
-    pv = SVector((SVector((dot(Mfk4fk5[i][j][1], p) for j=1:3)...) for i=1:2)...)
+    pv = SVector((SVector((dot(Mfk4fk5[i][j][1], p) for j in 1:3)...) for i in 1:2)...)
     #  Allow for fictitious proper motion
-    pv = pvu((epj(epb2jd(epoch)...) - 2000.0)/PMF, pv)
+    pv = pvu((epj(epb2jd(epoch)...) - 2000.0) / PMF, pv)
     #  Revert to spherical coordinates
     ra, dec = c2s(pv[1])
-    (ra = mod2pi(ra), dec = dec)
+    return (ra = mod2pi(ra), dec = dec)
 end
 
 """
@@ -310,30 +320,40 @@ Yallop, B.D. et al., 1989, "Transformation of mean star places from
 FK4 B1950.0 to FK5 J2000.0 using matrices in 6-space".  Astron.J. 97,
 274.
 """
-function fk524(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat, plx::AbstractFloat,
-               rv::AbstractFloat)
+function fk524(
+        ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat, plx::AbstractFloat,
+        rv::AbstractFloat
+    )
     ####  Canonical constants (Seidelmann 1992)
     #  Radians per year to arcsec per trop-century, km/s to AU/trop-century,
     #  and a small number to avoid arithmetic problems
-    PMF, VF, TINY = 3.6e5*rad2deg(1.), 21.095, 1e-30
+    PMF, VF, TINY = 3.6e5 * rad2deg(1.0), 21.095, 1.0e-30
     #  Express as a pv-vector
-    r0 = s2pv(ra, dec, 1.0, PMF*δra, PMF*δdec, VF*plx*rv)
+    r0 = s2pv(ra, dec, 1.0, PMF * δra, PMF * δdec, VF * plx * rv)
     #  Convert pv-vector to Bessel-Newcomb system (cf. Seidelmann 3.592-1)
-    r1 = SVector((SVector((dot(Mfk5fk4[i][j][1], r0[1]) +
-         dot(Mfk5fk4[i][j][2], r0[2]) for j=1:3)...) for i=1:2)...)
+    r1 = SVector(
+        (
+            SVector(
+                (
+                    dot(Mfk5fk4[i][j][1], r0[1]) +
+                        dot(Mfk5fk4[i][j][2], r0[2]) for j in 1:3
+                )...
+            ) for i in 1:2
+        )...
+    )
     #  Apply E-terms (equivalent to Seidelmann 3.592-3, one iteration)
     #  Direction
-    p1 = r1[1] .+ norm(r1[1])*A_fk4_fk5[1:3] .- dot(r1[1], A_fk4_fk5[1:3])*r1[1]
+    p1 = r1[1] .+ norm(r1[1]) * A_fk4_fk5[1:3] .- dot(r1[1], A_fk4_fk5[1:3]) * r1[1]
     #  Direction, using recomputed length
-    pv1 = r1[1] .+ norm(p1)*A_fk4_fk5[1:3] .- dot(r1[1], A_fk4_fk5[1:3])*r1[1]
+    pv1 = r1[1] .+ norm(p1) * A_fk4_fk5[1:3] .- dot(r1[1], A_fk4_fk5[1:3]) * r1[1]
     #  Derivative
-    pv2 = r1[2] .+ norm(p1)*A_fk4_fk5[4:6] .- dot(r1[1], A_fk4_fk5[4:6])*pv1
+    pv2 = r1[2] .+ norm(p1) * A_fk4_fk5[4:6] .- dot(r1[1], A_fk4_fk5[4:6]) * pv1
     #  Revert to catalog form
     cat = pv2s(SVector(pv1, pv2))
     if plx > TINY
-        plx, rv = plx/cat[3], cat[6]/(plx*VF)
+        plx, rv = plx / cat[3], cat[6] / (plx * VF)
     end
-    (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4]/PMF, δdec = cat[5]/PMF, plx = plx, rv = rv)
+    return (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4] / PMF, δdec = cat[5] / PMF, plx = plx, rv = rv)
 end
 """
     fk52h(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat, plx::AbstractFloat,
@@ -382,8 +402,10 @@ Status:  support function.
 
 F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 """
-function fk52h(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat,
-               plx::AbstractFloat, rv::AbstractFloat)
+function fk52h(
+        ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat,
+        plx::AbstractFloat, rv::AbstractFloat
+    )
     #  FK5 to Hipparcos orientation matrix and rotation vector
     ϵ, ω = fk5hip()
     #  FK5 barycentric normalized pv-vector
@@ -392,7 +414,7 @@ function fk52h(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec
     #  Apply spin to the position giving an extra space motion component, add it
     #  to the FK5 space motion, orient the FK5 space motion into the Hipparcos
     #  system, and convert Hipparcos pv-vector to spherical coordinates
-    pvstar(SVector(ϵ*pv[1], ϵ*(vec2mat(pv[1])*ω/DAYPERYEAR .+ pv[2])))
+    return pvstar(SVector(ϵ * pv[1], ϵ * (vec2mat(pv[1]) * ω / DAYPERYEAR .+ pv[2])))
 end
 
 """
@@ -447,17 +469,20 @@ Status:  support function.
 """
 function fk54z(ra::AbstractFloat, dec::AbstractFloat, epoch::AbstractFloat)
     #  FK5 equinox J2000.0 to FK4 equinox B1950.0
-    cat = fk524(ra, dec, 0., 0., 0., 0.)
+    cat = fk524(ra, dec, 0.0, 0.0, 0.0, 0.0)
     #  Spherical to Cartesian
     p1 = s2c(cat[1], cat[2])
     #  Fictitious proper motion (radians/year) and apply the motion
-    p1 .+= (epoch - 1950.0)*(
-        cat[3]*SVector(-p1[2], p1[1], 0.) .+
-        cat[4]*SVector(-cos(cat[1])*sin(cat[2]), -sin(cat[1])*sin(cat[2]),
-         cos(cat[2])))
+    p1 .+= (epoch - 1950.0) * (
+        cat[3] * SVector(-p1[2], p1[1], 0.0) .+
+            cat[4] * SVector(
+            -cos(cat[1]) * sin(cat[2]), -sin(cat[1]) * sin(cat[2]),
+            cos(cat[2])
+        )
+    )
     #  Cartesian to spherical
     ra, dec = c2s(p1)
-    (ra = mod2pi(ra), dec = dec, δra = cat[3], δdec = cat[4])
+    return (ra = mod2pi(ra), dec = dec, δra = cat[3], δdec = cat[4])
 end
 
 """
@@ -497,7 +522,7 @@ F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 """
 function fk5hip()
     #  FK5 wrt Hipparcos orientation and spin (radians, radians/year)
-    (pos = rv2m(deg2rad(1/3600.0).*ϵ_hipparcos), rot = deg2rad(1/3600.0).*ω_hipparcos)
+    return (pos = rv2m(deg2rad(1 / 3600.0) .* ϵ_hipparcos), rot = deg2rad(1 / 3600.0) .* ω_hipparcos)
 end
 
 """
@@ -572,14 +597,14 @@ F.Mignard & M.Froeschle, 2000, Astron.Astrophys. 354, 732-739.
 """
 function fk5hz(ra::AbstractFloat, dec::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
     #  Interval from given date to fundamental epoch J2000.0 (Julian years)
-    Δt = - ((day1 - JD2000) + day2)/DAYPERYEAR
+    Δt = - ((day1 - JD2000) + day2) / DAYPERYEAR
     #  FK5 to Hipparcos orientation matrix and rotation vector
     ϵ, ω = fk5hip()
     #  FK5 barycentric position vector, accumulate Hipparcos wrt FK5 spin over
     #  the interval, de-rotate the vector's FK5 axes back to the date, rotate
     #  the vector into the Hipparcos system, and convert to spherical
-    ra, dec = c2s(ϵ*rv2m(Δt.*ω)'*s2c(ra, dec))
-    (ra = mod2pi(ra), dec = dec)
+    ra, dec = c2s(ϵ * rv2m(Δt .* ω)' * s2c(ra, dec))
+    return (ra = mod2pi(ra), dec = dec)
 end
 
 """
@@ -629,8 +654,10 @@ Status:  support function.
 
 F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 """
-function h2fk5(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat,
-               plx::AbstractFloat, rv::AbstractFloat)
+function h2fk5(
+        ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat,
+        plx::AbstractFloat, rv::AbstractFloat
+    )
     #  Hipparcos barycentric normalized pv-vector
     pv = starpv(ra, dec, δra, δdec, plx, rv)
     #  FK5 to Hipparcos orientation matrix and spin vector
@@ -640,7 +667,7 @@ function h2fk5(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec
     #  subtract this component from the Hipparcos space motion, de-orient
     #  the Hipparcos space motion into the FK5 system, and convert the FK5
     # pv-vector to spherical coordinates.
-    pvstar(SVector(ϵ'*pv[1], ϵ'*(pv[2] .- vec2mat(pv[1])*ϵ*ω./DAYPERYEAR)))
+    return pvstar(SVector(ϵ' * pv[1], ϵ' * (pv[2] .- vec2mat(pv[1]) * ϵ * ω ./ DAYPERYEAR)))
 end
 
 """
@@ -711,18 +738,18 @@ F.Mignard & M.Froeschle, 2000, Astron.Astrophys. 354, 732-739.
 """
 function hfk5z(ra::AbstractFloat, dec::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
     #  Time interval from fundamental epoch J2000.0 to given date (Julian year)
-    Δt = ((day1 - JD2000) + day2)/DAYPERYEAR
+    Δt = ((day1 - JD2000) + day2) / DAYPERYEAR
     #  FK5 to Hipparcos orientation matrix and rotation vector
     ϵ, ω = fk5hip()
     #  Hipparcos barycentric position vector (normalized)
-    p  = s2c(ra, dec)
+    p = s2c(ra, dec)
     #  Accumulate Hipparcos wrt to FK5 spin over interval, de-orient & de-spin
     #  the Hipparcos position into FK5 J2000.0, rotate the spin to the
     #  Hipparcos system, apply spin to the position giving the space motion,
     #  and de-orient and de-spin the Hipparcos space motion into the FK5 J2000.0
-    r2f = (ϵ*rv2m(Δt*ω))'
-    cat = pv2s(SVector(r2f*p, r2f*(vec2mat(ϵ*ω)*p)))
-    (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4], δdec = cat[5])
+    r2f = (ϵ * rv2m(Δt * ω))'
+    cat = pv2s(SVector(r2f * p, r2f * (vec2mat(ϵ * ω) * p)))
+    return (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4], δdec = cat[5])
 end
 
 """
@@ -810,15 +837,17 @@ Star proper motion:  update star catalog data for space motion.
 8) The relativistic adjustment carried out in the starpv function
    involves an iterative calculation.
 """
-function starpm(ra::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmdec::AbstractFloat,
-                plx::AbstractFloat, rvel::AbstractFloat, epoch1a::AbstractFloat, epoch1b::AbstractFloat,
-                epoch2a::AbstractFloat, epoch2b::AbstractFloat)
+function starpm(
+        ra::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmdec::AbstractFloat,
+        plx::AbstractFloat, rvel::AbstractFloat, epoch1a::AbstractFloat, epoch1b::AbstractFloat,
+        epoch2a::AbstractFloat, epoch2b::AbstractFloat
+    )
     #  Days of light travel time per astronomical unit
-    DC = SECPERDAY/(ASTRUNIT/LIGHTSPEED)
+    DC = SECPERDAY / (ASTRUNIT / LIGHTSPEED)
     #  Position-velocity vector
     pv1 = starpv(ra, dec, pmras, pmdec, plx, rvel)
     #  Light time when observed (days)
-    tl1 = pm(pv1[1])/DC
+    tl1 = pm(pv1[1]) / DC
     #  Time interval
     Δt = (epoch2a - epoch1a) + (epoch2b - epoch1b)
     #  Move star along track from the "before" observed position to the
@@ -829,8 +858,8 @@ function starpm(ra::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmd
     r2, rdv, v2 = dot(pv[1], pv[1]), dot(pv[1], pv[2]), dot(pv[2], pv[2])
     c2mv2 = DC^2 - v2 # (SECPERDAY*LIGHTSPEED/ASTRUNIT)^2 - v2
     @assert c2mv2 > 0
-    tl2 = (-rdv + sqrt(rdv^2 + c2mv2*r2))/c2mv2
+    tl2 = (-rdv + sqrt(rdv^2 + c2mv2 * r2)) / c2mv2
     #  Move the position along track from the observed place at the
     #  "before" epoch to the observed place at the "after" epoch.
-    pvstar(pvu(Δt + (tl1 - tl2), pv1))
+    return pvstar(pvu(Δt + (tl1 - tl2), pv1))
 end

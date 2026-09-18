@@ -71,23 +71,25 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpors(ξ::F, η::F, a::F, b::F) where F<:AbstractFloat
-    r  = sqrt(1.0 + η*η + ξ*ξ)
-    rsb, rcb = r*sin(b), r*cos(b)
-    w2 = rcb*rcb - ξ*ξ
+function tpors(ξ::F, η::F, a::F, b::F) where {F <: AbstractFloat}
+    r = sqrt(1.0 + η * η + ξ * ξ)
+    rsb, rcb = r * sin(b), r * cos(b)
+    w2 = rcb * rcb - ξ * ξ
     if w2 >= 0.0
         w = sqrt(w2)
-        s, c = rsb - η*w, rsb*η + w
-        if ξ == 0.0 && w == 0.0 w = 1.0 end
+        s, c = rsb - η * w, rsb * η + w
+        if ξ == 0.0 && w == 0.0
+            w = 1.0
+        end
         a01, b01 = mod2pi(a - atan(ξ, w)), atan(s, c)
         w = -w
-        s, c = rsb - η*w, rsb*η + w
+        s, c = rsb - η * w, rsb * η + w
         a02, b02 = mod2pi(a - atan(ξ, w)), atan(s, c)
         res = abs(rsb) < 1.0 ? (a01, b01, nothing, nothing) : (a01, b01, a02, b02)
     else
         res = (nothing, nothing, nothing, nothing)
     end
-    NamedTuple{(:a01, :b01, :a02, :b02)}(res)
+    return NamedTuple{(:a01, :b01, :a02, :b02)}(res)
 end
 
 """
@@ -159,21 +161,21 @@ Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
 function tporv(ξ::F, η::F, v::V) where
-    {F<:AbstractFloat, V<:AbstractVector{<:AbstractFloat}}
-    r  = sqrt(1.0 + η*η + ξ*ξ)
-    w2 = r*r*sum(v[1:2].^2) - ξ*ξ
+    {F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat}}
+    r = sqrt(1.0 + η * η + ξ * ξ)
+    w2 = r * r * sum(v[1:2] .^ 2) - ξ * ξ
     if w2 > 0.0
         wp = sqrt(w2)
-        cp = (r*v[3]*η + wp)/((1.0+η*η)*sqrt(r*r*sum(v[1:2].^2)^2))
-        v01 = SVector(cp*(v[1]*wp+v[2]*ξ), cp*(v[2]*wp-v[1]*ξ), (r*v[3]-η*wp)/(1.0+η*η))
+        cp = (r * v[3] * η + wp) / ((1.0 + η * η) * sqrt(r * r * sum(v[1:2] .^ 2)^2))
+        v01 = SVector(cp * (v[1] * wp + v[2] * ξ), cp * (v[2] * wp - v[1] * ξ), (r * v[3] - η * wp) / (1.0 + η * η))
         wn = -sqrt(w2)
-        cn = (r*v[3]*η + wn)/((1.0+η*η)*sqrt(r*r*sum(v[1:2].^2)^2))
-        v02 = SVector(cn*(v[1]*wn+v[2]*ξ), cn*(v[2]*wn-v[1]*ξ), (r*v[3]-η*wn)/(1.0+η*η))
-        res = abs(r*v[3]) < 1.0 ? (v01, nothing) : (v01, v02)
+        cn = (r * v[3] * η + wn) / ((1.0 + η * η) * sqrt(r * r * sum(v[1:2] .^ 2)^2))
+        v02 = SVector(cn * (v[1] * wn + v[2] * ξ), cn * (v[2] * wn - v[1] * ξ), (r * v[3] - η * wn) / (1.0 + η * η))
+        res = abs(r * v[3]) < 1.0 ? (v01, nothing) : (v01, v02)
     else
         res = (nothing, nothing)
     end
-    NamedTuple{(:v01, :v02)}(res)
+    return NamedTuple{(:v01, :v02)}(res)
 end
 
 """
@@ -229,9 +231,11 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpsts(ξ::F, η::F, a0::F, b0::F) where F<:AbstractFloat
-    (a = mod2pi(atan(ξ, cos(b0) - η*sin(b0)) + a0),
-     b = atan(sin(b0) + η*cos(b0), sqrt(ξ*ξ+(cos(b0) - η*sin(b0))^2)))
+function tpsts(ξ::F, η::F, a0::F, b0::F) where {F <: AbstractFloat}
+    return (
+        a = mod2pi(atan(ξ, cos(b0) - η * sin(b0)) + a0),
+        b = atan(sin(b0) + η * cos(b0), sqrt(ξ * ξ + (cos(b0) - η * sin(b0))^2)),
+    )
 end
 
 """
@@ -293,18 +297,18 @@ Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
 function tpstv(ξ::F, η::F, v0::V) where
-    {F<:AbstractFloat, V<:AbstractVector{<:AbstractFloat}}
+    {F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat}}
     x, y, z = v0[1:3]
-    if sqrt(sum(v0[1:2].^2)) == 0.0
-        r = x = 1e-20
+    if sqrt(sum(v0[1:2] .^ 2)) == 0.0
+        r = x = 1.0e-20
     else
-        r = sqrt(sum(v0[1:2].^2))
+        r = sqrt(sum(v0[1:2] .^ 2))
     end
-    f = sqrt(1.0 + ξ*ξ + η*η)
-    SVector(x - (ξ*y + η*x*z)/r, y + (ξ*x - η*y*z)/r, z + η*r)/f
+    f = sqrt(1.0 + ξ * ξ + η * η)
+    return SVector(x - (ξ * y + η * x * z) / r, y + (ξ * x - η * y * z) / r, z + η * r) / f
 end
 
-const TINY = 1e-6
+const TINY = 1.0e-6
 
 """
     tpxes(a::AbstractFloat, b::AbstractFloat, a0::AbstractFloat, b0::AbstractFloat)
@@ -359,8 +363,8 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpxes(a::F, b::F, a0::F, b0::F) where F<:AbstractFloat
-    d = (sin(b)*sin(b0) + cos(b)*cos(b0)*cos(a - a0))
+function tpxes(a::F, b::F, a0::F, b0::F) where {F <: AbstractFloat}
+    d = (sin(b) * sin(b0) + cos(b) * cos(b0) * cos(a - a0))
     if d > TINY
         nothing
     elseif d >= 0.0
@@ -370,7 +374,7 @@ function tpxes(a::F, b::F, a0::F, b0::F) where F<:AbstractFloat
     else
         nothing
     end
-    (ξ = cos(b)*sin(a - a0)/d, η = (sin(b)*cos(b0) - cos(b)*sin(b0)*cos(a - a0))/d)
+    return (ξ = cos(b) * sin(a - a0) / d, η = (sin(b) * cos(b0) - cos(b) * sin(b0) * cos(a - a0)) / d)
 end
 
 """
@@ -430,15 +434,15 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpxev(v::V, v0::V) where V<:AbstractVector{<:AbstractFloat}
-    x,   y,  z = v[1:3]
+function tpxev(v::V, v0::V) where {V <: AbstractVector{<:AbstractFloat}}
+    x, y, z = v[1:3]
     x0, y0, z0 = v0[1:3]
-    if sqrt(sum(v0[1:2].^2)) == 0.0
-        r = x0 = 1e-20
+    if sqrt(sum(v0[1:2] .^ 2)) == 0.0
+        r = x0 = 1.0e-20
     else
-        r = sqrt(sum(v0[1:2].^2))
+        r = sqrt(sum(v0[1:2] .^ 2))
     end
-    d = x*x0 + y*y0 + z*z0
+    d = x * x0 + y * y0 + z * z0
     if d > TINY
         nothing
     elseif d >= 0.0
@@ -448,6 +452,7 @@ function tpxev(v::V, v0::V) where V<:AbstractVector{<:AbstractFloat}
     else
         nothing
     end
-    NamedTuple{(:ξ, :η)}(
-        (y*x0 - x*y0, z*sum(v0[1:2].^2) - z0*(x*x0 + y*y0))./(d*r))
+    return NamedTuple{(:ξ, :η)}(
+        (y * x0 - x * y0, z * sum(v0[1:2] .^ 2) - z0 * (x * x0 + y * y0)) ./ (d * r)
+    )
 end

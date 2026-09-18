@@ -30,7 +30,7 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-fad03(Δt::AbstractFloat) = deg2rad(1/3600)*rem(Polynomial(D_2003A...)(Δt), ARCSECPER2PI)
+fad03(Δt::AbstractFloat) = deg2rad(1 / 3600) * rem(Polynomial(D_2003A...)(Δt), ARCSECPER2PI)
 
 """
     fae03(Δt::AbstractFloat)
@@ -104,7 +104,7 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-faf03(Δt::AbstractFloat) = deg2rad(1/3600)*rem(Polynomial(F_2003A...)(Δt), ARCSECPER2PI)
+faf03(Δt::AbstractFloat) = deg2rad(1 / 3600) * rem(Polynomial(F_2003A...)(Δt), ARCSECPER2PI)
 
 """
     faju03(Δt::AbstractFloat)
@@ -178,7 +178,7 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-fal03(Δt::AbstractFloat) = deg2rad(1/3600)*rem(Polynomial(l0_2003A...)(Δt), ARCSECPER2PI)
+fal03(Δt::AbstractFloat) = deg2rad(1 / 3600) * rem(Polynomial(l0_2003A...)(Δt), ARCSECPER2PI)
 
 """
     falp03(Δt::AbstractFloat)
@@ -210,7 +210,7 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-falp03(Δt::AbstractFloat) = deg2rad(1/3600)*rem(Polynomial(l1_2003A...)(Δt), ARCSECPER2PI)
+falp03(Δt::AbstractFloat) = deg2rad(1 / 3600) * rem(Polynomial(l1_2003A...)(Δt), ARCSECPER2PI)
 
 """
     fama03(Δt::AbstractFloat)
@@ -343,7 +343,7 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J., 1994, Astron.Astrophys. 282, 663-683.
 """
-faom03(Δt::AbstractFloat) = deg2rad(1/3600)*rem(Polynomial(Ω_2003A...)(Δt), ARCSECPER2PI)
+faom03(Δt::AbstractFloat) = deg2rad(1 / 3600) * rem(Polynomial(Ω_2003A...)(Δt), ARCSECPER2PI)
 
 """
     fapa03(Δt::AbstractFloat)

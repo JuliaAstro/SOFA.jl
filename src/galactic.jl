@@ -73,8 +73,8 @@ function g2icrs(lon::AbstractFloat, lat::AbstractFloat)
     ICRS to galactic rotation matrix, obtained by computing Rz(-R)
     Rx(π/2-Q) Rz(π/2+P) to the full precision shown.
     =#
-    ra, dec = c2s(r_gal_icrs'*s2c(lon, lat))
-    (ra = anp(ra), dec = anpm(dec))
+    ra, dec = c2s(r_gal_icrs' * s2c(lon, lat))
+    return (ra = anp(ra), dec = anpm(dec))
 end
 
 """
@@ -150,6 +150,6 @@ function icrs2g(ra::AbstractFloat, dec::AbstractFloat)
     ICRS to galactic rotation matrix, obtained by computing R_3(-R)
     R_1(π/2-Q) R_3(π/2+P) to the full precision shown:
     =#
-    @inline lon, lat = c2s(r_gal_icrs*s2c(ra, dec))
-    (lon = anp(lon), lat = anpm(lat))
+    @inline lon, lat = c2s(r_gal_icrs * s2c(ra, dec))
+    return (lon = anp(lon), lat = anpm(lat))
 end

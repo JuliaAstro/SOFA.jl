@@ -1,6 +1,7 @@
 MIT License
 
 Copyright (c) 2018 Stanford Intelligent Systems Laboratory
+Copyright (c) 2023-2026 Paul Barrett <pebarrett@gmail.com> and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,10 +21,25 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
---------------–––---------------–––---------------–––---------------–––---------
+--------------------------------------------------------------------------------
 
-Copyright (C) 2018
-Standards Of Fundamental Astronomy Board
+SOFA.jl is a derived work of the International Astronomical Union's Standards
+of Fundamental Astronomy (SOFA) software collection, release 2023-10-11
+(https://www.iausofa.org). It uses routines and computations derived from the
+SOFA C source code under the SOFA Software License reproduced below, and it
+does not itself constitute software provided by or endorsed by the IAU SOFA
+Board.
+
+How this work is based upon and differs from the original SOFA software: the
+SOFA C routines have been rewritten in Julia, following the original
+algorithms and reproducing the official SOFA C test suite in the package
+tests; routine names omit the "iau" prefix (for example, cal2jd for
+iauCal2jd); results are returned as function values rather than through
+pointer arguments; and any further differences are described in the source
+code and the package documentation.
+
+Copyright (C) 2023
+Standards of Fundamental Astronomy Board
 of the International Astronomical Union.
 
 =====================

@@ -29,7 +29,7 @@ struct Astrom
     eh::AbstractVector{<:Real}          # Sun to observer (vector, unit)
     em::AbstractFloat                   # distance from Sun to observer (AU)
     v::AbstractVector{<:Real}           # barycentric observer velocity (vector, c)
-    bm1::AbstractFloat                  # inverse Lorenz factor, i.e., sqrt(1-v^2) 
+    bm1::AbstractFloat                  # inverse Lorenz factor, i.e., sqrt(1-v^2)
     bpn::AbstractMatrix{<:Real}         # bias-precession-nutation matrix
     along::AbstractFloat                # longitude + s' + dERA(DUT) (radians)
     phi::AbstractFloat                  # geodetic latitude (radians)
@@ -44,12 +44,16 @@ struct Astrom
 end
 
 function Astrom()
-    Astrom(0., [0., 0., 0.], [0., 0., 0.], 0., [0., 0., 0.], 0.,
-           zeros(Float64,3,3), 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.)
+    return Astrom(
+        0.0, [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], 0.0, [0.0, 0.0, 0.0], 0.0,
+        zeros(Float64, 3, 3), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    )
 end
 function Astrom(pm, eb, eh, em, v, bm1, bpn)
-    Astrom(pm, eb, eh, em, v, bm1, bpn,
-           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+    return Astrom(
+        pm, eb, eh, em, v, bm1, bpn,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    )
 end
 
 """
@@ -73,23 +77,31 @@ end
 
 function ephem_position(coef0, coef1, coef2, Δt)
 
-    A0, ϕ0, ν0 = [coef0[j,:] for j=1:3]
-    A1, ϕ1, ν1 = [coef1[j,:] for j=1:3]
-    A2, ϕ2, ν2 = [coef2[j,:] for j=1:3]
+    A0, ϕ0, ν0 = [coef0[j, :] for j in 1:3]
+    A1, ϕ1, ν1 = [coef1[j, :] for j in 1:3]
+    A2, ϕ2, ν2 = [coef2[j, :] for j in 1:3]
 
-    (sum(A0 .* cos.(ϕ0 .+ ν0 .* Δt)) +
-     sum(A1 .* cos.(ϕ1 .+ ν1 .* Δt))*Δt +
-     sum(A2 .* cos.(ϕ2 .+ ν2 .* Δt))*Δt^2)
+    return (
+        sum(A0 .* cos.(ϕ0 .+ ν0 .* Δt)) +
+            sum(A1 .* cos.(ϕ1 .+ ν1 .* Δt)) * Δt +
+            sum(A2 .* cos.(ϕ2 .+ ν2 .* Δt)) * Δt^2
+    )
 end
 
 function ephem_velocity(coef0, coef1, coef2, Δt)
 
-    A0, ϕ0, ν0 = coef0[1,:], coef0[2,:], coef0[3,:]
-    A1, ϕ1, ν1 = coef1[1,:], coef1[2,:], coef1[3,:]
-    A2, ϕ2, ν2 = coef2[1,:], coef2[2,:], coef2[3,:]
+    A0, ϕ0, ν0 = coef0[1, :], coef0[2, :], coef0[3, :]
+    A1, ϕ1, ν1 = coef1[1, :], coef1[2, :], coef1[3, :]
+    A2, ϕ2, ν2 = coef2[1, :], coef2[2, :], coef2[3, :]
 
-    (-sum(A0 .*  ν0 .* sin.(ϕ0 .+ ν0 .* Δt)) +
-      sum(A1 .* (cos.(ϕ1 .+ ν1 .* Δt) .- ν1 .* Δt .* sin.(ϕ1 .+ ν1 .* Δt))) +
-      sum(A2 .* (2 .* cos.(ϕ2 .+ ν2 .* Δt) .-
-                 ν2 .* Δt .* sin.(ϕ2 .+ ν2 .* Δt)))*Δt)/DAYPERYEAR
+    return (
+        -sum(A0 .* ν0 .* sin.(ϕ0 .+ ν0 .* Δt)) +
+            sum(A1 .* (cos.(ϕ1 .+ ν1 .* Δt) .- ν1 .* Δt .* sin.(ϕ1 .+ ν1 .* Δt))) +
+            sum(
+            A2 .* (
+                2 .* cos.(ϕ2 .+ ν2 .* Δt) .-
+                    ν2 .* Δt .* sin.(ϕ2 .+ ν2 .* Δt)
+            )
+        ) * Δt
+    ) / DAYPERYEAR
 end
