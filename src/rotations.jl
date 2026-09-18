@@ -237,7 +237,7 @@ IAU 2006/2000A precession-nutation.
 McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function ee06a(day1::F, day2::F) where {F <: AbstractFloat}
+function ee06a(day1::AbstractFloat, day2::AbstractFloat)
     return rem2pi(gst06a(0.0, 0.0, day1, day2) - gmst06(0.0, 0.0, day1, day2), RoundNearest)
 end
 
@@ -319,7 +319,7 @@ IAU Resolution C7, Recommendation 3 (1994)
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function eect00(day1::F, day2::F) where {F <: AbstractFloat}
+function eect00(day1::AbstractFloat, day2::AbstractFloat)
     #  Interval between fundamental epoch J2000.0 and current date.
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
@@ -889,8 +889,10 @@ Greenwich apparent sidereal time, IAU 2006, given the NPB matrix.
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function gst06(ut1::F, ut2::F, tt1::F, tt2::F, r::M) where
-    {F <: AbstractFloat, M <: AbstractMatrix{<:AbstractFloat}}
+function gst06(
+        ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat,
+        r::AbstractMatrix{<:AbstractFloat}
+    )
     return @inline mod2pi(era00(ut1, ut2) - eors(r, s06(tt1, tt2, bpn2xy(r)...)))
 end
 

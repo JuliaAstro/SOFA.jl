@@ -115,3 +115,37 @@
     ) .<=
         [1.0e-13, 1.0e-13, 1.0e-17, 1.0e-17, 1.0e-13, 1.0e-11]
 )
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   fk425, fk524: the literal 1.0 handed to s2pv could not match its single
+#   shared type parameter, so even all-BigFloat catalog data threw
+let args = (
+        0.07626899753879587532, -1.13740537839960578, 0.197374921784908746e-4,
+        0.5659714913272723189e-5, 0.134, 8.7,
+    )
+    rF, rB = values(SOFA.fk425(args...)), values(SOFA.fk425(big.(args)...))
+    @test all(x -> x isa BigFloat, rB)
+    @test all(abs.(rB .- rF) .<= 1.0e-14 .* max.(1.0, abs.(rF)))
+end
+
+let args = (
+        0.8723503576487275595, -0.7517076365138887672, 0.2019447755430472323e-4,
+        0.3541563940505160433e-5, 0.1559, 86.87,
+    )
+    rF, rB = values(SOFA.fk524(args...)), values(SOFA.fk524(big.(args)...))
+    @test all(x -> x isa BigFloat, rB)
+    @test all(abs.(rB .- rF) .<= 1.0e-14 .* max.(1.0, abs.(rF)))
+end
+
+#   starpm: independently typed arguments were forwarded to starpv, whose
+#   scalars shared one type parameter, so a single BigFloat argument threw
+let args = (
+        -1.093989828, -1.78323516e-5, 2.336024047e-6, 0.74723, -21.6,
+        2400000.5, 50083.0, 2400000.5, 53736.0,
+    )
+    rF = values(SOFA.starpm(0.01686756, args...))
+    rB = values(SOFA.starpm(big"0.01686756", args...))
+    @test all(x -> x isa BigFloat, rB)
+    @test all(abs.(rB .- rF) .<= 1.0e-14 .* max.(1.0, abs.(rF)))
+end

@@ -1536,3 +1536,69 @@ let a = SOFA.apci13(2456165.5, 0.401182685)[1],
     @test rB.ra isa BigFloat && rB.dec isa BigFloat
     @test abs(rB.ra - rF.ra) <= 1.0e-15 && abs(rB.dec - rF.dec) <= 1.0e-15
 end
+
+#   pmpx (and so atccq, atciq, atciqn, atci13, atco13): the direction vector
+#   was updated in place in an MVector, which StaticArrays does not support
+#   for non-isbits element types (BigFloat)
+let args = (2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0, 2456165.5, 0.401182685)
+    rF, rB = values(SOFA.atci13(args...)), values(SOFA.atci13(big.(args)...))
+    @test all(x -> x isa BigFloat, rB)
+    @test all(abs.(rB .- rF) .<= 1.0e-15)
+end
+
+@test eltype(SOFA.pmpx(big.((1.234, 0.789, 1.0e-5, -2.0e-5, 1.0e-2, 10.0, 8.75))..., big.([0.9, 0.4, 0.1]))) == BigFloat
+
+#   ldn: the direction was updated in place in a copy of `sc`, which threw
+#   for an immutable `sc` as well as for BigFloat
+let sun = [
+        SOFA.Ldbody(
+            1.0, 6.0e-6,
+            [
+                [-0.000712174377, -0.00230478303, -0.00105865966],
+                [6.29235213e-6, -3.30888387e-7, -2.96486623e-7],
+            ]
+        ),
+    ],
+        ob = [-0.974170437, -0.2115201, -0.0917583114],
+        sc = [-0.763276255, -0.608633767, -0.216735543]
+    @test SOFA.ldn(1, sun, ob, SOFA.SVector{3}(sc)) == SOFA.ldn(1, sun, ob, sc)
+    @test eltype(SOFA.ldn(1, sun, ob, big.(sc))) == BigFloat
+
+    a = SOFA.apci13(2456165.5, 0.401182685)[1]
+    args = (2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0)
+    rF, rB = values(SOFA.atciqn(args..., a, 1, sun)), values(SOFA.atciqn(big.(args)..., a, 1, sun))
+    @test all(x -> x isa BigFloat, rB)
+    @test all(abs.(rB .- rF) .<= 1.0e-15)
+end
+
+#   pmsafe, apco13: independently typed arguments were forwarded to helpers
+#   whose scalars shared one type parameter, so a single BigFloat argument threw
+let args = (0.789, 1.0e-5, -2.0e-5, 1.0e-2, 10.0, 2400000.5, 48348.5625, 2400000.5, 51544.5)
+    rF, rB = values(SOFA.pmsafe(1.234, args...)), values(SOFA.pmsafe(big"1.234", args...))
+    @test all(x -> x isa BigFloat, rB)
+    @test all(abs.(rB .- rF) .<= 1.0e-13 .* max.(1.0, abs.(rF)))
+end
+
+let head = (2456384.5, 0.969254051, 0.1550675),
+        tail = (-1.2345856, 2738.0, 2.47230737e-7, 1.82640464e-6, 731.0, 12.8, 0.59, 0.55)
+    aF = SOFA.apco13(head..., -0.527800806, tail...)[1]
+    aB = SOFA.apco13(head..., big"-0.527800806", tail...)[1]
+    @test aB.along isa BigFloat
+    @test abs(aB.along - aF.along) <= 1.0e-15
+end
+
+#   atoiq: the Float64-typed work vector discarded everything below Float64
+#   resolution, so a 1e-25 change of the observed coordinate had no effect
+let a = SOFA.apio13(
+        2456384.5, 0.969254051, 0.1550675, -0.527800806, -1.2345856,
+        2738.0, 2.47230737e-7, 1.82640464e-6, 731.0, 12.8, 0.59,
+        0.55, SOFA.Astrom()
+    )
+    for (tp, ob1, ob2) in (
+            ('R', big"2.710085107986886201", big"0.1717653435758265198"),
+            ('A', big"0.09233952224794989993", big"1.407758704513722461"),
+        )
+        Δ = SOFA.atoiq(tp, ob1 + big"1e-25", ob2, a).ra - SOFA.atoiq(tp, ob1, ob2, a).ra
+        @test big"0.9e-25" < abs(Δ) < big"1.1e-25"
+    end
+end

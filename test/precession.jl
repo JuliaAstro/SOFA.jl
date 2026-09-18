@@ -927,3 +927,11 @@ let nF = SOFA.nut00a(2400000.5, 53736.0),
     @test nB.ψ isa BigFloat && nB.ϵ isa BigFloat
     @test abs(nB.ψ - nF.ψ) <= 1.0e-16 && abs(nB.ϵ - nF.ϵ) <= 1.0e-16
 end
+
+#   xy06: Float64-typed accumulators froze the periodic terms at Float64
+#   resolution, so the slope of X over a sub-Float64 step lost their
+#   contribution (more than half of it at this date)
+let d1 = big"2400000.5", d2 = big"53736.0",
+        slope = h -> (SOFA.xy06(d1, d2 + h).x - SOFA.xy06(d1, d2 - h).x) / 2h
+    @test abs(slope(big"1e-25") - slope(big"1e-3")) <= 1.0e-6 * abs(slope(big"1e-3"))
+end

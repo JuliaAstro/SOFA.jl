@@ -98,8 +98,10 @@ Yallop, B.D. et al., 1989, "Transformation of mean star places from
 FK4 B1950.0 to FK5 J2000.0 using matrices in 6-space".  Astron.J. 97,
 274.
 """
-function fk425(ra::F, dec::F, δra::F, δdec::F, plx::F, rv::F) where
-    {F <: AbstractFloat}
+function fk425(
+        ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat,
+        plx::AbstractFloat, rv::AbstractFloat
+    )
     ####  Canonical constants (Seidelmann 1992)
     #  Radians per year to arcsec per trop-century, km/s to AU/trop-century,
     #  and a small number to avoid arithmetic problems

@@ -73,7 +73,7 @@ Convert star position & velocity vector to catalog coordinates.
 
 Stumpff, P., 1985, Astron.Astrophys. 144, 232-240.
 """
-function pvstar(pv::V) where {V <: AbstractVector{<:AbstractVector{<:AbstractFloat}}}
+function pvstar(pv::AbstractVector{<:AbstractVector{<:AbstractFloat}})
     DC = SECPERDAY / (ASTRUNIT / LIGHTSPEED)
     #  Isolate the radial component of the velocity (AU/day, inertial).
     @inline vr = pn(pv[1])[2]' * pv[2]
@@ -202,8 +202,10 @@ julia> starpv(0.01686756, -1.093989828, -1.78323516e-5, 2.336024047e-6, 0.74723,
 
 Stumpff, P., 1985, Astron.Astrophys. 144, 232-240.
 """
-function starpv(ra::F, dec::F, pmras::F, pmdec::F, plx::F, rvel::F) where
-    {F <: AbstractFloat}
+function starpv(
+        ra::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmdec::AbstractFloat,
+        plx::AbstractFloat, rvel::AbstractFloat
+    )
     DC = SECPERDAY / (ASTRUNIT / LIGHTSPEED)
     #  Distance (AU).
     r = 3600 * rad2deg(1) / (plx >= PXMIN ? plx : PXMIN)
@@ -214,13 +216,11 @@ function starpv(ra::F, dec::F, pmras::F, pmdec::F, plx::F, rvel::F) where
     #  Convert to PV-vector (AU, AU/DAY).
     @inline pv = s2pv(ra, dec, r, dras, ddec, dr)
     #  If excessive velocity, arbitrarily set to zero.
-    if pm(pv[2]) / DC > VMAX
-        pv[2] .= MVector{3}(0.0, 0.0, 0.0)
-    end
+    v = pm(pv[2]) / DC > VMAX ? zero(pv[2]) : pv[2]
     #  Isolate radial and transverse components of velocity (AU/day).
-    @inline vsr = pn(pv[1])[2]' * pv[2]
+    @inline vsr = pn(pv[1])[2]' * v
     @inline usr = vsr * pn(pv[1])[2]
-    ust = pv[2] .- usr
+    ust = v .- usr
     #  Special relativity dimensionless parameters
     betsr, betst = (vsr, pm(ust)) ./ DC
     #  Determine the observed-to-inertial corrections terms.
@@ -241,6 +241,5 @@ function starpv(ra::F, dec::F, pmras::F, pmdec::F, plx::F, rvel::F) where
     end
     #  Scale observed tangential velocity vector into inertial (AU/day) and
     #  compute inertial radial velocity vector (AU/day).
-    pv[2] .= DC * (d * betsr + δ) * pn(pv[1])[2] .+ d * ust
-    return pv
+    return MVector(pv[1], DC * (d * betsr + δ) * pn(pv[1])[2] .+ d * ust)
 end

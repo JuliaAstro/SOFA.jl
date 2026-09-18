@@ -364,3 +364,10 @@
 @test SOFA.a2af(4, 2.345).degree == 134
 @test SOFA.c2s([100.0, -50.0, 25.0]).θ ≈ -0.4636476090008061
 @test abs(SOFA.pn([0.3, 1.2, -2.5]).modulus - 2.789265136196270604) <= 1.0e-12
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   arguments sharing one type parameter rejected mixed element types
+@test SOFA.pdp([2.0, 2.0, 3.0], big.([1.0, 3.0, 4.0])) == 20
+@test SOFA.seps(big"1.0", 0.1, 0.2, -3.0) isa BigFloat
+@test eltype(SOFA.s2pv(big"-3.21", 0.123, 0.456, -7.8e-6, 9.01e-6, -1.23e-5)[1]) == BigFloat

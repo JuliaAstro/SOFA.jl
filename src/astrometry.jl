@@ -41,11 +41,10 @@ Astronomical Almanac, 3rd ed., University Science Books (2013).
 Klioner, Sergei A., "A practical relativistic model for micro-
 arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 """
-function ab(pnat::V, v::W, s::F, bm1::F) where
-    {
-        V <: AbstractVector{<:AbstractFloat}, W <: AbstractVector{<:AbstractFloat},
-        F <: AbstractFloat,
-    }
+function ab(
+        pnat::AbstractVector{<:AbstractFloat}, v::AbstractVector{<:AbstractFloat},
+        s::AbstractFloat, bm1::AbstractFloat
+    )
     p = bm1 .* pnat .+ (1.0 + sum(pnat .* v) / (1.0 + bm1)) .* v .+
         SCHWARZRADIUS / s .* (v .- sum(pnat .* v) .* pnat)
     return p ./ norm(p)
@@ -131,11 +130,11 @@ transformation chain.
 4) The context structure astrom produced by this function is used by
    atciq* and aticq*.
 """
-function apcg(day1::F, day2::F, ebpv::W, ehp::V) where
-    {
-        F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
-        W <: AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}},
-    }
+function apcg(
+        day1::AbstractFloat, day2::AbstractFloat,
+        ebpv::AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}},
+        ehp::AbstractVector{<:AbstractFloat}
+    )
 
     #  Compute the star-independent astrometry parameters.
     return apcs(day1, day2, SVector(SVector(0.0, 0.0, 0.0), SVector(0.0, 0.0, 0.0)), ebpv, ehp)
@@ -320,11 +319,12 @@ the astrometric transformation chain.
 5) The context structure astrom produced by this function is used by
    atciq and aticq.
 """
-function apci(day1::F, day2::F, ebpv::W, ehp::V, x::F, y::F, s::F) where
-    {
-        F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
-        W <: AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}},
-    }
+function apci(
+        day1::AbstractFloat, day2::AbstractFloat,
+        ebpv::AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}},
+        ehp::AbstractVector{<:AbstractFloat}, x::AbstractFloat, y::AbstractFloat,
+        s::AbstractFloat
+    )
 
     #  Star-independent astrometry parameters for geocenter and CIO based
     #  bias-precession-nutation matrix.
@@ -556,13 +556,13 @@ coordinates.
    atioq, atoiq, atciq* and aticq*.
 """
 function apco(
-        day1::F, day2::F, ebpv::W, ehp::V, x::F, y::F, s::F, θ::F,
-        elong::F, ϕ::F, hm::F, xp::F, yp::F, sp::F, refa::F, refb::F
-    ) where
-    {
-        F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
-        W <: AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}},
-    }
+        day1::AbstractFloat, day2::AbstractFloat,
+        ebpv::AbstractVecOrMat{<:AbstractVector{<:AbstractFloat}},
+        ehp::AbstractVector{<:AbstractFloat}, x::AbstractFloat, y::AbstractFloat,
+        s::AbstractFloat, θ::AbstractFloat, elong::AbstractFloat, ϕ::AbstractFloat,
+        hm::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat, sp::AbstractFloat,
+        refa::AbstractFloat, refb::AbstractFloat
+    )
 
     #  Form the rotation matrix, CIRS to apparent (HA, Dec).
     r = Rz(elong)Rx(-yp)Ry(-xp)Rz(θ + sp)
@@ -846,12 +846,12 @@ astrometric transformation chain.
 6) The context structure astrom produced by this function is used by
    Atciq and Aticq.
 """
-function apcs(day1::F, day2::F, pv::W, ebpv::X, ehp::V) where
-    {
-        F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
-        W <: AbstractVector{<:AbstractVector{<:AbstractFloat}},
-        X <: AbstractVector{<:AbstractVector{<:AbstractFloat}},
-    }
+function apcs(
+        day1::AbstractFloat, day2::AbstractFloat,
+        pv::AbstractVector{<:AbstractVector{<:AbstractFloat}},
+        ebpv::AbstractVector{<:AbstractVector{<:AbstractFloat}},
+        ehp::AbstractVector{<:AbstractFloat}
+    )
     # Time since reference epoch, years (for proper motion calculation).
     pmt = ((day1 - JD2000) + day2) / DAYPERYEAR
     # Barycentric position of observer (AU).
@@ -2724,16 +2724,15 @@ function atoiq(tp::Char, ob1::AbstractFloat, ob2::AbstractFloat, a::Astrom)
     #  indicates Az, ZD.
     tp = uppercase(tp)
     #  if Az, ZD, convert to cartesian (S=0, E=90).
-    aeo = MVector(0.0, 0.0, 0.0)
     if tp != 'R' && tp != 'H'
-        aeo .= SVector(-cos(ob1) * sin(ob2), sin(ob1) * sin(ob2), cos(ob2))
+        aeo = SVector(-cos(ob1) * sin(ob2), sin(ob1) * sin(ob2), cos(ob2))
     else
         #  If Ra, Dec, convert to HA, Dec.
         if tp == 'R'
             ob1 = a.eral - ob1
         end
         #  To cartesian -HA, Dec and then to cartesian Az, El (S=0, E=90).
-        aeo .= SMatrix{3, 3}([a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi]) * s2c(-ob1, ob2)
+        aeo = SVector{3}(SMatrix{3, 3}([a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi]) * s2c(-ob1, ob2))
     end
     #  Azimuth (S=0, E=90).
     az = aeo[1] != 0.0 || aeo[2] != 0.0 ? atan(aeo[2], aeo[1]) : 0.0
@@ -2824,11 +2823,11 @@ Astronomical Almanac, 3rd ed., University Science Books (2013).
 Klioner, Sergei A., "A practical relativistic model for micro-
 arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 """
-function ld(bm::AbstractFloat, p::V, q::W, e::X, em::AbstractFloat, dlim::AbstractFloat) where
-    {
-        V <: AbstractVector{<:AbstractFloat},
-        W <: AbstractVector{<:AbstractFloat}, X <: AbstractVector{<:AbstractFloat},
-    }
+function ld(
+        bm::AbstractFloat, p::AbstractVector{<:AbstractFloat},
+        q::AbstractVector{<:AbstractFloat}, e::AbstractVector{<:AbstractFloat},
+        em::AbstractFloat, dlim::AbstractFloat
+    )
     #  2*G*bm/(em*c^2*(q*(q+e))).
     #  Apply the deflection.
     return p .+ SCHWARZRADIUS * bm / em / maximum((dot(q, (q .+ e)), dlim)) .* pxp(p, pxp(e, q))
@@ -2904,9 +2903,11 @@ Urban, S. & Seidelmann, P. K. (eds), Explanatory Supplement to the
 Astronomical Almanac, 3rd ed., University Science Books (2013),
 Section 7.2.4.
 """
-function ldn(n::Int, b::AbstractVector{Ldbody}, ob::V, sc::W) where
-    {V <: AbstractVector{<:AbstractFloat}, W <: AbstractVector{<:AbstractFloat}}
-    sn = sc[:]
+function ldn(
+        n::Int, b::AbstractVector{Ldbody}, ob::AbstractVector{<:AbstractFloat},
+        sc::AbstractVector{<:AbstractFloat}
+    )
+    sn = SVector{3}(sc)
     for body in view(b, 1:n)
         #  Body to observer vector at epoch of observation (AU).
         v = ob .- body.pv[1]
@@ -2916,7 +2917,7 @@ function ldn(n::Int, b::AbstractVector{Ldbody}, ob::V, sc::W) where
         #  Body to observer vector as magnitude and direction.
         em, e = pn(v .- Δt .* body.pv[2])
         #  Apply light deflection for this body.
-        sn .= ld(body.bm, sn, sn, e, em, body.dl)
+        sn = ld(body.bm, sn, sn, e, em, body.dl)
     end
     return sn
 end
@@ -2950,11 +2951,10 @@ Deflection of starlight by the Sun.
 
 3) The arguments p and p1 can be the same array.
 """
-function ldsun(p::V, e::W, em::F) where
-    {
-        F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat},
-        W <: AbstractVector{<:AbstractFloat},
-    }
+function ldsun(
+        p::AbstractVector{<:AbstractFloat}, e::AbstractVector{<:AbstractFloat},
+        em::AbstractFloat
+    )
     #  Deflection limiter (smaller for distant observers).
     #  Apply the deflection.
     return ld(1.0, p, p, e, em, 1.0e-6 / (em^2 > 1.0 ? em^2 : 1.0))
@@ -3006,7 +3006,7 @@ function pmpx(
         pob::AbstractVector{<:AbstractFloat}
     )
     #  Spherical coordinates to unit vector (and useful functions.)
-    p = MVector(cos(rc) * cos(dc), sin(rc) * cos(dc), sin(dc))
+    p = SVector(cos(rc) * cos(dc), sin(rc) * cos(dc), sin(dc))
     #  Space motion (radian per year).
     rvpx = SECPERDAY * (1000 * DAYPERYEAR) / ASTRUNIT * rv * deg2rad(px / 3600.0)
     pm = SVector(
@@ -3016,7 +3016,7 @@ function pmpx(
     )
     #  Proper motion time interval (y) including Roemer effect.
     #  Coordinate direction of star (unit vector, BCRS).
-    p .+= (pmt + AULIGHT * dot(p, pob)) .* pm - deg2rad(px / 3600.0) .* pob
+    p += (pmt + AULIGHT * dot(p, pob)) .* pm - deg2rad(px / 3600.0) .* SVector{3}(pob)
     return p ./ norm(p)
 end
 

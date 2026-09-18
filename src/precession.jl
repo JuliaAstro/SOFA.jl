@@ -294,7 +294,7 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2i00a(day1::F, day2::F) where {F <: AbstractFloat}
+function c2i00a(day1::AbstractFloat, day2::AbstractFloat)
     #  Obtain the celestial-to-true matrix (IAU 2000A) and form the
     #  celestial-to-intermediate matrix
     return c2ibpn(day1, day2, pnm00a(day1, day2))
@@ -363,7 +363,7 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2i00b(day1::F, day2::F) where {F <: AbstractFloat}
+function c2i00b(day1::AbstractFloat, day2::AbstractFloat)
     #  Obtain the celestial-to-true matrix (IAU 2000B) and form the
     #  celestial-to-intermediate matrix
     return c2ibpn(day1, day2, pnm00b(day1, day2))
@@ -422,7 +422,7 @@ IAU 2006 precession and IAU 2000A nutation models.
 McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function c2i06a(day1::F, day2::F) where {F <: AbstractFloat}
+function c2i06a(day1::AbstractFloat, day2::AbstractFloat)
     #  Obtain the celestial-to-true matrix (IAU 2006/2000A), extract
     #  x, y coordinates.
     x, y = bpn2xy(pnm06a(day1, day2))
@@ -497,8 +497,9 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2ibpn(day1::F, day2::F, r::M) where
-    {F <: AbstractFloat, M <: AbstractMatrix{<:AbstractFloat}}
+function c2ibpn(
+        day1::AbstractFloat, day2::AbstractFloat, r::AbstractMatrix{<:AbstractFloat}
+    )
     return c2ixy(day1, day2, bpn2xy(r)...)
 end
 
@@ -562,7 +563,7 @@ date when the CIP X,Y coordinates are known.  IAU 2000.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2ixy(day1::F, day2::F, x::F, y::F) where {F <: AbstractFloat}
+function c2ixy(day1::AbstractFloat, day2::AbstractFloat, x::AbstractFloat, y::AbstractFloat)
     return c2ixys(x, y, s00(day1, day2, x, y))
 end
 
@@ -606,7 +607,7 @@ X,Y and the CIO locator s.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2ixys(x::F, y::F, s::F) where {F <: AbstractFloat}
+function c2ixys(x::AbstractFloat, y::AbstractFloat, s::AbstractFloat)
     r = x * x + y * y
     e = r > 0.0 ? atan(y, x) : 0.0
     return Rz(-(e + s))Ry(atan(sqrt(r / (1.0 - r))))Rz(e)
@@ -678,7 +679,10 @@ the polar motion, using the IAU 2000A precession-nutation model.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2t00a(tt1::F, tt2::F, ut1::F, ut2::F, x::F, y::F) where {F <: AbstractFloat}
+function c2t00a(
+        tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat,
+        x::AbstractFloat, y::AbstractFloat
+    )
     #  Form the celestial-to-intermediate matrix for this TT (IAU 2000A),
     #  predict the Earth rotation angle for this UT1, estimate s', form the
     #  polar motion matrix, and combine to form the celestial-to-terrestrial
@@ -752,7 +756,10 @@ the polar motion, using the IAU 2000B precession-nutation model.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2t00b(tt1::F, tt2::F, ut1::F, ut2::F, x::F, y::F) where {F <: AbstractFloat}
+function c2t00b(
+        tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat,
+        x::AbstractFloat, y::AbstractFloat
+    )
     #  Form the celestial-to-intermediate matrix for this TT (IAU 2000B),
     #  predict the Earth rotation angle for this UT1, form the polar motion
     #  matrix (neglecting s'), and combine to form the
@@ -823,7 +830,10 @@ the polar motion, using the IAU 2006/2000A precession-nutation model.
 McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function c2t06a(tt1::F, tt2::F, ut1::F, ut2::F, x::F, y::F) where {F <: AbstractFloat}
+function c2t06a(
+        tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat,
+        x::AbstractFloat, y::AbstractFloat
+    )
     #  Form the celestial-to-intermediate matrix for this TT (IAU 2006/2000A),
     #  predict the Earth rotation angle for this UT1, estimate s', form the
     #  polar motion matrix, and combine to form the celestial-to-terrestrial
@@ -876,8 +886,10 @@ the polar motion matrix).
 McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function c2tcio(c2i::M, era::F, pm::M) where
-    {M <: AbstractMatrix{<:AbstractFloat}, F <: AbstractFloat}
+function c2tcio(
+        c2i::AbstractMatrix{<:AbstractFloat}, era::AbstractFloat,
+        pm::AbstractMatrix{<:AbstractFloat}
+    )
     return pm * Rz(era) * c2i
 end
 
@@ -926,8 +938,10 @@ Sidereal Time and the polar motion matrix).
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2teqx(bpn::M, gst::F, pm::M) where
-    {M <: AbstractMatrix{<:AbstractFloat}, F <: AbstractFloat}
+function c2teqx(
+        bpn::AbstractMatrix{<:AbstractFloat}, gst::AbstractFloat,
+        pm::AbstractMatrix{<:AbstractFloat}
+    )
     return pm * Rz(gst) * bpn
 end
 
@@ -1004,8 +1018,10 @@ nutation and the polar motion.  IAU 2000.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2tpe(tt1::F, tt2::F, ut1::F, ut2::F, ψ::F, ϵ::F, xp::F, yp::F) where
-    {F <: AbstractFloat}
+function c2tpe(
+        tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat,
+        ψ::AbstractFloat, ϵ::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat
+    )
     #  Form the celestial-to-intermediate matrix for this TT
     ϵA, rb, rp, rbp, rn, rbpn = values(pn00(tt1, tt2, ψ, ϵ))
     #  Predict the Greenwich Mean Sidereal Time for this UT1 and TT, predict
@@ -1019,7 +1035,7 @@ function c2tpe(tt1::F, tt2::F, ut1::F, ut2::F, ψ::F, ϵ::F, xp::F, yp::F) where
 end
 
 """
-    c2txy(tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat, x, y, xp, yp)
+    c2txy(tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat, x::AbstractFloat, y::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat)
 
 Form the celestial to terrestrial matrix given the date, the UT1, the
 CIP coordinates and the polar motion.  IAU 2000.
@@ -1086,7 +1102,10 @@ CIP coordinates and the polar motion.  IAU 2000.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2txy(tt1::F, tt2::F, ut1::F, ut2::F, x, y, xp, yp) where {F <: AbstractFloat}
+function c2txy(
+        tt1::AbstractFloat, tt2::AbstractFloat, ut1::AbstractFloat, ut2::AbstractFloat,
+        x::AbstractFloat, y::AbstractFloat, xp::AbstractFloat, yp::AbstractFloat
+    )
     #  Form the celestial-to-intermediate matrix for this TT, predict the Earth
     #  rotation angle for this UT1, estimate s', form the polar motion matrix, and
     #  combine to form the celestial-to-terrestrial matrix.
@@ -1141,7 +1160,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function eo06a(day1::F, day2::F) where {F <: AbstractFloat}
+function eo06a(day1::AbstractFloat, day2::AbstractFloat)
     #  Classical nutation-precession-bias matrix.
     bpn = pnm06a(day1, day2)
     #  Extract CIP coordinates, the CIO locator (s), and solve for
@@ -1181,8 +1200,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
 Wallace, P. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function eors(r::M, s::F) where
-    {M <: AbstractMatrix{<:AbstractFloat}, F <: AbstractFloat}
+function eors(r::AbstractMatrix{<:AbstractFloat}, s::AbstractFloat)
     #  Evaluate Wallace & Capitaine (2006) expression (16).
     v = r * SVector(
         1.0 - r[3, 1]^2 / (1.0 + r[3, 3]),
@@ -1252,7 +1270,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
-function fw2m(γ::F, ϕ::F, ψ::F, ϵ::F) where {F <: AbstractFloat}
+function fw2m(γ::AbstractFloat, ϕ::AbstractFloat, ψ::AbstractFloat, ϵ::AbstractFloat)
     return Rx(-ϵ)Rz(-ψ)Rx(ϕ)Rz(γ)
 end
 
@@ -4378,7 +4396,7 @@ function xy06(day1::AbstractFloat, day2::AbstractFloat)
     japt = SVector(0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4)
 
     #  Nutation periodic terms, planetary
-    xypl = MVector(0.0, 0.0)
+    xypl = workzeros(typeof(Δt), Val(2))
     ialast = length(cip_amplitude_2006)
     for ifreq in length(cip_planetary_2006):-1:1
         sc = sincos(sum(cip_planetary_2006[ifreq] .* ϕ))
@@ -4390,7 +4408,7 @@ function xy06(day1::AbstractFloat, day2::AbstractFloat)
     end
 
     #  Nutation periodic terms, luni-solar
-    xyls = MVector(0.0, 0.0)
+    xyls = workzeros(typeof(Δt), Val(2))
     for ifreq in length(cip_lunisolar_2006):-1:1
         sc = sincos(sum(cip_lunisolar_2006[ifreq] .* ϕ[1:5]))
         ia = cip_pointer_2006[ifreq]

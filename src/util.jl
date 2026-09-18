@@ -17,6 +17,13 @@ function vec2mat(v::AbstractVector{<:Real})
     return SMatrix{3, 3}(zerot, v[3], -v[2], -v[3], zerot, v[1], v[2], -v[1], zerot)
 end
 
+#   Zeroed mutable work buffer of length N.  StaticArrays only supports setindex!
+#   on an MVector whose element type is isbits, so other element types (BigFloat)
+#   get a Vector.  The branch is resolved at compile time for a given T.
+function workzeros(::Type{T}, ::Val{N}) where {T, N}
+    return isbitstype(T) ? zeros(MVector{N, T}) : zeros(T, N)
+end
+
 #=
 function *(a::SMatrix{3,3}, b::SMatrix{3,3})
     SMatrix{3,3}(

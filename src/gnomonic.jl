@@ -71,7 +71,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpors(ξ::F, η::F, a::F, b::F) where {F <: AbstractFloat}
+function tpors(ξ::AbstractFloat, η::AbstractFloat, a::AbstractFloat, b::AbstractFloat)
     r = sqrt(1.0 + η * η + ξ * ξ)
     rsb, rcb = r * sin(b), r * cos(b)
     w2 = rcb * rcb - ξ * ξ
@@ -160,8 +160,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tporv(ξ::F, η::F, v::V) where
-    {F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat}}
+function tporv(ξ::AbstractFloat, η::AbstractFloat, v::AbstractVector{<:AbstractFloat})
     r = sqrt(1.0 + η * η + ξ * ξ)
     w2 = r * r * sum(v[1:2] .^ 2) - ξ * ξ
     if w2 > 0.0
@@ -231,7 +230,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpsts(ξ::F, η::F, a0::F, b0::F) where {F <: AbstractFloat}
+function tpsts(ξ::AbstractFloat, η::AbstractFloat, a0::AbstractFloat, b0::AbstractFloat)
     return (
         a = mod2pi(atan(ξ, cos(b0) - η * sin(b0)) + a0),
         b = atan(sin(b0) + η * cos(b0), sqrt(ξ * ξ + (cos(b0) - η * sin(b0))^2)),
@@ -296,8 +295,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpstv(ξ::F, η::F, v0::V) where
-    {F <: AbstractFloat, V <: AbstractVector{<:AbstractFloat}}
+function tpstv(ξ::AbstractFloat, η::AbstractFloat, v0::AbstractVector{<:AbstractFloat})
     x, y, z = v0[1:3]
     if sqrt(sum(v0[1:2] .^ 2)) == 0.0
         r = x = 1.0e-20
@@ -363,7 +361,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpxes(a::F, b::F, a0::F, b0::F) where {F <: AbstractFloat}
+function tpxes(a::AbstractFloat, b::AbstractFloat, a0::AbstractFloat, b0::AbstractFloat)
     d = (sin(b) * sin(b0) + cos(b) * cos(b0) * cos(a - a0))
     if d > TINY
         nothing
@@ -434,7 +432,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpxev(v::V, v0::V) where {V <: AbstractVector{<:AbstractFloat}}
+function tpxev(v::AbstractVector{<:AbstractFloat}, v0::AbstractVector{<:AbstractFloat})
     x, y, z = v[1:3]
     x0, y0, z0 = v0[1:3]
     if sqrt(sum(v0[1:2] .^ 2)) == 0.0
