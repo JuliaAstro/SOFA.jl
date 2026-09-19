@@ -105,6 +105,7 @@ reference ellipsoid.
 4) The inverse transformation is performed in the function gd2gc.
 """
 function gc2gd(model::Symbol, pos::AbstractVector{<:Real})
+    pos = floatarray(pos)
     return gc2gde(values(eform(model))..., pos)
 end
 
@@ -156,6 +157,7 @@ Fukushima, T., "Transformation from Cartesian to geodetic coordinates
 accelerated by Halley's method", J.Geodesy (2006) 79: 689-693
 """
 function gc2gde(radius::Real, oblate::Real, pos::AbstractVector{<:Real})
+    pos = floatarray(pos)
     @assert isfinite(oblate) "Oblateness is not a finite number (got $oblate)."
     @assert 0.0 <= oblate < 1.0 "Oblateness out of range [0 - 1)."
     @assert isfinite(radius) "Radius is not a finite number (got $radius)."
@@ -168,9 +170,9 @@ function gc2gde(radius::Real, oblate::Real, pos::AbstractVector{<:Real})
     p2 = sum(pos[1:2] .^ 2)
 
     #  Compute longitude.
-    ϵ = p2 > 0.0 ? atan(pos[2], pos[1]) : zero(float(p2))
+    ϵ = p2 > 0.0 ? atan(pos[2], pos[1]) : zero(p2)
 
-    if p2 > 1.0e-32 * radius^2
+    if p2 > 1.0e-32 * float(radius)^2
         #  Prepare Newton correction factors
         s, pn = abs(pos[3]) / radius, sqrt(p2) / radius
         a0 = sqrt((ec * pn)^2 + s^2)

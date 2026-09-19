@@ -199,3 +199,29 @@ end
 @test SOFA.taitt(2451545) === SOFA.taitt(2451545.0)
 @test (SOFA.utctai(2451545, 0) |> SOFA.taitt |> SOFA.tttdb(0)) ===
     (SOFA.utctai(2451545.0, 0.0) |> SOFA.taitt |> SOFA.tttdb(0.0))
+
+#   Integer arrays are converted to floating point on entry: the element type
+#   does not reach the arithmetic (nor overflow in it), and the result is the
+#   one of the equivalent Float64 array
+same(x, y) = typeof(x) == typeof(y) && x == y
+let r33 = [2 3 2; 3 2 3; 3 4 5], r33f = [2.0 3.0 2.0; 3.0 2.0 3.0; 3.0 4.0 5.0],
+        pv = [[0, 1, 0], [1, 2, 3]], pvf = [[0.0, 1.0, 0.0], [1.0, 2.0, 3.0]]
+    @test same(SOFA.rxp(r33, [0, 1, 0]), SOFA.rxp(r33f, [0.0, 1.0, 0.0]))
+    @test same(SOFA.trxpv(r33, pvf), SOFA.trxpv(r33f, pvf))
+    @test same(SOFA.rxr(r33, r33), SOFA.rxr(r33f, r33f))
+    @test same(SOFA.c2tcio(r33, 0.83, r33f), SOFA.c2tcio(r33f, 0.83, r33f))
+    @test same(SOFA.pdp([2, 2, 3], [1, 3, 4]), SOFA.pdp([2.0, 2.0, 3.0], [1.0, 3.0, 4.0]))
+    @test same(SOFA.pxp([2, 2, 3], [1, 3, 4]), SOFA.pxp([2.0, 2.0, 3.0], [1.0, 3.0, 4.0]))
+    @test same(SOFA.pvu(1.5, pv), SOFA.pvu(1.5, pvf))
+    @test same(SOFA.pvxpv(pv, pv), SOFA.pvxpv(pvf, pvf))
+    @test same(SOFA.cp([1, 2, 3]), SOFA.cp([1.0, 2.0, 3.0]))
+    @test same(SOFA.tpxev([0, 1, 0], [1, 0, 0]), SOFA.tpxev([0.0, 1.0, 0.0], [1.0, 0.0, 0.0]))
+    #   widths that overflow in Integer arithmetic
+    @test same(SOFA.pdp(Int32[100000, 100000, 100000], Int32[100000, 100000, 100000]), 3.0e10)
+    @test same(SOFA.c2s(Int32[100000, 100000, 100000]), SOFA.c2s([100000.0, 100000.0, 100000.0]))
+    @test same(SOFA.gc2gd(:WGS84, Int32[2000000, 3000000, 5244000]), SOFA.gc2gd(:WGS84, [2.0e6, 3.0e6, 5.244e6]))
+    @test same(SOFA.gc2gde(Int32(6378137), 0.0033528106647474805, [0.0, 0.0, 6.4e6]), SOFA.gc2gde(6378137.0, 0.0033528106647474805, [0.0, 0.0, 6.4e6]))
+    #   unsigned types, whose negation wraps
+    @test same(SOFA.pxp(UInt8[1, 2, 3], [1.0, 2.0, 4.0]), SOFA.pxp([1.0, 2.0, 3.0], [1.0, 2.0, 4.0]))
+    @test same(SOFA.af2a('-', 45, 13, UInt8(3)), SOFA.af2a('-', 45, 13, 3.0))
+end

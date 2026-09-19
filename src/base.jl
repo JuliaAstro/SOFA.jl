@@ -68,6 +68,14 @@ floattype(xs...) = float(promote_type(map(numtype, xs)...))
 numtype(x::Number) = typeof(x)
 numtype(x::AbstractArray) = eltype(x)
 
+#   An array argument in floating point, so that arithmetic on it neither
+#   overflows nor keeps an Integer element type.  A floating-point array, at
+#   any nesting, is returned as it is, so the Float64 path costs nothing.
+floatarray(x::AbstractArray{<:AbstractFloat}) = x
+floatarray(x::AbstractArray{<:Real}) = float.(x)
+floatarray(x::AbstractArray{<:AbstractArray{<:AbstractFloat}}) = x
+floatarray(x::AbstractArray{<:AbstractArray{<:Real}}) = map(floatarray, x)
+
 function Astrom(
         pmt, eb, eh, em, v, bm1, bpn, along, phi, xpl, ypl, sphi, cphi, diurab,
         eral, refa, refb

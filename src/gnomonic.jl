@@ -161,6 +161,7 @@ Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
 function tporv(ξ::Real, η::Real, v::AbstractVector{<:Real})
+    v = floatarray(v)
     r = sqrt(1.0 + η * η + ξ * ξ)
     w2 = r * r * sum(v[1:2] .^ 2) - ξ * ξ
     if w2 > 0.0
@@ -296,6 +297,7 @@ Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
 function tpstv(ξ::Real, η::Real, v0::AbstractVector{<:Real})
+    v0 = floatarray(v0)
     x, y, z = v0[1:3]
     if sqrt(sum(v0[1:2] .^ 2)) == 0.0
         r = x = 1.0e-20
@@ -433,6 +435,7 @@ Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
 function tpxev(v::AbstractVector{<:Real}, v0::AbstractVector{<:Real})
+    v, v0 = floatarray(v), floatarray(v0)
     x, y, z = v[1:3]
     x0, y0, z0 = v0[1:3]
     if sqrt(sum(v0[1:2] .^ 2)) == 0.0

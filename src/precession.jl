@@ -230,7 +230,10 @@ model", Astron.Astrophys. 400, 1145-1154 (2003)
 n.b. The celestial ephemeris origin (CEO) was renamed "celestial
      intermediate origin" (CIO) by IAU 2006 Resolution 2.
 """
-bpn2xy(r::AbstractMatrix{<:Real}) = r[3, 1:2]
+function bpn2xy(r::AbstractMatrix{<:Real})
+    r = floatarray(r)
+    return r[3, 1:2]
+end
 
 """
     c2i00a(day1::Real, day2::Real)
@@ -499,6 +502,7 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function c2ibpn(day1::Real, day2::Real, r::AbstractMatrix{<:Real})
+    r = floatarray(r)
     return c2ixy(day1, day2, bpn2xy(r)...)
 end
 
@@ -877,6 +881,7 @@ McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
 function c2tcio(c2i::AbstractMatrix{<:Real}, era::Real, pm::AbstractMatrix{<:Real})
+    c2i, pm = floatarray(c2i), floatarray(pm)
     return pm * Rz(era) * c2i
 end
 
@@ -926,6 +931,7 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function c2teqx(bpn::AbstractMatrix{<:Real}, gst::Real, pm::AbstractMatrix{<:Real})
+    bpn, pm = floatarray(bpn), floatarray(pm)
     return pm * Rz(gst) * bpn
 end
 
@@ -1183,6 +1189,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 Wallace, P. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
 function eors(r::AbstractMatrix{<:Real}, s::Real)
+    r = floatarray(r)
     #  Evaluate Wallace & Capitaine (2006) expression (16).
     v = r * SVector(
         1.0 - r[3, 1]^2 / (1.0 + r[3, 3]),

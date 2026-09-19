@@ -890,6 +890,7 @@ Greenwich apparent sidereal time, IAU 2006, given the NPB matrix.
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
 function gst06(ut1::Real, ut2::Real, tt1::Real, tt2::Real, r::AbstractMatrix{<:Real})
+    r = floatarray(r)
     return @inline mod2pi(era00(ut1, ut2) - eors(r, s06(tt1, tt2, bpn2xy(r)...)))
 end
 

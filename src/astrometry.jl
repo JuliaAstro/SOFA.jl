@@ -42,6 +42,7 @@ Klioner, Sergei A., "A practical relativistic model for micro-
 arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 """
 function ab(pnat::AbstractVector{<:Real}, v::AbstractVector{<:Real}, s::Real, bm1::Real)
+    pnat, v = floatarray(pnat), floatarray(v)
     p = bm1 .* pnat .+ (1.0 + sum(pnat .* v) / (1.0 + bm1)) .* v .+
         SCHWARZRADIUS / s .* (v .- sum(pnat .* v) .* pnat)
     return p ./ norm(p)
@@ -131,6 +132,7 @@ function apcg(
         day1::Real, day2::Real, ebpv::AbstractVecOrMat{<:AbstractVector{<:Real}},
         ehp::AbstractVector{<:Real}
     )
+    ebpv, ehp = floatarray(ebpv), floatarray(ehp)
 
     #  Compute the star-independent astrometry parameters.
     return apcs(day1, day2, SVector(SVector(0.0, 0.0, 0.0), SVector(0.0, 0.0, 0.0)), ebpv, ehp)
@@ -319,6 +321,7 @@ function apci(
         day1::Real, day2::Real, ebpv::AbstractVecOrMat{<:AbstractVector{<:Real}},
         ehp::AbstractVector{<:Real}, x::Real, y::Real, s::Real
     )
+    ebpv, ehp = floatarray(ebpv), floatarray(ehp)
 
     #  Star-independent astrometry parameters for geocenter and CIO based
     #  bias-precession-nutation matrix.
@@ -554,6 +557,7 @@ function apco(
         ehp::AbstractVector{<:Real}, x::Real, y::Real, s::Real, θ::Real, elong::Real,
         ϕ::Real, hm::Real, xp::Real, yp::Real, sp::Real, refa::Real, refb::Real
     )
+    ebpv, ehp = floatarray(ebpv), floatarray(ehp)
 
     #  Form the rotation matrix, CIRS to apparent (HA, Dec).
     r = Rz(elong)Rx(-yp)Ry(-xp)Rz(θ + sp)
@@ -841,6 +845,7 @@ function apcs(
         day1::Real, day2::Real, pv::AbstractVector{<:AbstractVector{<:Real}},
         ebpv::AbstractVector{<:AbstractVector{<:Real}}, ehp::AbstractVector{<:Real}
     )
+    pv, ebpv, ehp = floatarray(pv), floatarray(ebpv), floatarray(ehp)
     # Time since reference epoch, years (for proper motion calculation).
     pmt = ((day1 - JD2000) + day2) / DAYPERYEAR
     # Barycentric position of observer (AU).
@@ -948,6 +953,7 @@ function apcs13(
         day1::Real, day2::Real,
         pv::AbstractVector{<:AbstractVector{<:Real}}
     )
+    pv = floatarray(pv)
     #  Earth barycentric and heliocentric position & velocity (AU, AU/day).
     ehpv, ebpv = epv00(day1, day2)
     #  Compute the star-independent astrometry parameters.
@@ -2816,6 +2822,7 @@ function ld(
         bm::Real, p::AbstractVector{<:Real}, q::AbstractVector{<:Real},
         e::AbstractVector{<:Real}, em::Real, dlim::Real
     )
+    p, q, e = floatarray(p), floatarray(q), floatarray(e)
     #  2*G*bm/(em*c^2*(q*(q+e))).
     #  Apply the deflection.
     return p .+ SCHWARZRADIUS * bm / em / maximum((dot(q, (q .+ e)), dlim)) .* pxp(p, pxp(e, q))
@@ -2895,7 +2902,8 @@ function ldn(
         n::Integer, b::AbstractVector{<:Ldbody}, ob::AbstractVector{<:Real},
         sc::AbstractVector{<:Real}
     )
-    sn = float.(SVector{3}(sc))
+    ob, sc = floatarray(ob), floatarray(sc)
+    sn = SVector{3}(sc)
     for body in view(b, 1:n)
         #  Body to observer vector at epoch of observation (AU).
         v = ob .- body.pv[1]
@@ -2940,6 +2948,7 @@ Deflection of starlight by the Sun.
 3) The arguments p and p1 can be the same array.
 """
 function ldsun(p::AbstractVector{<:Real}, e::AbstractVector{<:Real}, em::Real)
+    p, e = floatarray(p), floatarray(e)
     #  Deflection limiter (smaller for distant observers).
     #  Apply the deflection.
     return ld(1.0, p, p, e, em, 1.0e-6 / (em^2 > 1.0 ? em^2 : 1.0))
@@ -2990,6 +2999,7 @@ function pmpx(
         px::Real, rv::Real, pmt::Real,
         pob::AbstractVector{<:Real}
     )
+    pob = floatarray(pob)
     #  Spherical coordinates to unit vector (and useful functions.)
     p = SVector(cos(rc) * cos(dc), sin(rc) * cos(dc), sin(dc))
     #  Space motion (radian per year).
