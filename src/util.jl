@@ -74,7 +74,7 @@ corrections.
 """
 function proper_motion(object, pmotion, parallax, rvelocity, pmt, observer)
 
-    obj = MVector(
+    obj = SVector(
         cos(object[1]) * cos(object[2]),
         sin(object[1]) * cos(object[2]),
         sin(object[2])

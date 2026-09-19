@@ -41,6 +41,7 @@ Package versions correspond to the following releases of the SOFA C library. As 
 
 | Package version | SOFA release | Build      |
 |:----------------|:-------------|:-----------|
+| v2.1            | 2023-10-11   | pure Julia |
 | v2.0            | 2023-10-11   | pure Julia |
 | v1.5            | 2023-10-11   | jll        |
 | v1.4            | 2021-05-12   | jll        |

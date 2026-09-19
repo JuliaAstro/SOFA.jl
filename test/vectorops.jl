@@ -387,3 +387,9 @@
 
 #   anp: mod2pi has no method for Rational
 @test SOFA.anp(1 // 2) === SOFA.anp(0.5)
+
+#   s2c, s2pv: immutable static vectors (the mutable ones they used to return
+#   invited in-place updates, which throw for BigFloat)
+@test SOFA.s2c(3.0123, -0.999) isa SOFA.SVector{3, Float64}
+@test SOFA.s2c(big"3.0123", -0.999) isa SOFA.SVector{3, BigFloat}
+@test SOFA.s2pv(-3.21, 0.123, 0.456, -7.8e-6, 9.01e-6, -1.23e-5) isa SOFA.SVector{2, SOFA.SVector{3, Float64}}

@@ -2005,7 +2005,7 @@ of the functions apci[13], apcg[13], apco[13] or apcs[13].
 function aticq(ri::Real, di::Real, a::Astrom)
     #  CIRS RA, Dec to cartesian.
     #  Bias-precession-nutation, giving GCRS proper direction.
-    ppr = a.bpn' * SVector{3}(s2c(ri, di))
+    ppr = a.bpn' * s2c(ri, di)
     #  Aberration, giving GCRS natural direction.
     d, pnat = zero(ppr), ppr
     for j in 1:2
@@ -2103,7 +2103,7 @@ function aticqn(
     )
     #  CIRS RA, Dec to cartesian.
     #  Bias-precession-nutation, giving GCRS proper direction.
-    ppr = a.bpn' * SVector{3}(s2c(ri, di))
+    ppr = a.bpn' * s2c(ri, di)
     #  Aberration, giving GCRS natural direction.
     d, pnat = zero(ppr), ppr
     for j in 1:2
@@ -2725,7 +2725,7 @@ function atoiq(tp::Char, ob1::Real, ob2::Real, a::Astrom)
             ob1 = a.eral - ob1
         end
         #  To cartesian -HA, Dec and then to cartesian Az, El (S=0, E=90).
-        aeo = SVector{3}((@SMatrix [a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi]) * s2c(-ob1, ob2))
+        aeo = (@SMatrix [a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi]) * s2c(-ob1, ob2)
     end
     #  Azimuth (S=0, E=90).
     az = aeo[1] != 0.0 || aeo[2] != 0.0 ? atan(aeo[2], aeo[1]) : zero(eltype(aeo))

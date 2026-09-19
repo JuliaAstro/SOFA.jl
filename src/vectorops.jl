@@ -1083,7 +1083,7 @@ Convert spherical coordinates to Cartesian.
 
 ```jldoctest
 julia> s2c(3.0123, -0.999)
-3-element StaticArraysCore.MVector{3, Float64} with indices SOneTo(3):
+3-element StaticArraysCore.SVector{3, Float64} with indices SOneTo(3):
  -0.5366267667260525
   0.06977111097651444
  -0.8409302618566215
@@ -1091,7 +1091,7 @@ julia> s2c(3.0123, -0.999)
 
 """
 function s2c(θ::Real, ϕ::Real)
-    return MVector(cos(θ) * cos(ϕ), sin(θ) * cos(ϕ), sin(ϕ))
+    return SVector(cos(θ) * cos(ϕ), sin(θ) * cos(ϕ), sin(ϕ))
 end
 
 """
@@ -1131,9 +1131,9 @@ Convert position/velocity from spherical to Cartesian coordinates.
  - `pv`    -- pv-vector
 """
 function s2pv(θ::Real, ϕ::Real, r::Real, dθ::Real, dϕ::Real, dr::Real)
-    return MVector(
-        MVector(r * cos(θ) * cos(ϕ), r * sin(θ) * cos(ϕ), r * sin(ϕ)),
-        MVector(
+    return SVector(
+        SVector(r * cos(θ) * cos(ϕ), r * sin(θ) * cos(ϕ), r * sin(ϕ)),
+        SVector(
             -r * dθ * sin(θ) * cos(ϕ) - cos(θ) * (r * dϕ * sin(ϕ) - dr * cos(ϕ)),
             r * dθ * cos(θ) * cos(ϕ) - sin(θ) * (r * dϕ * sin(ϕ) - dr * cos(ϕ)),
             r * dϕ * cos(ϕ) + dr * sin(ϕ)

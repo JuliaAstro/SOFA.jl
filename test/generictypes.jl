@@ -225,3 +225,18 @@ let r33 = [2 3 2; 3 2 3; 3 4 5], r33f = [2.0 3.0 2.0; 3.0 2.0 3.0; 3.0 4.0 5.0],
     @test same(SOFA.pxp(UInt8[1, 2, 3], [1.0, 2.0, 4.0]), SOFA.pxp([1.0, 2.0, 3.0], [1.0, 2.0, 4.0]))
     @test same(SOFA.af2a('-', 45, 13, UInt8(3)), SOFA.af2a('-', 45, 13, 3.0))
 end
+
+#   A two-part date is at least Float64, in both parts, whatever the arguments
+#   (the constant of the conversion enters only one of them)
+for f in (
+        SOFA.taitt, SOFA.taiutc, SOFA.tcbtdb, SOFA.tcgtt, SOFA.tdbtcb, SOFA.tttai,
+        SOFA.tttcg, SOFA.utctai,
+    )
+    @test f(2453750.5f0, 0.892482639f0) isa NamedTuple{(:day, :fraction), Tuple{Float64, Float64}}
+end
+for f in (
+        SOFA.taiut1, SOFA.tdbtt, SOFA.tttdb, SOFA.ttut1, SOFA.ut1tai, SOFA.ut1tt,
+        SOFA.ut1utc, SOFA.utcut1,
+    )
+    @test f(2453750.5f0, 0.892482639f0, 0.3341f0) isa NamedTuple{(:day, :fraction), Tuple{Float64, Float64}}
+end

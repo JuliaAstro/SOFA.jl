@@ -127,7 +127,7 @@ Convert star catalog coordinates to position+velocity vector.
 
 ```jldoctest
 julia> starpv(0.01686756, -1.093989828, -1.78323516e-5, 2.336024047e-6, 0.74723, -21.6)
-2-element StaticArraysCore.MVector{2, StaticArraysCore.MVector{3, Float64}} with indices SOneTo(2):
+2-element StaticArraysCore.SVector{2, StaticArraysCore.SVector{3, Float64}} with indices SOneTo(2):
  [126668.59127431609, 2136.792716839936, -245251.23398768302]
  [-0.004051854008955221, -0.00625391975441562, 0.0118935371458808]
 ```
@@ -239,5 +239,5 @@ function starpv(ra::Real, dec::Real, pmras::Real, pmdec::Real, plx::Real, rvel::
     end
     #  Scale observed tangential velocity vector into inertial (AU/day) and
     #  compute inertial radial velocity vector (AU/day).
-    return MVector(pv[1], DC * (d * betsr + δ) * pn(pv[1])[2] .+ d * ust)
+    return SVector(pv[1], DC * (d * betsr + δ) * pn(pv[1])[2] .+ d * ust)
 end

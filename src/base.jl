@@ -68,6 +68,10 @@ floattype(xs...) = float(promote_type(map(numtype, xs)...))
 numtype(x::Number) = typeof(x)
 numtype(x::AbstractArray) = eltype(x)
 
+#   Real arguments in one floating-point type, no narrower than the Float64 of
+#   the constants, so that the parts of a two-part date share their type.
+floatargs(xs::Real...) = Base.front(promote(map(float, xs)..., 0.0))
+
 #   An array argument in floating point, so that arithmetic on it neither
 #   overflows nor keeps an Integer element type.  A floating-point array, at
 #   any nesting, is returned as it is, so the Float64 path costs nothing.

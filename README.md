@@ -23,6 +23,7 @@ The planned package versions below correspond to the following releases of the S
 
 | Package Version | SOFA Release | build      |
 | :-------------- | :----------- | :--------  |
+| v2.1            | 2023-10-11   | pure Julia |
 | v2.0            | 2023-10-11   | pure Julia |
 | v1.5            | 2023-10-11   | jll        |
 | v1.4            | 2021-05-12   | jll        |

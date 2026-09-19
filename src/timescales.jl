@@ -579,8 +579,9 @@ julia> taitt(2453750.5, 0.892482639)
 2) Explanatory Supplement to the Astronomical Almanac, P. Kenneth
    Seidelmann (ed), University Science Books (1992)
 """
-function taitt(day1::Real, day2::Real)
-    day1, day2 = promote(float(day1), float(day2))
+function taitt end
+
+function _taitt(day1::Real, day2::Real)
     return abs(day1) > abs(day2) ? (day = day1, fraction = day2 + TT_MINUS_TAI / SECPERDAY) :
         (day = day1 + TT_MINUS_TAI / SECPERDAY, fraction = day2)
 end
@@ -619,8 +620,9 @@ Universal Time, UT1.
 Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
-function taiut1(day1::Real, day2::Real, Δt::Real)
-    day1, day2, Δt = promote(float(day1), float(day2), float(Δt))
+function taiut1 end
+
+function _taiut1(day1::Real, day2::Real, Δt::Real)
     return abs(day1) > abs(day2) ? (day = day1, fraction = day2 + Δt / SECPERDAY) :
         (day = day1 + Δt / SECPERDAY, fraction = day2)
 end
@@ -674,8 +676,9 @@ Technical Note No. 32, BKG (2004)
 Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
-function taiutc(day1::Real, day2::Real)
-    day1, day2 = promote(float(day1), float(day2))
+function taiutc end
+
+function _taiutc(day1::Real, day2::Real)
     utc1, utc2 = tai1, tai2 = abs(day1) >= abs(day2) ? (day1, day2) : (day2, day1)
 
     for j in 1:3
@@ -730,8 +733,9 @@ Barycentric Dynamical Time, TDB.
 
 IAU 2006 Resolution B3
 """
-function tcbtdb(day1::Real, day2::Real)
-    day1, day2 = promote(float(day1), float(day2))
+function tcbtdb end
+
+function _tcbtdb(day1::Real, day2::Real)
     return abs(day1) > abs(day2) ?
         (
             day = day1, fraction = day2 + TDB0 / SECPERDAY -
@@ -775,8 +779,9 @@ Technical Note No. 32, BKG (2004)
 
 IAU 2000 Resolution B1.9
 """
-function tcgtt(day1::Real, day2::Real)
-    day1, day2 = promote(float(day1), float(day2))
+function tcgtt end
+
+function _tcgtt(day1::Real, day2::Real)
     return abs(day1) > abs(day2) ?
         (
             day = day1, fraction = day2 -
@@ -834,8 +839,9 @@ Barycentric Coordinate Time, TCB.
 
 IAU 2006 Resolution B3
 """
-function tdbtcb(day1::Real, day2::Real)
-    day1, day2 = promote(float(day1), float(day2))
+function tdbtcb end
+
+function _tdbtcb(day1::Real, day2::Real)
     return abs(day1) > abs(day2) ?
         (
             day = day1, fraction = day2 - TDB0 / SECPERDAY -
@@ -898,8 +904,9 @@ Technical Note No. 32, BKG (2004)
 
 IAU 2006 Resolution 3
 """
-function tdbtt(day1::Real, day2::Real, dtr::Real)
-    day1, day2, dtr = promote(float(day1), float(day2), float(dtr))
+function tdbtt end
+
+function _tdbtt(day1::Real, day2::Real, dtr::Real)
     return abs(day1) > abs(day2) ? (day = day1, fraction = day2 - dtr / SECPERDAY) :
         (day = day1 - dtr / SECPERDAY, fraction = day2)
 end
@@ -936,8 +943,9 @@ Technical Note No. 32, BKG (2004)
 Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
-function tttai(day1::Real, day2::Real)
-    day1, day2 = promote(float(day1), float(day2))
+function tttai end
+
+function _tttai(day1::Real, day2::Real)
     return abs(day1) > abs(day2) ?
         (day = day1, fraction = day2 - TT_MINUS_TAI / SECPERDAY) :
         (day = day1 - TT_MINUS_TAI / SECPERDAY, fraction = day2)
@@ -974,8 +982,9 @@ Technical Note No. 32, BKG (2004)
 
 IAU 2000 Resolution B1.9
 """
-function tttcg(day1::Real, day2::Real)
-    day1, day2 = promote(float(day1), float(day2))
+function tttcg end
+
+function _tttcg(day1::Real, day2::Real)
     return abs(day1) > abs(day2) ?
         (
             day = day1, fraction = day2 +
@@ -1038,8 +1047,9 @@ Technical Note No. 32, BKG (2004)
 
 IAU 2006 Resolution 3
 """
-function tttdb(day1::Real, day2::Real, dtr::Real)
-    day1, day2, dtr = promote(float(day1), float(day2), float(dtr))
+function tttdb end
+
+function _tttdb(day1::Real, day2::Real, dtr::Real)
     return abs(day1) > abs(day2) ?
         (day = day1, fraction = day2 + dtr / SECPERDAY) :
         (day = day1 + dtr / SECPERDAY, fraction = day2)
@@ -1078,8 +1088,9 @@ UT1.
 Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
-function ttut1(day1::Real, day2::Real, dt::Real)
-    day1, day2, dt = promote(float(day1), float(day2), float(dt))
+function ttut1 end
+
+function _ttut1(day1::Real, day2::Real, dt::Real)
     return abs(day1) > abs(day2) ?
         (day = day1, fraction = day2 - dt / SECPERDAY) :
         (day = day1 - dt / SECPERDAY, fraction = day2)
@@ -1119,8 +1130,9 @@ Atomic Time, TAI.
 Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
-function ut1tai(day1::Real, day2::Real, Δt::Real)
-    day1, day2, Δt = promote(float(day1), float(day2), float(Δt))
+function ut1tai end
+
+function _ut1tai(day1::Real, day2::Real, Δt::Real)
     return abs(day1) > abs(day2) ?
         (day = day1, fraction = day2 - Δt / SECPERDAY) :
         (day = day1 - Δt / SECPERDAY, fraction = day2)
@@ -1159,8 +1171,9 @@ TT.
 Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
-function ut1tt(day1::Real, day2::Real, dt::Real)
-    day1, day2, dt = promote(float(day1), float(day2), float(dt))
+function ut1tt end
+
+function _ut1tt(day1::Real, day2::Real, dt::Real)
     return abs(day1) > abs(day2) ?
         (day = day1, fraction = day2 + dt / SECPERDAY) :
         (day = day1 + dt / SECPERDAY, fraction = day2)
@@ -1220,8 +1233,9 @@ Technical Note No. 32, BKG (2004)
 Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
-function ut1utc(day1::Real, day2::Real, duts::Real)
-    day1, day2, duts = promote(float(day1), float(day2), float(duts))
+function ut1utc end
+
+function _ut1utc(day1::Real, day2::Real, duts::Real)
     #  Put the two parts of the UT1 into big-first order.
     big1 = abs(day1) >= abs(day2)
     utc1, utc2 = big1 ? (day1, day2) : (day2, day1)
@@ -1321,8 +1335,9 @@ Technical Note No. 32, BKG (2004)
 Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
-function utctai(day1::Real, day2::Real)
-    day1, day2 = promote(float(day1), float(day2))
+function utctai end
+
+function _utctai(day1::Real, day2::Real)
 
     big1 = abs(day1) >= abs(day2)
     utc1, utc2 = big1 ? (day1, day2) : (day2, day1)
@@ -1409,8 +1424,9 @@ Technical Note No. 32, BKG (2004)
 Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992)
 """
-function utcut1(day1::Real, day2::Real, dut1::Real)
-    day1, day2, dut1 = promote(float(day1), float(day2), float(dut1))
+function utcut1 end
+
+function _utcut1(day1::Real, day2::Real, dut1::Real)
 
     #  Look up TAI-UTC.
     year, month, day, frac = jd2cal(day1, day2)
@@ -1423,6 +1439,7 @@ end
 
 for f in (:taitt, :taiutc, :tcbtdb, :tcgtt, :tdbtcb, :tttai, :tttcg, :utctai)
     @eval begin
+        ($f)(day1::Real, day2::Real) = $(Symbol(:_, f))(floatargs(day1, day2)...)
         ($f)(d1) = ($f)(d1, zero(d1))
         ($f)(df::NamedTuple{(:day, :fraction)}) = ($f)(df.day, df.fraction)
     end
@@ -1430,6 +1447,7 @@ end
 
 for f in (:taiut1, :tdbtt, :tttdb, :ttut1, :ut1tai, :ut1tt, :ut1utc, :utcut1)
     @eval begin
+        ($f)(day1::Real, day2::Real, dt::Real) = $(Symbol(:_, f))(floatargs(day1, day2, dt)...)
         ($f)(d1, dt) = ($f)(d1, zero(d1), dt)
         ($f)(df::NamedTuple{(:day, :fraction)}, dt) = ($f)(df.day, df.fraction, dt)
         ($f)(dt) = Base.Fix2($f, dt)
