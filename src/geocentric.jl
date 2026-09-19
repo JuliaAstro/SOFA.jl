@@ -168,7 +168,7 @@ function gc2gde(radius::Real, oblate::Real, pos::AbstractVector{<:Real})
     p2 = sum(pos[1:2] .^ 2)
 
     #  Compute longitude.
-    ϵ = p2 > 0.0 ? atan(pos[2], pos[1]) : 0.0
+    ϵ = p2 > 0.0 ? atan(pos[2], pos[1]) : zero(float(p2))
 
     if p2 > 1.0e-32 * radius^2
         #  Prepare Newton correction factors
@@ -187,7 +187,8 @@ function gc2gde(radius::Real, oblate::Real, pos::AbstractVector{<:Real})
         ) / sqrt(s1^2 + cc^2)
     else
         #  Exception: on or near the polar axis.
-        ϕ, r = π / 2, abs(pos[3]) - radius * ec
+        r = abs(pos[3]) - radius * ec
+        ϕ = oftype(r, π) / 2
     end
 
     #  Restore the sign of the latitude.

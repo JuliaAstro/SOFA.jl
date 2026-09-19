@@ -126,6 +126,8 @@ function fk425(ra::Real, dec::Real, δra::Real, δdec::Real, plx::Real, rv::Real
     cat = pv2s(pv)
     if plx > TINY
         plx, rv = plx / cat[3], cat[6] / (VF * plx)
+    else
+        plx, rv = oftype(cat[3], plx), oftype(cat[6], rv)
     end
     return (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4] / PMF, δdec = cat[5] / PMF, plx = plx, rv = rv)
 end
@@ -351,6 +353,8 @@ function fk524(
     cat = pv2s(SVector(pv1, pv2))
     if plx > TINY
         plx, rv = plx / cat[3], cat[6] / (plx * VF)
+    else
+        plx, rv = oftype(cat[3], plx), oftype(cat[6], rv)
     end
     return (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4] / PMF, δdec = cat[5] / PMF, plx = plx, rv = rv)
 end
@@ -472,7 +476,7 @@ function fk54z(ra::Real, dec::Real, epoch::Real)
     #  Spherical to Cartesian
     p1 = s2c(cat[1], cat[2])
     #  Fictitious proper motion (radians/year) and apply the motion
-    p1 .+= (epoch - 1950.0) * (
+    p1 = p1 .+ (epoch - 1950.0) * (
         cat[3] * SVector(-p1[2], p1[1], 0.0) .+
             cat[4] * SVector(
             -cos(cat[1]) * sin(cat[2]), -sin(cat[1]) * sin(cat[2]),

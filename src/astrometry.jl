@@ -2113,8 +2113,8 @@ function aticqn(
     for j in 1:5
         bf = (pnat .- d) ./ norm(pnat .- d)
         af = ldn(n, b, a.eb, bf)
-        d .= af .- bf
-        pco .= (pnat .- d) ./ norm(pnat .- d)
+        d = af .- bf
+        pco = (pnat .- d) ./ norm(pnat .- d)
     end
     rc, dc = c2s(pco)
     return (ra = mod2pi(rc), dec = dc)
@@ -2341,7 +2341,7 @@ function atioq(ri::Real, di::Real, a::Astrom)
     #  Cartesian -HA, Dec to cartesian Az, El (S=0, E=90).
     aet = SMatrix{3, 3}([a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi]) * hdt
     #  Azimuth (N=0, E=90)
-    azob = aet[1] != 0.0 || aet[2] != 0.0 ? atan(aet[2], -aet[1]) : 0.0
+    azob = aet[1] != 0.0 || aet[2] != 0.0 ? atan(aet[2], -aet[1]) : zero(eltype(aet))
     ####    Refraction    ####
     #  Cosine and sine of altitude, with precautions.
     r, z = maximum([norm(aet[1:2]) CELMIN; aet[3] SELMIN], dims = 2)
@@ -2724,7 +2724,7 @@ function atoiq(tp::Char, ob1::Real, ob2::Real, a::Astrom)
         aeo = SVector{3}(SMatrix{3, 3}([a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi]) * s2c(-ob1, ob2))
     end
     #  Azimuth (S=0, E=90).
-    az = aeo[1] != 0.0 || aeo[2] != 0.0 ? atan(aeo[2], aeo[1]) : 0.0
+    az = aeo[1] != 0.0 || aeo[2] != 0.0 ? atan(aeo[2], aeo[1]) : zero(eltype(aeo))
     #  Sine of observed ZD, and observed ZD.
     zdo = atan(norm(aeo[1:2]), aeo[3])
 
@@ -2895,7 +2895,7 @@ function ldn(
         n::Integer, b::AbstractVector{<:Ldbody}, ob::AbstractVector{<:Real},
         sc::AbstractVector{<:Real}
     )
-    sn = SVector{3}(sc)
+    sn = float.(SVector{3}(sc))
     for body in view(b, 1:n)
         #  Body to observer vector at epoch of observation (AU).
         v = ob .- body.pv[1]
@@ -3105,11 +3105,12 @@ function pmsafe(
     #  Proper motion in one year (radians)
     pm = F * seps(ra, dec, ra + pmr, dec + pmd)
     #  Override the parallax to reduce chances of a warning status.
+    plx, pm = promote(float(plx), pm)
     if plx < pm
         plx = pm
     end
     if plx < PXMIN
-        plx = PXMIN
+        plx = oftype(plx, PXMIN)
     end
     #  Carry out the transformation using the modified parallax.
     return starpm(ra, dec, pmr, pmd, plx, rv, ep1a, ep1b, ep2a, ep2b)

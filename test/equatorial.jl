@@ -21,3 +21,10 @@
 #   hd2pa: hour angle zero (sqsz == 0) threw a TypeError
 @test SOFA.hd2pa(0.0, 0.3, 0.5) == 0.0
 @test abs(SOFA.hd2pa(0.0, 0.5, 0.3) - pi) <= 1.0e-13
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   ae2hd, hd2ae, hd2pa: the degenerate branches returned a Float64 literal
+@test SOFA.ae2hd(big"0.0", big"0.0", big"0.0")[1] isa BigFloat
+@test SOFA.hd2ae(big"0.0", big"0.0", big"0.0").azi isa BigFloat
+@test SOFA.hd2pa(big"0.0", big"0.0", big"0.0") isa BigFloat

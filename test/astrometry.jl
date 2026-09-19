@@ -1637,6 +1637,9 @@ let site = (
     ab = SOFA.apio13(big.(site)..., SOFA.Astrom())
     @test ab isa SOFA.Astrom{BigFloat}
     @test abs(ab.along - aio.along) <= 1.0e-15 && abs(ab.refa - aio.refa) <= 1.0e-15
+    #   atioq: the degenerate azimuth branch returned a Float64 literal, so
+    #   the result type could not be inferred for other types
+    @test (@inferred SOFA.atioq(big"2.71", big"0.174", ab)).azi isa BigFloat
 end
 
 #   the constructors promote: any mix of scalar types, any array type
@@ -1656,3 +1659,28 @@ let v = [1.0, 2.0, 3.0], m = [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
     bodies = [SOFA.Ldbody(1.0, 6.0e-6, [v, v]), SOFA.Ldbody(big"1.0", 6.0e-6, [v, v])]
     @test eltype(SOFA.ldn(2, bodies, [-0.9, -0.2, -0.1], [-0.7, -0.6, -0.2])) == BigFloat
 end
+
+#   aticqn: the work buffers took their type from the coordinates and the
+#   parameters only, so BigFloat light-deflecting bodies were rounded away
+let a = SOFA.apci13(2456165.5, 0.401182685).astrom,
+        b = [
+        SOFA.Ldbody(
+            big"1.0", big"6.0e-6",
+            [
+                big.([-0.000712174377, -0.00230478303, -0.00105865966]),
+                big.([6.29235213e-6, -3.30888387e-7, -2.96486623e-7]),
+            ]
+        ),
+    ]
+    r = SOFA.aticqn(2.710121572969038991, 0.1729371367218230438, a, 1, b)
+    @test r.ra isa BigFloat && r.dec isa BigFloat
+end
+
+#   pmsafe: the parallax overrides replaced a BigFloat parallax by a Float64
+let r = SOFA.pmsafe(1.234, 0.789, 1.0e-5, -2.0e-5, big"1.0e-9", 10.0, 2400000.5, 48348.5625, 2400000.5, 51544.5)
+    @test all(x -> x isa BigFloat, values(r))
+end
+
+#   ldn: with no bodies an Integer direction was returned unchanged
+@test SOFA.ldn(0, SOFA.Ldbody[], [-0.97, -0.21, -0.09], [1, 0, 0]) ===
+    SOFA.ldn(0, SOFA.Ldbody[], [-0.97, -0.21, -0.09], [1.0, 0.0, 0.0])

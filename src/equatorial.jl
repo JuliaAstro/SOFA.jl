@@ -67,7 +67,7 @@ function ae2hd(azimuth::Real, altitude::Real, latitude::Real)
 
     x, y, z = -ca * ce * sp + se * cp, -sa * ce, ca * ce * cp + se * sp
     r = sqrt(x * x + y * y)
-    return (r != 0.0 ? atan(y, x) : 0.0, atan(z, r))
+    return (r != 0.0 ? atan(y, x) : zero(r), atan(z, r))
 end
 
 """
@@ -129,7 +129,7 @@ function hd2ae(HA::Real, Dec::Real, ϕ::Real)
 
     x, y, z = -ch * cd * sp + sd * cp, -sh * cd, ch * cd * cp + sd * sp
     r = sqrt(x * x + y * y)
-    return (azi = mod2pi(r != 0.0 ? atan(y, x) : 0.0), alt = atan(z, r))
+    return (azi = mod2pi(r != 0.0 ? atan(y, x) : zero(r)), alt = atan(z, r))
 end
 
 """
@@ -185,5 +185,5 @@ edition (Green, 1977), p49.
 function hd2pa(HA::Real, Dec::Real, latitude::Real)
     sqsz = cos(latitude) * sin(HA)
     cqsz = sin(latitude) * cos(Dec) - cos(latitude) * sin(Dec) * cos(HA)
-    return sqsz != 0.0 || cqsz != 0.0 ? atan(sqsz, cqsz) : 0.0
+    return sqsz != 0.0 || cqsz != 0.0 ? atan(sqsz, cqsz) : zero(cqsz)
 end

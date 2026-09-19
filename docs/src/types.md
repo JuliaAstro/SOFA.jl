@@ -31,7 +31,7 @@ julia> typeof(taitt(big"2453750.5", 0.892482639))
 @NamedTuple{day::BigFloat, fraction::BigFloat}
 ```
 
-The constants of the library are `Float64`, so number types narrower than `Float64` are widened wherever a constant enters the calculation, which is nearly everywhere: `Float32` arguments generally give `Float64` results. Integer results, such as the fields of a calendar date, stay integers.
+The constants of the library are `Float64`, so a number type narrower than `Float64` is widened wherever a constant enters the calculation, which is nearly everywhere: `Float32` arguments generally give `Float64` results, and where a constant enters only one part of a result (the fraction of a two-part date, say) the parts differ. Integer results, such as the fields of a calendar date, stay integers.
 
 ## Extended precision
 

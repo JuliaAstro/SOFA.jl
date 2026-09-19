@@ -56,7 +56,13 @@ leaves(x::SOFA.Astrom) = leaves(ntuple(i -> getfield(x, i), fieldcount(typeof(x)
 leaves(x) = []
 
 floats(x) = [y for y in leaves(x) if y isa AbstractFloat]
-agree(x, y; rtol) = all(abs.(floats(x) .- floats(y)) .<= rtol .* max.(1.0, abs.(floats(y))))
+function agree(x, y; rtol)
+    fx, fy = floats(x), floats(y)
+    return length(fx) == length(fy) && all(abs.(fx .- fy) .<= rtol .* max.(1.0, abs.(fy)))
+end
+
+#   Rows whose results are integers and characters only
+const INTEGER_RESULTS = (SOFA.d2dtf, SOFA.jdcalf, SOFA.a2af)
 
 let site = (
         2456384.5, 0.969254051, 0.1550675, -0.527800806, -1.2345856,
@@ -65,7 +71,8 @@ let site = (
         star = (2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0),
         r33 = [2.0 3.0 2.0; 3.0 2.0 3.0; 3.0 4.0 5.0],
         pv = [[-1836024.09, 1056607.72, -5998795.26], [-77.0361767, -133.310856, 0.0971855934]],
-        astrom = SOFA.apci13(2456165.5, 0.401182685).astrom
+        astrom = SOFA.apci13(2456165.5, 0.401182685).astrom,
+        aio = SOFA.apio13(site..., SOFA.Astrom())
 
     cases = [
         #   astrometry
@@ -79,6 +86,9 @@ let site = (
         (SOFA.aticq, (2.710121572969038991, 0.1729371367218230438, astrom)),
         (SOFA.atic13, (2.710121572969038991, 0.1729371367218230438, 2456165.5, 0.401182685)),
         (SOFA.atoc13, ('R', 2.710085107986886201, 0.1717653435758265198, site...)),
+        (SOFA.atioq, (2.710121572969038991, 0.1729371367218230438, aio)),
+        (SOFA.atoiq, ('R', 2.710085107986886201, 0.1717653435758265198, aio)),
+        (SOFA.atoiq, ('A', 0.09233952224794989993, 1.407758704513722461, aio)),
         (SOFA.pmsafe, (1.234, 0.789, 1.0e-5, -2.0e-5, 1.0e-2, 10.0, 2400000.5, 48348.5625, 2400000.5, 51544.5)),
         (SOFA.refco, (800.0, 10.0, 0.9, 0.4)),
         #   calendars
@@ -126,6 +136,11 @@ let site = (
         (SOFA.fk425, (0.07626899753879587532, -1.13740537839960578, 0.197374921784908746e-4, 0.5659714913272723189e-5, 0.134, 8.7)),
         (SOFA.fk52h, (1.76779433, -0.2917517103, -1.91851572e-7, -5.8468475e-6, 0.37921, -7.6)),
         (SOFA.starpm, (0.01686756, -1.093989828, -1.78323516e-5, 2.336024047e-6, 0.74723, -21.6, 2400000.5, 50083.0, 2400000.5, 53736.0)),
+        (SOFA.fk45z, (0.01602284975382960982, -0.1164347929099906024, 1954.677617625256806)),
+        (SOFA.fk54z, (0.02719026625066316119, -0.1115815170738754813, 1954.677308160316374)),
+        (SOFA.fk5hz, (1.76779433, -0.2917517103, 2400000.5, 54479.0)),
+        (SOFA.hfk5z, (1.767794352, -0.2917512594, 2400000.5, 54479.0)),
+        (SOFA.proper_motion, ([1.0, 0.5], [1.0e-5, 1.0e-5], 0.1, 10.0, 5.0, [0.9, 0.4, 0.1])),
         #   timescales
         (SOFA.taitt, (2453750.5, 0.892482639)),
         (SOFA.utctai, (2453750.5, 0.892100694)),
@@ -140,6 +155,7 @@ let site = (
         (SOFA.anpm, (-4.0,)),
         (SOFA.rx, (0.3456789, r33)),
         (SOFA.rxp, (r33, [0.2, 1.5, 0.1])),
+        (SOFA.pas, (1.0, 0.1, 0.2, -1.0)),
         (SOFA.pn, ([0.3, 1.2, -2.5],)),
         (SOFA.s2pv, (-3.21, 0.123, 0.456, -7.8e-6, 9.01e-6, -1.23e-5)),
         (SOFA.pvstar, (pv,)),
@@ -147,10 +163,12 @@ let site = (
 
     for (f, args) in cases
         ref = f(args...)
+        @test isempty(floats(ref)) == (f in INTEGER_RESULTS)
 
         #   BigFloat throughout: every floating-point result is a BigFloat that
         #   agrees with the Float64 one
         res = f(retype(BigFloat, args)...)
+        @test length(floats(res)) == length(floats(ref))
         @test all(x -> x isa BigFloat, floats(res))
         @test agree(res, ref; rtol = 1.0e-11)
 

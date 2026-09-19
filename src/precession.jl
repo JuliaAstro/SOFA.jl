@@ -110,7 +110,7 @@ function bp00(day1::Real, day2::Real)
     #  Interval between fundamental epoch J2000.0 and current date (JC).
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
     #  Frame bias
-    δψ, δϵ, δra = bi00()
+    δψ, δϵ, δra = oftype.(Δt, values(bi00()))
     #  Precession angles (Lieske et al. 1977)
     χA = deg2rad(Polynomial(χ_1977...)(Δt) / 3600)
     #  Apply IAU 2000 precession corrections.
@@ -190,7 +190,8 @@ Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
 function bp06(day1::Real, day2::Real)
     #  B matrix
-    rb = fw2m(pfw06(MJD0, MJD00)...)
+    T = floattype(day1, day2)
+    rb = fw2m(pfw06(T(MJD0), T(MJD00))...)
     #  PxB matrix
     rbp = pmat06(day1, day2)
     #  P matrix
@@ -607,7 +608,7 @@ Technical Note No. 32, BKG (2004)
 """
 function c2ixys(x::Real, y::Real, s::Real)
     r = x * x + y * y
-    e = r > 0.0 ? atan(y, x) : 0.0
+    e = r > 0.0 ? atan(y, x) : zero(float(r))
     return Rz(-(e + s))Ry(atan(sqrt(r / (1.0 - r))))Rz(e)
 end
 
@@ -2548,7 +2549,7 @@ function p06e(day1::Real, day2::Real)
     ψ = Polynomial(ψF_2006...)(Δt)
 
     return NamedTuple{(:ϵ0, :ψA, :ωA, :Pa, :Qa, :πA, :ΠA, :ϵA, :χA, :ζA, :θA, :zA, :pA, :γ, :ϕ, :ψ)}(
-        deg2rad.((ϵ0_2006, ψA, ωA, PA, QA, πA, ΠA, ϵA, χA, ζA, θA, zA, pA, γ, ϕ, ψ) ./ 3600.0)
+        deg2rad.((oftype(Δt, ϵ0_2006), ψA, ωA, PA, QA, πA, ΠA, ϵA, χA, ζA, θA, zA, pA, γ, ϕ, ψ) ./ 3600.0)
     )
 end
 
@@ -2614,11 +2615,11 @@ function pb06(day1::Real, day2::Real)
     r = pmat06(day1, day2)
     #  Solve for z, choosing the ±π alternative.
     x, y = -r[1, 3] < 0.0 ? (r[1, 3], -r[2, 3]) : (-r[1, 3], r[2, 3])
-    z = (x != 0.0 || y != 0.0) ? -atan(y, x) : 0.0
+    z = (x != 0.0 || y != 0.0) ? -atan(y, x) : zero(eltype(r))
     #  De-rotate z out of the matrix
     r = Rz(z) * r
-    ζ = r[2, 2] != 0.0 || -r[2, 1] != 0.0 ? -atan(-r[2, 1], r[2, 2]) : 0.0
-    θ = r[3, 3] != 0.0 || r[1, 3] != 0.0 ? -atan(r[1, 3], r[3, 3]) : 0.0
+    ζ = r[2, 2] != 0.0 || -r[2, 1] != 0.0 ? -atan(-r[2, 1], r[2, 2]) : zero(eltype(r))
+    θ = r[3, 3] != 0.0 || r[1, 3] != 0.0 ? -atan(r[1, 3], r[3, 3]) : zero(eltype(r))
     return (ζ = ζ, θ = θ, z = z)
 end
 
@@ -3247,7 +3248,8 @@ Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 function pn06(day1::Real, day2::Real, δψ::Real, δϵ::Real)
     #  Bias-precession Fukushima-Williams angle of J2000.0 = frame bias
     #  and matrix
-    rb = fw2m(pfw06(MJD0, MJD00)...)
+    T = floattype(day1, day2, δψ, δϵ)
+    rb = fw2m(pfw06(T(MJD0), T(MJD00))...)
     #  Bias-precession Fukushima-Williams angles of date.
     γb, ϕb, ψb, ϵb = pfw06(day1, day2)
     rbp = fw2m(γb, ϕb, ψb, ϵb)

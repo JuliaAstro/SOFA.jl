@@ -168,7 +168,7 @@ julia> anp(-0.1)
 
 """
 function anp(angle::Real)
-    return mod2pi(angle)
+    return mod2pi(float(angle))
 end
 
 """
@@ -726,7 +726,7 @@ Express an r-matrix as an r-vector.
 function rm2v(r::AbstractMatrix{<:Real})
     x, y, z = r[2, 3] - r[3, 2], r[3, 1] - r[1, 3], r[1, 2] - r[2, 1]
     s2, c2 = norm((x, y, z)), r[1, 1] + r[2, 2] + r[3, 3] - 1
-    zerot = zero(eltype(r))
+    zerot = zero(float(eltype(r)))
     return s2 > 0 ? SVector{3}(x, y, z) * atan(s2, c2) / s2 : SVector{3}(zerot, zerot, zerot)
 end
 
@@ -796,14 +796,14 @@ Position-angle from two p-vectors.
 """
 function pap(a::AbstractVector{<:Real}, b::AbstractVector{<:Real})
     if norm(a) == 0 || norm(b) == 0
-        θ = zero(eltype(a))
+        θ = zero(floattype(a, b))
     else
         #  The north axis tangent from a (arbitrary length)
         η = SVector{3}(-a[1] * a[3], -a[2] * a[3], sum(a[1:2] .^ 2))
         #  The east axis tanget from a (same length)
         ξ = vec2mat(η) * a / norm(a)
         # Resolve into components along the north and east axes
-        θ = (b .- a)' * ξ == 0 && (b .- a)' * η == 0 ? zero(eltype(a)) :
+        θ = (b .- a)' * ξ == 0 && (b .- a)' * η == 0 ? zero(floattype(a, b)) :
             atan((b .- a)' * ξ, (b .- a)' * η)
     end
     return θ
@@ -837,7 +837,7 @@ Position-angle from spherical coordinates.
 function pas(λa::Real, ϕa::Real, λb::Real, ϕb::Real)
     x = sin(ϕb) * cos(ϕa) - cos(ϕb) * sin(ϕa) * cos(λb - λa)
     y = sin(λb - λa) * cos(ϕb)
-    return x != 0 || y != 0 ? atan(y, x) : 0.0
+    return x != 0 || y != 0 ? atan(y, x) : zero(x)
 end
 
 """
@@ -867,7 +867,7 @@ function sepp(a::AbstractVector{<:Real}, b::AbstractVector{<:Real})
     #  Sine of angle between the vectors, multiplied by the two moduli
     #  Cosine of the angle, multiplied by the two moduli
     cosθ, sinθ = sum(a .* b), norm(vec2mat(a) * b)
-    return sinθ != 0 || cosθ != 0 ? atan(sinθ, cosθ) : 0.0
+    return sinθ != 0 || cosθ != 0 ? atan(sinθ, cosθ) : zero(sinθ)
 end
 
 """
@@ -940,7 +940,7 @@ julia> c2s([100.0, -50.0, 25.0])
 3) At either pole, zero θ is returned.
 """
 function c2s(pos::AbstractVector{<:Real})
-    zerot = zero(eltype(pos))
+    zerot = zero(float(eltype(pos)))
     return NamedTuple{(:θ, :ϕ)}(
         (
             (pos[1]^2 + pos[2]^2) == zerot ? zerot : atan(pos[2], pos[1]),
@@ -1006,7 +1006,7 @@ Convert position/velocity from Cartesian to spherical coordinates.
 """
 function pv2s(pv::AbstractVector{<:AbstractVector{<:Real}})
 
-    zerot = zero(eltype(pv[1]))
+    zerot = zero(floattype(pv[1], pv[2]))
     x, y, z = pv[norm(pv[1]) == zerot ? 2 : 1]
     dx, dy, dz = pv[2]
 

@@ -192,3 +192,20 @@ let d = SOFA.dtf2d("UTC", 2016, 12, 31, 23, 59, 57.0)
     @test all(values(SOFA.d2dtf("UTC", -1, d...)) .== (2017, 1, 1, 0, 0, 0, 0))
     @test all(values(SOFA.d2dtf("UTC", 0, d...)) .== (2016, 12, 31, 23, 59, 57, 0))
 end
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   dat: from 1972 on, the table constant replaced the type of the fraction
+@test SOFA.dat(2003, 6, 1, big"0.0") isa BigFloat
+
+#   ut1utc: in the days before a leap second the leap-second branch broadcast
+#   against a NamedTuple and threw (reference values from ERFA 2.0.1, which is
+#   derived from SOFA release 2023-10-11)
+for (ut2, utc2) in (
+        (49533.5, 49533.50000192012), (49533.9, 49533.899997290544),
+        (49534.2, 49534.1999961331),
+    )
+    r = SOFA.ut1utc(2400000.5, ut2, 0.3341)
+    @test r.day == 2400000.5 && abs(r.fraction - utc2) <= 1.0e-11
+end
+@test SOFA.ut1utc(big"2400000.5", big"49533.5", big"0.3341").fraction isa BigFloat

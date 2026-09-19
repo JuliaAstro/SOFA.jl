@@ -87,7 +87,7 @@ function proper_motion(object, pmotion, parallax, rvelocity, pmt, observer)
         prv * obj[3] + pmotion[2] * cos(object[2])
     )
 
-    obj .+= (pmt .+ AULIGHT * sum(obj .* observer)) .* pmo .-
+    obj = obj .+ (pmt .+ AULIGHT * sum(obj .* observer)) .* pmo .-
         deg2rad(1 / 3600) * parallax .* observer
 
     modulus = norm2(obj)

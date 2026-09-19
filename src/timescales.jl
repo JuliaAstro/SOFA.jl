@@ -205,7 +205,7 @@ function dat(year::Integer, month::Integer, day::Integer, subday::Real)
         # Find leap second
         for leap in reverse(LEAPSECOND)
             if (12 * year + month) >= (12 * leap.year + leap.month)
-                Δt = leap.second
+                Δt = oftype(Δt, leap.second)
                 break
             end
         end
@@ -1243,7 +1243,7 @@ function ut1utc(day1::Real, day2::Real, duts::Real)
 
             #  UT1 for the start of the UTC day that ends in a leap.
             #  Is the UT1 after this time?
-            du = sum((utc1, utc2 + 1.0 - duts / SECPERDAY) .- cal2jd(year, month, day))
+            du = sum((utc1, utc2 + 1.0 - duts / SECPERDAY) .- values(cal2jd(year, month, day)))
 
             if du > 0
                 #  Yes. fraction of the current UTC day that has elapsed.

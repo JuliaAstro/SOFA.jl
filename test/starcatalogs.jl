@@ -149,3 +149,19 @@ let args = (
     @test all(x -> x isa BigFloat, rB)
     @test all(abs.(rB .- rF) .<= 1.0e-14 .* max.(1.0, abs.(rF)))
 end
+
+#   fk54z: the position was updated in place in the MVector from s2c, which
+#   threw for a BigFloat position and truncated a BigFloat epoch
+let args = (0.02719026625066316119, -0.1115815170738754813, 1954.677308160316374)
+    rF, rB = values(SOFA.fk54z(args...)), values(SOFA.fk54z(big.(args)...))
+    @test all(x -> x isa BigFloat, rB)
+    @test all(abs.(rB .- rF) .<= 1.0e-14 .* max.(1.0, abs.(rF)))
+    rE = SOFA.fk54z(args[1], args[2], big(args[3]))
+    @test rE.ra isa BigFloat && rE.dec isa BigFloat
+    @test abs(rE.ra - rF[1]) <= 1.0e-14 && abs(rE.dec - rF[2]) <= 1.0e-14
+end
+
+#   fk425, fk524: below the minimum parallax the input parallax and radial
+#   velocity were returned with their own types
+@test SOFA.fk425(1, 1, 0, 0, 0, 0) === SOFA.fk425(1.0, 1.0, 0.0, 0.0, 0.0, 0.0)
+@test SOFA.fk524(1, 1, 0, 0, 0, 0) === SOFA.fk524(1.0, 1.0, 0.0, 0.0, 0.0, 0.0)
