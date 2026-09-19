@@ -2005,27 +2005,26 @@ of the functions apci[13], apcg[13], apco[13] or apcs[13].
 function aticq(ri::Real, di::Real, a::Astrom)
     #  CIRS RA, Dec to cartesian.
     #  Bias-precession-nutation, giving GCRS proper direction.
-    ppr = a.bpn' * s2c(ri, di)
+    ppr = a.bpn' * SVector{3}(s2c(ri, di))
     #  Aberration, giving GCRS natural direction.
-    T = eltype(ppr)
-    d, pnat, pco = zeros(T, 3), zeros(T, 3), zeros(T, 3)
+    d, pnat = zero(ppr), ppr
     for j in 1:2
         w = ppr .- d
-        bf = copy(w) ./ norm(w)
+        bf = w ./ norm(w)
         af = ab(bf, a.v, a.em, a.bm1)
         d = af .- bf
         w = ppr .- d
-        pnat .= copy(w) ./ norm(w)
+        pnat = w ./ norm(w)
     end
     #  Light deflection by the Sun, giving BCRS coordinate direction.
-    d = zeros(T, 3)
+    d, pco = zero(ppr), pnat
     for j in 1:5
         w = pnat .- d
-        bf = copy(w) ./ norm(w)
+        bf = w ./ norm(w)
         af = ldsun(bf, a.eh, a.em)
         d = af .- bf
         w = pnat .- d
-        pco .= copy(w) ./ norm(w)
+        pco = w ./ norm(w)
     end
     #  ICRS astrometric RA, Dec.
     ra, dec = c2s(pco)
@@ -2104,18 +2103,17 @@ function aticqn(
     )
     #  CIRS RA, Dec to cartesian.
     #  Bias-precession-nutation, giving GCRS proper direction.
-    ppr = a.bpn' * s2c(ri, di)
+    ppr = a.bpn' * SVector{3}(s2c(ri, di))
     #  Aberration, giving GCRS natural direction.
-    T = eltype(ppr)
-    d, pnat, pco = zeros(T, 3), zeros(T, 3), zeros(T, 3)
+    d, pnat = zero(ppr), ppr
     for j in 1:2
         bf = (ppr .- d) ./ norm(ppr .- d)
         af = ab(bf, a.v, a.em, a.bm1)
-        d .= af .- bf
-        pnat .= (ppr .- d) ./ norm(ppr .- d)
+        d = af .- bf
+        pnat = (ppr .- d) ./ norm(ppr .- d)
     end
     #  Light deflection, giving BCRS coordinate direction.
-    d = zeros(T, 3)
+    d, pco = zero(ppr), pnat
     for j in 1:5
         bf = (pnat .- d) ./ norm(pnat .- d)
         af = ldn(n, b, a.eb, bf)
@@ -2335,8 +2333,8 @@ function atioq(ri::Real, di::Real, a::Astrom)
     #  Minimum cos(alt) and sin(alt) for refraction.
     CELMIN, SELMIN = 1.0e-6, 0.05
     #  CIRS Ra, Dec to cartesian and polar motion.
-    hd = SMatrix{3, 3}(
-        [
+    hd = (
+        @SMatrix [
             cos(a.xpl) 0.0 sin(a.xpl);
             sin(a.xpl) * sin(a.ypl) cos(a.ypl) -cos(a.xpl) * sin(a.ypl);
             -sin(a.xpl) * cos(a.ypl) sin(a.ypl) cos(a.xpl) * cos(a.ypl)
@@ -2345,12 +2343,12 @@ function atioq(ri::Real, di::Real, a::Astrom)
     #  Diurnal aberration.
     hdt = (1.0 - a.diurab * hd[2]) .* (hd .+ SVector(0.0, a.diurab, 0.0))
     #  Cartesian -HA, Dec to cartesian Az, El (S=0, E=90).
-    aet = SMatrix{3, 3}([a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi]) * hdt
+    aet = (@SMatrix [a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi]) * hdt
     #  Azimuth (N=0, E=90)
     azob = aet[1] != 0.0 || aet[2] != 0.0 ? atan(aet[2], -aet[1]) : zero(eltype(aet))
     ####    Refraction    ####
     #  Cosine and sine of altitude, with precautions.
-    r, z = maximum([norm(aet[1:2]) CELMIN; aet[3] SELMIN], dims = 2)
+    r, z = max(norm(aet[SVector(1, 2)]), CELMIN), max(aet[3], SELMIN)
     #  A*tan(z) + B*tan^3(z) model, with Newton-Raphson correction.
     w = a.refb * (r / z)^2
     del = (a.refa + w) * (r / z) / (1.0 + (a.refa + 3 * w) / z^2)
@@ -2358,9 +2356,9 @@ function atioq(ri::Real, di::Real, a::Astrom)
     cosdel = 1.0 - del^2 / 2.0
     aeo = SVector((cosdel - del * z / r), cosdel - del * z / r, cosdel) .* aet .+ SVector(0.0, 0.0, del * r)
     #  Observed ZD.
-    zdob = atan(norm(aeo[1:2]), aeo[3])
+    zdob = atan(norm(aeo[SVector(1, 2)]), aeo[3])
     #  Az/El vector to HA, Dec vector (both right-handed) and to spherical -HA, Dec.
-    hmob, dcob = c2s(SMatrix{3, 3}([a.sphi 0.0 a.cphi; 0.0 1.0 0.0; -a.cphi 0.0 a.sphi]) * aeo)
+    hmob, dcob = c2s((@SMatrix [a.sphi 0.0 a.cphi; 0.0 1.0 0.0; -a.cphi 0.0 a.sphi]) * aeo)
     #  Right ascension (with respect to CIO).
     raob = a.eral + hmob
     return (azi = mod2pi(azob), zen = zdob, ha = -hmob, dec = dcob, ra = mod2pi(raob))
@@ -2727,27 +2725,27 @@ function atoiq(tp::Char, ob1::Real, ob2::Real, a::Astrom)
             ob1 = a.eral - ob1
         end
         #  To cartesian -HA, Dec and then to cartesian Az, El (S=0, E=90).
-        aeo = SVector{3}(SMatrix{3, 3}([a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi]) * s2c(-ob1, ob2))
+        aeo = SVector{3}((@SMatrix [a.sphi 0.0 -a.cphi; 0.0 1.0 0.0; a.cphi 0.0 a.sphi]) * s2c(-ob1, ob2))
     end
     #  Azimuth (S=0, E=90).
     az = aeo[1] != 0.0 || aeo[2] != 0.0 ? atan(aeo[2], aeo[1]) : zero(eltype(aeo))
     #  Sine of observed ZD, and observed ZD.
-    zdo = atan(norm(aeo[1:2]), aeo[3])
+    zdo = atan(norm(aeo[SVector(1, 2)]), aeo[3])
 
     ####    Refraction    ####
     #  Fast algorithm using two constant model.
-    tz = norm(aeo[1:2]) / maximum((aeo[3], SELMIN))
+    tz = norm(aeo[SVector(1, 2)]) / maximum((aeo[3], SELMIN))
     zdt = zdo + a.refa * tz + a.refb * tz^3
     #  To cartesian AZ, ZD.
     aet = SVector(cos(az) * sin(zdt), sin(az) * sin(zdt), cos(zdt))
     #  Cartesian Az, ZD to cartesian -HA, Dec.
-    mhda = SMatrix{3, 3}([a.sphi 0.0 a.cphi; 0.0 1.0 0.0; -a.cphi 0.0 a.sphi]) * aet
+    mhda = (@SMatrix [a.sphi 0.0 a.cphi; 0.0 1.0 0.0; -a.cphi 0.0 a.sphi]) * aet
     #  Diurnal aberration.
     hd = (1.0 + a.diurab * mhda[2]) .* (mhda .- SVector(0.0, a.diurab, 0.0))
     #  Polar motion.
     hma, dec = c2s(
-        SMatrix{3, 3}(
-            [
+        (
+            @SMatrix [
                 cos(a.xpl)  sin(a.xpl) * sin(a.ypl) -sin(a.xpl) * cos(a.ypl);
                 0.0              cos(a.ypl)             sin(a.ypl);
                 sin(a.xpl) -cos(a.xpl) * sin(a.ypl)  cos(a.xpl) * cos(a.ypl)
