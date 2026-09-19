@@ -1,7 +1,7 @@
 #### Astronomy / Ecliptic Coordinates
 
 """
-    eceq06(day1::AbstractFloat, day2::AbstractFloat, lon::AbstractFloat, lat::AbstractFloat)
+    eceq06(day1::Real, day2::Real, lon::Real, lat::Real)
 
 Transformation from ecliptic coordinates (mean equinox and ecliptic of
 date) to ICRS RA,Dec, using the IAU 2006 precession model.
@@ -55,13 +55,13 @@ julia> eceq06(2456165.5, 0.401182685, 5.1, -0.9)
    right ascension and declination, with only frame bias (always less
    than 25 mas) to disturb this classical picture.
 """
-function eceq06(day1::AbstractFloat, day2::AbstractFloat, lon::AbstractFloat, lat::AbstractFloat)
+function eceq06(day1::Real, day2::Real, lon::Real, lat::Real)
     @inline ra, dec = c2s(ecm06(day1, day2)' * s2c(lon, lat))
     return (ra = anp(ra), dec = anpm(dec))
 end
 
 """
-    ecm06(day1::AbstractFloat, day2::AbstractFloat)
+    ecm06(day1::Real, day2::Real)
 
 ICRS equatorial to ecliptic rotation matrix, IAU 2006.
 
@@ -112,12 +112,12 @@ ICRS equatorial to ecliptic rotation matrix, IAU 2006.
    longitude and latitude, with only frame bias (always less than 25
    mas) to disturb this classical picture.
 """
-function ecm06(day1::AbstractFloat, day2::AbstractFloat)
+function ecm06(day1::Real, day2::Real)
     return @inline Rx(obl06(day1, day2)) * pmat06(day1, day2)
 end
 
 """
-    eqec06(day1::AbstractFloat, day2::AbstractFloat, ra::AbstractFloat, dec::AbstractFloat)
+    eqec06(day1::Real, day2::Real, ra::Real, dec::Real)
     
 Transformation from ICRS equatorial coordinates to ecliptic
 coordinates (mean equinox and ecliptic of date) using IAU 2006
@@ -172,13 +172,13 @@ julia> eqec06(1234.5, 2440000.5, 1.234, 0.987)
    equinox and ecliptic of date), with only frame bias (always less
    than 25 mas) to disturb this classical picture.
 """
-function eqec06(day1::AbstractFloat, day2::AbstractFloat, ra::AbstractFloat, dec::AbstractFloat)
+function eqec06(day1::Real, day2::Real, ra::Real, dec::Real)
     @inline lon, lat = c2s(ecm06(day1, day2) * s2c(ra, dec))
     return (lon = anp(lon), lat = anpm(lat))
 end
 
 """
-    lteceq(epoch::AbstractFloat, lon::AbstractFloat, lat::AbstractFloat)
+    lteceq(epoch::Real, lon::Real, lat::Real)
 
 Transformation from ecliptic coordinates (mean equinox and ecliptic of
 date) to ICRS RA,Dec, using a long-term precession model.
@@ -221,13 +221,13 @@ Vondrak, J., Capitaine, N. and Wallace, P., 2012, New precession
 expressions, valid for long time intervals (Corrigendum),
 Astron.Astrophys. 541, C1
 """
-function lteceq(epoch::AbstractFloat, lon::AbstractFloat, lat::AbstractFloat)
+function lteceq(epoch::Real, lon::Real, lat::Real)
     @inline ra, dec = c2s(ltecm(epoch)' * s2c(lon, lat))
     return (ra = anp(ra), dec = anpm(dec))
 end
 
 """
-    ltecm(epoch::AbstractFloat)
+    ltecm(epoch::Real)
 
 ICRS equatorial to ecliptic rotation matrix, long-term.
 
@@ -274,7 +274,7 @@ Vondrak, J., Capitaine, N. and Wallace, P., 2012, New precession
 expressions, valid for long time intervals (Corrigendum),
 Astron.Astrophys. 541, C1
 """
-function ltecm(epoch::AbstractFloat)
+function ltecm(epoch::Real)
     #  Bias vector
     bias = SVector(η0_2010, -ϵ0_2010, -dα0_2010)
 
@@ -288,7 +288,7 @@ function ltecm(epoch::AbstractFloat)
 end
 
 """
-    lteqec(epoch::AbstractFloat, ra::AbstractFloat, dec::AbstractFloat)
+    lteqec(epoch::Real, ra::Real, dec::Real)
 
 Transformation from ICRS equatorial coordinates to ecliptic
 coordinates (mean equinox and ecliptic of date) using a long-term
@@ -332,7 +332,7 @@ Vondrak, J., Capitaine, N. and Wallace, P., 2012, New precession
 expressions, valid for long time intervals (Corrigendum),
 Astron.Astrophys. 541, C1
 """
-function lteqec(epoch::AbstractFloat, ra::AbstractFloat, dec::AbstractFloat)
+function lteqec(epoch::Real, ra::Real, dec::Real)
     @inline lon, lat = c2s(ltecm(epoch) * s2c(ra, dec))
     return (lon = anp(lon), lat = anpm(lat))
 end

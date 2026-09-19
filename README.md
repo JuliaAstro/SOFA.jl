@@ -36,6 +36,7 @@ The planned package versions below correspond to the following releases of the S
 
 1. All computed values are returned by the function call. No values are returned by reference.
 2. As of v2.0, function names follow the SOFA names without the `iau` prefix (e.g. `cal2jd` instead of `iauCal2jd`).
+3. Arguments can be of any real number type, and results carry the promoted floating-point type, so `Integer` dates and extended precision types such as `BigFloat` work throughout. The constants of the library are `Float64`, which bounds the accuracy; see [Number types and precision](https://juliaastro.org/SOFA.jl/dev/types/) in the documentation.
 
 ## Dev docs
 

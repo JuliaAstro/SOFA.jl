@@ -1,7 +1,7 @@
 ####    Astronomy / Ephemerides    ####
 
 """
-    epv00(day1::AbstractFloat, day2::AbstractFloat)
+    epv00(day1::Real, day2::Real)
 
 Earth position and velocity, heliocentric and barycentric, with
 respect to the Barycentric Celestial Reference System.
@@ -88,7 +88,7 @@ respect to the Barycentric Celestial Reference System.
 5) It is permissible to use the same array for pvh and pvb, which will
    receive the barycentric values.
 """
-function epv00(day1::AbstractFloat, day2::AbstractFloat)
+function epv00(day1::Real, day2::Real)
     Δt = ((day1 - JD2000) + day2) / DAYPERYEAR
     #  Warn (only) if the date is outside 1900-2100; the result is still
     #  computed, with degraded accuracy, as in the SOFA C library.
@@ -123,7 +123,7 @@ function epv00(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    moon98(day1::AbstractFloat, day2::AbstractFloat)
+    moon98(day1::Real, day2::Real)
 
 Approximate geocentric position and velocity of the Moon.
 
@@ -199,7 +199,7 @@ p337.
 Simon, J.L., Bretagnon, P., Chapront, J., Chapront-Touze, M., Francou,
 G. & Laskar, J., Astron.Astrophys., 1994, 282, 663
 """
-function moon98(day1::AbstractFloat, day2::AbstractFloat)
+function moon98(day1::Real, day2::Real)
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     #  Arguments (radians) and derivatives (radians per Julian century).
@@ -280,7 +280,7 @@ end
 const KMAX = 10
 
 """
-    plan94(day1::AbstractFloat, day2::AbstractFloat, planet::Integer)
+    plan94(day1::Real, day2::Real, planet::Integer)
 
 Approximate heliocentric position and velocity of a nominated major
 planet: Mercury, Venus, EMB, Mars, Jupiter, Saturn, Uranus or Neptune
@@ -437,7 +437,7 @@ julia> plan94(2400000.5, 43999.9, 1)
 Simon, J.L, Bretagnon, P., Chapront, J., Chapront-Touze, M., Francou,
 G., and Laskar, J., Astron.Astrophys., 282, 663 (1994).
 """
-function plan94(day1::AbstractFloat, day2::AbstractFloat, planet::Integer)
+function plan94(day1::Real, day2::Real, planet::Integer)
     @assert 1 <= planet <= 8 "Invalid planet: valid range is [1-8]"
     Δt = ((day1 - JD2000) + day2) / (1000 * DAYPERYEAR)
     #  Warn (only) if the year is outside 1000-3000; the result is still

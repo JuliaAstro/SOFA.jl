@@ -13,8 +13,16 @@ Rx(θ) = SMatrix{3, 3}(1.0, 0.0, 0.0, 0.0, cos(θ), -sin(θ), 0.0, sin(θ), cos(
 Ry(θ) = SMatrix{3, 3}(cos(θ), 0.0, sin(θ), 0.0, 1.0, 0.0, -sin(θ), 0.0, cos(θ))
 Rz(θ) = SMatrix{3, 3}(cos(θ), -sin(θ), 0.0, sin(θ), cos(θ), 0.0, 0.0, 0.0, 1.0)
 function vec2mat(v::AbstractVector{<:Real})
+    v = floatarray(v)
     zerot = zero(eltype(v))
     return SMatrix{3, 3}(zerot, v[3], -v[2], -v[3], zerot, v[1], v[2], -v[1], zerot)
+end
+
+#   Zeroed mutable work buffer of length N.  StaticArrays only supports setindex!
+#   on an MVector whose element type is isbits, so other element types (BigFloat)
+#   get a Vector.  The branch is resolved at compile time for a given T.
+function workzeros(::Type{T}, ::Val{N}) where {T, N}
+    return isbitstype(T) ? zeros(MVector{N, T}) : zeros(T, N)
 end
 
 #=
@@ -54,15 +62,15 @@ Correct coordinates for proper motion, parallax, radial velocity, and Rømer
 corrections.
 
 # Arguments
-- `object::Vector{AbstractFloat}`: RA and Dec of object (in radians)
-- `pmotion::Vector{AbstractFloat}`: RA and Dec proper motion of object (in radians/year)
-- `parallax::AbstractFloat`: parallax of object (in arcseconds)
-- `rvelocity::AbstractFloat`: radial velocity of object (in km/sec; positive is receding)
-- `pmt::AbstractFloat`: proper motion time interval (in Julian years; at barycenter)
-- `observer::Vector{AbstractFloat}`: position of observer (in AU; from barycenter)
+- `object::Vector{<:Real}`: RA and Dec of object (in radians)
+- `pmotion::Vector{<:Real}`: RA and Dec proper motion of object (in radians/year)
+- `parallax::Real`: parallax of object (in arcseconds)
+- `rvelocity::Real`: radial velocity of object (in km/sec; positive is receding)
+- `pmt::Real`: proper motion time interval (in Julian years; at barycenter)
+- `observer::Vector{<:Real}`: position of observer (in AU; from barycenter)
 
 # Returns
-- `object::Vector{AbstractFloat}`: corrected barycentric unit direction vector of object
+- `object::Vector{<:Real}`: corrected barycentric unit direction vector of object
 """
 function proper_motion(object, pmotion, parallax, rvelocity, pmt, observer)
 
@@ -80,7 +88,7 @@ function proper_motion(object, pmotion, parallax, rvelocity, pmt, observer)
         prv * obj[3] + pmotion[2] * cos(object[2])
     )
 
-    obj .+= (pmt .+ AULIGHT * sum(obj .* observer)) .* pmo .-
+    obj = obj .+ (pmt .+ AULIGHT * sum(obj .* observer)) .* pmo .-
         deg2rad(1 / 3600) * parallax .* observer
 
     modulus = norm2(obj)

@@ -1,7 +1,7 @@
 ####    Astronomy / Fundamental Arguments    ####
 
 """
-    fad03(Δt::AbstractFloat)
+    fad03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean elongation of the
 Moon from the Sun.
@@ -30,10 +30,10 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-fad03(Δt::AbstractFloat) = deg2rad(1 / 3600) * rem(Polynomial(D_2003A...)(Δt), ARCSECPER2PI)
+fad03(Δt::Real) = deg2rad(1 / 3600) * rem(Polynomial(D_2003A...)(Δt), ARCSECPER2PI)
 
 """
-    fae03(Δt::AbstractFloat)
+    fae03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean longitude of
 Earth.
@@ -65,10 +65,10 @@ Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 Astron.Astrophys.Supp.Ser. 135, 111
 """
-fae03(Δt::AbstractFloat) = rem(Polynomial(lea_2003...)(Δt), 2π)
+fae03(Δt::Real) = rem(Polynomial(lea_2003...)(Δt), 2π)
 
 """
-    faf03(Δt::AbstractFloat)
+    faf03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean longitude of the
 Moon minus mean longitude of the ascending node.
@@ -104,10 +104,10 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-faf03(Δt::AbstractFloat) = deg2rad(1 / 3600) * rem(Polynomial(F_2003A...)(Δt), ARCSECPER2PI)
+faf03(Δt::Real) = deg2rad(1 / 3600) * rem(Polynomial(F_2003A...)(Δt), ARCSECPER2PI)
 
 """
-    faju03(Δt::AbstractFloat)
+    faju03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean longitude of
 Jupiter.
@@ -139,10 +139,10 @@ Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 Astron.Astrophys.Supp.Ser. 135, 111
 """
-faju03(Δt::AbstractFloat) = rem(Polynomial(lju_2003...)(Δt), 2π)
+faju03(Δt::Real) = rem(Polynomial(lju_2003...)(Δt), 2π)
 
 """
-    fal03(Δt::AbstractFloat)
+    fal03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean anomaly of the
 Moon.
@@ -178,10 +178,10 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-fal03(Δt::AbstractFloat) = deg2rad(1 / 3600) * rem(Polynomial(l0_2003A...)(Δt), ARCSECPER2PI)
+fal03(Δt::Real) = deg2rad(1 / 3600) * rem(Polynomial(l0_2003A...)(Δt), ARCSECPER2PI)
 
 """
-    falp03(Δt::AbstractFloat)
+    falp03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean anomaly of the
 Sun.
@@ -210,10 +210,10 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-falp03(Δt::AbstractFloat) = deg2rad(1 / 3600) * rem(Polynomial(l1_2003A...)(Δt), ARCSECPER2PI)
+falp03(Δt::Real) = deg2rad(1 / 3600) * rem(Polynomial(l1_2003A...)(Δt), ARCSECPER2PI)
 
 """
-    fama03(Δt::AbstractFloat)
+    fama03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean longitude of Mars.
 
@@ -244,10 +244,10 @@ Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 Astron.Astrophys.Supp.Ser. 135, 111
 """
-fama03(Δt::AbstractFloat) = rem(Polynomial(lma_2003...)(Δt), 2π)
+fama03(Δt::Real) = rem(Polynomial(lma_2003...)(Δt), 2π)
 
 """
-    fame03(Δt::AbstractFloat)
+    fame03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean longitude of
 Mercury.
@@ -279,10 +279,10 @@ Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 Astron.Astrophys.Supp.Ser. 135, 111
 """
-fame03(Δt::AbstractFloat) = rem(Polynomial(lme_2003...)(Δt), 2π)
+fame03(Δt::Real) = rem(Polynomial(lme_2003...)(Δt), 2π)
 
 """
-    fane03(Δt::AbstractFloat)
+    fane03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean longitude of
 Neptune.
@@ -311,10 +311,10 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-fane03(Δt::AbstractFloat) = rem(Polynomial(lne_2003...)(Δt), 2π)
+fane03(Δt::Real) = rem(Polynomial(lne_2003...)(Δt), 2π)
 
 """
-    faom03(Δt::AbstractFloat)
+    faom03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean longitude of the
 Moon's ascending node.
@@ -343,10 +343,10 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J., 1994, Astron.Astrophys. 282, 663-683.
 """
-faom03(Δt::AbstractFloat) = deg2rad(1 / 3600) * rem(Polynomial(Ω_2003A...)(Δt), ARCSECPER2PI)
+faom03(Δt::Real) = deg2rad(1 / 3600) * rem(Polynomial(Ω_2003A...)(Δt), ARCSECPER2PI)
 
 """
-    fapa03(Δt::AbstractFloat)
+    fapa03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): general accumulated
 precession in longitude.
@@ -379,10 +379,10 @@ Astron.Astrophys. 58, 1-16
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-fapa03(Δt::AbstractFloat) = Polynomial(lge_2003...)(Δt)
+fapa03(Δt::Real) = Polynomial(lge_2003...)(Δt)
 
 """
-    fasa03(Δt::AbstractFloat)
+    fasa03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean longitude of
 Saturn.
@@ -414,10 +414,10 @@ Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 Astron.Astrophys.Supp.Ser. 135, 111
 """
-fasa03(Δt::AbstractFloat) = rem(Polynomial(lsa_2003...)(Δt), 2π)
+fasa03(Δt::Real) = rem(Polynomial(lsa_2003...)(Δt), 2π)
 
 """
-    faur03(Δt::AbstractFloat)
+    faur03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean longitude of
 Uranus.
@@ -446,10 +446,10 @@ Technical Note No. 32, BKG (2004)
 Simon, J.-L., Bretagnon, P., Chapront, J., Chapront-Touze, M.,
 Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 """
-faur03(Δt::AbstractFloat) = rem(Polynomial(lur_2003...)(Δt), 2π)
+faur03(Δt::Real) = rem(Polynomial(lur_2003...)(Δt), 2π)
 
 """
-    fave03(Δt::AbstractFloat)
+    fave03(Δt::Real)
 
 Fundamental argument, IERS Conventions (2003): mean longitude of
 Venus.
@@ -481,4 +481,4 @@ Francou, G., Laskar, J. 1994, Astron.Astrophys. 282, 663-683
 Souchay, J., Loysel, B., Kinoshita, H., Folgueira, M. 1999,
 Astron.Astrophys.Supp.Ser. 135, 111
 """
-fave03(Δt::AbstractFloat) = rem(Polynomial(lve_2003...)(Δt), 2π)
+fave03(Δt::Real) = rem(Polynomial(lve_2003...)(Δt), 2π)

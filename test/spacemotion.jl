@@ -43,3 +43,17 @@
 #   (the sanity check had inverted logic)
 @test_throws AssertionError SOFA.pvstar([[1.0e5, 0.0, 0.0], [200.0, 0.0, 0.0]])
 @test_throws AssertionError SOFA.pvstar([[0.0, 0.0, 0.0], [1.0e-5, 0.0, 0.0]])
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   starpv: the velocity was written into an MVector in place, which
+#   StaticArrays does not support for non-isbits element types (BigFloat)
+let args = (0.01686756, -1.093989828, -1.78323516e-5, 2.336024047e-6, 0.74723, -21.6)
+    pvF, pvB = SOFA.starpv(args...), SOFA.starpv(big.(args)...)
+    @test eltype(pvB[1]) == BigFloat && eltype(pvB[2]) == BigFloat
+    @test all(abs.(pvB[1] .- pvF[1]) .<= 1.0e-14 .* abs.(pvF[1]))
+    @test all(abs.(pvB[2] .- pvF[2]) .<= 1.0e-14 .* abs.(pvF[2]))
+end
+
+#   starpv: below the minimum parallax the Float64 constant replaced a BigFloat
+@test eltype(SOFA.starpv(0.1, 0.2, 1.0e-6, 1.0e-6, big"1.0e-8", 10.0)[1]) == BigFloat

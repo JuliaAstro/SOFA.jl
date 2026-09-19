@@ -107,7 +107,8 @@ available as a single number by adding MJD0 and MJD.
 Lieske, J.H., 1979, Astron.Astrophys. 73, 282.
 """
 function epb2jd(epoch::Real)
-    return (mjd0 = MJDAY0, mjd = 15019.81352 + (epoch - 1900.0) * DAYINYEAR1900)
+    mjd0, mjd = promote(MJDAY0, 15019.81352 + (epoch - 1900.0) * DAYINYEAR1900)
+    return (mjd0 = mjd0, mjd = mjd)
 end
 
 """
@@ -171,7 +172,8 @@ available as a single number by adding MJD0 and MJD.
 Lieske, J.H., 1979, Astron.Astrophys. 73, 282.
 """
 function epj2jd(epoch::Real)
-    return (mjd0 = MJDAY0, mjd = MODJULDAY0 + (epoch - 2000.0) * DAYINYEAR2000)
+    mjd0, mjd = promote(MJDAY0, MODJULDAY0 + (epoch - 2000.0) * DAYINYEAR2000)
+    return (mjd0 = mjd0, mjd = mjd)
 end
 
 """
@@ -239,10 +241,11 @@ function jd2cal(day1::Real, day2::Real)
 
     # Separate day and fraction where fraction in range [-0.5, 0.5].
     day::Integer = convert(Int, round(day1)) + convert(Int, round(day2))
-    fracs::AbstractVector{<:AbstractFloat} = SVector((day1 - round(day1)), (day2 - round(day2)))
+    fracs = float.(SVector((day1 - round(day1)), (day2 - round(day2))))
+    T = eltype(fracs)
 
     # Compute frac1 + frac2 + 0.5 using compensated summation (Klein 2006).
-    cs::Float64, s::Float64, t::Float64 = 0.0, 0.5, 0.0
+    cs, s, t = zero(T), T(0.5), zero(T)
     for x in fracs
         t = s + x
         cs += abs(s) >= abs(x) ? (s - t) + x : (x - t) + s
@@ -252,7 +255,7 @@ function jd2cal(day1::Real, day2::Real)
             s -= 1.0
         end
     end
-    frac::Float64 = s + cs
+    frac = s + cs
     cs = frac - s
 
     # Correct for negative fraction
@@ -275,7 +278,7 @@ function jd2cal(day1::Real, day2::Real)
         frac = s + cs
         if -eps(typeof(frac)) / 2.0 < frac
             day += 1
-            frac = maximum((frac, 0.0))
+            frac = max(frac, zero(frac))
         end
     end
 
@@ -338,7 +341,7 @@ formatting messages: rounded to a specified precision.
 function jdcalf(ndp::Integer, day1::Real, day2::Real)
 
     # Denominator of fraction (e.g., 100 for 2 decimal places)
-    denom::Float64 = 0 <= ndp <= 9 ? 10.0^ndp : 1.0
+    denom = 0 <= ndp <= 9 ? 10.0^ndp : 1.0
 
     d1, d2 = abs(day1) >= abs(day2) ? (day1, day2) : (day2, day1)
 
@@ -362,7 +365,7 @@ function jdcalf(ndp::Integer, day1::Real, day2::Real)
     djd += 0.5
 
     # Convert to Gregorian calendar
-    year::Integer, month::Integer, day::Integer, fraction::Float64 = jd2cal(djd, rf)
+    year::Integer, month::Integer, day::Integer, fraction = jd2cal(djd, rf)
 
     return (
         year = year, month = month, day = day,

@@ -1,7 +1,7 @@
 #### Astronomy / Galactic Coordinates
 
 """
-    g2icrs(lon::AbstractFloat, lat::AbstractFloat)
+    g2icrs(lon::Real, lat::Real)
 
 Transformation from Galactic Coordinates to ICRS.
 
@@ -60,7 +60,7 @@ catalogues.  Astrometric and photometric star catalogues derived from
 the ESA Hipparcos Space Astrometry Mission.  ESA Publications
 Division, Noordwijk, Netherlands.
 """
-function g2icrs(lon::AbstractFloat, lat::AbstractFloat)
+function g2icrs(lon::Real, lat::Real)
     #=
     L2,B2 system of galactic coordinates in the form presented in the
     Hipparcos Catalogue.  In degrees:
@@ -78,7 +78,7 @@ function g2icrs(lon::AbstractFloat, lat::AbstractFloat)
 end
 
 """
-    icrs2g(ra::AbstractFloat, dec::AbstractFloat)
+    icrs2g(ra::Real, dec::Real)
 
 Transformation from ICRS to Galactic Coordinates.
 
@@ -137,7 +137,7 @@ catalogues.  Astrometric and photometric star catalogues derived from
 the ESA Hipparcos Space Astrometry Mission.  ESA Publications
 Division, Noordwijk, Netherlands.
 """
-function icrs2g(ra::AbstractFloat, dec::AbstractFloat)
+function icrs2g(ra::Real, dec::Real)
     #=
     L2,B2 system of galactic coordinates in the form presented in the
     Hipparcos Catalogue.  In degrees:
