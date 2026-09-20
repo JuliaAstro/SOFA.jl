@@ -67,7 +67,7 @@ function eform(model::Symbol)
 end
 
 """
-    gc2gd(model::Symbol, pos::AbstractVector{<:Real})
+    gc2gd(model::Symbol, pos::AbstractVector)
     
 Transform geocentric coordinates to geodetic using the specified
 reference ellipsoid.
@@ -104,13 +104,13 @@ reference ellipsoid.
 
 4) The inverse transformation is performed in the function gd2gc.
 """
-function gc2gd(model::Symbol, pos::AbstractVector{<:Real})
+function gc2gd(model::Symbol, pos::AbstractVector)
     pos = floatarray(pos)
     return gc2gde(values(eform(model))..., pos)
 end
 
 """
-    gc2gde(radius::Real, oblate::Real, pos::AbstractVector{<:Real})
+    gc2gde(radius::Real, oblate::Real, pos::AbstractVector)
 
 Transform geocentric coordinates to geodetic for a reference
 ellipsoid of specified form.
@@ -156,7 +156,7 @@ ellipsoid of specified form.
 Fukushima, T., "Transformation from Cartesian to geodetic coordinates
 accelerated by Halley's method", J.Geodesy (2006) 79: 689-693
 """
-function gc2gde(radius::Real, oblate::Real, pos::AbstractVector{<:Real})
+function gc2gde(radius::Real, oblate::Real, pos::AbstractVector)
     pos = floatarray(pos)
     @assert isfinite(oblate) "Oblateness is not a finite number (got $oblate)."
     @assert 0.0 <= oblate < 1.0 "Oblateness out of range [0 - 1)."

@@ -93,7 +93,7 @@ function tpors(ξ::Real, η::Real, a::Real, b::Real)
 end
 
 """
-    tporv(ξ::Real, η::Real, v::AbstractVector{<:Real})
+    tporv(ξ::Real, η::Real, v::AbstractVector)
 
 In the tangent plane projection, given the rectangular coordinates of
 a star and its direction cosines, determine the direction cosines of
@@ -160,7 +160,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tporv(ξ::Real, η::Real, v::AbstractVector{<:Real})
+function tporv(ξ::Real, η::Real, v::AbstractVector)
     v = floatarray(v)
     r = sqrt(1.0 + η * η + ξ * ξ)
     w2 = r * r * sum(v[1:2] .^ 2) - ξ * ξ
@@ -239,7 +239,7 @@ function tpsts(ξ::Real, η::Real, a0::Real, b0::Real)
 end
 
 """
-    tpstv(ξ::Real, η::Real, v0::AbstractVector{<:Real})
+    tpstv(ξ::Real, η::Real, v0::AbstractVector)
 
 In the tangent plane projection, given the star's rectangular
 coordinates and the direction cosines of the tangent point, solve for
@@ -296,7 +296,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpstv(ξ::Real, η::Real, v0::AbstractVector{<:Real})
+function tpstv(ξ::Real, η::Real, v0::AbstractVector)
     v0 = floatarray(v0)
     x, y, z = v0[1:3]
     if sqrt(sum(v0[1:2] .^ 2)) == 0.0
@@ -378,7 +378,7 @@ function tpxes(a::Real, b::Real, a0::Real, b0::Real)
 end
 
 """
-    tpxev(v::AbstractVector{<:Real}, v0::AbstractVector{<:Real})
+    tpxev(v::AbstractVector, v0::AbstractVector)
 
 In the tangent plane projection, given celestial direction cosines for
 a star and the tangent point, solve for the star's rectangular
@@ -434,7 +434,7 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpxev(v::AbstractVector{<:Real}, v0::AbstractVector{<:Real})
+function tpxev(v::AbstractVector, v0::AbstractVector)
     v, v0 = floatarray(v), floatarray(v0)
     x, y, z = v[1:3]
     x0, y0, z0 = v0[1:3]

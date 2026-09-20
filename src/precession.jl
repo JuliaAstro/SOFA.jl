@@ -199,7 +199,7 @@ function bp06(day1::Real, day2::Real)
 end
 
 """
-    bpn2xy(r::AbstractMatrix{<:Real})
+    bpn2xy(r::AbstractMatrix)
 
 Extract from the bias-precession-nutation matrix the X,Y coordinates
 of the Celestial Intermediate Pole.
@@ -230,7 +230,7 @@ model", Astron.Astrophys. 400, 1145-1154 (2003)
 n.b. The celestial ephemeris origin (CEO) was renamed "celestial
      intermediate origin" (CIO) by IAU 2006 Resolution 2.
 """
-function bpn2xy(r::AbstractMatrix{<:Real})
+function bpn2xy(r::AbstractMatrix)
     r = floatarray(r)
     return r[3, 1:2]
 end
@@ -435,7 +435,7 @@ function c2i06a(day1::Real, day2::Real)
 end
 
 """
-    c2ibpn(day1::Real, day2::Real, r::AbstractMatrix{<:Real})
+    c2ibpn(day1::Real, day2::Real, r::AbstractMatrix)
 
 Form the celestial-to-intermediate matrix for a given date given the
 bias-precession-nutation matrix.  IAU 2000.
@@ -501,7 +501,7 @@ n.b. The celestial ephemeris origin (CEO) was renamed "celestial
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2ibpn(day1::Real, day2::Real, r::AbstractMatrix{<:Real})
+function c2ibpn(day1::Real, day2::Real, r::AbstractMatrix)
     r = floatarray(r)
     return c2ixy(day1, day2, bpn2xy(r)...)
 end
@@ -836,7 +836,7 @@ function c2t06a(tt1::Real, tt2::Real, ut1::Real, ut2::Real, x::Real, y::Real)
 end
 
 """
-    c2tcio(c2i::AbstractMatrix{<:Real}, era::Real, pm::AbstractMatrix{<:Real})
+    c2tcio(c2i::AbstractMatrix, era::Real, pm::AbstractMatrix)
 
 Assemble the celestial to terrestrial matrix from CIO-based components
 (the celestial-to-intermediate matrix, the Earth Rotation Angle and
@@ -880,13 +880,13 @@ the polar motion matrix).
 McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function c2tcio(c2i::AbstractMatrix{<:Real}, era::Real, pm::AbstractMatrix{<:Real})
+function c2tcio(c2i::AbstractMatrix, era::Real, pm::AbstractMatrix)
     c2i, pm = floatarray(c2i), floatarray(pm)
     return pm * Rz(era) * c2i
 end
 
 """
-    c2teqx(bpn::AbstractMatrix{<:Real}, gst::Real, pm::AbstractMatrix{<:Real})
+    c2teqx(bpn::AbstractMatrix, gst::Real, pm::AbstractMatrix)
 
 Assemble the celestial to terrestrial matrix from equinox-based
 components (the celestial-to-true matrix, the Greenwich Apparent
@@ -930,7 +930,7 @@ Sidereal Time and the polar motion matrix).
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function c2teqx(bpn::AbstractMatrix{<:Real}, gst::Real, pm::AbstractMatrix{<:Real})
+function c2teqx(bpn::AbstractMatrix, gst::Real, pm::AbstractMatrix)
     bpn, pm = floatarray(bpn), floatarray(pm)
     return pm * Rz(gst) * bpn
 end
@@ -1157,7 +1157,7 @@ function eo06a(day1::Real, day2::Real)
 end
 
 """
-    eors(r::AbstractMatrix{<:Real}, s::Real)
+    eors(r::AbstractMatrix, s::Real)
 
 Equation of the origins, given the classical NPB matrix and the
 quantity s.
@@ -1188,7 +1188,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 
 Wallace, P. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function eors(r::AbstractMatrix{<:Real}, s::Real)
+function eors(r::AbstractMatrix, s::Real)
     r = floatarray(r)
     #  Evaluate Wallace & Capitaine (2006) expression (16).
     v = r * SVector(

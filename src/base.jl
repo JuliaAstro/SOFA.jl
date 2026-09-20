@@ -66,19 +66,21 @@ end
 #   Common floating-point type of a mix of scalars and arrays
 floattype(xs...) = float(promote_type(map(numtype, xs)...))
 numtype(x::Number) = typeof(x)
-numtype(x::AbstractArray) = eltype(x)
+#   (the elements decide when the element type is abstract, as in a Vector{Any})
+numtype(x::AbstractArray{T}) where {T} =
+    isconcretetype(T) ? T : mapreduce(numtype, promote_type, x)
 
 #   Real arguments in one floating-point type, no narrower than the Float64 of
 #   the constants, so that the parts of a two-part date share their type.
 floatargs(xs::Real...) = Base.front(promote(map(float, xs)..., 0.0))
 
-#   An array argument in floating point, so that arithmetic on it neither
-#   overflows nor keeps an Integer element type.  A floating-point array, at
-#   any nesting, is returned as it is, so the Float64 path costs nothing.
+#   An array argument in floating point, whatever its element type: an Integer
+#   array (of any width), a Vector{Any} of numbers, a pv-vector of either.  A
+#   floating-point array is returned as it is, so the Float64 path costs nothing.
+floatarray(x::Real) = float(x)
 floatarray(x::AbstractArray{<:AbstractFloat}) = x
-floatarray(x::AbstractArray{<:Real}) = float.(x)
 floatarray(x::AbstractArray{<:AbstractArray{<:AbstractFloat}}) = x
-floatarray(x::AbstractArray{<:AbstractArray{<:Real}}) = map(floatarray, x)
+floatarray(x::AbstractArray) = map(floatarray, x)
 
 function Astrom(
         pmt, eb, eh, em, v, bm1, bpn, along, phi, xpl, ypl, sphi, cphi, diurab,

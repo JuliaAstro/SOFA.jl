@@ -12,7 +12,7 @@ end
 Rx(θ) = SMatrix{3, 3}(1.0, 0.0, 0.0, 0.0, cos(θ), -sin(θ), 0.0, sin(θ), cos(θ))
 Ry(θ) = SMatrix{3, 3}(cos(θ), 0.0, sin(θ), 0.0, 1.0, 0.0, -sin(θ), 0.0, cos(θ))
 Rz(θ) = SMatrix{3, 3}(cos(θ), -sin(θ), 0.0, sin(θ), cos(θ), 0.0, 0.0, 0.0, 1.0)
-function vec2mat(v::AbstractVector{<:Real})
+function vec2mat(v::AbstractVector)
     v = floatarray(v)
     zerot = zero(eltype(v))
     return SMatrix{3, 3}(zerot, v[3], -v[2], -v[3], zerot, v[1], v[2], -v[1], zerot)

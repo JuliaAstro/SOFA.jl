@@ -240,3 +240,32 @@ for f in (
     )
     @test f(2453750.5f0, 0.892482639f0, 0.3341f0) isa NamedTuple{(:day, :fraction), Tuple{Float64, Float64}}
 end
+
+#   Array arguments are dispatched on their shape only, so an array with an
+#   abstract element type (a Vector{Any} of numbers, as built by push! onto []
+#   or read from a file) gives the result of the equivalent Float64 array
+let v = Any[2.0, 2, 3.0], vf = [2.0, 2.0, 3.0], w = [1.0, 3.0, 4.0],
+        m = Any[2.0 3 2.0; 3.0 2.0 3.0; 3.0 4.0 5], mf = [2.0 3.0 2.0; 3.0 2.0 3.0; 3.0 4.0 5.0],
+        pv = Any[[1.0, 2.0, 3.0], Any[4, 5.0, 6]], pvf = [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]],
+        body = SOFA.Ldbody(1.0, 6.0e-6, [[-0.0007, -0.0023, -0.0011], [6.3e-6, -3.3e-7, -3.0e-7]]),
+        ob = [-0.97, -0.21, -0.09], sc = [-0.76, -0.61, -0.22]
+    @test same(SOFA.pdp(v, w), SOFA.pdp(vf, w))
+    @test same(SOFA.pdp(w, v), SOFA.pdp(w, vf))
+    @test same(SOFA.pxp(v, Real[1, 3.0, 4]), SOFA.pxp(vf, w))
+    @test same(SOFA.rxp(m, v), SOFA.rxp(mf, vf))
+    @test same(SOFA.rx(0.3, m), SOFA.rx(0.3, mf))
+    @test same(SOFA.c2s(v), SOFA.c2s(vf))
+    @test same(SOFA.pvu(1.5, pv), SOFA.pvu(1.5, pvf))
+    @test same(SOFA.pvstar(Any[[126668.0, 2136.0, -245251.0], [0, 0, 0]]), SOFA.pvstar([[126668.0, 2136.0, -245251.0], [0.0, 0.0, 0.0]]))
+    @test same(SOFA.gc2gd(:WGS84, Any[2.0e6, 3.0e6, 5.244e6]), SOFA.gc2gd(:WGS84, [2.0e6, 3.0e6, 5.244e6]))
+    @test same(SOFA.ldn(1, Any[body], ob, Any[sc...]), SOFA.ldn(1, [body], ob, sc))
+    #   the element types still decide the type of the result
+    @test SOFA.pdp(Any[big"2.0", 2, 3.0], w) isa BigFloat
+    #   the constructors, whose arguments are untyped
+    @test same(SOFA.Astrom(1.0, v, v, 1.0, v, 1.0, m), SOFA.Astrom(1.0, vf, vf, 1.0, vf, 1.0, mf))
+    @test same(SOFA.Ldbody(1.0, 6.0e-6, pv), SOFA.Ldbody(1.0, 6.0e-6, pvf))
+    @test SOFA.Ldbody(1.0, 6.0e-6, Any[big.(vf), vf]) isa SOFA.Ldbody{BigFloat}
+    #   and what is not an array of real numbers is a MethodError
+    @test_throws MethodError SOFA.pdp(Any["a", 1, 2], w)
+    @test_throws MethodError SOFA.pdp("a", "b")
+end
