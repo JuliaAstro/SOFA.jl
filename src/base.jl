@@ -136,33 +136,35 @@ end
 
 #   Ephemeris series evaluation (originally Astrometry.jl src/model2000.jl)
 
-function ephem_position(coef0, coef1, coef2, Δt)
+#   Position and its time derivative from the three coefficient tables of a
+#   component: A cos(ϕ + νt) terms in t^0, t^1 and t^2.  Each term is
+#   evaluated once, for both, with a single sincos.
+function ephem_pv(coef0, coef1, coef2, Δt)
+    T = promote_type(eltype(coef0), typeof(Δt))
 
-    A0, ϕ0, ν0 = [coef0[j, :] for j in 1:3]
-    A1, ϕ1, ν1 = [coef1[j, :] for j in 1:3]
-    A2, ϕ2, ν2 = [coef2[j, :] for j in 1:3]
+    p0 = v0 = zero(T)
+    for k in axes(coef0, 2)
+        A, ν = coef0[1, k], coef0[3, k]
+        s, c = sincos(coef0[2, k] + ν * Δt)
+        p0 += A * c
+        v0 -= A * ν * s
+    end
 
-    return (
-        sum(A0 .* cos.(ϕ0 .+ ν0 .* Δt)) +
-            sum(A1 .* cos.(ϕ1 .+ ν1 .* Δt)) * Δt +
-            sum(A2 .* cos.(ϕ2 .+ ν2 .* Δt)) * Δt^2
-    )
-end
+    p1 = v1 = zero(T)
+    for k in axes(coef1, 2)
+        A, ν = coef1[1, k], coef1[3, k]
+        s, c = sincos(coef1[2, k] + ν * Δt)
+        p1 += A * c
+        v1 += A * (c - ν * Δt * s)
+    end
 
-function ephem_velocity(coef0, coef1, coef2, Δt)
+    p2 = v2 = zero(T)
+    for k in axes(coef2, 2)
+        A, ν = coef2[1, k], coef2[3, k]
+        s, c = sincos(coef2[2, k] + ν * Δt)
+        p2 += A * c
+        v2 += A * (2 * c - ν * Δt * s)
+    end
 
-    A0, ϕ0, ν0 = coef0[1, :], coef0[2, :], coef0[3, :]
-    A1, ϕ1, ν1 = coef1[1, :], coef1[2, :], coef1[3, :]
-    A2, ϕ2, ν2 = coef2[1, :], coef2[2, :], coef2[3, :]
-
-    return (
-        -sum(A0 .* ν0 .* sin.(ϕ0 .+ ν0 .* Δt)) +
-            sum(A1 .* (cos.(ϕ1 .+ ν1 .* Δt) .- ν1 .* Δt .* sin.(ϕ1 .+ ν1 .* Δt))) +
-            sum(
-            A2 .* (
-                2 .* cos.(ϕ2 .+ ν2 .* Δt) .-
-                    ν2 .* Δt .* sin.(ϕ2 .+ ν2 .* Δt)
-            )
-        ) * Δt
-    ) / DAYPERYEAR
+    return (p0 + p1 * Δt + p2 * Δt^2, (v0 + v1 + v2 * Δt) / DAYPERYEAR)
 end

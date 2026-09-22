@@ -96,28 +96,18 @@ function epv00(day1::Real, day2::Real)
         @warn "Julian day is not between 1900 and 2100: accuracy is degraded."
 
     # Sun to Earth ecliptic vector
-    p_heli = iau_2000_bcrs * SVector(
-        ephem_position(sun_earth_x_0, sun_earth_x_1, sun_earth_x_2, Δt),
-        ephem_position(sun_earth_y_0, sun_earth_y_1, sun_earth_y_2, Δt),
-        ephem_position(sun_earth_z_0, sun_earth_z_1, sun_earth_z_2, Δt)
-    )
-    v_heli = iau_2000_bcrs * SVector(
-        ephem_velocity(sun_earth_x_0, sun_earth_x_1, sun_earth_x_2, Δt),
-        ephem_velocity(sun_earth_y_0, sun_earth_y_1, sun_earth_y_2, Δt),
-        ephem_velocity(sun_earth_z_0, sun_earth_z_1, sun_earth_z_2, Δt)
-    )
+    hx = ephem_pv(sun_earth_x_0, sun_earth_x_1, sun_earth_x_2, Δt)
+    hy = ephem_pv(sun_earth_y_0, sun_earth_y_1, sun_earth_y_2, Δt)
+    hz = ephem_pv(sun_earth_z_0, sun_earth_z_1, sun_earth_z_2, Δt)
+    p_heli = iau_2000_bcrs * SVector(hx[1], hy[1], hz[1])
+    v_heli = iau_2000_bcrs * SVector(hx[2], hy[2], hz[2])
 
     # Barycenter to Earth ecliptic vector
-    p_bary = p_heli .+ iau_2000_bcrs * SVector(
-        ephem_position(bary_sun_x_0, bary_sun_x_1, bary_sun_x_2, Δt),
-        ephem_position(bary_sun_y_0, bary_sun_y_1, bary_sun_y_2, Δt),
-        ephem_position(bary_sun_z_0, bary_sun_z_1, bary_sun_z_2, Δt)
-    )
-    v_bary = v_heli .+ iau_2000_bcrs * SVector(
-        ephem_velocity(bary_sun_x_0, bary_sun_x_1, bary_sun_x_2, Δt),
-        ephem_velocity(bary_sun_y_0, bary_sun_y_1, bary_sun_y_2, Δt),
-        ephem_velocity(bary_sun_z_0, bary_sun_z_1, bary_sun_z_2, Δt)
-    )
+    bx = ephem_pv(bary_sun_x_0, bary_sun_x_1, bary_sun_x_2, Δt)
+    by = ephem_pv(bary_sun_y_0, bary_sun_y_1, bary_sun_y_2, Δt)
+    bz = ephem_pv(bary_sun_z_0, bary_sun_z_1, bary_sun_z_2, Δt)
+    p_bary = p_heli .+ iau_2000_bcrs * SVector(bx[1], by[1], bz[1])
+    v_bary = v_heli .+ iau_2000_bcrs * SVector(bx[2], by[2], bz[2])
 
     return (helio = SVector(p_heli, v_heli), bary = SVector(p_bary, v_bary))
 end
@@ -206,23 +196,23 @@ function moon98(day1::Real, day2::Real)
 
     #  Moon's mean longitude.
     λm = deg2rad(rem(Polynomial(λmoon_1994...)(Δt), 360.0))
-    dλm = deg2rad(Polynomial(SVector(1.0, 2.0, 3.0, 4.0) .* λmoon_1994[2:5]...)(Δt))
+    dλm = deg2rad(Polynomial(dλmoon_1994...)(Δt))
 
     #  Moon's mean elongation.
     dm = deg2rad(rem(Polynomial(dmoon_1998...)(Δt), 360.0))
-    ddm = deg2rad(Polynomial(SVector(1.0, 2.0, 3.0, 4.0) .* dmoon_1998[2:5]...)(Δt))
+    ddm = deg2rad(Polynomial(ddmoon_1998...)(Δt))
 
     #  Sun's mean anomaly.
     ls = deg2rad(rem(Polynomial(lsun_1998...)(Δt), 360.0))
-    dls = deg2rad(Polynomial(SVector(1.0, 2.0, 3.0, 4.0) .* lsun_1998[2:5]...)(Δt))
+    dls = deg2rad(Polynomial(dlsun_1998...)(Δt))
 
     #  Moon's mean anomaly.
     lm = deg2rad(rem(Polynomial(lmoon_1998...)(Δt), 360.0))
-    dlm = deg2rad(Polynomial(SVector(1.0, 2.0, 3.0, 4.0) .* lmoon_1998[2:5]...)(Δt))
+    dlm = deg2rad(Polynomial(dlmoon_1998...)(Δt))
 
     #  Mean distance of the Moon from its ascending node.
     fm = deg2rad(rem(Polynomial(fmoon_1998...)(Δt), 360.0))
-    dfm = deg2rad(Polynomial(SVector(1.0, 2.0, 3.0, 4.0) .* fmoon_1998[2:5]...)(Δt))
+    dfm = deg2rad(Polynomial(dfmoon_1998...)(Δt))
 
     #  Meeus further arguments.
     #  NB: for da1 the SOFA C library (as of release 2023-10-11) uses the
@@ -253,22 +243,29 @@ function moon98(day1::Real, day2::Real)
     η = SVector(λm, a3, a1 - fm, a1 + fm, λm - lm, λm + lm)
     dη = SVector(dλm, da3, da1 - dfm, da1 + dfm, dλm - dlm, dλm + dlm)
 
+    #  Sine and cosine of each argument, once
+    sincosv(x) = (sc = map(sincos, x); (map(first, sc), map(last, sc)))
+    sϕ, cϕ = sincosv(ϕ)
+    sψ, cψ = sincosv(ψ)
+    sζ, cζ = sincosv(ζ)
+    sη, cη = sincosv(η)
+
     #  Longitude, latitude, and distance plus derivatives
-    λ = λm + deg2rad(sum(a_l .* sin.(ψ)) + sum(la[:, 1] .* lre .* sin.(ϕ)))
+    λ = λm + deg2rad(sum(a_l .* sψ) + sum(la[:, 1] .* lre .* sϕ))
     dλ = (
         dλm + deg2rad(
-            sum(a_l .* dψ .* cos.(ψ)) +
-                sum(la[:, 1] .* (dlre .* sin.(ϕ) .+ lre .* dϕ .* cos.(ϕ)))
+            sum(a_l .* dψ .* cψ) +
+                sum(la[:, 1] .* (dlre .* sϕ .+ lre .* dϕ .* cϕ))
         )
     ) /
         (100 * DAYPERYEAR)
-    b = deg2rad(sum(a_b .* sin.(η)) + sum(ba[:, 1] .* bne .* sin.(ζ)))
+    b = deg2rad(sum(a_b .* sη) + sum(ba[:, 1] .* bne .* sζ))
     db = deg2rad(
-        sum(a_b .* dη .* cos.(η)) +
-            sum(ba[:, 1] .* (dbne .* sin.(ζ) .+ bne .* dζ .* cos.(ζ)))
+        sum(a_b .* dη .* cη) +
+            sum(ba[:, 1] .* (dbne .* sζ .+ bne .* dζ .* cζ))
     ) / (100 * DAYPERYEAR)
-    r = (r0 + sum(la[:, 2] .* lre .* cos.(ϕ))) / ASTRUNIT
-    dr = sum(la[:, 2] .* (dlre .* cos.(ϕ) .- lre .* dϕ .* sin.(ϕ))) / (ASTRUNIT * 100 * DAYPERYEAR)
+    r = (r0 + sum(la[:, 2] .* lre .* cϕ)) / ASTRUNIT
+    dr = sum(la[:, 2] .* (dlre .* cϕ .- lre .* dϕ .* sϕ)) / (ASTRUNIT * 100 * DAYPERYEAR)
 
     #  IAU 2006 Fukushima-Williams bias+precession angles
     γB, ϕB, ψB, ϵA = pfw06(day1, day2)
