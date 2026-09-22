@@ -4350,29 +4350,22 @@ function xy06(day1::Real, day2::Real)
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     #  Lunar, solar, and planetary longitudes
-    ϕ = deg2rad.(
-        rem.(
-            [
-                Polynomial(l0_2003A...)(Δt),
-                Polynomial(l1_2003A...)(Δt),
-                Polynomial(F_2003A...)(Δt),
-                Polynomial(D_2003A...)(Δt),
-                Polynomial(Ω_2003A...)(Δt),
-            ], ARCSECPER2PI
-        ) / 3600.0
-    )
-    append!(
-        ϕ, [
-            Polynomial(lme_2003...)(Δt),
-            Polynomial(lve_2003...)(Δt),
-            Polynomial(lea_2003...)(Δt),
-            Polynomial(lma_2003...)(Δt),
-            Polynomial(lju_2003...)(Δt),
-            Polynomial(lsa_2003...)(Δt),
-            Polynomial(lur_2003...)(Δt),
-            Polynomial(lne_2003...)(Δt),
-            Polynomial(lge_2003...)(Δt),
-        ]
+    arcsec(x) = deg2rad(rem(x, ARCSECPER2PI) / 3600.0)
+    ϕ = SVector(
+        arcsec(Polynomial(l0_2003A...)(Δt)),
+        arcsec(Polynomial(l1_2003A...)(Δt)),
+        arcsec(Polynomial(F_2003A...)(Δt)),
+        arcsec(Polynomial(D_2003A...)(Δt)),
+        arcsec(Polynomial(Ω_2003A...)(Δt)),
+        Polynomial(lme_2003...)(Δt),
+        Polynomial(lve_2003...)(Δt),
+        Polynomial(lea_2003...)(Δt),
+        Polynomial(lma_2003...)(Δt),
+        Polynomial(lju_2003...)(Δt),
+        Polynomial(lsa_2003...)(Δt),
+        Polynomial(lur_2003...)(Δt),
+        Polynomial(lne_2003...)(Δt),
+        Polynomial(lge_2003...)(Δt),
     )
 
     #  Polynomial part of precession-nutation
@@ -4386,29 +4379,41 @@ function xy06(day1::Real, day2::Real)
     japt = SVector(0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4)
 
     #  Nutation periodic terms, planetary
-    xypl = workzeros(typeof(Δt), Val(2))
+    xpl = ypl = zero(Δt)
     ialast = length(cip_amplitude_2006)
     for ifreq in length(cip_planetary_2006):-1:1
         sc = sincos(sum(cip_planetary_2006[ifreq] .* ϕ))
         ia = cip_pointer_2006[ifreq + length(cip_lunisolar_2006)]
         for i in ialast:-1:ia
-            xypl[jaxy[i - ia + 1]] += cip_amplitude_2006[i] * sc[jasc[i - ia + 1]] * Δt^japt[i - ia + 1]
+            k = i - ia + 1
+            term = cip_amplitude_2006[i] * sc[jasc[k]] * Δt^japt[k]
+            if jaxy[k] == 1
+                xpl += term
+            else
+                ypl += term
+            end
         end
         ialast = ia - 1
     end
 
     #  Nutation periodic terms, luni-solar
-    xyls = workzeros(typeof(Δt), Val(2))
+    xls = yls = zero(Δt)
     for ifreq in length(cip_lunisolar_2006):-1:1
-        sc = sincos(sum(cip_lunisolar_2006[ifreq] .* ϕ[1:5]))
+        sc = sincos(sum(cip_lunisolar_2006[ifreq] .* ϕ[SOneTo(5)]))
         ia = cip_pointer_2006[ifreq]
         for i in ialast:-1:ia
-            xyls[jaxy[i - ia + 1]] += cip_amplitude_2006[i] * sc[jasc[i - ia + 1]] * Δt^japt[i - ia + 1]
+            k = i - ia + 1
+            term = cip_amplitude_2006[i] * sc[jasc[k]] * Δt^japt[k]
+            if jaxy[k] == 1
+                xls += term
+            else
+                yls += term
+            end
         end
         ialast = ia - 1
     end
 
-    x, y = deg2rad.((xypr .+ (xyls .+ xypl) ./ 1.0e6) / 3600.0)
+    x, y = deg2rad.((xypr .+ SVector(xls + xpl, yls + ypl) ./ 1.0e6) / 3600.0)
     return (x = x, y = y)
 end
 

@@ -959,7 +959,7 @@ const tdb_tt_2003_4 = SMatrix{3, 3}(
 ####    Fundamental argument multipliers:
 #
 #   Luni-solar coefficients
-const cip_lunisolar_2006::Vector{Vector{Int8}} = [
+const cip_lunisolar_2006::Vector{SVector{5, Int8}} = [
     # 1-10
     [0, 0, 0, 0, 1],
     [0, 0, 2, -2, 2],
@@ -1681,7 +1681,7 @@ const cip_lunisolar_2006::Vector{Vector{Int8}} = [
     [0, 0, 4, -4, 4],
 ]
 
-const cip_planetary_2006::Vector{Vector{Int8}} = [
+const cip_planetary_2006::Vector{SVector{14, Int8}} = [
     # 1-10
     [0, 0, 1, -1, 1, 0, 0, -1, 0, -2, 5, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, -5, 0, 0, -1],
