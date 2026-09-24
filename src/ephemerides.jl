@@ -96,18 +96,20 @@ function epv00(day1::Real, day2::Real)
         @warn "Julian day is not between 1900 and 2100: accuracy is degraded."
 
     # Sun to Earth ecliptic vector
-    hx = ephem_pv(sun_earth_x_0, sun_earth_x_1, sun_earth_x_2, Δt)
-    hy = ephem_pv(sun_earth_y_0, sun_earth_y_1, sun_earth_y_2, Δt)
-    hz = ephem_pv(sun_earth_z_0, sun_earth_z_1, sun_earth_z_2, Δt)
-    p_heli = iau_2000_bcrs * SVector(hx[1], hy[1], hz[1])
-    v_heli = iau_2000_bcrs * SVector(hx[2], hy[2], hz[2])
+    h = SVector(
+        ephem_pv(sun_earth_x_0, sun_earth_x_1, sun_earth_x_2, Δt),
+        ephem_pv(sun_earth_y_0, sun_earth_y_1, sun_earth_y_2, Δt),
+        ephem_pv(sun_earth_z_0, sun_earth_z_1, sun_earth_z_2, Δt)
+    )
+    p_heli, v_heli = iau_2000_bcrs * first.(h), iau_2000_bcrs * last.(h)
 
     # Barycenter to Earth ecliptic vector
-    bx = ephem_pv(bary_sun_x_0, bary_sun_x_1, bary_sun_x_2, Δt)
-    by = ephem_pv(bary_sun_y_0, bary_sun_y_1, bary_sun_y_2, Δt)
-    bz = ephem_pv(bary_sun_z_0, bary_sun_z_1, bary_sun_z_2, Δt)
-    p_bary = p_heli .+ iau_2000_bcrs * SVector(bx[1], by[1], bz[1])
-    v_bary = v_heli .+ iau_2000_bcrs * SVector(bx[2], by[2], bz[2])
+    b = SVector(
+        ephem_pv(bary_sun_x_0, bary_sun_x_1, bary_sun_x_2, Δt),
+        ephem_pv(bary_sun_y_0, bary_sun_y_1, bary_sun_y_2, Δt),
+        ephem_pv(bary_sun_z_0, bary_sun_z_1, bary_sun_z_2, Δt)
+    )
+    p_bary, v_bary = p_heli .+ iau_2000_bcrs * first.(b), v_heli .+ iau_2000_bcrs * last.(b)
 
     return (helio = SVector(p_heli, v_heli), bary = SVector(p_bary, v_bary))
 end

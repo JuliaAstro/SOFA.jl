@@ -136,35 +136,26 @@ end
 
 #   Ephemeris series evaluation (originally Astrometry.jl src/model2000.jl)
 
-#   Position and its time derivative from the three coefficient tables of a
-#   component: A cos(ϕ + νt) terms in t^0, t^1 and t^2.  Each term is
-#   evaluated once, for both, with a single sincos.
+#   Σ A cos θ and Σ A ν sin θ over the terms (A, ϕ, ν) of one coefficient
+#   table, with θ = ϕ + νt.  A column of the table is one term.
+@inline function ephem_sums(coef, Δt)
+    P = Q = zero(promote_type(eltype(coef), typeof(Δt)))
+    for k in axes(coef, 2)
+        A, ϕ, ν = view(coef, :, k)
+        s, c = sincos(ϕ + ν * Δt)
+        P += A * c
+        Q += A * ν * s
+    end
+    return P, Q
+end
+
+#   Position P0 + P1 t + P2 t² of a component and its time derivative, from
+#   the sums over its three coefficient tables.
 function ephem_pv(coef0, coef1, coef2, Δt)
-    T = promote_type(eltype(coef0), typeof(Δt))
-
-    p0 = v0 = zero(T)
-    for k in axes(coef0, 2)
-        A, ν = coef0[1, k], coef0[3, k]
-        s, c = sincos(coef0[2, k] + ν * Δt)
-        p0 += A * c
-        v0 -= A * ν * s
-    end
-
-    p1 = v1 = zero(T)
-    for k in axes(coef1, 2)
-        A, ν = coef1[1, k], coef1[3, k]
-        s, c = sincos(coef1[2, k] + ν * Δt)
-        p1 += A * c
-        v1 += A * (c - ν * Δt * s)
-    end
-
-    p2 = v2 = zero(T)
-    for k in axes(coef2, 2)
-        A, ν = coef2[1, k], coef2[3, k]
-        s, c = sincos(coef2[2, k] + ν * Δt)
-        p2 += A * c
-        v2 += A * (2 * c - ν * Δt * s)
-    end
-
-    return (p0 + p1 * Δt + p2 * Δt^2, (v0 + v1 + v2 * Δt) / DAYPERYEAR)
+    P0, Q0 = ephem_sums(coef0, Δt)
+    P1, Q1 = ephem_sums(coef1, Δt)
+    P2, Q2 = ephem_sums(coef2, Δt)
+    p = P0 + P1 * Δt + P2 * Δt^2
+    v = (-Q0 + (P1 - Q1 * Δt) + (2 * P2 - Q2 * Δt) * Δt) / DAYPERYEAR
+    return p, v
 end
