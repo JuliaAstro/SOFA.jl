@@ -71,20 +71,25 @@ const r_gal_icrs = SMatrix{3, 3}(
 #   . Units are degrees.
 #
 #   Moon's mean longitude (wrt mean equinox and ecliptic of date)
-#   Simon et al. (1994).
+#   Simon et al. (1994).  The d-prefixed tuples are the derivatives.
 const λmoon_1994 = (218.31665436, 481267.88123421, -0.0015786, 1 / 538841.0, -1 / 65194000.0)
+const dλmoon_1994 = ntuple(i -> i * λmoon_1994[i + 1], 4)
 
 #   Moon's mean elongation
 const dmoon_1998 = (297.8501921, 445267.1114034, -0.0018819, 1 / 545868.0, 1 / 113065000.0)
+const ddmoon_1998 = ntuple(i -> i * dmoon_1998[i + 1], 4)
 
 #   Sun's mean anomaly
 const lsun_1998 = (357.5291092, 35999.0502909, -0.0001536, 1 / 24490000.0, 0.0)
+const dlsun_1998 = ntuple(i -> i * lsun_1998[i + 1], 4)
 
 #   Moon's mean anomaly
 const lmoon_1998 = (134.9633964, 477198.8675055, 0.0087414, 1 / 69699.0, -1 / 14712000.0)
+const dlmoon_1998 = ntuple(i -> i * lmoon_1998[i + 1], 4)
 
 #   Mean distance of the Moon from its ascending node
 const fmoon_1998 = (93.272095, 483202.0175233, -0.0036539, 1 / 3526000.0, 1 / 863310000.0)
+const dfmoon_1998 = ntuple(i -> i * fmoon_1998[i + 1], 4)
 
 #   Other arguments
 

@@ -4357,16 +4357,18 @@ function xy06(day1::Real, day2::Real)
         arcsec(Polynomial(F_2003A...)(Δt)),
         arcsec(Polynomial(D_2003A...)(Δt)),
         arcsec(Polynomial(Ω_2003A...)(Δt)),
-        Polynomial(lme_2003...)(Δt),
-        Polynomial(lve_2003...)(Δt),
-        Polynomial(lea_2003...)(Δt),
-        Polynomial(lma_2003...)(Δt),
-        Polynomial(lju_2003...)(Δt),
-        Polynomial(lsa_2003...)(Δt),
-        Polynomial(lur_2003...)(Δt),
-        Polynomial(lne_2003...)(Δt),
+        rem(Polynomial(lme_2003...)(Δt), 2π),
+        rem(Polynomial(lve_2003...)(Δt), 2π),
+        rem(Polynomial(lea_2003...)(Δt), 2π),
+        rem(Polynomial(lma_2003...)(Δt), 2π),
+        rem(Polynomial(lju_2003...)(Δt), 2π),
+        rem(Polynomial(lsa_2003...)(Δt), 2π),
+        rem(Polynomial(lur_2003...)(Δt), 2π),
+        rem(Polynomial(lne_2003...)(Δt), 2π),
         Polynomial(lge_2003...)(Δt),
     )
+    #  Powers of the time
+    pt = SVector(Δt^0, Δt^1, Δt^2, Δt^3, Δt^4)
 
     #  Polynomial part of precession-nutation
     xypr = SVector(
@@ -4386,7 +4388,7 @@ function xy06(day1::Real, day2::Real)
         ia = cip_pointer_2006[ifreq + length(cip_lunisolar_2006)]
         for i in ialast:-1:ia
             k = i - ia + 1
-            term = cip_amplitude_2006[i] * sc[jasc[k]] * Δt^japt[k]
+            term = cip_amplitude_2006[i] * sc[jasc[k]] * pt[japt[k] + 1]
             if jaxy[k] == 1
                 xpl += term
             else
@@ -4403,7 +4405,7 @@ function xy06(day1::Real, day2::Real)
         ia = cip_pointer_2006[ifreq]
         for i in ialast:-1:ia
             k = i - ia + 1
-            term = cip_amplitude_2006[i] * sc[jasc[k]] * Δt^japt[k]
+            term = cip_amplitude_2006[i] * sc[jasc[k]] * pt[japt[k] + 1]
             if jaxy[k] == 1
                 xls += term
             else
