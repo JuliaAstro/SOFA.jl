@@ -1496,3 +1496,191 @@ let sun = SOFA.Ldbody(
 
     @test SOFA.ldn(0, [sun], ob, sc) == sc
 end
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   aticq/aticqn: Float64-typed work arrays demoted BigFloat coordinates
+let a = SOFA.apci13(2456165.5, 0.401182685)[1]
+    rF = SOFA.aticq(2.710121572969038991, 0.1729371367218230438, a)
+    rB = SOFA.aticq(big"2.710121572969038991", big"0.1729371367218230438", a)
+    @test rB.ra isa BigFloat && rB.dec isa BigFloat
+    @test abs(rB.ra - rF.ra) <= 1.0e-15 && abs(rB.dec - rF.dec) <= 1.0e-15
+end
+
+let a = SOFA.apci13(2456165.5, 0.401182685)[1],
+        b = [
+        SOFA.Ldbody(
+            0.00028574, 3.0e-10,
+            [
+                [-7.81014427, -5.60956681, -1.98079819],
+                [0.0030723249, -0.00406995477, -0.00181335842],
+            ]
+        ),
+        SOFA.Ldbody(
+            0.00095435, 3.0e-9,
+            [
+                [0.738098796, 4.63658692, 1.9693136],
+                [-0.00755816922, 0.00126913722, 0.000727999001],
+            ]
+        ),
+        SOFA.Ldbody(
+            1.0, 6.0e-6,
+            [
+                [-0.000712174377, -0.00230478303, -0.00105865966],
+                [6.29235213e-6, -3.30888387e-7, -2.96486623e-7],
+            ]
+        ),
+    ]
+    rF = SOFA.aticqn(2.709994899247599271, 0.1728740720983623469, a, 3, b)
+    rB = SOFA.aticqn(big"2.709994899247599271", big"0.1728740720983623469", a, 3, b)
+    @test rB.ra isa BigFloat && rB.dec isa BigFloat
+    @test abs(rB.ra - rF.ra) <= 1.0e-15 && abs(rB.dec - rF.dec) <= 1.0e-15
+end
+
+#   pmpx (and so atccq, atciq, atciqn, atci13, atco13): the direction vector
+#   was updated in place in an MVector, which StaticArrays does not support
+#   for non-isbits element types (BigFloat)
+let args = (2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0, 2456165.5, 0.401182685)
+    rF, rB = values(SOFA.atci13(args...)), values(SOFA.atci13(big.(args)...))
+    @test all(x -> x isa BigFloat, rB)
+    @test all(abs.(rB .- rF) .<= 1.0e-15)
+end
+
+@test eltype(SOFA.pmpx(big.((1.234, 0.789, 1.0e-5, -2.0e-5, 1.0e-2, 10.0, 8.75))..., big.([0.9, 0.4, 0.1]))) == BigFloat
+
+#   ldn: the direction was updated in place in a copy of `sc`, which threw
+#   for an immutable `sc` as well as for BigFloat
+let sun = [
+        SOFA.Ldbody(
+            1.0, 6.0e-6,
+            [
+                [-0.000712174377, -0.00230478303, -0.00105865966],
+                [6.29235213e-6, -3.30888387e-7, -2.96486623e-7],
+            ]
+        ),
+    ],
+        ob = [-0.974170437, -0.2115201, -0.0917583114],
+        sc = [-0.763276255, -0.608633767, -0.216735543]
+    @test SOFA.ldn(1, sun, ob, SOFA.SVector{3}(sc)) == SOFA.ldn(1, sun, ob, sc)
+    @test eltype(SOFA.ldn(1, sun, ob, big.(sc))) == BigFloat
+
+    a = SOFA.apci13(2456165.5, 0.401182685)[1]
+    args = (2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0)
+    rF, rB = values(SOFA.atciqn(args..., a, 1, sun)), values(SOFA.atciqn(big.(args)..., a, 1, sun))
+    @test all(x -> x isa BigFloat, rB)
+    @test all(abs.(rB .- rF) .<= 1.0e-15)
+end
+
+#   pmsafe, apco13: independently typed arguments were forwarded to helpers
+#   whose scalars shared one type parameter, so a single BigFloat argument threw
+let args = (0.789, 1.0e-5, -2.0e-5, 1.0e-2, 10.0, 2400000.5, 48348.5625, 2400000.5, 51544.5)
+    rF, rB = values(SOFA.pmsafe(1.234, args...)), values(SOFA.pmsafe(big"1.234", args...))
+    @test all(x -> x isa BigFloat, rB)
+    @test all(abs.(rB .- rF) .<= 1.0e-13 .* max.(1.0, abs.(rF)))
+end
+
+let head = (2456384.5, 0.969254051, 0.1550675),
+        tail = (-1.2345856, 2738.0, 2.47230737e-7, 1.82640464e-6, 731.0, 12.8, 0.59, 0.55)
+    aF = SOFA.apco13(head..., -0.527800806, tail...)[1]
+    aB = SOFA.apco13(head..., big"-0.527800806", tail...)[1]
+    @test aB.along isa BigFloat
+    @test abs(aB.along - aF.along) <= 1.0e-15
+end
+
+#   atoiq: the Float64-typed work vector discarded everything below Float64
+#   resolution, so a 1e-25 change of the observed coordinate had no effect
+let a = SOFA.apio13(
+        2456384.5, 0.969254051, 0.1550675, -0.527800806, -1.2345856,
+        2738.0, 2.47230737e-7, 1.82640464e-6, 731.0, 12.8, 0.59,
+        0.55, SOFA.Astrom()
+    )
+    for (tp, ob1, ob2) in (
+            ('R', big"2.710085107986886201", big"0.1717653435758265198"),
+            ('A', big"0.09233952224794989993", big"1.407758704513722461"),
+        )
+        Δ = SOFA.atoiq(tp, ob1 + big"1e-25", ob2, a).ra - SOFA.atoiq(tp, ob1, ob2, a).ra
+        @test big"0.9e-25" < abs(Δ) < big"1.1e-25"
+    end
+end
+
+#   Astrom, Ldbody: abstractly typed fields made every field load in the
+#   consumers dynamic, and let one instance hold several precisions at once
+@test isbitstype(SOFA.Astrom{Float64}) && isbitstype(SOFA.Ldbody{Float64})
+
+let site = (
+        2456384.5, 0.969254051, 0.1550675, -0.527800806, -1.2345856,
+        2738.0, 2.47230737e-7, 1.82640464e-6, 731.0, 12.8, 0.59, 0.55,
+    ),
+        star = (2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0)
+    a = @inferred SOFA.apci13(2456165.5, 0.401182685)
+    aio = @inferred SOFA.apio13(site..., SOFA.Astrom())
+    @test a.astrom isa SOFA.Astrom{Float64} && aio isa SOFA.Astrom{Float64}
+    @test (@inferred SOFA.apco13(site...)).astrom isa SOFA.Astrom{Float64}
+    @test (@inferred SOFA.aper(5.678, aio)) isa SOFA.Astrom{Float64}
+
+    #   the transformations reading the parameters
+    @test (@inferred SOFA.atci13(star..., 2456165.5, 0.401182685)).ra isa Float64
+    @test (@inferred SOFA.atco13(star..., site...)).azi isa Float64
+    @test (@inferred SOFA.atciq(star..., a.astrom)).ra isa Float64
+    @test (@inferred SOFA.aticq(2.71, 0.174, a.astrom)).ra isa Float64
+    @test (@inferred SOFA.atioq(2.71, 0.174, aio)).azi isa Float64
+    @test (@inferred SOFA.atoiq('R', 2.71, 0.174, aio)).ra isa Float64
+
+    #   updating parameters with a wider type widens them rather than
+    #   truncating the new value to the old element type
+    ab = SOFA.aper(big"5.678", aio)
+    @test ab isa SOFA.Astrom{BigFloat}
+    @test ab.eral == big"5.678" + aio.along
+    @test ab.refa == aio.refa && ab.bpn == aio.bpn
+
+    #   apio fills the Float64 Astrom() handed to it from its own arguments
+    ab = SOFA.apio13(big.(site)..., SOFA.Astrom())
+    @test ab isa SOFA.Astrom{BigFloat}
+    @test abs(ab.along - aio.along) <= 1.0e-15 && abs(ab.refa - aio.refa) <= 1.0e-15
+    #   atioq: the degenerate azimuth branch returned a Float64 literal, so
+    #   the result type could not be inferred for other types
+    @test (@inferred SOFA.atioq(big"2.71", big"0.174", ab)).azi isa BigFloat
+end
+
+#   the constructors promote: any mix of scalar types, any array type
+let v = [1.0, 2.0, 3.0], m = [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
+    @test SOFA.Astrom(1.0, v, v, 1.0, v, 1.0, m) isa SOFA.Astrom{Float64}
+    @test SOFA.Astrom(1, [1, 2, 3], v, 1.0, v, 1.0, m) isa SOFA.Astrom{Float64}
+    @test SOFA.Astrom(big"1.0", v, v, 1.0, v, 1.0, m) isa SOFA.Astrom{BigFloat}
+    @test SOFA.Astrom(big"1.0", v, v, 1.0, v, 1.0, m).bpn == m
+    @test SOFA.Astrom{BigFloat}() isa SOFA.Astrom{BigFloat}
+
+    @test SOFA.Ldbody(1.0, 6.0e-6, [v, v]) isa SOFA.Ldbody{Float64}
+    @test SOFA.Ldbody(1, 6.0e-6, [[1, 2, 3], v]) isa SOFA.Ldbody{Float64}
+    @test SOFA.Ldbody(1.0, 6.0e-6, [big.(v), v]) isa SOFA.Ldbody{BigFloat}
+    @test SOFA.Ldbody(1.0, 6.0e-6, [v, 2v]).pv == [v, 2v]
+
+    #   a vector of bodies of different precisions is still a vector of Ldbody
+    bodies = [SOFA.Ldbody(1.0, 6.0e-6, [v, v]), SOFA.Ldbody(big"1.0", 6.0e-6, [v, v])]
+    @test eltype(SOFA.ldn(2, bodies, [-0.9, -0.2, -0.1], [-0.7, -0.6, -0.2])) == BigFloat
+end
+
+#   aticqn: the work buffers took their type from the coordinates and the
+#   parameters only, so BigFloat light-deflecting bodies were rounded away
+let a = SOFA.apci13(2456165.5, 0.401182685).astrom,
+        b = [
+        SOFA.Ldbody(
+            big"1.0", big"6.0e-6",
+            [
+                big.([-0.000712174377, -0.00230478303, -0.00105865966]),
+                big.([6.29235213e-6, -3.30888387e-7, -2.96486623e-7]),
+            ]
+        ),
+    ]
+    r = SOFA.aticqn(2.710121572969038991, 0.1729371367218230438, a, 1, b)
+    @test r.ra isa BigFloat && r.dec isa BigFloat
+end
+
+#   pmsafe: the parallax overrides replaced a BigFloat parallax by a Float64
+let r = SOFA.pmsafe(1.234, 0.789, 1.0e-5, -2.0e-5, big"1.0e-9", 10.0, 2400000.5, 48348.5625, 2400000.5, 51544.5)
+    @test all(x -> x isa BigFloat, values(r))
+end
+
+#   ldn: with no bodies an Integer direction was returned unchanged
+@test SOFA.ldn(0, SOFA.Ldbody[], [-0.97, -0.21, -0.09], [1, 0, 0]) ===
+    SOFA.ldn(0, SOFA.Ldbody[], [-0.97, -0.21, -0.09], [1.0, 0.0, 0.0])

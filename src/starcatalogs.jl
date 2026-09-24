@@ -1,8 +1,8 @@
 #### Astronomy / Star Catalogs
 
 """
-    fk425(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat, plx::AbstractFloat,
-          rv::AbstractFloat)
+    fk425(ra::Real, dec::Real, δra::Real, δdec::Real, plx::Real,
+          rv::Real)
 
 Convert B1950.0 FK4 star catalog data to J2000.0 FK5.
 
@@ -98,8 +98,7 @@ Yallop, B.D. et al., 1989, "Transformation of mean star places from
 FK4 B1950.0 to FK5 J2000.0 using matrices in 6-space".  Astron.J. 97,
 274.
 """
-function fk425(ra::F, dec::F, δra::F, δdec::F, plx::F, rv::F) where
-    {F <: AbstractFloat}
+function fk425(ra::Real, dec::Real, δra::Real, δdec::Real, plx::Real, rv::Real)
     ####  Canonical constants (Seidelmann 1992)
     #  Radians per year to arcsec per trop-century, km/s to AU/trop-century,
     #  and a small number to avoid arithmetic problems
@@ -127,12 +126,14 @@ function fk425(ra::F, dec::F, δra::F, δdec::F, plx::F, rv::F) where
     cat = pv2s(pv)
     if plx > TINY
         plx, rv = plx / cat[3], cat[6] / (VF * plx)
+    else
+        plx, rv = oftype(cat[3], plx), oftype(cat[6], rv)
     end
     return (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4] / PMF, δdec = cat[5] / PMF, plx = plx, rv = rv)
 end
 
 """
-    fk45z(ra::AbstractFloat, dec::AbstractFloat, epoch::AbstractFloat)
+    fk45z(ra::Real, dec::Real, epoch::Real)
 
 Convert a B1950.0 FK4 star position to J2000.0 FK5, assuming zero
 proper motion in the FK5 system.
@@ -208,7 +209,7 @@ new IAU resolutions".  Astron.Astrophys.  128, 263-267.
 Seidelmann, P.K. (ed), 1992, "Explanatory Supplement to the
 Astronomical Almanac", ISBN 0-935702-68-7.
 """
-function fk45z(ra::AbstractFloat, dec::AbstractFloat, epoch::AbstractFloat)
+function fk45z(ra::Real, dec::Real, epoch::Real)
     PMF = 3.6e5 * rad2deg(1.0)
     #  Spherical coordinates to p-vector, adjust p-vector to give zero proper
     #  motion in FK5.
@@ -225,8 +226,8 @@ function fk45z(ra::AbstractFloat, dec::AbstractFloat, epoch::AbstractFloat)
 end
 
 """
-    fk524(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat, plx::AbstractFloat,
-          rv::AbstractFloat)
+    fk524(ra::Real, dec::Real, δra::Real, δdec::Real, plx::Real,
+          rv::Real)
 
 Convert J2000.0 FK5 star catalog data to B1950.0 FK4.
 
@@ -321,8 +322,8 @@ FK4 B1950.0 to FK5 J2000.0 using matrices in 6-space".  Astron.J. 97,
 274.
 """
 function fk524(
-        ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat, plx::AbstractFloat,
-        rv::AbstractFloat
+        ra::Real, dec::Real, δra::Real, δdec::Real, plx::Real,
+        rv::Real
     )
     ####  Canonical constants (Seidelmann 1992)
     #  Radians per year to arcsec per trop-century, km/s to AU/trop-century,
@@ -352,12 +353,14 @@ function fk524(
     cat = pv2s(SVector(pv1, pv2))
     if plx > TINY
         plx, rv = plx / cat[3], cat[6] / (plx * VF)
+    else
+        plx, rv = oftype(cat[3], plx), oftype(cat[6], rv)
     end
     return (ra = mod2pi(cat[1]), dec = cat[2], δra = cat[4] / PMF, δdec = cat[5] / PMF, plx = plx, rv = rv)
 end
 """
-    fk52h(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat, plx::AbstractFloat,
-          rv::AbstractFloat)
+    fk52h(ra::Real, dec::Real, δra::Real, δdec::Real, plx::Real,
+          rv::Real)
 
 Transform FK5 (J2000.0) star data into the Hipparcos system.
 
@@ -403,8 +406,8 @@ Status:  support function.
 F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 """
 function fk52h(
-        ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat,
-        plx::AbstractFloat, rv::AbstractFloat
+        ra::Real, dec::Real, δra::Real, δdec::Real,
+        plx::Real, rv::Real
     )
     #  FK5 to Hipparcos orientation matrix and rotation vector
     ϵ, ω = fk5hip()
@@ -418,7 +421,7 @@ function fk52h(
 end
 
 """
-    fk54z(ra::AbstractFloat, dec::AbstractFloat, epoch::AbstractFloat)
+    fk54z(ra::Real, dec::Real, epoch::Real)
 
 Convert a J2000.0 FK5 star position to B1950.0 FK4, assuming zero
 proper motion in FK5 and parallax.
@@ -467,13 +470,13 @@ Status:  support function.
 5) The RA component of the returned (fictitious) proper motion is
    dRA/dt rather than cos(Dec)*dRA/dt.
 """
-function fk54z(ra::AbstractFloat, dec::AbstractFloat, epoch::AbstractFloat)
+function fk54z(ra::Real, dec::Real, epoch::Real)
     #  FK5 equinox J2000.0 to FK4 equinox B1950.0
     cat = fk524(ra, dec, 0.0, 0.0, 0.0, 0.0)
     #  Spherical to Cartesian
     p1 = s2c(cat[1], cat[2])
     #  Fictitious proper motion (radians/year) and apply the motion
-    p1 .+= (epoch - 1950.0) * (
+    p1 = p1 .+ (epoch - 1950.0) * (
         cat[3] * SVector(-p1[2], p1[1], 0.0) .+
             cat[4] * SVector(
             -cos(cat[1]) * sin(cat[2]), -sin(cat[1]) * sin(cat[2]),
@@ -526,7 +529,7 @@ function fk5hip()
 end
 
 """
-    fk5hz(ra::AbstractFloat, dec::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
+    fk5hz(ra::Real, dec::Real, day1::Real, day2::Real)
 
 Transform an FK5 (J2000.0) star position into the system of the
 Hipparcos catalog, assuming zero Hipparcos proper motion.
@@ -595,7 +598,7 @@ julia> fk5hz(1.76779433, -0.2917517103, 2400000.5, 54479.0)
 
 F.Mignard & M.Froeschle, 2000, Astron.Astrophys. 354, 732-739.
 """
-function fk5hz(ra::AbstractFloat, dec::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
+function fk5hz(ra::Real, dec::Real, day1::Real, day2::Real)
     #  Interval from given date to fundamental epoch J2000.0 (Julian years)
     Δt = - ((day1 - JD2000) + day2) / DAYPERYEAR
     #  FK5 to Hipparcos orientation matrix and rotation vector
@@ -608,8 +611,8 @@ function fk5hz(ra::AbstractFloat, dec::AbstractFloat, day1::AbstractFloat, day2:
 end
 
 """
-    h2fk5(ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat, plx::AbstractFloat,
-          rv::AbstractFloat)
+    h2fk5(ra::Real, dec::Real, δra::Real, δdec::Real, plx::Real,
+          rv::Real)
 
 Transform Hipparcos star data into the FK5 (J2000.0) system.
 
@@ -655,8 +658,8 @@ Status:  support function.
 F.Mignard & M.Froeschle, Astron.Astrophys., 354, 732-739 (2000).
 """
 function h2fk5(
-        ra::AbstractFloat, dec::AbstractFloat, δra::AbstractFloat, δdec::AbstractFloat,
-        plx::AbstractFloat, rv::AbstractFloat
+        ra::Real, dec::Real, δra::Real, δdec::Real,
+        plx::Real, rv::Real
     )
     #  Hipparcos barycentric normalized pv-vector
     pv = starpv(ra, dec, δra, δdec, plx, rv)
@@ -671,7 +674,7 @@ function h2fk5(
 end
 
 """
-    hfk5z(ra::AbstractFloat, dec::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
+    hfk5z(ra::Real, dec::Real, day1::Real, day2::Real)
 
 Transform a Hipparcos star position into FK5 J2000.0, assuming zero
 Hipparcos proper motion.
@@ -736,7 +739,7 @@ Returned (all FK5, equinox J2000.0, date date1+date2):
 
 F.Mignard & M.Froeschle, 2000, Astron.Astrophys. 354, 732-739.
 """
-function hfk5z(ra::AbstractFloat, dec::AbstractFloat, day1::AbstractFloat, day2::AbstractFloat)
+function hfk5z(ra::Real, dec::Real, day1::Real, day2::Real)
     #  Time interval from fundamental epoch J2000.0 to given date (Julian year)
     Δt = ((day1 - JD2000) + day2) / DAYPERYEAR
     #  FK5 to Hipparcos orientation matrix and rotation vector
@@ -753,9 +756,9 @@ function hfk5z(ra::AbstractFloat, dec::AbstractFloat, day1::AbstractFloat, day2:
 end
 
 """
-    starpm(ra::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmdec::AbstractFloat,
-           plx::AbstractFloat, rvel::AbstractFloat, epoch1a::AbstractFloat, epoch1b::AbstractFloat,
-           epoch2a::AbstractFloat, epoch2b::AbstractFloat)
+    starpm(ra::Real, dec::Real, pmras::Real, pmdec::Real,
+           plx::Real, rvel::Real, epoch1a::Real, epoch1b::Real,
+           epoch2a::Real, epoch2b::Real)
 
 Star proper motion:  update star catalog data for space motion.
 
@@ -838,9 +841,9 @@ Star proper motion:  update star catalog data for space motion.
    involves an iterative calculation.
 """
 function starpm(
-        ra::AbstractFloat, dec::AbstractFloat, pmras::AbstractFloat, pmdec::AbstractFloat,
-        plx::AbstractFloat, rvel::AbstractFloat, epoch1a::AbstractFloat, epoch1b::AbstractFloat,
-        epoch2a::AbstractFloat, epoch2b::AbstractFloat
+        ra::Real, dec::Real, pmras::Real, pmdec::Real,
+        plx::Real, rvel::Real, epoch1a::Real, epoch1b::Real,
+        epoch2a::Real, epoch2b::Real
     )
     #  Days of light travel time per astronomical unit
     DC = SECPERDAY / (ASTRUNIT / LIGHTSPEED)

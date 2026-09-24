@@ -918,3 +918,33 @@
             (0.5791308482835292617e-3, 0.402058009945402031e-4, -0.1220032294164579896e-7)
     ) .<= 1.0e-14
 )
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   nut00a: Float64-typed phase buffers demoted BigFloat dates
+let nF = SOFA.nut00a(2400000.5, 53736.0),
+        nB = SOFA.nut00a(big"2400000.5", big"53736.0")
+    @test nB.ψ isa BigFloat && nB.ϵ isa BigFloat
+    @test abs(nB.ψ - nF.ψ) <= 1.0e-16 && abs(nB.ϵ - nF.ϵ) <= 1.0e-16
+end
+
+#   xy06: Float64-typed accumulators froze the periodic terms at Float64
+#   resolution, so the slope of X over a sub-Float64 step lost their
+#   contribution (more than half of it at this date)
+let d1 = big"2400000.5", d2 = big"53736.0",
+        slope = h -> (SOFA.xy06(d1, d2 + h).x - SOFA.xy06(d1, d2 - h).x) / 2h
+    @test abs(slope(big"1e-25") - slope(big"1e-3")) <= 1.0e-6 * abs(slope(big"1e-3"))
+end
+
+#   pb06: the degenerate branches returned a Float64 literal, so the result
+#   type could not be inferred for other types
+@test (@inferred SOFA.pb06(big"2451545.0", big"0.0")).z isa BigFloat
+
+#   bp00, bp06, pn06: the frame bias matrix was built from Float64 constants
+#   only, so its field did not carry the type of the date
+@test eltype(SOFA.bp00(big"2400000.5", big"50123.9999").rb) == BigFloat
+@test eltype(SOFA.bp06(big"2400000.5", big"50123.9999").rb) == BigFloat
+@test eltype(SOFA.pn06a(big"2400000.5", big"53736.0").rb) == BigFloat
+
+#   p06e: the obliquity of J2000.0 was a Float64 constant among BigFloat angles
+@test SOFA.p06e(big"2400000.5", big"52541.0").ϵ0 isa BigFloat

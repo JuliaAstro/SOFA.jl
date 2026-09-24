@@ -67,7 +67,7 @@ function eform(model::Symbol)
 end
 
 """
-    gc2gd(model::Symbol, pos::AbstractVector{<:AbstractFloat})
+    gc2gd(model::Symbol, pos::AbstractVector)
     
 Transform geocentric coordinates to geodetic using the specified
 reference ellipsoid.
@@ -104,12 +104,13 @@ reference ellipsoid.
 
 4) The inverse transformation is performed in the function gd2gc.
 """
-function gc2gd(model::Symbol, pos::AbstractVector{<:AbstractFloat})
+function gc2gd(model::Symbol, pos::AbstractVector)
+    pos = floatarray(pos)
     return gc2gde(values(eform(model))..., pos)
 end
 
 """
-    gc2gde(radius::AbstractFloat, oblate::AbstractFloat, pos::AbstractVector{<:AbstractFloat})
+    gc2gde(radius::Real, oblate::Real, pos::AbstractVector)
 
 Transform geocentric coordinates to geodetic for a reference
 ellipsoid of specified form.
@@ -155,7 +156,8 @@ ellipsoid of specified form.
 Fukushima, T., "Transformation from Cartesian to geodetic coordinates
 accelerated by Halley's method", J.Geodesy (2006) 79: 689-693
 """
-function gc2gde(radius::AbstractFloat, oblate::AbstractFloat, pos::AbstractVector{<:AbstractFloat})
+function gc2gde(radius::Real, oblate::Real, pos::AbstractVector)
+    pos = floatarray(pos)
     @assert isfinite(oblate) "Oblateness is not a finite number (got $oblate)."
     @assert 0.0 <= oblate < 1.0 "Oblateness out of range [0 - 1)."
     @assert isfinite(radius) "Radius is not a finite number (got $radius)."
@@ -168,9 +170,9 @@ function gc2gde(radius::AbstractFloat, oblate::AbstractFloat, pos::AbstractVecto
     p2 = sum(pos[1:2] .^ 2)
 
     #  Compute longitude.
-    ϵ = p2 > 0.0 ? atan(pos[2], pos[1]) : 0.0
+    ϵ = p2 > 0.0 ? atan(pos[2], pos[1]) : zero(p2)
 
-    if p2 > 1.0e-32 * radius^2
+    if p2 > 1.0e-32 * float(radius)^2
         #  Prepare Newton correction factors
         s, pn = abs(pos[3]) / radius, sqrt(p2) / radius
         a0 = sqrt((ec * pn)^2 + s^2)
@@ -187,7 +189,8 @@ function gc2gde(radius::AbstractFloat, oblate::AbstractFloat, pos::AbstractVecto
         ) / sqrt(s1^2 + cc^2)
     else
         #  Exception: on or near the polar axis.
-        ϕ, r = π / 2, abs(pos[3]) - radius * ec
+        r = abs(pos[3]) - radius * ec
+        ϕ = oftype(r, π) / 2
     end
 
     #  Restore the sign of the latitude.
@@ -195,7 +198,7 @@ function gc2gde(radius::AbstractFloat, oblate::AbstractFloat, pos::AbstractVecto
 end
 
 """
-    gd2gc(model::Symbol, ϵ::AbstractFloat, ϕ::AbstractFloat, r::AbstractFloat)
+    gd2gc(model::Symbol, ϵ::Real, ϕ::Real, r::Real)
 
 Transform geodetic coordinates to geocentric using the specified
 reference ellipsoid.
@@ -244,12 +247,12 @@ julia> gd2gc(:WGS84, 3.1, -0.5, 2500.0)
 
 4) The inverse transformation is performed in the function gc2gd.
 """
-function gd2gc(model::Symbol, ϵ::AbstractFloat, ϕ::AbstractFloat, r::AbstractFloat)
+function gd2gc(model::Symbol, ϵ::Real, ϕ::Real, r::Real)
     return @inline gd2gce(values(eform(model))..., ϵ, ϕ, r)
 end
 
 """
-    gd2gce(radius::AbstractFloat, oblate::AbstractFloat, ϵ::AbstractFloat, ϕ::AbstractFloat, r::AbstractFloat)
+    gd2gce(radius::Real, oblate::Real, ϵ::Real, ϕ::Real, r::Real)
 
 Transform geodetic coordinates to geocentric for a reference ellipsoid
 of specified form.
@@ -296,7 +299,7 @@ Section 4.5, p96.
 Explanatory Supplement to the Astronomical Almanac, P. Kenneth
 Seidelmann (ed), University Science Books (1992), Section 4.22, p202.
 """
-function gd2gce(radius::AbstractFloat, oblate::AbstractFloat, ϵ::AbstractFloat, ϕ::AbstractFloat, r::AbstractFloat)
+function gd2gce(radius::Real, oblate::Real, ϵ::Real, ϕ::Real, r::Real)
     @assert (cos(ϕ)^2 + ((1.0 - oblate) * sin(ϕ))^2) > 0.0 "Illegal ellipsoid parameters."
     d = sqrt(cos(ϕ)^2 + ((1.0 - oblate) * sin(ϕ))^2)
     rr = radius / d + r

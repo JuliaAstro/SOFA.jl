@@ -1,7 +1,7 @@
 #### Astronomy / Rotation and Time
 
 """
-    ee00(day1::AbstractFloat, day2::AbstractFloat, ϵA::AbstractFloat, ψ::AbstractFloat)
+    ee00(day1::Real, day2::Real, ϵA::Real, ψ::Real)
 
 The equation of the equinoxes, compatible with IAU 2000 resolutions,
 given the nutation in longitude and the mean obliquity.
@@ -57,13 +57,13 @@ implement the IAU 2000 definition of UT1", Astronomy & Astrophysics,
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function ee00(day1::AbstractFloat, day2::AbstractFloat, ϵA::AbstractFloat, ψ::AbstractFloat)
+function ee00(day1::Real, day2::Real, ϵA::Real, ψ::Real)
     #  Equation of the equinoxes
     return ψ * cos(ϵA) + eect00(day1, day2)
 end
 
 """
-    ee00a(day1::AbstractFloat, day2::AbstractFloat)
+    ee00a(day1::Real, day2::Real)
 
 Equation of the equinoxes, compatible with IAU 2000 resolutions.
 
@@ -114,7 +114,7 @@ implement the IAU 2000 definition of UT1", Astronomy & Astrophysics,
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004).
 """
-function ee00a(day1::AbstractFloat, day2::AbstractFloat)
+function ee00a(day1::Real, day2::Real)
     #  IAU 2000 precession rate adjustment, mean obliquity, consistent with
     #  IAU 2000 precession-nutation, nutation in longitude, and solve for
     #  equation of the equinoxes.
@@ -125,7 +125,7 @@ function ee00a(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    ee00b(day1::AbstractFloat, day2::AbstractFloat)
+    ee00b(day1::Real, day2::Real)
 
 Equation of the equinoxes, compatible with IAU 2000 resolutions but
 using the truncated nutation model IAU 2000B.
@@ -182,7 +182,7 @@ Dynamical Astronomy, 85, 37-49 (2003)
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function ee00b(day1::AbstractFloat, day2::AbstractFloat)
+function ee00b(day1::Real, day2::Real)
     #  IAU 2000 precession rate adjustment, mean obliquity, consistent with
     #  IAU 2000 precession-nutation, nutation in longitude, and solve for
     #  equation of the equinoxes.
@@ -193,7 +193,7 @@ function ee00b(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    ee06a(day1::AbstractFloat, day2::AbstractFloat)
+    ee06a(day1::Real, day2::Real)
 
 Equation of the equinoxes, compatible with IAU 2000 resolutions and
 IAU 2006/2000A precession-nutation.
@@ -237,12 +237,12 @@ IAU 2006/2000A precession-nutation.
 McCarthy, D. D., Petit, G. (eds.), 2004, IERS Conventions (2003), IERS
 Technical Note No. 32, BKG
 """
-function ee06a(day1::F, day2::F) where {F <: AbstractFloat}
+function ee06a(day1::Real, day2::Real)
     return rem2pi(gst06a(0.0, 0.0, day1, day2) - gmst06(0.0, 0.0, day1, day2), RoundNearest)
 end
 
 """
-    eect00(day1::AbstractFloat, day2::AbstractFloat)
+    eect00(day1::Real, day2::Real)
 
 Equation of the equinoxes complementary terms, consistent with IAU
 2000 resolutions.
@@ -319,7 +319,7 @@ IAU Resolution C7, Recommendation 3 (1994)
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function eect00(day1::F, day2::F) where {F <: AbstractFloat}
+function eect00(day1::Real, day2::Real)
     #  Interval between fundamental epoch J2000.0 and current date.
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
@@ -352,7 +352,7 @@ function eect00(day1::F, day2::F) where {F <: AbstractFloat}
 end
 
 """
-    eqeq94(day1::AbstractFloat, day2::AbstractFloat)
+    eqeq94(day1::Real, day2::Real)
 
 Equation of the equinoxes, IAU 1994 model.
 
@@ -395,7 +395,7 @@ IAU Resolution C7, Recommendation 3 (1994).
 
 Capitaine, N. & Gontier, A.-M., 1993, Astron.Astrophys., 275, 645-650.
 """
-function eqeq94(day1::AbstractFloat, day2::AbstractFloat)
+function eqeq94(day1::Real, day2::Real)
     #  Interval between fundamental epoch J2000.0 and given date
     #  (Julian centuries).
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
@@ -411,7 +411,7 @@ function eqeq94(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    era00(day1::AbstractFloat, day2::AbstractFloat)
+    era00(day1::Real, day2::Real)
 
 Earth rotation angle (IAU 2000 model).
 
@@ -467,7 +467,7 @@ Capitaine N., Guinot B. and McCarthy D.D, 2000, Astron.  Astrophys.,
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function era00(day1::AbstractFloat, day2::AbstractFloat)
+function era00(day1::Real, day2::Real)
     if day1 < day2
         Δt = day1 + (day2 - JD2000)
         fr = rem(day1, 1.0) + rem(day2, 1.0)
@@ -479,7 +479,7 @@ function era00(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    gmst00(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat)
+    gmst00(ut1::Real, ut2::Real, tt1::Real, tt2::Real)
 
 Greenwich mean sidereal time (model consistent with IAU 2000
 resolutions).
@@ -541,7 +541,7 @@ implement the IAU 2000 definition of UT1", Astronomy & Astrophysics,
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function gmst00(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat)
+function gmst00(ut1::Real, ut2::Real, tt1::Real, tt2::Real)
     #  TT Julian centuries since J2000.0.
     return mod2pi(
         era00(ut1, ut2) + deg2rad(
@@ -553,7 +553,7 @@ function gmst00(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2:
 end
 
 """
-    gmst06(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat)
+    gmst06(ut1::Real, ut2::Real, tt1::Real, tt2::Real)
 
 Greenwich mean sidereal time (consistent with IAU 2006 precession).
 
@@ -613,7 +613,7 @@ julia> gmst06(2400000.5, 53736.0, 2400000.5, 53736.0)
 Capitaine, N., Wallace, P.T. & Chapront, J., 2005,
 Astron.Astrophys. 432, 355
 """
-function gmst06(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat)
+function gmst06(ut1::Real, ut2::Real, tt1::Real, tt2::Real)
     #  TT Julian centuries since J2000.0
     Δt = ((tt1 - JD2000) + tt2) / (100 * DAYPERYEAR)
     #  Greenwich mean sidereal time, IAU 2006
@@ -621,7 +621,7 @@ function gmst06(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2:
 end
 
 """
-    gmst82(day1::AbstractFloat, day2::AbstractFloat)
+    gmst82(day1::Real, day2::Real)
 
 Universal Time to Greenwich mean sidereal time (IAU 1982 model).
 
@@ -677,7 +677,7 @@ Transactions of the International Astronomical Union, XVIII B, 67
 
 Aoki et al., Astron.Astrophys., 105, 359-361 (1982).
 """
-function gmst82(day1::AbstractFloat, day2::AbstractFloat)
+function gmst82(day1::Real, day2::Real)
     #  Julian centuries since fundamental epoch.
     Δt = (day1 < day2 ? (day2 - JD2000) + day1 : (day1 - JD2000) + day2) / (100 * DAYPERYEAR)
     #  Fractional part of JD(UT1) (seconds) and GMST at this UT1.
@@ -692,7 +692,7 @@ function gmst82(day1::AbstractFloat, day2::AbstractFloat)
 end
 
 """
-    gst00a(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat)
+    gst00a(ut1::Real, ut2::Real, tt1::Real, tt2::Real)
 
 Greenwich apparent sidereal time (consistent with IAU 2000
 resolutions).
@@ -754,12 +754,12 @@ implement the IAU 2000 definition of UT1", Astronomy & Astrophysics,
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function gst00a(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat)
+function gst00a(ut1::Real, ut2::Real, tt1::Real, tt2::Real)
     return mod2pi(gmst00(ut1, ut2, tt1, tt2) + ee00a(tt1, tt2))
 end
 
 """
-    gst00b(ut1::AbstractFloat, ut2::AbstractFloat)
+    gst00b(ut1::Real, ut2::Real)
 
 Greenwich apparent sidereal time (consistent with IAU 2000 resolutions
 but using the truncated nutation model IAU 2000B).
@@ -829,13 +829,13 @@ Dynamical Astronomy, 85, 37-49 (2003)
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-function gst00b(ut1::AbstractFloat, ut2::AbstractFloat)
+function gst00b(ut1::Real, ut2::Real)
     return mod2pi(gmst00(ut1, ut2, ut1, ut2) + ee00b(ut1, ut2))
 end
 
 """
-    gst06(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat,
-          r::AbstractMatrix{<:AbstractFloat})
+    gst06(ut1::Real, ut2::Real, tt1::Real, tt2::Real,
+          r::AbstractMatrix)
 
 Greenwich apparent sidereal time, IAU 2006, given the NPB matrix.
 
@@ -889,13 +889,13 @@ Greenwich apparent sidereal time, IAU 2006, given the NPB matrix.
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function gst06(ut1::F, ut2::F, tt1::F, tt2::F, r::M) where
-    {F <: AbstractFloat, M <: AbstractMatrix{<:AbstractFloat}}
+function gst06(ut1::Real, ut2::Real, tt1::Real, tt2::Real, r::AbstractMatrix)
+    r = floatarray(r)
     return @inline mod2pi(era00(ut1, ut2) - eors(r, s06(tt1, tt2, bpn2xy(r)...)))
 end
 
 """
-    gst06a(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat)
+    gst06a(ut1::Real, ut2::Real, tt1::Real, tt2::Real)
 
 Greenwich apparent sidereal time (consistent with IAU 2000 and 2006
 resolutions).
@@ -949,14 +949,14 @@ resolutions).
 
 Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
-function gst06a(ut1::AbstractFloat, ut2::AbstractFloat, tt1::AbstractFloat, tt2::AbstractFloat)
+function gst06a(ut1::Real, ut2::Real, tt1::Real, tt2::Real)
     #  Greenwich apparent sidereal time using classical
     #  nutation-precession-bias matrix (IAU 2000A)
     return gst06(ut1, ut2, tt1, tt2, pnm06a(tt1, tt2))
 end
 
 """
-    gst94(ut1::AbstractFloat, ut2::AbstractFloat)
+    gst94(ut1::Real, ut2::Real)
 
 Greenwich apparent sidereal time (consistent with IAU 1982/94
 resolutions).
@@ -1011,4 +1011,4 @@ Seidelmann (ed), University Science Books (1992)
 
 IAU Resolution C7, Recommendation 3 (1994)
 """
-gst94(ut1::AbstractFloat, ut2::AbstractFloat) = mod2pi(gmst82(ut1, ut2) + eqeq94(ut1, ut2))
+gst94(ut1::Real, ut2::Real) = mod2pi(gmst82(ut1, ut2) + eqeq94(ut1, ut2))
