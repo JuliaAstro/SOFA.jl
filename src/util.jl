@@ -34,6 +34,7 @@ function leapday(year::Integer, month::Integer)
 end
 
 function calendar2MJD(year::Integer, month::Integer, day::Integer)
+    year, month, day = Int64(year), Int64(month), Int64(day)
 
     @assert -4799 <= year "Year less than -4799."
     @assert 1 <= month <= 12 "Month out of range [1-12]."

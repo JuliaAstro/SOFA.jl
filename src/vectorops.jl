@@ -461,7 +461,7 @@ Copy a position/velocity vector.
  - `c`      -- copy
 """
 function cpv(pv::AbstractVector)
-    pv = floatarray(pv)
+    pv = floatpv(pv)
     return deepcopy(pv)
 end
 
@@ -516,7 +516,7 @@ Discard velocity component of a pv-vector.
  - `p`     -- p-vector
 """
 function pv2p(pv::AbstractVector)
-    pv = floatarray(pv)
+    pv = floatpv(pv)
     return pv[1]
 end
 
@@ -669,7 +669,7 @@ function rxpv(
         r::AbstractMatrix,
         pv::AbstractVector
     )
-    r, pv = floatarray(r), floatarray(pv)
+    r, pv = floatarray(r), floatpv(pv)
     return SVector{2}(r * pv[1], r * pv[2])
 end
 
@@ -723,7 +723,7 @@ function trxpv(
         r::AbstractMatrix,
         pv::AbstractVector
     )
-    r, pv = floatarray(r), floatarray(pv)
+    r, pv = floatarray(r), floatpv(pv)
     return SVector{2}(r' * pv[1], r' * pv[2])
 end
 
@@ -833,14 +833,14 @@ Position-angle from two p-vectors.
 function pap(a::AbstractVector, b::AbstractVector)
     a, b = floatarray(a), floatarray(b)
     if norm(a) == 0 || norm(b) == 0
-        θ = zero(eltype(a))
+        θ = zero(floattype(a, b))
     else
         #  The north axis tangent from a (arbitrary length)
         η = SVector{3}(-a[1] * a[3], -a[2] * a[3], sum(a[1:2] .^ 2))
         #  The east axis tanget from a (same length)
         ξ = vec2mat(η) * a / norm(a)
         # Resolve into components along the north and east axes
-        θ = (b .- a)' * ξ == 0 && (b .- a)' * η == 0 ? zero(eltype(a)) :
+        θ = (b .- a)' * ξ == 0 && (b .- a)' * η == 0 ? zero(floattype(a, b)) :
             atan((b .- a)' * ξ, (b .- a)' * η)
     end
     return θ
@@ -872,6 +872,7 @@ Position-angle from spherical coordinates.
 2) Zero is returned if the two points are coincident.
 """
 function pas(λa::Real, ϕa::Real, λb::Real, ϕb::Real)
+    λa, λb = float(λa), float(λb)
     x = sin(ϕb) * cos(ϕa) - cos(ϕb) * sin(ϕa) * cos(λb - λa)
     y = sin(λb - λa) * cos(ϕb)
     return x != 0 || y != 0 ? atan(y, x) : zero(x)
@@ -1045,9 +1046,9 @@ Convert position/velocity from Cartesian to spherical coordinates.
    such cases zeroes are returned for all three.
 """
 function pv2s(pv::AbstractVector)
-    pv = floatarray(pv)
+    pv = floatpv(pv)
 
-    zerot = zero(eltype(pv[1]))
+    zerot = zero(floattype(pv[1], pv[2]))
     x, y, z = pv[norm(pv[1]) == zerot ? 2 : 1]
     dx, dy, dz = pv[2]
 
@@ -1131,6 +1132,7 @@ Convert position/velocity from spherical to Cartesian coordinates.
  - `pv`    -- pv-vector
 """
 function s2pv(θ::Real, ϕ::Real, r::Real, dθ::Real, dϕ::Real, dr::Real)
+    r, dθ, dϕ = float(r), float(dθ), float(dϕ)
     return SVector(
         SVector(r * cos(θ) * cos(ϕ), r * sin(θ) * cos(ϕ), r * sin(ϕ)),
         SVector(
@@ -1297,7 +1299,7 @@ function pvdpv(
         a::AbstractVector,
         b::AbstractVector
     )
-    a, b = floatarray(a), floatarray(b)
+    a, b = floatpv(a), floatpv(b)
     return SVector{2}(sum(a[1] .* b[1]), sum(a[1] .* b[2] .+ a[2] .* b[1]))
 end
 
@@ -1316,7 +1318,7 @@ Modulus of pv-vector.
  - `s`     -- modulus of velocity component
 """
 function pvm(pv::AbstractVector)
-    pv = floatarray(pv)
+    pv = floatpv(pv)
     return sqrt.(sum.(SVector{2}(pv[1] .^ 2, pv[2] .^ 2)))
 end
 
@@ -1338,7 +1340,7 @@ function pvmpv(
         a::AbstractVector,
         b::AbstractVector
     )
-    a, b = floatarray(a), floatarray(b)
+    a, b = floatpv(a), floatpv(b)
     return SVector{2}(a[1] .- b[1], a[2] .- b[2])
 end
 
@@ -1360,7 +1362,7 @@ function pvppv(
         a::AbstractVector,
         b::AbstractVector
     )
-    a, b = floatarray(a), floatarray(b)
+    a, b = floatpv(a), floatpv(b)
     return SVector{2}(a[1] .+ b[1], a[2] .+ b[2])
 end
 
@@ -1386,7 +1388,7 @@ Update a pv-vector.
 2) The time units of dt must match those of the velocity.
 """
 function pvu(dt::Real, pv::AbstractVector)
-    pv = floatarray(pv)
+    pv = floatpv(pv)
     return SVector{2}(pv[1] .+ dt .* pv[2], pv[2])
 end
 
@@ -1412,7 +1414,7 @@ Update a pv-vector, discarding the velocity component.
 2) The time units of dt must match those of the velocity.
 """
 function pvup(dt::Real, pv::AbstractVector)
-    pv = floatarray(pv)
+    pv = floatpv(pv)
     return pv[1] .+ dt * pv[2]
 end
 
@@ -1441,7 +1443,7 @@ function pvxpv(
         a::AbstractVector,
         b::AbstractVector
     )
-    a, b = floatarray(a), floatarray(b)
+    a, b = floatpv(a), floatpv(b)
     return SVector{2}(vec2mat(a[1]) * b[1], vec2mat(a[1]) * b[2] .+ vec2mat(a[2]) * b[1])
 end
 
@@ -1480,7 +1482,7 @@ Multiply a pv-vector by two scalars.
  - `spv`   -- pv-vector: p scaled by s1, v scaled by s2
 """
 function s2xpv(s1::Real, s2::Real, pv::AbstractVector)
-    pv = floatarray(pv)
+    pv = floatpv(pv)
     return SVector{2}(s1 * pv[1], s2 * pv[2])
 end
 
@@ -1518,6 +1520,6 @@ Multiply a pv-vector by a scalar.
  - `spv`   -- s * pv
 """
 function sxpv(s::Real, pv::AbstractVector)
-    pv = floatarray(pv)
+    pv = floatpv(pv)
     return SVector{2}(s * pv[1], s * pv[2])
 end

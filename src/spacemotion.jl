@@ -74,7 +74,7 @@ Convert star position & velocity vector to catalog coordinates.
 Stumpff, P., 1985, Astron.Astrophys. 144, 232-240.
 """
 function pvstar(pv::AbstractVector)
-    pv = floatarray(pv)
+    pv = floatpv(pv)
     DC = SECPERDAY / (ASTRUNIT / LIGHTSPEED)
     #  Isolate the radial component of the velocity (AU/day, inertial).
     @inline vr = pn(pv[1])[2]' * pv[2]
@@ -206,7 +206,7 @@ Stumpff, P., 1985, Astron.Astrophys. 144, 232-240.
 function starpv(ra::Real, dec::Real, pmras::Real, pmdec::Real, plx::Real, rvel::Real)
     DC = SECPERDAY / (ASTRUNIT / LIGHTSPEED)
     #  Distance (AU).
-    r = 3600 * rad2deg(1) / (plx >= PXMIN ? plx : oftype(float(plx), PXMIN))
+    r = 3600 * rad2deg(1) / (plx >= PXMIN ? plx : convert(floattype(plx, PXMIN), PXMIN))
     #  Radial velocity (AU/day).
     dr = SECPERDAY * 1.0e3 / ASTRUNIT * rvel
     #  Proper motion (radian/day).

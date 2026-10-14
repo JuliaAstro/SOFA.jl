@@ -190,7 +190,7 @@ Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 """
 function bp06(day1::Real, day2::Real)
     #  B matrix
-    T = floattype(day1, day2)
+    T = floattype(day1, day2, MJD0)
     rb = fw2m(pfw06(T(MJD0), T(MJD00))...)
     #  PxB matrix
     rbp = pmat06(day1, day2)
@@ -611,6 +611,7 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function c2ixys(x::Real, y::Real, s::Real)
+    x, y = float(x), float(y)
     r = x * x + y * y
     e = r > 0.0 ? atan(y, x) : zero(float(r))
     return Rz(-(e + s))Ry(atan(sqrt(r / (1.0 - r))))Rz(e)
@@ -1195,7 +1196,7 @@ function eors(r::AbstractMatrix, s::Real)
         1.0 - r[3, 1]^2 / (1.0 + r[3, 3]),
         -r[3, 2] * r[3, 1] / (1.0 + r[3, 3]), -r[3, 1]
     )
-    return v[1] != 0 || v[2] != 0 ? s - atan(v[2], v[1]) : s
+    return v[1] != 0 || v[2] != 0 ? s - atan(v[2], v[1]) : s - zero(eltype(v))
 end
 
 """
@@ -1260,7 +1261,7 @@ Capitaine, N. & Wallace, P.T., 2006, Astron.Astrophys. 450, 855
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
 function fw2m(γ::Real, ϕ::Real, ψ::Real, ϵ::Real)
-    return Rx(-ϵ)Rz(-ψ)Rx(ϕ)Rz(γ)
+    return Rx(-float(ϵ))Rz(-float(ψ))Rx(ϕ)Rz(γ)
 end
 
 """
@@ -1308,7 +1309,7 @@ CIP X,Y given Fukushima-Williams bias-precession-nutation angles.
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
 function fw2xy(γ::Real, ϕ::Real, ψ::Real, ϵ::Real)
-    return (Rx(-ϵ)Rz(-ψ)Rx(ϕ)Rz(γ))[3, 1:2]
+    return (Rx(-float(ϵ))Rz(-float(ψ))Rx(ϕ)Rz(γ))[3, 1:2]
 end
 
 """
@@ -1692,7 +1693,7 @@ Seidelmann (ed), University Science Books (1992), Section 3.222-3
 (p114).
 """
 function numat(ϵA::Real, δψ::Real, δϵ::Real)
-    return Rx(-(ϵA + δϵ))Rz(-δψ)Rx(ϵA)
+    return Rx(-(float(ϵA) + δϵ))Rz(-float(δψ))Rx(ϵA)
 end
 
 """
@@ -3255,7 +3256,7 @@ Wallace, P.T. & Capitaine, N., 2006, Astron.Astrophys. 459, 981
 function pn06(day1::Real, day2::Real, δψ::Real, δϵ::Real)
     #  Bias-precession Fukushima-Williams angle of J2000.0 = frame bias
     #  and matrix
-    T = floattype(day1, day2, δψ, δϵ)
+    T = floattype(day1, day2, δψ, δϵ, MJD0)
     rb = fw2m(pfw06(T(MJD0), T(MJD00))...)
     #  Bias-precession Fukushima-Williams angles of date.
     γb, ϕb, ψb, ϵb = pfw06(day1, day2)
@@ -3604,7 +3605,7 @@ Form the matrix of polar motion for a given date, IAU 2000.
 McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
-pom00(x::Real, y::Real, s::Real) = Rx(-y)Ry(-x)Rz(s)
+pom00(x::Real, y::Real, s::Real) = Rx(-float(y))Ry(-float(x))Rz(s)
 
 """
     pr00(day1::Real, day2::Real)
@@ -3745,6 +3746,7 @@ Lieske, J.H., 1979, Astron.Astrophys. 73, 282, equations (6) & (7),
 p283.
 """
 function prec76(day11::Real, day12::Real, day21::Real, day22::Real)
+    day11, day12, day21, day22 = floatargs(day11, day12, day21, day22)
     #  Interval between fundamental epoch J2000.0 and start date (Julian centuries).
     t0 = ((day11 - JD2000) + day12) / (100 * DAYPERYEAR)
     #  Interval over which precession required (Julian centuries).
@@ -3881,7 +3883,7 @@ function s00(day1::Real, day2::Real, x::Real, y::Real)
     end
 
     corrections = SVector(sum0, sum1, sum2, sum3, sum4, 0.0)
-    return deg2rad(Polynomial((sp_2000A .+ corrections)...)(Δt) / 3600) - x * y / 2.0
+    return deg2rad(Polynomial((sp_2000A .+ corrections)...)(Δt) / 3600) - float(x) * y / 2.0
 end
 
 """
@@ -4152,7 +4154,7 @@ function s06(day1::Real, day2::Real, x::Real, y::Real)
     end
 
     corrections = SVector(sum0, sum1, sum2, sum3, sum4, 0.0)
-    return deg2rad(Polynomial((cio_s_2006 .+ corrections)...)(Δt) / 3600) - x * y / 2.0
+    return deg2rad(Polynomial((cio_s_2006 .+ corrections)...)(Δt) / 3600) - float(x) * y / 2.0
 end
 
 """

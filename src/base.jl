@@ -49,13 +49,15 @@ struct Astrom{T <: Real}
     refa::T                             # refraction constant A (radians)
     refb::T                             # refraction constant B (radians)
 
-    #   An explicit inner constructor keeps Julia from generating the outer
-    #   `Astrom(::T, ::SVector{3, T}, ...)`, which would reject mixed types; the
-    #   outer constructors below promote instead.
+    #   An explicit inner constructor stops Julia generating the outer
+    #   `Astrom(::T, ::SVector{3, T}, ...)`, which would build an `Astrom{Int}`;
+    #   the outer constructors below promote to floating point.  The shape of
+    #   `bpn` is checked, as converting it to an SMatrix checks only its length.
     function Astrom{T}(
-            pmt, eb, eh, em, v, bm1, bpn, along, phi, xpl, ypl, sphi, cphi, diurab,
-            eral, refa, refb
+            pmt, eb::AbstractVector, eh::AbstractVector, em, v::AbstractVector, bm1,
+            bpn::AbstractMatrix, along, phi, xpl, ypl, sphi, cphi, diurab, eral, refa, refb
         ) where {T <: Real}
+        size(bpn) == (3, 3) || throw(DimensionMismatch("bpn is $(size(bpn)), not (3, 3)"))
         return new{T}(
             pmt, eb, eh, em, v, bm1, bpn, along, phi, xpl, ypl, sphi, cphi, diurab,
             eral, refa, refb
@@ -72,29 +74,23 @@ numtype(x::AbstractArray{T}) where {T} =
 
 #   Real arguments in one floating-point type, no narrower than the Float64 of
 #   the constants, so that the parts of a two-part date share their type.
-floatargs(xs::Real...) = Base.front(promote(map(float, xs)..., 0.0))
+#   (Promoting first converts a Rational straight to a wider type.)
+floatargs(xs::Real...) = Base.front(map(float, promote(xs..., 0.0)))
 
-#   An array argument in floating point, whatever its element type: an Integer
-#   array (of any width), a Vector{Any} of numbers, a pv-vector of either.  A
-#   floating-point array is returned as it is, so the Float64 path costs nothing.
-floatarray(x::Real) = float(x)
-floatarray(x::AbstractArray{<:AbstractFloat}) = x
-floatarray(x::AbstractArray{<:AbstractArray{<:AbstractFloat}}) = x
-floatarray(x::AbstractArray) = map(floatarray, x)
+#   An array of numbers (an Integer array, a Vector{Any}) in the promoted
+#   floating-point type of its elements.  An array already of that type is
+#   returned as it is, so the Float64 path costs nothing; an array of arrays is
+#   a MethodError.
+floatarray(x::AbstractArray) = floatarray(floattype(x), x)
+floatarray(::Type{T}, x::AbstractArray{T}) where {T} = x
+floatarray(::Type{T}, x::AbstractArray) where {T} = map(T, x)
 
-function Astrom(
-        pmt, eb, eh, em, v, bm1, bpn, along, phi, xpl, ypl, sphi, cphi, diurab,
-        eral, refa, refb
-    )
-    T = floattype(
-        pmt, eb, eh, em, v, bm1, bpn, along, phi, xpl, ypl, sphi, cphi, diurab,
-        eral, refa, refb
-    )
-    return Astrom{T}(
-        pmt, eb, eh, em, v, bm1, bpn, along, phi, xpl, ypl, sphi, cphi, diurab,
-        eral, refa, refb
-    )
-end
+#   The same for a pv-vector; a flat vector is a MethodError.
+floatpv(pv::AbstractVector) = map(floatarray, pv)
+floatpv(pv::AbstractVector{<:AbstractVector{T}}) where {T <: AbstractFloat} =
+    isconcretetype(T) ? pv : map(floatarray, pv)
+
+Astrom(f::Vararg{Any, 17}) = Astrom{floattype(f...)}(f...)
 function Astrom(pm, eb, eh, em, v, bm1, bpn)
     z = zero(floattype(pm, eb, eh, em, v, bm1, bpn))
     return Astrom(pm, eb, eh, em, v, bm1, bpn, z, z, z, z, z, z, z, z, z, z)
@@ -126,7 +122,7 @@ struct Ldbody{T <: Real}
     pv::SVector{2, SVector{3, T}}       #  barycentric PV of the body (AU, AU/day)
 
     function Ldbody{T}(bm, dl, pv) where {T <: Real}
-        return new{T}(bm, dl, SVector{2}(SVector{3, T}(pv[1]), SVector{3, T}(pv[2])))
+        return new{T}(bm, dl, SVector{2, SVector{3, T}}(pv))
     end
 end
 

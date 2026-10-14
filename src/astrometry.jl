@@ -129,10 +129,10 @@ transformation chain.
    atciq* and aticq*.
 """
 function apcg(
-        day1::Real, day2::Real, ebpv::AbstractVecOrMat,
+        day1::Real, day2::Real, ebpv::AbstractVector,
         ehp::AbstractVector
     )
-    ebpv, ehp = floatarray(ebpv), floatarray(ehp)
+    ebpv, ehp = floatpv(ebpv), floatarray(ehp)
 
     #  Compute the star-independent astrometry parameters.
     return apcs(day1, day2, SVector(SVector(0.0, 0.0, 0.0), SVector(0.0, 0.0, 0.0)), ebpv, ehp)
@@ -318,10 +318,10 @@ the astrometric transformation chain.
    atciq and aticq.
 """
 function apci(
-        day1::Real, day2::Real, ebpv::AbstractVecOrMat,
+        day1::Real, day2::Real, ebpv::AbstractVector,
         ehp::AbstractVector, x::Real, y::Real, s::Real
     )
-    ebpv, ehp = floatarray(ebpv), floatarray(ehp)
+    ebpv, ehp = floatpv(ebpv), floatarray(ehp)
 
     #  Star-independent astrometry parameters for geocenter and CIO based
     #  bias-precession-nutation matrix.
@@ -553,11 +553,12 @@ coordinates.
    atioq, atoiq, atciq* and aticq*.
 """
 function apco(
-        day1::Real, day2::Real, ebpv::AbstractVecOrMat,
+        day1::Real, day2::Real, ebpv::AbstractVector,
         ehp::AbstractVector, x::Real, y::Real, s::Real, θ::Real, elong::Real,
         ϕ::Real, hm::Real, xp::Real, yp::Real, sp::Real, refa::Real, refb::Real
     )
-    ebpv, ehp = floatarray(ebpv), floatarray(ehp)
+    ebpv, ehp = floatpv(ebpv), floatarray(ehp)
+    θ, xp, yp = float(θ), float(xp), float(yp)
 
     #  Form the rotation matrix, CIRS to apparent (HA, Dec).
     r = Rz(elong)Rx(-yp)Ry(-xp)Rz(θ + sp)
@@ -845,7 +846,7 @@ function apcs(
         day1::Real, day2::Real, pv::AbstractVector,
         ebpv::AbstractVector, ehp::AbstractVector
     )
-    pv, ebpv, ehp = floatarray(pv), floatarray(ebpv), floatarray(ehp)
+    pv, ebpv, ehp = floatpv(pv), floatpv(ebpv), floatarray(ehp)
     # Time since reference epoch, years (for proper motion calculation).
     pmt = ((day1 - JD2000) + day2) / DAYPERYEAR
     # Barycentric position of observer (AU).
@@ -953,7 +954,7 @@ function apcs13(
         day1::Real, day2::Real,
         pv::AbstractVector
     )
-    pv = floatarray(pv)
+    pv = floatpv(pv)
     #  Earth barycentric and heliocentric position & velocity (AU, AU/day).
     ehpv, ebpv = epv00(day1, day2)
     #  Compute the star-independent astrometry parameters.
@@ -1191,6 +1192,7 @@ function apio(
         sp::Real, θ::Real, elong::Real, ϕ::Real, hm::Real,
         xp::Real, yp::Real, refa::Real, refb::Real, a::Astrom
     )
+    θ, xp, yp = float(θ), float(xp), float(yp)
     #  Form the rotation matrix, CIRS to apparent (HA, Dec).
     r = Rz(elong)Rx(-yp)Ry(-xp)Rz(θ + sp)
     #  Solve for local Earth rotation angle.
@@ -2005,7 +2007,8 @@ of the functions apci[13], apcg[13], apco[13] or apcs[13].
 function aticq(ri::Real, di::Real, a::Astrom)
     #  CIRS RA, Dec to cartesian.
     #  Bias-precession-nutation, giving GCRS proper direction.
-    ppr = a.bpn' * s2c(ri, di)
+    #  (in the type of the result, so that the iterations keep one type)
+    ppr = SVector{3, promote_type(Float64, floattype(ri, di, a.bpn))}(a.bpn' * s2c(ri, di))
     #  Aberration, giving GCRS natural direction.
     d, pnat = zero(ppr), ppr
     for j in 1:2
@@ -2103,7 +2106,8 @@ function aticqn(
     )
     #  CIRS RA, Dec to cartesian.
     #  Bias-precession-nutation, giving GCRS proper direction.
-    ppr = a.bpn' * s2c(ri, di)
+    #  (in the type of the result, so that the iterations keep one type)
+    ppr = SVector{3, promote_type(Float64, floattype(ri, di, a.bpn))}(a.bpn' * s2c(ri, di))
     #  Aberration, giving GCRS natural direction.
     d, pnat = zero(ppr), ppr
     for j in 1:2
@@ -2113,7 +2117,9 @@ function aticqn(
         pnat = (ppr .- d) ./ norm(ppr .- d)
     end
     #  Light deflection, giving BCRS coordinate direction.
-    d, pco = zero(ppr), pnat
+    #  (in the type of the bodies too)
+    pnat = pnat .* bodyone(b)
+    d, pco = zero(pnat), pnat
     for j in 1:5
         bf = (pnat .- d) ./ norm(pnat .- d)
         af = ldn(n, b, a.eb, bf)
@@ -2711,6 +2717,7 @@ apio[13] or apco[13].
    accordance with the models used.
 """
 function atoiq(tp::Char, ob1::Real, ob2::Real, a::Astrom)
+    ob1 = float(ob1)
     #  Minimum sin(alt) for refraction.
     SELMIN = 0.05
     #  Standardize coordinate type: anything that is not 'R' or 'H'
@@ -2901,20 +2908,32 @@ function ldn(
         sc::AbstractVector
     )
     ob, sc = floatarray(ob), floatarray(sc)
-    sn = SVector{3}(sc)
+    #  (in the type of all the bodies, so that the type does not depend on n)
+    sn = SVector{3}(sc) .* (one(eltype(ob)) * bodyone(b))
     for body in view(b, 1:n)
-        #  Body to observer vector at epoch of observation (AU).
-        v = ob .- body.pv[1]
-        #  Minus the time since the light passed the body (days).
-        Δt = minimum((ASTRUNIT / LIGHTSPEED / SECPERDAY * dot(sn, v), 0.0))
-        #  Backtrack the body to the time the light was passing the body.
-        #  Body to observer vector as magnitude and direction.
-        em, e = pn(v .- Δt .* body.pv[2])
-        #  Apply light deflection for this body.
-        sn = ld(body.bm, sn, sn, e, em, body.dl)
+        sn = ldbody(sn, body, ob)
     end
     return sn
 end
+
+#   Light deflection by one body: a function barrier, for a vector of bodies
+#   of different types
+function ldbody(sn, body, ob)
+    #  Body to observer vector at epoch of observation (AU).
+    v = ob .- body.pv[1]
+    #  Minus the time since the light passed the body (days).
+    Δt = minimum((ASTRUNIT / LIGHTSPEED / SECPERDAY * dot(sn, v), 0.0))
+    #  Backtrack the body to the time the light was passing the body.
+    #  Body to observer vector as magnitude and direction.
+    em, e = pn(v .- Δt .* body.pv[2])
+    #  Apply light deflection for this body.
+    return ld(body.bm, sn, sn, e, em, body.dl)
+end
+
+#   One in the promoted type of the bodies and Float64 (by value for a
+#   Vector{Ldbody}, whose type is slow to compute at run time)
+bodyone(b::AbstractVector{Ldbody{T}}) where {T} = one(promote_type(Float64, T))
+bodyone(b::AbstractVector) = mapreduce(body -> one(body.bm), *, b; init = 1.0)
 
 """
 	ldsun(p::AbstractVector, e::AbstractVector, em::Real)
@@ -2946,7 +2965,7 @@ Deflection of starlight by the Sun.
 3) The arguments p and p1 can be the same array.
 """
 function ldsun(p::AbstractVector, e::AbstractVector, em::Real)
-    p, e = floatarray(p), floatarray(e)
+    p, e, em = floatarray(p), floatarray(e), float(em)
     #  Deflection limiter (smaller for distant observers).
     #  Apply the deflection.
     return ld(1.0, p, p, e, em, 1.0e-6 / (em^2 > 1.0 ? em^2 : 1.0))
@@ -3111,7 +3130,7 @@ function pmsafe(
     # speed of about 1% c.
     PXMIN, F = 5.0e-7, 326.0
     #  Proper motion in one year (radians)
-    pm = F * seps(ra, dec, ra + pmr, dec + pmd)
+    pm = F * seps(ra, dec, ra + float(pmr), dec + float(pmd))
     #  Override the parallax to reduce chances of a warning status.
     plx, pm = promote(float(plx), pm)
     if plx < pm
@@ -3343,6 +3362,7 @@ South Wales, Sydney, Australia, 2002.
 Stone, Ronald C., P.A.S.P. 108, 1051-1058, 1996.
 """
 function refco(phpa::Real, tc::Real, rh::Real, wl::Real)
+    phpa, tc, rh, wl = floatargs(phpa, tc, rh, wl)
     #  Determine the spectral band, either optical/IR or radio, based on
     #  the wavelength of > or < 100 microns.
     optical = wl <= 100.0 ? true : false

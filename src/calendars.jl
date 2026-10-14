@@ -234,6 +234,7 @@ Klein, A., A Generalized Kahan-Babuska-Summation-Algorithm.
 Computing, 76, 279-293 (2006), Section 3.
 """
 function jd2cal(day1::Real, day2::Real)
+    day1, day2 = floatargs(day1, day2)
 
     total = day1 + day2
     @assert isfinite(total) "Julian Date is not a finite number (day1=$day1, day2=$day2)."
@@ -241,7 +242,7 @@ function jd2cal(day1::Real, day2::Real)
 
     # Separate day and fraction where fraction in range [-0.5, 0.5].
     day::Integer = convert(Int, round(day1)) + convert(Int, round(day2))
-    fracs = float.(SVector((day1 - round(day1)), (day2 - round(day2))))
+    fracs = (day1 - round(day1), day2 - round(day2))
     T = eltype(fracs)
 
     # Compute frac1 + frac2 + 0.5 using compensated summation (Klein 2006).
@@ -369,6 +370,6 @@ function jdcalf(ndp::Integer, day1::Real, day2::Real)
 
     return (
         year = year, month = month, day = day,
-        fraction = convert(Integer, round(fraction * denom, RoundNearestTiesAway)),
+        fraction = convert(Int, round(fraction * denom, RoundNearestTiesAway)),
     )
 end

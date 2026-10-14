@@ -1649,9 +1649,13 @@ let v = [1.0, 2.0, 3.0], m = [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
     @test SOFA.Astrom(big"1.0", v, v, 1.0, v, 1.0, m) isa SOFA.Astrom{BigFloat}
     @test SOFA.Astrom(big"1.0", v, v, 1.0, v, 1.0, m).bpn == m
     @test SOFA.Astrom{BigFloat}() isa SOFA.Astrom{BigFloat}
+    #   (Integer static arrays too, which Julia's default constructor would store)
+    z, I3 = SOFA.SVector(1, 2, 3), SOFA.SMatrix{3, 3}(1, 0, 0, 0, 1, 0, 0, 0, 1)
+    @test SOFA.Astrom(1, z, z, 1, z, 1, I3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1) isa SOFA.Astrom{Float64}
+    @test SOFA.Ldbody(1, 0, SOFA.SVector(z, z)) isa SOFA.Ldbody{Float64}
 
     @test SOFA.Ldbody(1.0, 6.0e-6, [v, v]) isa SOFA.Ldbody{Float64}
-    @test SOFA.Ldbody(1, 6.0e-6, [[1, 2, 3], v]) isa SOFA.Ldbody{Float64}
+    @test SOFA.Ldbody(1, 6.0e-6, [[1, 2, 3], [4, 5, 6]]) isa SOFA.Ldbody{Float64}
     @test SOFA.Ldbody(1.0, 6.0e-6, [big.(v), v]) isa SOFA.Ldbody{BigFloat}
     @test SOFA.Ldbody(1.0, 6.0e-6, [v, 2v]).pv == [v, 2v]
 

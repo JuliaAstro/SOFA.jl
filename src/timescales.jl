@@ -93,6 +93,7 @@ function d2dtf(scale::AbstractString, ndp::Integer, day1::Real, day2::Real)
     end
 
     sign, hour, minute, second, subsec = d2tf(ndp, subday)
+    hour, minute, second, subsec = Int(hour), Int(minute), Int(second), Int(subsec)
 
     # Check for rounded time >24 hours
     if hour > 23
@@ -192,7 +193,7 @@ function dat(year::Integer, month::Integer, day::Integer, subday::Real)
     # Validate the calendar date (month and day ranges).
     mjd = cal2jd(year, month, day)[:mjd]
 
-    Δt = zero(float(subday))
+    Δt = zero(floattype(subday, 0.0))
     if year < 1972
         # Find drift offset
         for drift in reverse(DRIFTSECOND)

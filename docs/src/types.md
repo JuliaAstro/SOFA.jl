@@ -18,7 +18,7 @@ true
 
 ## Result types
 
-Floating-point results have the promoted floating-point type of the real-valued arguments. The parts of a two-part date, and the fields of a returned `NamedTuple` in general, share that type:
+Floating-point results have the promoted floating-point type of the real-valued arguments they are computed from, and that type depends on the types of the arguments only, never on their values. The parts of a two-part date in floating point share their type; other fields of a returned `NamedTuple` need not, as a field keeps the type of the arguments it depends on:
 
 ```jldoctest types
 julia> typeof(era00(2451545, 0))
@@ -29,9 +29,12 @@ BigFloat
 
 julia> typeof(taitt(big"2453750.5", 0.892482639))
 @NamedTuple{day::BigFloat, fraction::BigFloat}
+
+julia> typeof(tpsts(-0.03, 0.07, big"2.3", 1.5)) # b does not depend on a0
+@NamedTuple{a::BigFloat, b::Float64}
 ```
 
-The constants of the library are `Float64`, so a number type narrower than `Float64` is widened wherever a constant enters the calculation, which is nearly everywhere: `Float32` arguments generally give `Float64` results. A two-part date is always at least `Float64`, in both parts; elsewhere, a field that no constant enters can keep the narrower type. Integer results, such as the fields of a calendar date, stay integers.
+The constants of the library are `Float64`, so a number type narrower than `Float64` is widened wherever a constant enters the calculation, which is nearly everywhere: `Float32` arguments generally give `Float64` results. A two-part date in floating point is at least `Float64`, in both parts; elsewhere, a field that no constant enters can keep the narrower type. Integer results stay integers, such as the fields of a calendar date and the day number of the date that [`cal2jd`](@ref) returns.
 
 ## Extended precision
 
@@ -73,6 +76,6 @@ julia> astrom = apci13(2456165.5, 0.401182685).astrom;
 julia> typeof(aper(big"1.5", astrom))
 Astrom{BigFloat}
 
-julia> typeof(Ldbody(1, 6.0e-6, [[1, 2, 3], [4.0, 5.0, 6.0]]))
+julia> typeof(Ldbody(1, 6.0e-6, [[1, 2, 3], [4, 5, 6]]))
 Ldbody{Float64}
 ```

@@ -213,9 +213,9 @@ function fk45z(ra::Real, dec::Real, epoch::Real)
     PMF = 3.6e5 * rad2deg(1.0)
     #  Spherical coordinates to p-vector, adjust p-vector to give zero proper
     #  motion in FK5.
-    r1, p = s2c(ra, dec), A_fk4_fk5[1:3] .+ (epoch - 1950.0) / PMF .* A_fk4_fk5[4:6]
+    r1, p0 = s2c(ra, dec), A_fk4_fk5[1:3] .+ (epoch - 1950.0) / PMF .* A_fk4_fk5[4:6]
     #  Remove E-terms
-    p = r1 .- (p .- dot(r1, p) .* r1)
+    p = r1 .- (p0 .- dot(r1, p0) .* r1)
     #  Convert to Fricke system pv-vector (cf. Seidelmann 3.591-3)
     pv = SVector((SVector((dot(Mfk4fk5[i][j][1], p) for j in 1:3)...) for i in 1:2)...)
     #  Allow for fictitious proper motion
@@ -845,6 +845,7 @@ function starpm(
         plx::Real, rvel::Real, epoch1a::Real, epoch1b::Real,
         epoch2a::Real, epoch2b::Real
     )
+    epoch1a, epoch1b, epoch2a, epoch2b = floatargs(epoch1a, epoch1b, epoch2a, epoch2b)
     #  Days of light travel time per astronomical unit
     DC = SECPERDAY / (ASTRUNIT / LIGHTSPEED)
     #  Position-velocity vector
