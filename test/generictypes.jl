@@ -229,29 +229,27 @@ end
 @test (SOFA.utctai(2451545, 0) |> SOFA.taitt |> SOFA.tttdb(0)) ===
     (SOFA.utctai(2451545.0, 0.0) |> SOFA.taitt |> SOFA.tttdb(0.0))
 
-#   Integer arrays are converted to floating point on entry: the element type
-#   does not reach the arithmetic (nor overflow in it), and the result is the
-#   one of the equivalent Float64 array
+#   Integer arrays use integer arithmetic, as Julia's own `dot` and `cross` do;
+#   results that are real-valued by nature are floating point, on every branch
 same(x, y) = typeof(x) == typeof(y) && x == y
 let r33 = [2 3 2; 3 2 3; 3 4 5], r33f = [2.0 3.0 2.0; 3.0 2.0 3.0; 3.0 4.0 5.0],
         pv = [[0, 1, 0], [1, 2, 3]], pvf = [[0.0, 1.0, 0.0], [1.0, 2.0, 3.0]]
-    @test same(SOFA.rxp(r33, [0, 1, 0]), SOFA.rxp(r33f, [0.0, 1.0, 0.0]))
+    @test SOFA.rxp(r33, [0, 1, 0]) == SOFA.rxp(r33f, [0.0, 1.0, 0.0])
     @test same(SOFA.trxpv(r33, pvf), SOFA.trxpv(r33f, pvf))
-    @test same(SOFA.rxr(r33, r33), SOFA.rxr(r33f, r33f))
+    @test SOFA.rxr(r33, r33) == SOFA.rxr(r33f, r33f)
     @test same(SOFA.c2tcio(r33, 0.83, r33f), SOFA.c2tcio(r33f, 0.83, r33f))
-    @test same(SOFA.pdp([2, 2, 3], [1, 3, 4]), SOFA.pdp([2.0, 2.0, 3.0], [1.0, 3.0, 4.0]))
-    @test same(SOFA.pxp([2, 2, 3], [1, 3, 4]), SOFA.pxp([2.0, 2.0, 3.0], [1.0, 3.0, 4.0]))
+    @test same(SOFA.pdp([2, 2, 3], [1, 3, 4]), 20)
+    @test SOFA.pxp([2, 2, 3], [1, 3, 4]) == SOFA.pxp([2.0, 2.0, 3.0], [1.0, 3.0, 4.0])
     @test same(SOFA.pvu(1.5, pv), SOFA.pvu(1.5, pvf))
-    @test same(SOFA.pvxpv(pv, pv), SOFA.pvxpv(pvf, pvf))
-    @test same(SOFA.cp([1, 2, 3]), SOFA.cp([1.0, 2.0, 3.0]))
+    @test SOFA.pvxpv(pv, pv) == SOFA.pvxpv(pvf, pvf)
+    @test SOFA.cp([1, 2, 3]) == [1, 2, 3]
     @test same(SOFA.tpxev([0, 1, 0], [1, 0, 0]), SOFA.tpxev([0.0, 1.0, 0.0], [1.0, 0.0, 0.0]))
-    #   widths that overflow in Integer arithmetic
-    @test same(SOFA.pdp(Int32[100000, 100000, 100000], Int32[100000, 100000, 100000]), 3.0e10)
-    @test same(SOFA.c2s(Int32[100000, 100000, 100000]), SOFA.c2s([100000.0, 100000.0, 100000.0]))
-    @test same(SOFA.gc2gd(:WGS84, Int32[2000000, 3000000, 5244000]), SOFA.gc2gd(:WGS84, [2.0e6, 3.0e6, 5.244e6]))
+    @test same(SOFA.tpxev([0, 1, 0], [0, 0, 1]), SOFA.tpxev([0.0, 1.0, 0.0], [0.0, 0.0, 1.0]))
+    @test same(SOFA.tpstv(0.01, 0.02, [0, 0, 1]), SOFA.tpstv(0.01, 0.02, [0.0, 0.0, 1.0]))
+    @test same(SOFA.gc2gde(6378137.0, 0.0033528106647474805, [0, 0, 6400000]), SOFA.gc2gde(6378137.0, 0.0033528106647474805, [0.0, 0.0, 6.4e6]))
+    #   an Int32 scalar, whose arithmetic overflows
     @test same(SOFA.gc2gde(Int32(6378137), 0.0033528106647474805, [0.0, 0.0, 6.4e6]), SOFA.gc2gde(6378137.0, 0.0033528106647474805, [0.0, 0.0, 6.4e6]))
     #   unsigned types, whose negation wraps
-    @test same(SOFA.pxp(UInt8[1, 2, 3], [1.0, 2.0, 4.0]), SOFA.pxp([1.0, 2.0, 3.0], [1.0, 2.0, 4.0]))
     @test same(SOFA.af2a('-', 45, 13, UInt8(3)), SOFA.af2a('-', 45, 13, 3.0))
     @test same(SOFA.pom00(0x01, 0x02, 0x00), SOFA.pom00(1.0, 2.0, 0.0))
     @test same(SOFA.prec76(UInt32(2451545), 0x00, UInt32(2400000), 0x00), SOFA.prec76(2451545.0, 0.0, 2400000.0, 0.0))
@@ -280,42 +278,25 @@ for f in (
     @test f(2453750.5f0, 0.892482639f0, 0.3341f0) isa NamedTuple{(:day, :fraction), Tuple{Float64, Float64}}
 end
 
-#   Array arguments are dispatched on their shape only, so an array with an
-#   abstract element type (a Vector{Any} of numbers, as built by push! onto []
-#   or read from a file) gives the result of the equivalent Float64 array
-let v = Any[2.0, 2, 3.0], vf = [2.0, 2.0, 3.0], w = [1.0, 3.0, 4.0],
-        m = Any[2.0 3 2.0; 3.0 2.0 3.0; 3.0 4.0 5], mf = [2.0 3.0 2.0; 3.0 2.0 3.0; 3.0 4.0 5.0],
-        pv = Any[[1.0, 2.0, 3.0], Any[4, 5.0, 6]], pvf = [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]],
+#   Array arguments are dispatched on their shape and element type, so what is
+#   not an array of real numbers is a MethodError, a Vector{Any} included
+let vf = [2.0, 2.0, 3.0], w = [1.0, 3.0, 4.0],
+        mf = [2.0 3.0 2.0; 3.0 2.0 3.0; 3.0 4.0 5.0], pvf = [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]],
         body = SOFA.Ldbody(1.0, 6.0e-6, [[-0.0007, -0.0023, -0.0011], [6.3e-6, -3.3e-7, -3.0e-7]]),
         ob = [-0.97, -0.21, -0.09], sc = [-0.76, -0.61, -0.22]
-    @test same(SOFA.pdp(v, w), SOFA.pdp(vf, w))
-    @test same(SOFA.pdp(w, v), SOFA.pdp(w, vf))
-    @test same(SOFA.pxp(v, Real[1, 3.0, 4]), SOFA.pxp(vf, w))
-    @test same(SOFA.rxp(m, v), SOFA.rxp(mf, vf))
-    @test same(SOFA.rx(0.3, m), SOFA.rx(0.3, mf))
-    @test same(SOFA.c2s(v), SOFA.c2s(vf))
-    @test same(SOFA.pvu(1.5, pv), SOFA.pvu(1.5, pvf))
-    @test same(SOFA.pvstar(Any[[126668.0, 2136.0, -245251.0], [0, 0, 0]]), SOFA.pvstar([[126668.0, 2136.0, -245251.0], [0.0, 0.0, 0.0]]))
-    @test same(SOFA.gc2gd(:WGS84, Any[2.0e6, 3.0e6, 5.244e6]), SOFA.gc2gd(:WGS84, [2.0e6, 3.0e6, 5.244e6]))
-    @test same(SOFA.ldn(1, Any[body], ob, Any[sc...]), SOFA.ldn(1, [body], ob, sc))
-    @test same(SOFA.c2s(Union{Float32, Float64}[2.0, 2.0f0, 3.0]), SOFA.c2s(vf))
-    #   (converted to one type before any arithmetic)
-    @test same(SOFA.pm(Any[big"0.0", 1 // 3, 0]), SOFA.pm(BigFloat[0, 1 // 3, 0]))
-    #   the type of ldn does not depend on the number of bodies applied
-    @test typeof(SOFA.ldn(0, [body], ob, Float32.(sc))) == typeof(SOFA.ldn(1, [body], ob, Float32.(sc)))
-    #   the element types still decide the type of the result
-    @test SOFA.pdp(Any[big"2.0", 2, 3.0], w) isa BigFloat
-    #   the constructors, whose arguments are untyped
-    @test same(SOFA.Astrom(1.0, v, v, 1.0, v, 1.0, m), SOFA.Astrom(1.0, vf, vf, 1.0, vf, 1.0, mf))
-    @test same(SOFA.Ldbody(1.0, 6.0e-6, pv), SOFA.Ldbody(1.0, 6.0e-6, pvf))
-    @test SOFA.Ldbody(1.0, 6.0e-6, Any[big.(vf), vf]) isa SOFA.Ldbody{BigFloat}
-    #   and what is not an array of real numbers is a MethodError
+    @test_throws MethodError SOFA.pdp(Any[2.0, 2, 3.0], w)
     @test_throws MethodError SOFA.pdp(Any["a", 1, 2], w)
     @test_throws MethodError SOFA.pdp("a", "b")
     #   as is a pv-vector given for a p-vector, or a flat vector for a pv-vector
     @test_throws MethodError SOFA.pm(pvf)
     @test_throws MethodError SOFA.pvm(vcat(pvf...))
     @test_throws MethodError SOFA.apcs13(2456384.5, 0.970031644, vcat(pvf...))
+    #   the type of ldn does not depend on the number of bodies applied
+    @test typeof(SOFA.ldn(0, [body], ob, Float32.(sc))) == typeof(SOFA.ldn(1, [body], ob, Float32.(sc)))
+    #   the constructors, whose arguments are untyped, promote to floating point
+    @test same(SOFA.Astrom(1.0, [2, 2, 3], [2, 2, 3], 1, [2, 2, 3], 1.0, [2 3 2; 3 2 3; 3 4 5]), SOFA.Astrom(1.0, vf, vf, 1.0, vf, 1.0, mf))
+    @test same(SOFA.Ldbody(1.0, 6.0e-6, [[1, 2, 3], [4, 5, 6]]), SOFA.Ldbody(1.0, 6.0e-6, pvf))
+    @test SOFA.Ldbody(1.0, 6.0e-6, Any[big.(vf), vf]) isa SOFA.Ldbody{BigFloat}
     #   and the constructors check the shapes of their arrays
     @test_throws MethodError SOFA.Astrom(1.0, vf, vf, 1.0, vf, 1.0, vec(mf))
     @test_throws DimensionMismatch SOFA.Astrom(1.0, vf, vf, 1.0, vf, 1.0, reshape(vec(mf), 1, 9))

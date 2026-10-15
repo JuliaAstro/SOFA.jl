@@ -4,7 +4,7 @@ The SOFA C library works in `double` throughout. SOFA.jl computes in `Float64` b
 
 ## Argument types
 
-Real-valued arguments are annotated `Real`, and vectors and matrices of them `AbstractVector` and `AbstractMatrix`, whatever their element type. Counts and indices (a year, a number of decimal places, a planet number) are `Integer`. Each argument is typed independently of the others, so number types can be mixed freely in one call. Vectors and matrices are converted to floating point on entry, so an `Integer` array, of any width, gives the result of the equivalent `Float64` one, and so does an array with an abstract element type, such as a `Vector{Any}` of numbers:
+Real-valued arguments are annotated `Real`, and vectors and matrices of them `AbstractVector{<:Real}` and `AbstractMatrix{<:Real}`. Counts and indices (a year, a number of decimal places, a planet number) are `Integer`. Each argument is typed independently of the others, so number types can be mixed freely in one call. Arrays are used as they are, so arithmetic on `Integer` arrays stays in integers, as with Julia's own `dot` and `cross`:
 
 ```jldoctest types
 julia> using SOFA
@@ -14,6 +14,12 @@ julia> jd2cal(2451545, 0) # Integer Julian Date
 
 julia> era00(2451545, 1 // 4) == era00(2451545.0, 0.25) # Integer and Rational
 true
+
+julia> pdp([2, 2, 3], [1, 3, 4]) # Integer vectors
+20
+
+julia> c2s([0, 1, 0])
+(θ = 1.5707963267948966, ϕ = 0.0)
 ```
 
 ## Result types

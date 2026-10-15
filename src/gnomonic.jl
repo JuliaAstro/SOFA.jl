@@ -94,7 +94,7 @@ function tpors(ξ::Real, η::Real, a::Real, b::Real)
 end
 
 """
-    tporv(ξ::Real, η::Real, v::AbstractVector)
+    tporv(ξ::Real, η::Real, v::AbstractVector{<:Real})
 
 In the tangent plane projection, given the rectangular coordinates of
 a star and its direction cosines, determine the direction cosines of
@@ -161,8 +161,8 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tporv(ξ::Real, η::Real, v::AbstractVector)
-    ξ, η, v = float(ξ), float(η), floatarray(v)
+function tporv(ξ::Real, η::Real, v::AbstractVector{<:Real})
+    ξ, η = float(ξ), float(η)
     r = sqrt(1.0 + η * η + ξ * ξ)
     w2 = r * r * sum(v[1:2] .^ 2) - ξ * ξ
     if w2 > 0.0
@@ -241,7 +241,7 @@ function tpsts(ξ::Real, η::Real, a0::Real, b0::Real)
 end
 
 """
-    tpstv(ξ::Real, η::Real, v0::AbstractVector)
+    tpstv(ξ::Real, η::Real, v0::AbstractVector{<:Real})
 
 In the tangent plane projection, given the star's rectangular
 coordinates and the direction cosines of the tangent point, solve for
@@ -298,9 +298,9 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpstv(ξ::Real, η::Real, v0::AbstractVector)
-    ξ, η, v0 = float(ξ), float(η), floatarray(v0)
-    x, y, z = v0[1:3]
+function tpstv(ξ::Real, η::Real, v0::AbstractVector{<:Real})
+    ξ, η = float(ξ), float(η)
+    x, y, z = float(v0[1:3])
     if sqrt(sum(v0[1:2] .^ 2)) == 0.0
         r = x = oftype(x, 1.0e-20)
     else
@@ -381,7 +381,7 @@ function tpxes(a::Real, b::Real, a0::Real, b0::Real)
 end
 
 """
-    tpxev(v::AbstractVector, v0::AbstractVector)
+    tpxev(v::AbstractVector{<:Real}, v0::AbstractVector{<:Real})
 
 In the tangent plane projection, given celestial direction cosines for
 a star and the tangent point, solve for the star's rectangular
@@ -437,10 +437,9 @@ coordinates in FITS", Astron.Astrophys. 395, 1077
 Green, R.M., "Spherical Astronomy", Cambridge University Press, 1987,
 Chapter 13.
 """
-function tpxev(v::AbstractVector, v0::AbstractVector)
-    v, v0 = floatarray(v), floatarray(v0)
+function tpxev(v::AbstractVector{<:Real}, v0::AbstractVector{<:Real})
     x, y, z = v[1:3]
-    x0, y0, z0 = v0[1:3]
+    x0, y0, z0 = float(v0[1:3])
     if sqrt(sum(v0[1:2] .^ 2)) == 0.0
         r = x0 = oftype(x0, 1.0e-20)
     else

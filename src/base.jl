@@ -66,29 +66,12 @@ struct Astrom{T <: Real}
 end
 
 #   Common floating-point type of a mix of scalars and arrays
-floattype(xs...) = float(promote_type(map(numtype, xs)...))
-numtype(x::Number) = typeof(x)
-#   (the elements decide when the element type is abstract, as in a Vector{Any})
-numtype(x::AbstractArray{T}) where {T} =
-    isconcretetype(T) ? T : mapreduce(numtype, promote_type, x)
+floattype(xs...) = float(promote_type(map(eltype, xs)...))
 
 #   Real arguments in one floating-point type, no narrower than the Float64 of
 #   the constants, so that the parts of a two-part date share their type.
 #   (Promoting first converts a Rational straight to a wider type.)
 floatargs(xs::Real...) = Base.front(map(float, promote(xs..., 0.0)))
-
-#   An array of numbers (an Integer array, a Vector{Any}) in the promoted
-#   floating-point type of its elements.  An array already of that type is
-#   returned as it is, so the Float64 path costs nothing; an array of arrays is
-#   a MethodError.
-floatarray(x::AbstractArray) = floatarray(floattype(x), x)
-floatarray(::Type{T}, x::AbstractArray{T}) where {T} = x
-floatarray(::Type{T}, x::AbstractArray) where {T} = map(T, x)
-
-#   The same for a pv-vector; a flat vector is a MethodError.
-floatpv(pv::AbstractVector) = map(floatarray, pv)
-floatpv(pv::AbstractVector{<:AbstractVector{T}}) where {T <: AbstractFloat} =
-    isconcretetype(T) ? pv : map(floatarray, pv)
 
 Astrom(f::Vararg{Any, 17}) = Astrom{floattype(f...)}(f...)
 function Astrom(pm, eb, eh, em, v, bm1, bpn)

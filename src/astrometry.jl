@@ -1,7 +1,7 @@
 ####    Astronomy / Astrometry    ####
 
 """
-	ab(pnat::AbstractVector, v::AbstractVector, s::Real, bm1::Real)
+	ab(pnat::AbstractVector{<:Real}, v::AbstractVector{<:Real}, s::Real, bm1::Real)
 
 Apply aberration to transform natural direction into proper direction.
 
@@ -41,16 +41,15 @@ Astronomical Almanac, 3rd ed., University Science Books (2013).
 Klioner, Sergei A., "A practical relativistic model for micro-
 arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 """
-function ab(pnat::AbstractVector, v::AbstractVector, s::Real, bm1::Real)
-    pnat, v = floatarray(pnat), floatarray(v)
+function ab(pnat::AbstractVector{<:Real}, v::AbstractVector{<:Real}, s::Real, bm1::Real)
     p = bm1 .* pnat .+ (1.0 + sum(pnat .* v) / (1.0 + bm1)) .* v .+
         SCHWARZRADIUS / s .* (v .- sum(pnat .* v) .* pnat)
     return p ./ norm(p)
 end
 
 """
-	apcg(day1::Real, day2::Real, ebpv::AbstractVector,
-		 ehp::AbstractVector)
+	apcg(day1::Real, day2::Real, ebpv::AbstractVector{<:AbstractVector{<:Real}},
+		 ehp::AbstractVector{<:Real})
 
 For a geocentric observer, prepare star-independent astrometry
 parameters for transformations between ICRS and GCRS coordinates. The
@@ -129,8 +128,8 @@ transformation chain.
    atciq* and aticq*.
 """
 function apcg(
-        day1::Real, day2::Real, ebpv::AbstractVector,
-        ehp::AbstractVector
+        day1::Real, day2::Real, ebpv::AbstractVector{<:AbstractVector{<:Real}},
+        ehp::AbstractVector{<:Real}
     )
     #  Compute the star-independent astrometry parameters.
     return apcs(day1, day2, SVector(SVector(0.0, 0.0, 0.0), SVector(0.0, 0.0, 0.0)), ebpv, ehp)
@@ -227,8 +226,8 @@ function apcg13(day1::Real, day2::Real)
 end
 
 """
-	apci(day1::Real, day2::Real, ebpv::AbstractVector,
-		 ehp::AbstractVector, x::Real, y::Real, s::Real)
+	apci(day1::Real, day2::Real, ebpv::AbstractVector{<:AbstractVector{<:Real}},
+		 ehp::AbstractVector{<:Real}, x::Real, y::Real, s::Real)
 
 For a terrestrial observer, prepare star-independent astrometry
 parameters for transformations between ICRS and geocentric CIRS
@@ -316,8 +315,8 @@ the astrometric transformation chain.
    atciq and aticq.
 """
 function apci(
-        day1::Real, day2::Real, ebpv::AbstractVector,
-        ehp::AbstractVector, x::Real, y::Real, s::Real
+        day1::Real, day2::Real, ebpv::AbstractVector{<:AbstractVector{<:Real}},
+        ehp::AbstractVector{<:Real}, x::Real, y::Real, s::Real
     )
     #  Star-independent astrometry parameters for geocenter and CIO based
     #  bias-precession-nutation matrix.
@@ -424,8 +423,8 @@ function apci13(day1::Real, day2::Real)
 end
 
 """
-	apco(day1::Real, day2::Real, ebpv::AbstractVector,
-		 ehp::AbstractVector, x::Real, y::Real, s::Real,
+	apco(day1::Real, day2::Real, ebpv::AbstractVector{<:AbstractVector{<:Real}},
+		 ehp::AbstractVector{<:Real}, x::Real, y::Real, s::Real,
 		 θ::Real, elong::Real, ϕ::Real, hm::Real,
 		 xp::Real, yp::Real, sp::Real, refa::Real, refb::Real)
 
@@ -549,8 +548,8 @@ coordinates.
    atioq, atoiq, atciq* and aticq*.
 """
 function apco(
-        day1::Real, day2::Real, ebpv::AbstractVector,
-        ehp::AbstractVector, x::Real, y::Real, s::Real, θ::Real, elong::Real,
+        day1::Real, day2::Real, ebpv::AbstractVector{<:AbstractVector{<:Real}},
+        ehp::AbstractVector{<:Real}, x::Real, y::Real, s::Real, θ::Real, elong::Real,
         ϕ::Real, hm::Real, xp::Real, yp::Real, sp::Real, refa::Real, refb::Real
     )
     θ, xp, yp = float(θ), float(xp), float(yp)
@@ -741,8 +740,8 @@ function apco13(
 end
 
 """
-	apcs(day1::Real, day2::Real, pv::AbstractVector,
-		 ebpv::AbstractVector, ehp::AbstractVector)
+	apcs(day1::Real, day2::Real, pv::AbstractVector{<:AbstractVector{<:Real}},
+		 ebpv::AbstractVector{<:AbstractVector{<:Real}}, ehp::AbstractVector{<:Real})
 
 For an observer whose geocentric position and velocity are known,
 prepare star-independent astrometry parameters for transformations
@@ -838,10 +837,9 @@ astrometric transformation chain.
    Atciq and Aticq.
 """
 function apcs(
-        day1::Real, day2::Real, pv::AbstractVector,
-        ebpv::AbstractVector, ehp::AbstractVector
+        day1::Real, day2::Real, pv::AbstractVector{<:AbstractVector{<:Real}},
+        ebpv::AbstractVector{<:AbstractVector{<:Real}}, ehp::AbstractVector{<:Real}
     )
-    pv, ebpv, ehp = floatpv(pv), floatpv(ebpv), floatarray(ehp)
     # Time since reference epoch, years (for proper motion calculation).
     pmt = ((day1 - JD2000) + day2) / DAYPERYEAR
     # Barycentric position of observer (AU).
@@ -859,7 +857,7 @@ function apcs(
 end
 
 """
-	apcs13(day1::Real, day2::Real, pv::AbstractVector)
+	apcs13(day1::Real, day2::Real, pv::AbstractVector{<:AbstractVector{<:Real}})
 
 For an observer whose geocentric position and velocity are known,
 prepare star-independent astrometry parameters for transformations
@@ -947,7 +945,7 @@ astrometric transformation chain.
 """
 function apcs13(
         day1::Real, day2::Real,
-        pv::AbstractVector
+        pv::AbstractVector{<:AbstractVector{<:Real}}
     )
     #  Earth barycentric and heliocentric position & velocity (AU, AU/day).
     ehpv, ebpv = epv00(day1, day2)
@@ -1612,7 +1610,7 @@ end
 
 """
 	atciqn(rc::Real, dc::Real, pr::Real, pd::Real, px::Real,
-		   rv::Real, a::Astrom, n::Integer, b::AbstractVector)
+		   rv::Real, a::Astrom, n::Integer, b::AbstractVector{<:Ldbody})
 
 Quick ICRS, epoch J2000.0, to CIRS transformation, given precomputed
 star-independent astrometry parameters plus a list of light-
@@ -1684,7 +1682,7 @@ used.
 function atciqn(
         rc::Real, dc::Real, pr::Real, pd::Real,
         px::Real, rv::Real, a::Astrom, n::Integer,
-        b::AbstractVector
+        b::AbstractVector{<:Ldbody}
     )
     #  Proper motion and parallax, giving BCRS coordinate direction.
     #  Light deflection, giving natural direction.
@@ -2002,7 +2000,7 @@ function aticq(ri::Real, di::Real, a::Astrom)
     #  CIRS RA, Dec to cartesian.
     #  Bias-precession-nutation, giving GCRS proper direction.
     #  (in the type of the result, so that the iterations keep one type)
-    ppr = SVector{3, promote_type(Float64, floattype(ri, di, a.bpn))}(a.bpn' * s2c(ri, di))
+    ppr = SVector{3, floattype(ri, di, a.bpn, 0.0)}(a.bpn' * s2c(ri, di))
     #  Aberration, giving GCRS natural direction.
     d, pnat = zero(ppr), ppr
     for j in 1:2
@@ -2029,7 +2027,7 @@ function aticq(ri::Real, di::Real, a::Astrom)
 end
 
 """
-	aticqn(ri::Real, di::Real, a::Astrom, n::Integer, b::AbstractVector)
+	aticqn(ri::Real, di::Real, a::Astrom, n::Integer, b::AbstractVector{<:Ldbody})
 
 Quick CIRS to ICRS astrometric place transformation, given the star-
 independent astrometry parameters plus a list of light-deflecting
@@ -2096,12 +2094,12 @@ the aticq function can be used instead.
 """
 function aticqn(
         ri::Real, di::Real, a::Astrom, n::Integer,
-        b::AbstractVector
+        b::AbstractVector{<:Ldbody}
     )
     #  CIRS RA, Dec to cartesian.
     #  Bias-precession-nutation, giving GCRS proper direction.
     #  (in the type of the result, so that the iterations keep one type)
-    ppr = SVector{3, promote_type(Float64, floattype(ri, di, a.bpn))}(a.bpn' * s2c(ri, di))
+    ppr = SVector{3, floattype(ri, di, a.bpn, 0.0)}(a.bpn' * s2c(ri, di))
     #  Aberration, giving GCRS natural direction.
     d, pnat = zero(ppr), ppr
     for j in 1:2
@@ -2757,7 +2755,7 @@ function atoiq(tp::Char, ob1::Real, ob2::Real, a::Astrom)
 end
 
 """
-	ld(bm::Real, p::AbstractVector, q::AbstractVector, e::AbstractVector,
+	ld(bm::Real, p::AbstractVector{<:Real}, q::AbstractVector{<:Real}, e::AbstractVector{<:Real},
 	   em::Real, dlim::Real)
 
 Apply light deflection by a solar-system body, as part of transforming
@@ -2818,17 +2816,16 @@ Klioner, Sergei A., "A practical relativistic model for micro-
 arcsecond astrometry in space", Astr. J. 125, 1580-1597 (2003).
 """
 function ld(
-        bm::Real, p::AbstractVector, q::AbstractVector,
-        e::AbstractVector, em::Real, dlim::Real
+        bm::Real, p::AbstractVector{<:Real}, q::AbstractVector{<:Real},
+        e::AbstractVector{<:Real}, em::Real, dlim::Real
     )
-    p, q, e = floatarray(p), floatarray(q), floatarray(e)
     #  2*G*bm/(em*c^2*(q*(q+e))).
     #  Apply the deflection.
     return p .+ SCHWARZRADIUS * bm / em / maximum((dot(q, (q .+ e)), dlim)) .* pxp(p, pxp(e, q))
 end
 
 """
-	ldn(n::Integer, b::AbstractVector, ob::AbstractVector, sc::AbstractVector)
+	ldn(n::Integer, b::AbstractVector{<:Ldbody}, ob::AbstractVector{<:Real}, sc::AbstractVector{<:Real})
 
 For a star, apply light deflection by multiple solar-system bodies, as
 part of transforming coordinate direction into natural direction.
@@ -2898,10 +2895,10 @@ Astronomical Almanac, 3rd ed., University Science Books (2013),
 Section 7.2.4.
 """
 function ldn(
-        n::Integer, b::AbstractVector, ob::AbstractVector,
-        sc::AbstractVector
+        n::Integer, b::AbstractVector{<:Ldbody}, ob::AbstractVector{<:Real},
+        sc::AbstractVector{<:Real}
     )
-    ob, sc = SVector{3}(floatarray(ob)), floatarray(sc)
+    ob = SVector{3}(ob)
     #  (in the type of all the bodies, so that the type does not depend on n)
     sn = SVector{3}(sc) .* (one(eltype(ob)) * bodyone(b))
     for body in view(b, 1:n)
@@ -2930,7 +2927,7 @@ bodyone(b::AbstractVector{Ldbody{T}}) where {T} = one(promote_type(Float64, T))
 bodyone(b::AbstractVector) = mapreduce(body -> one(body.bm), *, b; init = 1.0)
 
 """
-	ldsun(p::AbstractVector, e::AbstractVector, em::Real)
+	ldsun(p::AbstractVector{<:Real}, e::AbstractVector{<:Real}, em::Real)
 
 Deflection of starlight by the Sun.
 
@@ -2958,7 +2955,7 @@ Deflection of starlight by the Sun.
 
 3) The arguments p and p1 can be the same array.
 """
-function ldsun(p::AbstractVector, e::AbstractVector, em::Real)
+function ldsun(p::AbstractVector{<:Real}, e::AbstractVector{<:Real}, em::Real)
     em = float(em)
     #  Deflection limiter (smaller for distant observers).
     #  Apply the deflection.
@@ -2967,7 +2964,7 @@ end
 
 """
 	pmpx(rc::Real, dc::Real, pr::Real, pd::Real, px::Real,
-		 rv::Real, pmt::Real, pob::AbstractVector)
+		 rv::Real, pmt::Real, pob::AbstractVector{<:Real})
 
 Proper motion and parallax.
 
@@ -3008,9 +3005,8 @@ Section 7.2.
 function pmpx(
         rc::Real, dc::Real, pr::Real, pd::Real,
         px::Real, rv::Real, pmt::Real,
-        pob::AbstractVector
+        pob::AbstractVector{<:Real}
     )
-    pob = floatarray(pob)
     #  Spherical coordinates to unit vector (and useful functions.)
     p = @inline s2c(rc, dc)
     #  Space motion (radian per year).
