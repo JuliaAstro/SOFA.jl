@@ -105,7 +105,6 @@ reference ellipsoid.
 4) The inverse transformation is performed in the function gd2gc.
 """
 function gc2gd(model::Symbol, pos::AbstractVector)
-    pos = floatarray(pos)
     return gc2gde(values(eform(model))..., pos)
 end
 

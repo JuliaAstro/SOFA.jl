@@ -132,8 +132,6 @@ function apcg(
         day1::Real, day2::Real, ebpv::AbstractVector,
         ehp::AbstractVector
     )
-    ebpv, ehp = floatpv(ebpv), floatarray(ehp)
-
     #  Compute the star-independent astrometry parameters.
     return apcs(day1, day2, SVector(SVector(0.0, 0.0, 0.0), SVector(0.0, 0.0, 0.0)), ebpv, ehp)
 end
@@ -321,8 +319,6 @@ function apci(
         day1::Real, day2::Real, ebpv::AbstractVector,
         ehp::AbstractVector, x::Real, y::Real, s::Real
     )
-    ebpv, ehp = floatpv(ebpv), floatarray(ehp)
-
     #  Star-independent astrometry parameters for geocenter and CIO based
     #  bias-precession-nutation matrix.
     p = apcg(day1, day2, ebpv, ehp)
@@ -557,7 +553,6 @@ function apco(
         ehp::AbstractVector, x::Real, y::Real, s::Real, θ::Real, elong::Real,
         ϕ::Real, hm::Real, xp::Real, yp::Real, sp::Real, refa::Real, refb::Real
     )
-    ebpv, ehp = floatpv(ebpv), floatarray(ehp)
     θ, xp, yp = float(θ), float(xp), float(yp)
 
     #  Form the rotation matrix, CIRS to apparent (HA, Dec).
@@ -565,7 +560,7 @@ function apco(
     #  Solve for the local Earth rotation angle.
     eral = r[1, 1] != 0.0 || r[1, 2] != 0.0 ? atan(r[1, 2], r[1, 1]) : zero(eltype(r))
     #  Solve for the polar motion (x, y) with respect to local meridian.
-    xpl = atan(r[1, 3], norm(r[1, 1:2]))
+    xpl = atan(r[1, 3], norm(r[1, SVector(1, 2)]))
     ypl = r[2, 3] != 0.0 || r[3, 3] != 0.0 ? -atan(r[2, 3], r[3, 3]) : zero(eltype(r))
     #  Adjusted longitude.
     along = anpm(eral - θ)
@@ -954,7 +949,6 @@ function apcs13(
         day1::Real, day2::Real,
         pv::AbstractVector
     )
-    pv = floatpv(pv)
     #  Earth barycentric and heliocentric position & velocity (AU, AU/day).
     ehpv, ebpv = epv00(day1, day2)
     #  Compute the star-independent astrometry parameters.
@@ -1198,7 +1192,7 @@ function apio(
     #  Solve for local Earth rotation angle.
     eral = r[1, 1] != 0.0 || r[1, 2] != 0.0 ? atan(r[1, 2], r[1, 1]) : zero(eltype(r))
     #  Solve for polar motion (x, y) with respect to local meridian.
-    xpl = atan(r[1, 3], norm(r[1, 1:2]))
+    xpl = atan(r[1, 3], norm(r[1, SVector(1, 2)]))
     ypl = r[2, 3] != 0.0 || r[3, 3] != 0.0 ? -atan(r[2, 3], r[3, 3]) : zero(eltype(r))
     #  Adjust longitude.
     along = anpm(eral - θ)
@@ -1207,7 +1201,7 @@ function apio(
     #  Observer's geocentric position and velocity (m, m/s, CIRS).
     pv = pvtob(elong, ϕ, hm, xp, yp, sp, θ)
     #  Magnitude of diurnal aberration vector.
-    diurab = norm(pv[2][1:2]) / LIGHTSPEED
+    diurab = norm(pv[2][SVector(1, 2)]) / LIGHTSPEED
     return Astrom(
         a.pmt, a.eb, a.eh, a.em, a.v, a.bm1, a.bpn, along, a.phi,
         xpl, ypl, sphi, cphi, diurab, eral, refa, refb
@@ -2907,7 +2901,7 @@ function ldn(
         n::Integer, b::AbstractVector, ob::AbstractVector,
         sc::AbstractVector
     )
-    ob, sc = floatarray(ob), floatarray(sc)
+    ob, sc = SVector{3}(floatarray(ob)), floatarray(sc)
     #  (in the type of all the bodies, so that the type does not depend on n)
     sn = SVector{3}(sc) .* (one(eltype(ob)) * bodyone(b))
     for body in view(b, 1:n)
@@ -2965,7 +2959,7 @@ Deflection of starlight by the Sun.
 3) The arguments p and p1 can be the same array.
 """
 function ldsun(p::AbstractVector, e::AbstractVector, em::Real)
-    p, e, em = floatarray(p), floatarray(e), float(em)
+    em = float(em)
     #  Deflection limiter (smaller for distant observers).
     #  Apply the deflection.
     return ld(1.0, p, p, e, em, 1.0e-6 / (em^2 > 1.0 ? em^2 : 1.0))
@@ -3018,7 +3012,7 @@ function pmpx(
     )
     pob = floatarray(pob)
     #  Spherical coordinates to unit vector (and useful functions.)
-    p = SVector(cos(rc) * cos(dc), sin(rc) * cos(dc), sin(dc))
+    p = @inline s2c(rc, dc)
     #  Space motion (radian per year).
     rvpx = SECPERDAY * (1000 * DAYPERYEAR) / ASTRUNIT * rv * deg2rad(px / 3600.0)
     pm = SVector(

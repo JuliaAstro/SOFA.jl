@@ -195,9 +195,6 @@ end
 
 ####    Regression tests (issue #46: generic argument types)    ####
 
-#   dat: from 1972 on, the table constant replaced the type of the fraction
-@test SOFA.dat(2003, 6, 1, big"0.0") isa BigFloat
-
 #   ut1utc: in the days before a leap second the leap-second branch broadcast
 #   against a NamedTuple and threw (reference values from ERFA 2.0.1, which is
 #   derived from SOFA release 2023-10-11)

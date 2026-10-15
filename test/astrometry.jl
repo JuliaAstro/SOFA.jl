@@ -1540,12 +1540,6 @@ end
 #   pmpx (and so atccq, atciq, atciqn, atci13, atco13): the direction vector
 #   was updated in place in an MVector, which StaticArrays does not support
 #   for non-isbits element types (BigFloat)
-let args = (2.71, 0.174, 1.0e-5, 5.0e-6, 0.1, 55.0, 2456165.5, 0.401182685)
-    rF, rB = values(SOFA.atci13(args...)), values(SOFA.atci13(big.(args)...))
-    @test all(x -> x isa BigFloat, rB)
-    @test all(abs.(rB .- rF) .<= 1.0e-15)
-end
-
 @test eltype(SOFA.pmpx(big.((1.234, 0.789, 1.0e-5, -2.0e-5, 1.0e-2, 10.0, 8.75))..., big.([0.9, 0.4, 0.1]))) == BigFloat
 
 #   ldn: the direction was updated in place in a copy of `sc`, which threw

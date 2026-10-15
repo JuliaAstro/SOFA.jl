@@ -107,7 +107,7 @@ available as a single number by adding MJD0 and MJD.
 Lieske, J.H., 1979, Astron.Astrophys. 73, 282.
 """
 function epb2jd(epoch::Real)
-    mjd0, mjd = promote(MJDAY0, 15019.81352 + (epoch - 1900.0) * DAYINYEAR1900)
+    mjd0, mjd = floatargs(MJDAY0, 15019.81352 + (epoch - 1900.0) * DAYINYEAR1900)
     return (mjd0 = mjd0, mjd = mjd)
 end
 
@@ -172,7 +172,7 @@ available as a single number by adding MJD0 and MJD.
 Lieske, J.H., 1979, Astron.Astrophys. 73, 282.
 """
 function epj2jd(epoch::Real)
-    mjd0, mjd = promote(MJDAY0, MODJULDAY0 + (epoch - 2000.0) * DAYINYEAR2000)
+    mjd0, mjd = floatargs(MJDAY0, MODJULDAY0 + (epoch - 2000.0) * DAYINYEAR2000)
     return (mjd0 = mjd0, mjd = mjd)
 end
 

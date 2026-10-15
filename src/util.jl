@@ -27,8 +27,6 @@ function *(a::SMatrix{3,3}, b::SMatrix{3,3})
 end
 =#
 
-norm2(v) = sqrt(sum(v .* v))
-
 function leapday(year::Integer, month::Integer)
     return month == 2 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
 end
@@ -48,52 +46,6 @@ function calendar2MJD(year::Integer, month::Integer, day::Integer)
             day - 2432076
     )
 end
-
-"""
-    proper_motion(object, pmotion, parallax, rvelocity, pmt, observer)
-
-Correct coordinates for proper motion, parallax, radial velocity, and Rømer
-corrections.
-
-# Arguments
-- `object::Vector{<:Real}`: RA and Dec of object (in radians)
-- `pmotion::Vector{<:Real}`: RA and Dec proper motion of object (in radians/year)
-- `parallax::Real`: parallax of object (in arcseconds)
-- `rvelocity::Real`: radial velocity of object (in km/sec; positive is receding)
-- `pmt::Real`: proper motion time interval (in Julian years; at barycenter)
-- `observer::Vector{<:Real}`: position of observer (in AU; from barycenter)
-
-# Returns
-- `object::Vector{<:Real}`: corrected barycentric unit direction vector of object
-"""
-function proper_motion(object, pmotion, parallax, rvelocity, pmt, observer)
-
-    obj = SVector(
-        cos(object[1]) * cos(object[2]),
-        sin(object[1]) * cos(object[2]),
-        sin(object[2])
-    )
-
-    prv = SECPERDAY * 1000 * DAYPERYEAR / ASTRUNIT * rvelocity * deg2rad(1 / 3600) * parallax
-
-    pmo = SVector(
-        prv * obj[1] - pmotion[1] * obj[2] - pmotion[2] * cos(object[1]) * obj[3],
-        prv * obj[2] + pmotion[1] * obj[1] - pmotion[2] * sin(object[1]) * obj[3],
-        prv * obj[3] + pmotion[2] * cos(object[2])
-    )
-
-    obj = obj .+ (pmt .+ AULIGHT * sum(obj .* observer)) .* pmo .-
-        deg2rad(1 / 3600) * parallax .* observer
-
-    modulus = norm2(obj)
-    return modulus == 0.0 ? zero(obj) : obj ./ modulus
-end
-
-"""
-    proper_motion(object, pmotion, parallax, rvelocity)
-"""
-proper_motion(object, pmotion, parallax, rvelocity) =
-    proper_motion(object, pmotion, parallax, rvelocity, 0.0, (0.0, 0.0, 0.0))
 
 """
    @const_smatrix_from_series name series field

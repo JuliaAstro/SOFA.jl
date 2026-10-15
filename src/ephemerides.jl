@@ -198,23 +198,23 @@ function moon98(day1::Real, day2::Real)
 
     #  Moon's mean longitude.
     λm = deg2rad(rem(Polynomial(λmoon_1994...)(Δt), 360.0))
-    dλm = deg2rad(Polynomial(dλmoon_1994...)(Δt))
+    dλm = deg2rad(derivative(Polynomial(λmoon_1994...))(Δt))
 
     #  Moon's mean elongation.
     dm = deg2rad(rem(Polynomial(dmoon_1998...)(Δt), 360.0))
-    ddm = deg2rad(Polynomial(ddmoon_1998...)(Δt))
+    ddm = deg2rad(derivative(Polynomial(dmoon_1998...))(Δt))
 
     #  Sun's mean anomaly.
     ls = deg2rad(rem(Polynomial(lsun_1998...)(Δt), 360.0))
-    dls = deg2rad(Polynomial(dlsun_1998...)(Δt))
+    dls = deg2rad(derivative(Polynomial(lsun_1998...))(Δt))
 
     #  Moon's mean anomaly.
     lm = deg2rad(rem(Polynomial(lmoon_1998...)(Δt), 360.0))
-    dlm = deg2rad(Polynomial(dlmoon_1998...)(Δt))
+    dlm = deg2rad(derivative(Polynomial(lmoon_1998...))(Δt))
 
     #  Mean distance of the Moon from its ascending node.
     fm = deg2rad(rem(Polynomial(fmoon_1998...)(Δt), 360.0))
-    dfm = deg2rad(Polynomial(dfmoon_1998...)(Δt))
+    dfm = deg2rad(derivative(Polynomial(fmoon_1998...))(Δt))
 
     #  Meeus further arguments.
     #  NB: for da1 the SOFA C library (as of release 2023-10-11) uses the
@@ -226,7 +226,7 @@ function moon98(day1::Real, day2::Real)
 
     #  E-factor
     e = Polynomial(efac...)(Δt)
-    de = Polynomial(SVector(1.0, 2.0) .* efac[2:3]...)(Δt)
+    de = derivative(Polynomial(efac...))(Δt)
 
     #  Arrange matrices for vector operations.
     lre = map(m -> m == 2 ? e * e : (m == 1 ? e : 1.0), lr_emask)

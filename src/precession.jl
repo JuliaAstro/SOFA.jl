@@ -230,10 +230,7 @@ model", Astron.Astrophys. 400, 1145-1154 (2003)
 n.b. The celestial ephemeris origin (CEO) was renamed "celestial
      intermediate origin" (CIO) by IAU 2006 Resolution 2.
 """
-function bpn2xy(r::AbstractMatrix)
-    r = floatarray(r)
-    return r[3, 1:2]
-end
+bpn2xy(r::AbstractMatrix) = floatarray(r)[3, SVector(1, 2)]
 
 """
     c2i00a(day1::Real, day2::Real)
@@ -502,7 +499,6 @@ McCarthy, D. D., Petit, G. (eds.), IERS Conventions (2003), IERS
 Technical Note No. 32, BKG (2004)
 """
 function c2ibpn(day1::Real, day2::Real, r::AbstractMatrix)
-    r = floatarray(r)
     return c2ixy(day1, day2, bpn2xy(r)...)
 end
 
@@ -1309,7 +1305,7 @@ CIP X,Y given Fukushima-Williams bias-precession-nutation angles.
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
 function fw2xy(γ::Real, ϕ::Real, ψ::Real, ϵ::Real)
-    return (Rx(-float(ϵ))Rz(-float(ψ))Rx(ϕ)Rz(γ))[3, 1:2]
+    return (Rx(-float(ϵ))Rz(-float(ψ))Rx(ϕ)Rz(γ))[3, SVector(1, 2)]
 end
 
 """
@@ -4352,22 +4348,10 @@ function xy06(day1::Real, day2::Real)
     Δt = ((day1 - JD2000) + day2) / (100 * DAYPERYEAR)
 
     #  Lunar, solar, and planetary longitudes
-    arcsec(x) = deg2rad(rem(x, ARCSECPER2PI) / 3600.0)
     ϕ = SVector(
-        arcsec(Polynomial(l0_2003A...)(Δt)),
-        arcsec(Polynomial(l1_2003A...)(Δt)),
-        arcsec(Polynomial(F_2003A...)(Δt)),
-        arcsec(Polynomial(D_2003A...)(Δt)),
-        arcsec(Polynomial(Ω_2003A...)(Δt)),
-        rem(Polynomial(lme_2003...)(Δt), 2π),
-        rem(Polynomial(lve_2003...)(Δt), 2π),
-        rem(Polynomial(lea_2003...)(Δt), 2π),
-        rem(Polynomial(lma_2003...)(Δt), 2π),
-        rem(Polynomial(lju_2003...)(Δt), 2π),
-        rem(Polynomial(lsa_2003...)(Δt), 2π),
-        rem(Polynomial(lur_2003...)(Δt), 2π),
-        rem(Polynomial(lne_2003...)(Δt), 2π),
-        Polynomial(lge_2003...)(Δt),
+        fal03(Δt), falp03(Δt), faf03(Δt), fad03(Δt), faom03(Δt),
+        fame03(Δt), fave03(Δt), fae03(Δt), fama03(Δt), faju03(Δt),
+        fasa03(Δt), faur03(Δt), fane03(Δt), fapa03(Δt),
     )
     #  Powers of the time
     pt = SVector(Δt^0, Δt^1, Δt^2, Δt^3, Δt^4)

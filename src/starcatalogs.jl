@@ -109,8 +109,8 @@ function fk425(ra::Real, dec::Real, δra::Real, δdec::Real, plx::Real, rv::Real
     #  Allow for E-terms (cf. Seidelmann eq. 3.591-2) and convert pv-vector to
     #  Fricke system (cf., Seidelmann eq. 3.591-3).
     r1 = SVector(
-        r0[1] .- A_fk4_fk5[1:3] .+ dot(r0[1], A_fk4_fk5[1:3]) * r0[1],
-        r0[2] .- A_fk4_fk5[4:6] .+ dot(r0[1], A_fk4_fk5[4:6]) * r0[1]
+        r0[1] .- A_fk4_fk5[SVector(1, 2, 3)] .+ dot(r0[1], A_fk4_fk5[SVector(1, 2, 3)]) * r0[1],
+        r0[2] .- A_fk4_fk5[SVector(4, 5, 6)] .+ dot(r0[1], A_fk4_fk5[SVector(4, 5, 6)]) * r0[1]
     )
     pv = SVector(
         (
@@ -213,7 +213,7 @@ function fk45z(ra::Real, dec::Real, epoch::Real)
     PMF = 3.6e5 * rad2deg(1.0)
     #  Spherical coordinates to p-vector, adjust p-vector to give zero proper
     #  motion in FK5.
-    r1, p0 = s2c(ra, dec), A_fk4_fk5[1:3] .+ (epoch - 1950.0) / PMF .* A_fk4_fk5[4:6]
+    r1, p0 = s2c(ra, dec), A_fk4_fk5[SVector(1, 2, 3)] .+ (epoch - 1950.0) / PMF .* A_fk4_fk5[SVector(4, 5, 6)]
     #  Remove E-terms
     p = r1 .- (p0 .- dot(r1, p0) .* r1)
     #  Convert to Fricke system pv-vector (cf. Seidelmann 3.591-3)
@@ -344,11 +344,11 @@ function fk524(
     )
     #  Apply E-terms (equivalent to Seidelmann 3.592-3, one iteration)
     #  Direction
-    p1 = r1[1] .+ norm(r1[1]) * A_fk4_fk5[1:3] .- dot(r1[1], A_fk4_fk5[1:3]) * r1[1]
+    p1 = r1[1] .+ norm(r1[1]) * A_fk4_fk5[SVector(1, 2, 3)] .- dot(r1[1], A_fk4_fk5[SVector(1, 2, 3)]) * r1[1]
     #  Direction, using recomputed length
-    pv1 = r1[1] .+ norm(p1) * A_fk4_fk5[1:3] .- dot(r1[1], A_fk4_fk5[1:3]) * r1[1]
+    pv1 = r1[1] .+ norm(p1) * A_fk4_fk5[SVector(1, 2, 3)] .- dot(r1[1], A_fk4_fk5[SVector(1, 2, 3)]) * r1[1]
     #  Derivative
-    pv2 = r1[2] .+ norm(p1) * A_fk4_fk5[4:6] .- dot(r1[1], A_fk4_fk5[4:6]) * pv1
+    pv2 = r1[2] .+ norm(p1) * A_fk4_fk5[SVector(4, 5, 6)] .- dot(r1[1], A_fk4_fk5[SVector(4, 5, 6)]) * pv1
     #  Revert to catalog form
     cat = pv2s(SVector(pv1, pv2))
     if plx > TINY

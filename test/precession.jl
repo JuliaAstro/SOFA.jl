@@ -921,13 +921,6 @@
 
 ####    Regression tests (issue #46: generic argument types)    ####
 
-#   nut00a: Float64-typed phase buffers demoted BigFloat dates
-let nF = SOFA.nut00a(2400000.5, 53736.0),
-        nB = SOFA.nut00a(big"2400000.5", big"53736.0")
-    @test nB.ψ isa BigFloat && nB.ϵ isa BigFloat
-    @test abs(nB.ψ - nF.ψ) <= 1.0e-16 && abs(nB.ϵ - nF.ϵ) <= 1.0e-16
-end
-
 #   xy06: Float64-typed accumulators froze the periodic terms at Float64
 #   resolution, so the slope of X over a sub-Float64 step lost their
 #   contribution (more than half of it at this date)

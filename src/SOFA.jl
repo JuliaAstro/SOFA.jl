@@ -76,6 +76,7 @@ export pdp, pm, pmp, pn, ppp, ppsp, pvdpv, pvm, pvmpv, pvppv, pvu, pvup, pvxpv,
     pxp, s2xpv, sxp, sxpv
 
 using LinearAlgebra, StaticArrays, StaticUnivariatePolynomials
+using StaticUnivariatePolynomials: derivative
 
 include("base.jl")
 include("util.jl")

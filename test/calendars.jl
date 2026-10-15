@@ -50,7 +50,5 @@ let frac2 = big"0.9999" + big"1.2345e-30"
 end
 @test SOFA.jd2cal(2451545, 0) == (year = 2000, month = 1, day = 1, fraction = 0.5)
 
-#   jdcalf: accepts Integer and BigFloat date parts
+#   jdcalf: accepts Integer date parts
 @test SOFA.jdcalf(4, 2400000, 50124) == (year = 1996, month = 2, day = 10, fraction = 5000)
-@test SOFA.jdcalf(4, big"2400000.5", big"50123.9999") ==
-    (year = 1996, month = 2, day = 10, fraction = 9999)

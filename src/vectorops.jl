@@ -442,10 +442,7 @@ Copy a p-vector.
 
  - `c`     -- copy
 """
-function cp(p::AbstractVector)
-    p = floatarray(p)
-    return copy(p)
-end
+cp(p::AbstractVector) = copy(floatarray(p))
 
 """
     cpv(pv::AbstractVector)
@@ -460,10 +457,7 @@ Copy a position/velocity vector.
 
  - `c`      -- copy
 """
-function cpv(pv::AbstractVector)
-    pv = floatpv(pv)
-    return deepcopy(pv)
-end
+cpv(pv::AbstractVector) = deepcopy(floatpv(pv))
 
 """
     cr(r::AbstractMatrix)
@@ -478,10 +472,7 @@ Copy an r-matrix.
 
  - `c`     -- copy
 """
-function cr(r::AbstractMatrix)
-    r = floatarray(r)
-    return copy(r)
-end
+cr(r::AbstractMatrix) = copy(floatarray(r))
 
 """
     p2pv(p::AbstractVector)
@@ -515,10 +506,7 @@ Discard velocity component of a pv-vector.
 
  - `p`     -- p-vector
 """
-function pv2p(pv::AbstractVector)
-    pv = floatpv(pv)
-    return pv[1]
-end
+pv2p(pv::AbstractVector) = floatpv(pv)[1]
 
 #### Vector - Matrix / Initialization
 
@@ -612,10 +600,7 @@ Transpose an r-matrix.
    `LinearAlgebra` are loaded, an unqualified `tr` is ambiguous and
    must be written as `SOFA.tr` or `LinearAlgebra.tr`.
 """
-function tr(r::AbstractMatrix)
-    r = floatarray(r)
-    return r'
-end
+tr(r::AbstractMatrix) = floatarray(r)'
 
 #### Vector - Matrix / Matrix-Vector Products
 
@@ -637,10 +622,7 @@ Multiply a p-vector by an r-matrix.
 
 1) It is permissible for p and rp to be the same array.
 """
-function rxp(r::AbstractMatrix, p::AbstractVector)
-    r, p = floatarray(r), floatarray(p)
-    return r * p
-end
+rxp(r::AbstractMatrix, p::AbstractVector) = floatarray(r) * floatarray(p)
 
 """
     rxpv(r::AbstractMatrix, pv::AbstractVector)
@@ -691,10 +673,7 @@ Multiply a p-vector by the transpose of an r-matrix.
 
 1) It is permissible for p and trp to be the same array.
 """
-function trxp(r::AbstractMatrix, p::AbstractVector)
-    r, p = floatarray(r), floatarray(p)
-    return r' * p
-end
+trxp(r::AbstractMatrix, p::AbstractVector) = floatarray(r)' * floatarray(p)
 
 """
     trxpv(r::AbstractMatrix, pv::AbstractVector)
@@ -1185,10 +1164,7 @@ Modulus of p-vector.
 
  - `r`     -- modulus
 """
-function pm(p::AbstractVector)
-    p = floatarray(p)
-    return norm(p)
-end
+pm(p::AbstractVector) = norm(floatarray(p))
 
 """
     pmp(a::AbstractVector, b::AbstractVector)
@@ -1500,10 +1476,7 @@ Multiply a p-vector by a scalar.
 
  - `sp`    -- s * p
 """
-function sxp(s::Real, p::AbstractVector)
-    p = floatarray(p)
-    return s * p
-end
+sxp(s::Real, p::AbstractVector) = s * floatarray(p)
 
 """
     sxpv(s::Real, pv::AbstractVector)
