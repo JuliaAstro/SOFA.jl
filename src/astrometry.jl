@@ -2110,7 +2110,7 @@ function aticqn(
     end
     #  Light deflection, giving BCRS coordinate direction.
     #  (in the type of the bodies too)
-    pnat = pnat .* bodyone(b)
+    pnat = pnat .* one(bodytype(b))
     d, pco = zero(pnat), pnat
     for j in 1:5
         bf = (pnat .- d) ./ norm(pnat .- d)
@@ -2900,31 +2900,25 @@ function ldn(
     )
     ob = SVector{3}(ob)
     #  (in the type of all the bodies, so that the type does not depend on n)
-    sn = SVector{3}(sc) .* (one(eltype(ob)) * bodyone(b))
+    sn = SVector{3}(sc) .* one(promote_type(eltype(ob), bodytype(b)))
     for body in view(b, 1:n)
-        sn = ldbody(sn, body, ob)
+        #  Body to observer vector at epoch of observation (AU).
+        v = ob .- body.pv[1]
+        #  Minus the time since the light passed the body (days).
+        Δt = minimum((ASTRUNIT / LIGHTSPEED / SECPERDAY * dot(sn, v), 0.0))
+        #  Backtrack the body to the time the light was passing the body.
+        #  Body to observer vector as magnitude and direction.
+        em, e = pn(v .- Δt .* body.pv[2])
+        #  Apply light deflection for this body.
+        sn = ld(body.bm, sn, sn, e, em, body.dl)
     end
     return sn
 end
 
-#   Light deflection by one body: a function barrier, for a vector of bodies
-#   of different types
-function ldbody(sn, body, ob)
-    #  Body to observer vector at epoch of observation (AU).
-    v = ob .- body.pv[1]
-    #  Minus the time since the light passed the body (days).
-    Δt = minimum((ASTRUNIT / LIGHTSPEED / SECPERDAY * dot(sn, v), 0.0))
-    #  Backtrack the body to the time the light was passing the body.
-    #  Body to observer vector as magnitude and direction.
-    em, e = pn(v .- Δt .* body.pv[2])
-    #  Apply light deflection for this body.
-    return ld(body.bm, sn, sn, e, em, body.dl)
-end
-
-#   One in the promoted type of the bodies and Float64 (by value for a
-#   Vector{Ldbody}, whose type is slow to compute at run time)
-bodyone(b::AbstractVector{Ldbody{T}}) where {T} = one(promote_type(Float64, T))
-bodyone(b::AbstractVector) = mapreduce(body -> one(body.bm), *, b; init = 1.0)
+#   The type of the bodies, at least Float64 (Float64 for a Vector{Ldbody},
+#   whose bodies may differ in type)
+bodytype(::AbstractVector{Ldbody{T}}) where {T} = promote_type(Float64, T)
+bodytype(::AbstractVector) = Float64
 
 """
 	ldsun(p::AbstractVector{<:Real}, e::AbstractVector{<:Real}, em::Real)
