@@ -559,7 +559,7 @@ function apco(
     #  Solve for the local Earth rotation angle.
     eral = r[1, 1] != 0.0 || r[1, 2] != 0.0 ? atan(r[1, 2], r[1, 1]) : zero(eltype(r))
     #  Solve for the polar motion (x, y) with respect to local meridian.
-    xpl = atan(r[1, 3], norm(r[1, SVector(1, 2)]))
+    xpl = atan(r[1, 3], norm(r[1, SA[1, 2]]))
     ypl = r[2, 3] != 0.0 || r[3, 3] != 0.0 ? -atan(r[2, 3], r[3, 3]) : zero(eltype(r))
     #  Adjusted longitude.
     along = anpm(eral - θ)
@@ -1190,7 +1190,7 @@ function apio(
     #  Solve for local Earth rotation angle.
     eral = r[1, 1] != 0.0 || r[1, 2] != 0.0 ? atan(r[1, 2], r[1, 1]) : zero(eltype(r))
     #  Solve for polar motion (x, y) with respect to local meridian.
-    xpl = atan(r[1, 3], norm(r[1, SVector(1, 2)]))
+    xpl = atan(r[1, 3], norm(r[1, SA[1, 2]]))
     ypl = r[2, 3] != 0.0 || r[3, 3] != 0.0 ? -atan(r[2, 3], r[3, 3]) : zero(eltype(r))
     #  Adjust longitude.
     along = anpm(eral - θ)
@@ -1199,7 +1199,7 @@ function apio(
     #  Observer's geocentric position and velocity (m, m/s, CIRS).
     pv = pvtob(elong, ϕ, hm, xp, yp, sp, θ)
     #  Magnitude of diurnal aberration vector.
-    diurab = norm(pv[2][SVector(1, 2)]) / LIGHTSPEED
+    diurab = norm(pv[2][SA[1, 2]]) / LIGHTSPEED
     return Astrom(
         a.pmt, a.eb, a.eh, a.em, a.v, a.bm1, a.bpn, along, a.phi,
         xpl, ypl, sphi, cphi, diurab, eral, refa, refb
@@ -2346,7 +2346,7 @@ function atioq(ri::Real, di::Real, a::Astrom)
     azob = aet[1] != 0.0 || aet[2] != 0.0 ? atan(aet[2], -aet[1]) : zero(eltype(aet))
     ####    Refraction    ####
     #  Cosine and sine of altitude, with precautions.
-    r, z = max(norm(aet[SVector(1, 2)]), CELMIN), max(aet[3], SELMIN)
+    r, z = max(norm(aet[SA[1, 2]]), CELMIN), max(aet[3], SELMIN)
     #  A*tan(z) + B*tan^3(z) model, with Newton-Raphson correction.
     w = a.refb * (r / z)^2
     del = (a.refa + w) * (r / z) / (1.0 + (a.refa + 3 * w) / z^2)
@@ -2354,7 +2354,7 @@ function atioq(ri::Real, di::Real, a::Astrom)
     cosdel = 1.0 - del^2 / 2.0
     aeo = SVector((cosdel - del * z / r), cosdel - del * z / r, cosdel) .* aet .+ SVector(0.0, 0.0, del * r)
     #  Observed ZD.
-    zdob = atan(norm(aeo[SVector(1, 2)]), aeo[3])
+    zdob = atan(norm(aeo[SA[1, 2]]), aeo[3])
     #  Az/El vector to HA, Dec vector (both right-handed) and to spherical -HA, Dec.
     hmob, dcob = c2s((@SMatrix [a.sphi 0.0 a.cphi; 0.0 1.0 0.0; -a.cphi 0.0 a.sphi]) * aeo)
     #  Right ascension (with respect to CIO).
@@ -2729,11 +2729,11 @@ function atoiq(tp::Char, ob1::Real, ob2::Real, a::Astrom)
     #  Azimuth (S=0, E=90).
     az = aeo[1] != 0.0 || aeo[2] != 0.0 ? atan(aeo[2], aeo[1]) : zero(eltype(aeo))
     #  Sine of observed ZD, and observed ZD.
-    zdo = atan(norm(aeo[SVector(1, 2)]), aeo[3])
+    zdo = atan(norm(aeo[SA[1, 2]]), aeo[3])
 
     ####    Refraction    ####
     #  Fast algorithm using two constant model.
-    tz = norm(aeo[SVector(1, 2)]) / maximum((aeo[3], SELMIN))
+    tz = norm(aeo[SA[1, 2]]) / maximum((aeo[3], SELMIN))
     zdt = zdo + a.refa * tz + a.refb * tz^3
     #  To cartesian AZ, ZD.
     aet = SVector(cos(az) * sin(zdt), sin(az) * sin(zdt), cos(zdt))

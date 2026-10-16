@@ -230,7 +230,7 @@ model", Astron.Astrophys. 400, 1145-1154 (2003)
 n.b. The celestial ephemeris origin (CEO) was renamed "celestial
      intermediate origin" (CIO) by IAU 2006 Resolution 2.
 """
-bpn2xy(r::AbstractMatrix{<:Real}) = r[3, SVector(1, 2)]
+bpn2xy(r::AbstractMatrix{<:Real}) = r[3, SA[1, 2]]
 
 """
     c2i00a(day1::Real, day2::Real)
@@ -1302,7 +1302,7 @@ CIP X,Y given Fukushima-Williams bias-precession-nutation angles.
 Hilton, J. et al., 2006, Celest.Mech.Dyn.Astron. 94, 351
 """
 function fw2xy(γ::Real, ϕ::Real, ψ::Real, ϵ::Real)
-    return (Rx(-float(ϵ))Rz(-float(ψ))Rx(ϕ)Rz(γ))[3, SVector(1, 2)]
+    return (Rx(-float(ϵ))Rz(-float(ψ))Rx(ϕ)Rz(γ))[3, SA[1, 2]]
 end
 
 """
