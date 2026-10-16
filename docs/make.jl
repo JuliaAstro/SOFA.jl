@@ -17,6 +17,7 @@ makedocs(
     ),
     pages = [
         "Home" => "index.md",
+        "Number Types and Precision" => "types.md",
         "API Reference" => [
             "Overview" => "api/index.md",
             "Calendars" => "api/calendars.md",

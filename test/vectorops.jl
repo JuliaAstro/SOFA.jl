@@ -364,3 +364,32 @@
 @test SOFA.a2af(4, 2.345).degree == 134
 @test SOFA.c2s([100.0, -50.0, 25.0]).θ ≈ -0.4636476090008061
 @test abs(SOFA.pn([0.3, 1.2, -2.5]).modulus - 2.789265136196270604) <= 1.0e-12
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   arguments sharing one type parameter rejected mixed element types
+@test SOFA.pdp([2.0, 2.0, 3.0], big.([1.0, 3.0, 4.0])) == 20
+@test SOFA.seps(big"1.0", 0.1, 0.2, -3.0) isa BigFloat
+@test eltype(SOFA.s2pv(big"-3.21", 0.123, 0.456, -7.8e-6, 9.01e-6, -1.23e-5)[1]) == BigFloat
+
+#   pas: coincident points returned a Float64 literal
+@test SOFA.pas(big"1.0", big"1.0", big"1.0", big"1.0") isa BigFloat
+
+#   sepp: null vectors returned a Float64 literal
+@test SOFA.sepp(big.([0.0, 0.0, 0.0]), big.([1.0, 0.0, 0.0])) isa BigFloat
+
+#   rm2v, pap, c2s, pv2s: the degenerate branches returned a zero of the input
+#   type, so for Integer input the result type depended on the data
+@test SOFA.rm2v([1 0 0; 0 1 0; 0 0 1]) === SOFA.rm2v([1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0])
+@test SOFA.pap([0, 0, 0], [0, 1, 0]) === SOFA.pap([0.0, 0.0, 0.0], [0.0, 1.0, 0.0])
+@test SOFA.c2s([0, 0, 1]) === SOFA.c2s([0.0, 0.0, 1.0])
+@test SOFA.pv2s([[0, 0, 1], [1, 2, 3]]) === SOFA.pv2s([[0.0, 0.0, 1.0], [1.0, 2.0, 3.0]])
+
+#   anp: mod2pi has no method for Rational
+@test SOFA.anp(1 // 2) === SOFA.anp(0.5)
+
+#   s2c, s2pv: immutable static vectors (the mutable ones they used to return
+#   invited in-place updates, which throw for BigFloat)
+@test SOFA.s2c(3.0123, -0.999) isa SOFA.SVector{3, Float64}
+@test SOFA.s2c(big"3.0123", -0.999) isa SOFA.SVector{3, BigFloat}
+@test SOFA.s2pv(-3.21, 0.123, 0.456, -7.8e-6, 9.01e-6, -1.23e-5) isa SOFA.SVector{2, SOFA.SVector{3, Float64}}

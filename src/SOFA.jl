@@ -6,6 +6,10 @@ Version: 2023-10-11 (Release 19)
 Pure Julia implementation of the IAU SOFA library, migrated from the
 `Astrometry.SOFA` submodule of
 [Astrometry.jl](https://github.com/JuliaAstro/Astrometry.jl).
+
+Real-valued arguments can be of any `Real` type, and floating-point results
+have the promoted floating-point type of the arguments. The constants of the
+library are `Float64`, which bounds the accuracy of extended precision results.
 """
 module SOFA
 
@@ -72,6 +76,7 @@ export pdp, pm, pmp, pn, ppp, ppsp, pvdpv, pvm, pvmpv, pvppv, pvu, pvup, pvxpv,
     pxp, s2xpv, sxp, sxpv
 
 using LinearAlgebra, StaticArrays, StaticUnivariatePolynomials
+using StaticUnivariatePolynomials: derivative
 
 include("base.jl")
 include("util.jl")

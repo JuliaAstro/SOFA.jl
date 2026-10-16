@@ -2,7 +2,7 @@
 
 [SOFA.jl](https://github.com/JuliaAstro/SOFA.jl) is a pure Julia implementation of the International Astronomical Union's [Standards of Fundamental Astronomy (SOFA)](https://www.iausofa.org/) library: the authoritative algorithms for fundamental astronomy, covering calendars and timescales, Earth rotation, precession-nutation, astrometric transformations, ephemerides, star catalog conversions, and the supporting vector-matrix toolkit.
 
-No compiled C library is required. Function names mirror their SOFA C counterparts with the `iau` prefix removed (e.g. [`cal2jd`](@ref) instead of `iauCal2jd`), all computed values are returned by the function call (nothing is returned by reference), and the official SOFA C test suite is reproduced in the package tests to prove compliance of the core functionality.
+No compiled C library is required. Function names mirror their SOFA C counterparts with the `iau` prefix removed (e.g. [`cal2jd`](@ref) instead of `iauCal2jd`), all computed values are returned by the function call (nothing is returned by reference), and the official SOFA C test suite is reproduced in the package tests to prove compliance of the core functionality. Arguments can be of any real number type, including extended precision ones; see [Number types and precision](@ref).
 
 ## Installation
 
@@ -41,6 +41,7 @@ Package versions correspond to the following releases of the SOFA C library. As 
 
 | Package version | SOFA release | Build      |
 |:----------------|:-------------|:-----------|
+| v2.1            | 2023-10-11   | pure Julia |
 | v2.0            | 2023-10-11   | pure Julia |
 | v1.5            | 2023-10-11   | jll        |
 | v1.4            | 2021-05-12   | jll        |

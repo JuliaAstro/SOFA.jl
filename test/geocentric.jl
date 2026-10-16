@@ -73,3 +73,12 @@ let g = SOFA.gc2gd(:WGS84, [2.0e6, 3.0e6, -5.244e6])
 end
 @test SOFA.gc2gd(:WGS84, [0.0, 0.0, 6.4e6]).ϕ ≈ pi / 2
 @test SOFA.gc2gd(:WGS84, [0.0, 0.0, -6.4e6]).ϕ ≈ -pi / 2
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   gc2gde: on the polar axis the longitude and latitude were Float64 literals
+let r = SOFA.gc2gd(:WGS84, big.([0.0, 0.0, 6.4e6]))
+    @test r.ϵ isa BigFloat && r.ϕ isa BigFloat && r.r isa BigFloat
+    @test r.ϕ == big(π) / 2
+end
+@test SOFA.gc2gd(:WGS84, big.([1.0e-20, 0.0, 6.4e6])).ϕ isa BigFloat

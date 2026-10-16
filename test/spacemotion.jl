@@ -43,3 +43,8 @@
 #   (the sanity check had inverted logic)
 @test_throws AssertionError SOFA.pvstar([[1.0e5, 0.0, 0.0], [200.0, 0.0, 0.0]])
 @test_throws AssertionError SOFA.pvstar([[0.0, 0.0, 0.0], [1.0e-5, 0.0, 0.0]])
+
+####    Regression tests (issue #46: generic argument types)    ####
+
+#   starpv: below the minimum parallax the Float64 constant replaced a BigFloat
+@test eltype(SOFA.starpv(0.1, 0.2, 1.0e-6, 1.0e-6, big"1.0e-8", 10.0)[1]) == BigFloat
